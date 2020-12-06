@@ -1,10 +1,13 @@
 ﻿Imports System.Runtime.InteropServices
+
 Public Class IPictureDispConverter
+
     Private Shared IPictureDispGUID As Guid = GetType(stdole.IPictureDisp).GUID
 
     <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)>
     Private Shared Function OleCreatePictureIndirect(<MarshalAs(UnmanagedType.AsAny)> ByVal picdesc As Object, ByRef iid As Guid, ByVal fOwn As Boolean)
     End Function
+
     Public Shared Function Convert(ByVal Icon As Drawing.Icon) As stdole.IPictureDisp
         Dim pictIcon As PICTDESC.Icon = New PICTDESC.Icon(Icon)
         Return IPictureDispConverter.OleCreatePictureIndirect(pictIcon, IPictureDispGUID, True)
@@ -51,5 +54,6 @@ Public Class IPictureDispConverter
                 BitmapHandle = Bitmap.GetHbitmap()
             End Sub
         End Class
+
     End Class
 End Class

@@ -76,9 +76,11 @@ Public NotInheritable Class Ribbon
 
         Dim Validator As Xml.XmlReader = Xml.XmlReader.Create(RibbonX, RibbonXValidationSettings)
 
-        While Validator.Read
-
-        End While
+        Do
+            If Not Validator.Read() Then
+                Exit Do
+            End If
+        Loop
     End Sub
 
     Private Sub LogXMLError(ByVal Sender As Object, ByVal E As ValidationEventArgs)
