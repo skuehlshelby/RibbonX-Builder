@@ -14,9 +14,9 @@ Friend NotInheritable Class AttributeProvider
 
             ElseIf InterfaceType Is GetType(IDescribable) Then
                 GetDefaults.Add(New ControlProperty(Of Boolean)(ShowLabel.ShowLabel, False))
-                GetDefaults.Add(New ControlProperty(Of String)(Label.Label, ""))
-                GetDefaults.Add(New ControlProperty(Of String)(Screentip.Screentip, ""))
-                GetDefaults.Add(New ControlProperty(Of String)(Supertip.Supertip, ""))
+                GetDefaults.Add(New ControlProperty(Of String)(Label.Label, String.Empty))
+                GetDefaults.Add(New ControlProperty(Of String)(Screentip.Screentip, String.Empty))
+                GetDefaults.Add(New ControlProperty(Of String)(Supertip.Supertip, String.Empty))
 
             ElseIf InterfaceType Is GetType(IEditable) Then
                 GetDefaults.Add(New ControlProperty(Of String)(Text.SizeString, New String("F", 20)))
