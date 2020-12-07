@@ -1,4 +1,5 @@
 ﻿Friend Class ControlPropertyList
+    'Maybe just inherit HashSet and Shadow 'Add()'
     Implements IEnumerable(Of IControlProperty)
 
     Private ReadOnly This As HashSet(Of IControlProperty) = New HashSet(Of IControlProperty)
