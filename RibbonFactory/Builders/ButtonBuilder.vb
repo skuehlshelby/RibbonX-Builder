@@ -1,64 +1,68 @@
-﻿Imports RibbonFactory.CallbackSignatures
+﻿Imports RibbonFactory.Builder_Interfaces
+Imports RibbonFactory.Controls
+Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.RibbonAttributes.Categories.Label
+Imports RibbonFactory.RibbonAttributes.Categories.Screentip
+Imports RibbonFactory.RibbonAttributes.Categories.Supertip
 
-Public Class ButtonBuilder
-    Inherits Builder(Of Button)
-    Implements IDescribable(Of ButtonBuilder)
+Namespace Builders
+    Public NotInheritable Class ButtonBuilder
+        Inherits Builder(Of Button)
+        Implements IDescribable(Of ButtonBuilder)
 
-    Private ButtonAttributes As ControlPropertyList = AttributeProvider.GetDefaults(Of Button)()
-    Private Tag As Object = Nothing
-    Friend Sub New()
+        Private ReadOnly ButtonAttributes As AttributeGroup = New AttributeGroup()
 
-    End Sub
+        Private Tag As Object = Nothing
+        Friend Sub New()
 
-    Public Overrides Function Build() As Button
-        Return New Button(ButtonAttributes, Tag)
-    End Function
+        End Sub
 
-    Public Function WithLabel(Label As String, Optional CopyToScreentip As Boolean = True) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithLabel
-        ButtonAttributes.Add(New ControlProperty(Of String)(Attributes.Label.Label, Label))
+        Public Overrides Function Build() As Button
+            Return New Button(ButtonAttributes, Tag)
+        End Function
 
-        If CopyToScreentip Then
-            ButtonAttributes.Add(New ControlProperty(Of String)(Attributes.Screentip.Screentip, Label))
-        End If
+        Public Function WithLabel(Label As String, Optional CopyToScreentip As Boolean = True) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithLabel
+            ButtonAttributes.Add(New Label(Label))
 
-        Return Me
-    End Function
+            If CopyToScreentip Then
+                ButtonAttributes.Add(New Screentip(Label))
+            End If
 
-    Public Function WithLabel(Label As String, Callback As FromControl(Of String), Optional CopyToScreentip As Boolean = True) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithLabel
-        ButtonAttributes.Add(New DynamicControlProperty(Of String)(Attributes.Label.GetLabel, Callback.Method.Name, Label))
+            Return Me
+        End Function
 
-        If CopyToScreentip Then
-            ButtonAttributes.Add(New DynamicControlProperty(Of String)(Attributes.Screentip.GetScreentip, Callback.Method.Name, Label))
-        End If
+        Public Function WithLabel(Label As String, Callback As FromControl(Of String), Optional CopyToScreentip As Boolean = True) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithLabel
+            ButtonAttributes.Add(New GetLabel(Label, Callback))
 
-        Return Me
-    End Function
+            If CopyToScreentip Then
+                ButtonAttributes.Add(New GetScreentip(Label, Callback))
+            End If
 
-    Public Function WithScreenTip(ScreenTip As String) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithScreenTip
-        ButtonAttributes.Add(New ControlProperty(Of String)(Attributes.Screentip.Screentip, ScreenTip))
-        Return Me
-    End Function
+            Return Me
+        End Function
 
-    Public Function WithScreenTip(ScreenTip As String, Callback As FromControl(Of String)) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithScreenTip
-        ButtonAttributes.Add(New DynamicControlProperty(Of String)(Attributes.Screentip.GetScreentip, Callback.Method.Name, ScreenTip))
-        Return Me
-    End Function
+        Public Function WithScreenTip(ScreenTip As String) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithScreenTip
+            ButtonAttributes.Add(New Screentip(ScreenTip))
+            Return Me
+        End Function
 
-    Public Function WithSupertip(Supertip As String) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithSupertip
-        ButtonAttributes.Add(New ControlProperty(Of String)(Attributes.Supertip.Supertip, Supertip))
-        Return Me
-    End Function
+        Public Function WithScreenTip(ScreenTip As String, Callback As FromControl(Of String)) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithScreenTip
+            ButtonAttributes.Add(New GetScreentip(ScreenTip, Callback))
+            Return Me
+        End Function
 
-    Public Function WithSupertip(Supertip As String, Callback As FromControl(Of String)) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithSupertip
-        ButtonAttributes.Add(New DynamicControlProperty(Of String)(Attributes.Supertip.GetSupertip, Callback.Method.Name, Supertip))
-        Return Me
-    End Function
+        Public Function WithSupertip(Supertip As String) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithSupertip
+            ButtonAttributes.Add(New Supertip(Supertip))
+            Return Me
+        End Function
 
-    Public Function ThatDoes(ByVal Callback As OnAction) As ButtonBuilder
+        Public Function WithSupertip(Supertip As String, Callback As FromControl(Of String)) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithSupertip
+            ButtonAttributes.Add(New GetSupertip(Supertip, Callback))
+            Return Me
+        End Function
 
-    End Function
-
-    Public Function ThatDoes(ByVal Callback As OnAction, ByVal Action As Action) As ButtonBuilder
-
-    End Function
-End Class
+        Public Function ThatDoes(Callback As OnAction, Action As Action) As ButtonBuilder
+            ButtonAttributes.Add(New RibbonAttributes.Categories.OnAction.OnAction(Action, Callback))
+        End Function
+    End Class
+End NameSpace

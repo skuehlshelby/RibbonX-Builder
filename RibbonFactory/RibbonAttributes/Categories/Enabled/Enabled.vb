@@ -1,0 +1,16 @@
+﻿Namespace RibbonAttributes.Categories.Enabled
+    Friend Class Enabled
+        Inherits RibbonAttribute(Of Boolean, Enabled)
+        Implements IRibbonAttribute(Of Boolean)
+
+        Public Sub New(Value As Boolean)
+            MyBase.New(Value)
+        End Sub
+
+        Public Overrides ReadOnly Property XML As String
+            Get
+                Return String.Format(XML_TEMPLATE, NameOf(Enabled), GetValue())
+            End Get
+        End Property
+    End Class
+End Namespace

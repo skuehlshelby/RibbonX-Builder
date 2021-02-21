@@ -4,7 +4,10 @@
   <ribbon>
     <tabs>
       <tab>
-        <group>
+        <group >
+          <box></box>
+          <labelControl />
+          <button id="" />
           <toggleButton/>
         </group>
       </tab>

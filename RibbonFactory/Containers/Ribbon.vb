@@ -1,89 +1,93 @@
 ﻿Imports System.Xml.Schema
+Imports RibbonFactory.Component_Interfaces
 
-Public NotInheritable Class Ribbon
+Namespace Containers
 
-    Private Const BoilerPlate As String =
-        "<?xml version=""1.0"" encoding=""utf-8"" ?>
+    Public NotInheritable Class Ribbon
 
-        <customUI xmlns=""http//schemas.microsoft.com/office/2009/07/customui"">
-            <ribbon {0}>
-                <tabs>
-                    {1}
-                </tabs>                            
-            </ribbon>
-        </customUI>"
+        Private Const BoilerPlate As String =
+            "<?xml version=""1.0"" encoding=""utf-8"" ?>
 
-    Private Structure TThis
-        Public StartFromScratch As Boolean
-        Public [NameSpace] As String
-        Public AllElements As List(Of RibbonElement)
-        Public Tabs As List(Of Tab)
-    End Structure
+            <customUI xmlns=""http//schemas.microsoft.com/office/2009/07/customui"">
+                <ribbon {0}>
+                    <tabs>
+                        {1}
+                    </tabs>                            
+                </ribbon>
+            </customUI>"
 
-    Private ReadOnly This As TThis
+        Private ReadOnly _startFromScratch As Boolean
+        Private ReadOnly _nameSpace As String
+        Private ReadOnly _allElements As List(Of RibbonElement) = New List(Of RibbonElement)
 
-    Public Sub New(Optional ByVal [NameSpace] As String = Nothing, Optional ByVal StartFromScratch As Boolean = False)
-        This = New TThis With {
-            .AllElements = New List(Of RibbonElement),
-            .[NameSpace] = [NameSpace],
-            .StartFromScratch = StartFromScratch,
-            .Tabs = New List(Of Tab)
-        }
-    End Sub
+        Public Sub New(Optional [nameSpace] As String = Nothing, Optional startFromScratch As Boolean = False)
+            _nameSpace = [nameSpace]
+            _startFromScratch = startFromScratch
+            Tabs = New List(Of Tab)()
+        End Sub
 
-    Public ReadOnly Property Tabs As List(Of Tab)
-        Get
-            Return This.Tabs
-        End Get
-    End Property
+        Public ReadOnly Property Tabs As List(Of Tab)
 
-    Public ReadOnly Property AllElements As List(Of RibbonElement)
-        Get
-            Return This.AllElements
-        End Get
-    End Property
+        Public ReadOnly Property AllElements As List(Of RibbonElement)
+            Get
+                Return _allElements
+            End Get
+        End Property
 
-    Public Function AddTab(ByVal DisplayName As String) As Tab
-        Dim NewTab As Tab = New Tab(DisplayName)
-        Tabs.Add(NewTab)
-        Return NewTab
-    End Function
+        Public Function AddTab(displayName As String) As Tab
+            Dim newTab As Tab = New Tab(displayName)
+            Tabs.Add(newTab)
+            Return newTab
+        End Function
 
-    Public Function Build() As String
-        This.Tabs.ForEach(Sub(T) AddElements(T))
-        Return String.Format(BoilerPlate, If(This.StartFromScratch, "startFromScratch=""true""", String.Empty), String.Join(vbNewLine, Tabs.Select(Function(T) T.XML)))
-    End Function
+        Public Function Build() As String
+            '_Tabs.ForEach(Sub(T) AddElements(T))
+            Return String.Format(BoilerPlate, $"startFromScratch=""{_startFromScratch}""", String.Join(vbNewLine, Tabs.Select(Function(T) T.XML)))
+        End Function
 
-    Private Sub AddElements(ByVal Container As IContainer)
-        For Each E As RibbonElement In Container.Items
-            If Not This.AllElements.Contains(E) Then
-                This.AllElements.Add(E)
+        Private Sub AddElements(container As IContainer)
+            For Each e As RibbonElement In container.Items
+                If Not _allElements.Contains(e) Then
+                    _allElements.Add(e)
+                End If
+                If TypeOf e Is IContainer Then
+                    'AddElements(E)
+                End If
+            Next e
+        End Sub
+
+        Private Function Flatten(container As IContainer) As List(Of RibbonElement)
+            Flatten = New List(Of RibbonElement)
+
+            If container.Items.Any(Function(item) TypeOf item Is IContainer) Then
+                For Each c As IContainer In container.Items.Where(Function(item) TypeOf item Is IContainer).Select(Function(item) (DirectCast(item, IContainer)))
+                    Flatten.AddRange(Flatten(c)) 
+                Next c
+            Else
+                Flatten.AddRange(container.Items)
             End If
-            If TypeOf E Is IContainer Then
-                AddElements(E)
-            End If
-        Next E
-    End Sub
+        End Function
 
-    Public Sub ValidateRibbon(ByVal RibbonX As String)
-        Dim RibbonXValidationSettings As Xml.XmlReaderSettings = New Xml.XmlReaderSettings With {
-            .ValidationType = Xml.ValidationType.Schema
-        }
+        Public Sub ValidateRibbon(ribbonX As String)
+            Dim ribbonXValidationSettings As Xml.XmlReaderSettings = New Xml.XmlReaderSettings With {
+                    .ValidationType = Xml.ValidationType.Schema
+                    }
 
-        RibbonXValidationSettings.Schemas.Add("http://schemas.microsoft.com/office/2009/07/customui", "RibbonX.xsd")
+            ribbonXValidationSettings.Schemas.Add("http://schemas.microsoft.com/office/2009/07/customui", "RibbonX.xsd")
 
-        AddHandler RibbonXValidationSettings.ValidationEventHandler, AddressOf LogXMLError
+            AddHandler ribbonXValidationSettings.ValidationEventHandler, AddressOf LogXMLError
 
-        Dim Validator As Xml.XmlReader = Xml.XmlReader.Create(RibbonX, RibbonXValidationSettings)
+            Dim validator As Xml.XmlReader = Xml.XmlReader.Create(ribbonX, ribbonXValidationSettings)
 
-        Do
-            If Not Validator.Read() Then
-                Exit Do
-            End If
-        Loop
-    End Sub
+            Do
+                If Not validator.Read() Then
+                    Exit Do
+                End If
+            Loop
+        End Sub
 
-    Private Sub LogXMLError(ByVal Sender As Object, ByVal E As ValidationEventArgs)
-        Debug.WriteLine(String.Format("{0}: {1}", E.Severity.ToString().ToUpper, E.Message))
-    End Sub
-End Class
+        Private Shared Sub LogXMLError(sender As Object, e As ValidationEventArgs)
+            Debug.WriteLine($"{e.Severity.ToString().ToUpper}: {e.Message}")
+        End Sub
+    End Class
+End NameSpace

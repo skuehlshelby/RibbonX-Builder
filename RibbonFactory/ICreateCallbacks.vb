@@ -1,30 +1,30 @@
-﻿Imports IRibbonControl = NetOffice.OfficeApi.IRibbonControl
-Imports IPictureDisp = stdole.IPictureDisp
+﻿Imports NetOffice.OfficeApi
+Imports RibbonFactory.Enums
+Imports stdole
 
-Namespace CallbackSignatures
-    Interface ICreateCallbacks
-        Function GetEnabled(ByVal control As IRibbonControl) As Boolean
-        Function GetVisible(ByVal control As IRibbonControl) As Boolean
-        Function GetLabel(ByVal control As IRibbonControl) As String
-        Function GetShowLabel(ByVal control As IRibbonControl) As Boolean
-        Function GetDescription(ByVal control As IRibbonControl) As String
-        Function GetScreenTip(ByVal control As IRibbonControl) As String
-        Function GetSuperTip(ByVal control As IRibbonControl) As String
-        Function GetSize(ByVal control As IRibbonControl) As ControlSize
-        Function GetShowImage(ByVal control As IRibbonControl) As Boolean
-        Function GetPressed(ByVal control As IRibbonControl) As Boolean
-        Function GetText(ByVal control As IRibbonControl) As String
-        Function GetItemCount(ByVal control As IRibbonControl) As Integer
-        Function GetItemID(ByVal control As IRibbonControl, index As Integer) As String
-        Function GetItemImage(ByVal control As IRibbonControl, index As Integer) As IPictureDisp
-        Function GetItemLabel(ByVal control As IRibbonControl, index As Integer) As String
-        Function GetItemScreentip(ByVal control As IRibbonControl, index As Integer) As String
-        Function GetItemSuperTip(ByVal control As IRibbonControl, index As Integer) As String
-        Function GetSelectedItemID(ByVal control As IRibbonControl) As String
-        Function GetSelectedItemIndex(ByVal control As IRibbonControl) As Integer
-        Sub OnAction(ByVal control As IRibbonControl)
-        Sub OnChange(ByVal control As IRibbonControl, text As String)
-        Sub SelectionChange(ByVal control As IRibbonControl, selectedId As String, selectedIndex As Integer)
-        Sub ButtonToggle(ByVal control As IRibbonControl, pressed As Boolean)
-    End Interface
-End Namespace
+
+Interface ICreateCallbacks
+    Function GetEnabled(control As IRibbonControl) As Boolean
+    Function GetVisible(control As IRibbonControl) As Boolean
+    Function GetLabel(control As IRibbonControl) As String
+    Function GetShowLabel(control As IRibbonControl) As Boolean
+    Function GetDescription(control As IRibbonControl) As String
+    Function GetScreenTip(control As IRibbonControl) As String
+    Function GetSuperTip(control As IRibbonControl) As String
+    Function GetSize(control As IRibbonControl) As ControlSize
+    Function GetShowImage(control As IRibbonControl) As Boolean
+    Function GetPressed(control As IRibbonControl) As Boolean
+    Function GetText(control As IRibbonControl) As String
+    Function GetItemCount(control As IRibbonControl) As Integer
+    Function GetItemID(control As IRibbonControl, index As Integer) As String
+    Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp
+    Function GetItemLabel(control As IRibbonControl, index As Integer) As String
+    Function GetItemScreentip(control As IRibbonControl, index As Integer) As String
+    Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String
+    Function GetSelectedItemID(control As IRibbonControl) As String
+    Function GetSelectedItemIndex(control As IRibbonControl) As Integer
+    Sub OnAction(control As IRibbonControl)
+    Sub OnChange(control As IRibbonControl, text As String)
+    Sub SelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer)
+    Sub ButtonToggle(control As IRibbonControl, pressed As Boolean)
+End Interface
