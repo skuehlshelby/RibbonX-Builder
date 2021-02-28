@@ -12,18 +12,22 @@ Namespace Containers
         Private ReadOnly _groups As List(Of Group) = new List(Of Group)
 
         Friend Sub New(displayName As String, Optional tag As Object = Nothing)
-            MyBase.New(GetDefaults(Of Tab)(), tag)
+            MyBase.New(tag)
             _displayName = displayName
         End Sub
 
         Public Function AddGroup() As Group
-            Return new Group(New AttributeGroup())
+            Dim group As Group = New Group(New AttributeGroup())
+            _groups.Add(group)
+            Return group
         End Function
+
+        Public Overrides ReadOnly Property ID As String
 
         Public Overrides ReadOnly Property XML As String
             Get
                 Return _
-                    $"<tab id=""{ID}"", {String.Join(vbNewLine + vbTab, _groups.Select(Function(g) g.XML))}, ></tab>"
+                    $"<tab>{String.Join(vbNewLine + vbTab + vbTab + vbTab + vbTab, _groups.Select(Function(g) g.XML))}</tab>"
             End Get
         End Property
 

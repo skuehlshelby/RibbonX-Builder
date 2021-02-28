@@ -1,5 +1,9 @@
 ﻿Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.RibbonAttributes.Categories.Enabled
+Imports RibbonFactory.RibbonAttributes.Categories.ID
+Imports RibbonFactory.RibbonAttributes.Categories.Label
+Imports RibbonFactory.RibbonAttributes.Categories.Visible
 
 Namespace Containers
 
@@ -8,13 +12,22 @@ Namespace Containers
         Implements ILabel
         Implements IEnable
         Implements IVisible
-        Implements ICollection(Of RibbonElement)
+        Implements IReadOnlyCollection(Of RibbonElement)
 
         Private ReadOnly _items As List(Of RibbonElement) = New List(Of RibbonElement)()
+        Private ReadOnly _attributes As AttributeGroup
 
-        Public Sub New(buttonAttributes As AttributeGroup, Optional tag As Object = Nothing)
-            MyBase.New(buttonAttributes, tag)
+        Public Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
+            MyBase.New(tag)
+            _attributes = attributes
         End Sub
+
+        Public Overrides ReadOnly Property ID As String
+            Get
+                Return _attributes.Lookup(Of Id).GetValue()
+            End Get
+        End Property
+
         Public Overrides ReadOnly Property XML As String
             Get
                 Return _
@@ -23,77 +36,51 @@ Namespace Containers
             End Get
         End Property
 
-        Public ReadOnly Property Count As Integer Implements ICollection(Of RibbonElement).Count
+        Public ReadOnly Property Count As Integer Implements IReadOnlyCollection(Of RibbonElement).Count
             Get
                 Return _items.Count
             End Get
         End Property
 
-        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of RibbonElement).IsReadOnly
-            Get
-                Return False
-            End Get
-        End Property
-
         Public Property Label As String Implements ILabel.Label
             Get
-                Throw New NotImplementedException()
+                Return _attributes.Lookup(Of Label).GetValue()
             End Get
-            Set(value As String)
-                Throw New NotImplementedException()
+            Set
+                _attributes.Lookup(Of GetLabel).SetValue(Value)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements ILabel.ShowLabel
             Get
-                Throw New NotImplementedException()
+                Return _attributes.Lookup(Of ShowLabel).GetValue()
             End Get
-            Set(value As Boolean)
-                Throw New NotImplementedException()
-            End Set
-        End Property
-
-        Public Property Visible As Boolean Implements IVisible.Visible
-            Get
-                Throw New NotImplementedException()
-            End Get
-            Set(value As Boolean)
-                Throw New NotImplementedException()
+            Set
+                _attributes.Lookup(Of GetShowLabel).SetValue(Value)
             End Set
         End Property
 
         Public Property Enabled As Boolean Implements IEnable.Enabled
             Get
-                Throw New NotImplementedException()
+                Return _attributes.Lookup(Of Enabled).GetValue()
             End Get
-            Set(value As Boolean)
-                Throw New NotImplementedException()
+            Set
+                _attributes.Lookup(Of GetEnabled).SetValue(Value)
             End Set
         End Property
 
-        Public Sub Add(ParamArray items AS RibbonElement())
+        Public Property Visible As Boolean Implements IVisible.Visible
+            Get
+                Return _attributes.Lookup(Of Visible).GetValue()
+            End Get
+            Set
+                _attributes.Lookup(Of GetVisible).SetValue(Value)
+            End Set
+        End Property
+
+        Public Sub Add(ParamArray items As RibbonElement())
             _items.AddRange(items)
         End Sub
-
-        Public Sub Add(item As RibbonElement) Implements ICollection(Of RibbonElement).Add
-            _items.Add(item)
-        End Sub
-
-        Public Sub Clear() Implements ICollection(Of RibbonElement).Clear
-            _items.Clear()
-        End Sub
-
-        Public Sub CopyTo(array() As RibbonElement, arrayIndex As Integer) Implements ICollection(Of RibbonElement).CopyTo
-            _items.CopyTo(array, arrayIndex)
-        End Sub
-
-        Public Function Contains(item As RibbonElement) As Boolean Implements ICollection(Of RibbonElement).Contains
-            Return _items.Contains(item)
-        End Function
-
-        Public Function Remove(item As RibbonElement) As Boolean Implements ICollection(Of RibbonElement).Remove
-            Return _items.Remove(item)
-        End Function
 
         Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
             Return _items.GetEnumerator()
@@ -107,4 +94,4 @@ Namespace Containers
             Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is Group
         End Function
     End Class
-End NameSpace
+End Namespace

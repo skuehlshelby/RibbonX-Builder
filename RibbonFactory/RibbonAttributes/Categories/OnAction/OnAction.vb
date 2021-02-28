@@ -12,7 +12,7 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(OnAction), _callback)
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(OnAction)), _callback)
             End Get
         End Property
     End Class

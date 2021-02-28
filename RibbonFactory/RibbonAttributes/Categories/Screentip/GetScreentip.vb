@@ -17,7 +17,7 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(GetScreentip), Callback)
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(GetScreentip)), Callback)
             End Get
         End Property
     End Class

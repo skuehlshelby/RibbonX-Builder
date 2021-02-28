@@ -14,7 +14,7 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(ImageMso), GetValue())
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(ImageMso)), GetValue())
             End Get
         End Property
     End Class

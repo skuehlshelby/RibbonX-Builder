@@ -2,22 +2,22 @@
     Friend NotInheritable Class GetDescription
         Inherits Description
 
-        Private ReadOnly Callback As String
+        Private ReadOnly _callback As String
 
-        Public Sub New(Value As String, Callback As FromControl(Of String))
-            MyBase.New(Value)
-            Me.Callback = Callback.Method.Name
+        Public Sub New(value As String, callback As FromControl(Of String))
+            MyBase.New(value)
+            Me._callback = callback.Method.Name
         End Sub
 
-        Public Sub SetValue(Value As String)
-            If Not Me.Value.Equals(Value) Then
-                Me.Value = Value
+        Public Sub SetValue(newValue As String)
+            If Not Value.Equals(newValue) Then
+                Value = newValue
             End If
         End Sub
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(GetDescription), Callback)
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(GetDescription)), _callback)
             End Get
         End Property
     End Class

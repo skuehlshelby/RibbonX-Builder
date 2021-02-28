@@ -1,4 +1,8 @@
-﻿Imports System.Xml.Schema
+﻿Imports System.IO
+Imports System.Reflection
+Imports System.Xml
+Imports System.Xml.Schema
+Imports NetOffice.OfficeApi
 Imports RibbonFactory.Component_Interfaces
 
 Namespace Containers
@@ -6,19 +10,20 @@ Namespace Containers
     Public NotInheritable Class Ribbon
 
         Private Const BoilerPlate As String =
-            "<?xml version=""1.0"" encoding=""utf-8"" ?>
-
-            <customUI xmlns=""http//schemas.microsoft.com/office/2009/07/customui"">
-                <ribbon {0}>
-                    <tabs>
-                        {1}
-                    </tabs>                            
-                </ribbon>
-            </customUI>"
+            "<?xml version=""1.0"" encoding=""utf-8"" ?>" _
+            & vbNewLine & vbNewLine & _
+            "<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">" _
+            & vbNewLine & vbTab & "<ribbon {0}>" _
+            & vbNewLine & vbTab & vbTab & "<tabs>" _
+            & vbNewLine & vbTab & vbTab & vbTab & "{1}" _
+            & vbNewLine & vbTab & vbTab & "</tabs>" _                            
+            & vbNewLine & vbTab & "</ribbon>" _
+            & vbNewLine & "</customUI>"
 
         Private ReadOnly _startFromScratch As Boolean
         Private ReadOnly _nameSpace As String
         Private ReadOnly _allElements As List(Of RibbonElement) = New List(Of RibbonElement)
+        Private _ribbon As IRibbonUI
 
         Public Sub New(Optional [nameSpace] As String = Nothing, Optional startFromScratch As Boolean = False)
             _nameSpace = [nameSpace]
@@ -41,8 +46,9 @@ Namespace Containers
         End Function
 
         Public Function Build() As String
-            '_Tabs.ForEach(Sub(T) AddElements(T))
-            Return String.Format(BoilerPlate, $"startFromScratch=""{_startFromScratch}""", String.Join(vbNewLine, Tabs.Select(Function(T) T.XML)))
+            Dim ribbonX As String = String.Format(BoilerPlate, $"startFromScratch=""{_startFromScratch.ToString().ToLower()}""", String.Join(vbNewLine, Tabs.Select(Function(T) T.XML)))
+            ValidateRibbon(ribbonX)
+            Return ribbonX
         End Function
 
         Private Sub AddElements(container As IContainer)
@@ -68,22 +74,22 @@ Namespace Containers
             End If
         End Function
 
-        Public Sub ValidateRibbon(ribbonX As String)
-            Dim ribbonXValidationSettings As Xml.XmlReaderSettings = New Xml.XmlReaderSettings With {
-                    .ValidationType = Xml.ValidationType.Schema
-                    }
+        Public Sub AssignRibbonUI(ribbonUi As IRibbonUI)
+            _ribbon = If(_ribbon, ribbonUi)
+        End Sub
 
-            ribbonXValidationSettings.Schemas.Add("http://schemas.microsoft.com/office/2009/07/customui", "RibbonX.xsd")
+        Public Shared Sub ValidateRibbon(ribbonX As String)
+            Dim assembly As Assembly = Assembly.GetExecutingAssembly()
 
-            AddHandler ribbonXValidationSettings.ValidationEventHandler, AddressOf LogXMLError
+            Dim xsd As XmlSchemaSet = New XmlSchemaSet()
 
-            Dim validator As Xml.XmlReader = Xml.XmlReader.Create(ribbonX, ribbonXValidationSettings)
+            Using reader As StreamReader = New StreamReader(assembly.GetManifestResourceStream("RibbonFactory.RibbonX.xsd"))
+                xsd.Add("http://schemas.microsoft.com/office/2009/07/customui", XmlReader.Create(reader))
 
-            Do
-                If Not validator.Read() Then
-                    Exit Do
-                End If
-            Loop
+                Dim ribbon As XDocument = XDocument.Parse(ribbonX)
+
+                ribbon.Validate(xsd, AddressOf LogXMLError)
+            End Using
         End Sub
 
         Private Shared Sub LogXMLError(sender As Object, e As ValidationEventArgs)

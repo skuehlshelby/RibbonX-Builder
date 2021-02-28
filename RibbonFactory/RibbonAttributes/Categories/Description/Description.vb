@@ -2,13 +2,13 @@
     Friend Class Description
         Inherits RibbonAttribute(Of String, Description)
 
-        Public Sub New(Value As String)
-            MyBase.New(Value)
+        Public Sub New(value As String)
+            MyBase.New(value)
         End Sub
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(Description), GetValue())
+                Return If(String.IsNullOrEmpty(Value), String.Empty, String.Format(XML_TEMPLATE, CamelCase(NameOf(Description)), GetValue()))
             End Get
         End Property
     End Class

@@ -18,7 +18,6 @@ Public Class SimpleRibbonTest
         _button = buttonBuilder.Build()
         _group.Add(_button)
         dim xml As String = _ribbon.Build()
-        _ribbon.ValidateRibbon(xml)
     End Sub
 
     Private Sub OnAction(control As IRibbonControl)

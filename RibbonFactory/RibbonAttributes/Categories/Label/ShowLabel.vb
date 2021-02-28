@@ -8,7 +8,7 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(ShowLabel), GetValue())
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(ShowLabel)), CamelCase(GetValue()))
             End Get
         End Property
     End Class

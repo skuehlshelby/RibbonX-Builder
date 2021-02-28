@@ -8,7 +8,7 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(Supertip), GetValue())
+                Return If(String.IsNullOrEmpty(GetValue()), String.Empty, String.Format(XML_TEMPLATE, CamelCase(NameOf(Supertip)), GetValue())) 
             End Get
         End Property
     End Class

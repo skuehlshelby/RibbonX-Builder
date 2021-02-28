@@ -10,7 +10,7 @@ Namespace RibbonAttributes.Categories.Size
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(Size), GetValue())
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(Size)), GetValue())
             End Get
         End Property
     End Class
