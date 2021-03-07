@@ -17,7 +17,7 @@ Namespace Containers
         Private ReadOnly _items As List(Of RibbonElement) = New List(Of RibbonElement)()
         Private ReadOnly _attributes As AttributeGroup
 
-        Public Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
         End Sub
@@ -48,15 +48,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.Lookup(Of GetLabel).SetValue(Value)
-            End Set
-        End Property
-
-        Public Property ShowLabel As Boolean Implements ILabel.ShowLabel
-            Get
-                Return _attributes.Lookup(Of ShowLabel).GetValue()
-            End Get
-            Set
-                _attributes.Lookup(Of GetShowLabel).SetValue(Value)
             End Set
         End Property
 

@@ -12,6 +12,7 @@ Namespace Controls
         Implements IEnable
         Implements IVisible
         Implements ILabel
+        Implements IShowLabel
         Implements ITip
 
         Private ReadOnly Attributes As AttributeGroup
@@ -57,7 +58,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property ShowLabel As Boolean Implements ILabel.ShowLabel
+        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
                 Return Attributes.Lookup(Of ShowLabel).GetValue()
             End Get

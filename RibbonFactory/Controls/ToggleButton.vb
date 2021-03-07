@@ -21,6 +21,7 @@ Namespace Controls
         Implements ITip
         Implements IDescribe
         Implements ILabel
+        Implements IShowLabel
         Implements IGraphic
         Implements IResizable
         Implements IToggle
@@ -72,7 +73,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property ShowLabel As Boolean Implements ILabel.ShowLabel
+        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
                 Return _attributes.Lookup(Of ShowLabel).GetValue()
             End Get

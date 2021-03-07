@@ -94,6 +94,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builders\GroupBuilder.vb" />
     <Compile Include="Component Interfaces\ILabel.vb" />
     <Compile Include="Component Interfaces\IDescribe.vb" />
     <Compile Include="Builder Interfaces\IActionable.vb" />
@@ -103,6 +104,7 @@
     <Compile Include="Builders\Builder.vb" />
     <Compile Include="Builders\ButtonBuilder.vb" />
     <Compile Include="Callbacks.vb" />
+    <Compile Include="Component Interfaces\IShowLabel.vb" />
     <Compile Include="Component Interfaces\IVisible.vb" />
     <Compile Include="Containers\Box.vb" />
     <Compile Include="Containers\Group.vb" />

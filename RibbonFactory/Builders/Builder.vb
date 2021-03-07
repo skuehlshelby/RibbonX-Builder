@@ -13,7 +13,7 @@ Imports RibbonFactory.RibbonAttributes.Categories.Visible
 
 Namespace Builders
     Public MustInherit Class Builder
-        Protected Shared ReadOnly ControlIDs As Dictionary(Of Type, Integer) = New Dictionary(Of Type, Integer)
+        Private Shared ReadOnly ControlIDs As Dictionary(Of Type, Integer) = New Dictionary(Of Type, Integer)
 
         Protected Shared Function FabricateID(Of T As RibbonElement)() As String
             Dim ribbonElementType As Type = GetType(T)
@@ -66,10 +66,71 @@ Namespace Builders
 
     Public MustInherit Class Builder(Of T As RibbonElement)
         Inherits Builder
-        Implements IBuilder(Of T)
 
-        Public MustOverride Function Build() As T Implements IBuilder(Of T).Build
+        Protected ReadOnly Attributes As AttributeGroup = New AttributeGroup
 
-        
+        Public MustOverride Function Build() As T
+
+        Public MustOverride Function Build(tag As Object) As T
+
+        Protected Sub AddEnabled(enabled As Boolean)
+            Attributes.Add(New Enabled(enabled))
+        End Sub
+
+        Protected Sub AddEnabled(enabled As Boolean, callback As FromControl(Of Boolean))
+            Attributes.Add(New GetEnabled(enabled, callback))
+        End Sub
+
+        Protected Sub AddVisible(visible As Boolean)
+            Attributes.Add(New Visible(visible))
+        End Sub
+
+        Protected Sub AddVisible(visible As Boolean, callback As FromControl(Of Boolean))
+            Attributes.Add(New GetEnabled(visible, callback))
+        End Sub
+
+        Protected Sub AddLabel(label As String)
+            Attributes.Add(New Label(label))
+        End Sub
+
+        Protected Sub AddLabel(label As String, callback As FromControl(Of String))
+            Attributes.Add(New GetLabel(label, callback))
+        End Sub
+
+        Protected Sub AddShowLabel(showLabel As Boolean)
+            Attributes.Add(New ShowLabel(showLabel))
+        End Sub
+
+        Protected Sub AddScreenTip(screenTip As String)
+            Attributes.Add(New Screentip(screenTip))
+        End Sub
+
+        Protected Sub AddScreenTip(screenTip As String, callback As FromControl(Of String))
+            Attributes.Add(New GetScreentip(screenTip, callback))
+        End Sub
+
+        Protected Sub AddSuperTip(superTip As String)
+            Attributes.Add(New Supertip(supertip))
+        End Sub
+
+        Protected Sub AddSuperTip(superTip As String, callback As FromControl(Of String))
+            Attributes.Add(New GetSupertip(supertip, callback))
+        End Sub
+
+        Protected Sub AddDescription(description As String)
+            Attributes.Add(new Description(description))
+        End Sub
+
+        Protected Sub AddDescription(description As String, callback As FromControl(Of String))
+            Attributes.Add(new GetDescription(description, callback))
+        End Sub
+
+        Protected Sub AddImage(image As ImageMSO)
+            Attributes.Add(New Categories.Image.ImageMso(image))
+        End Sub
+
+        Protected Sub AddAction(callback As OnAction, action As Action)
+            Attributes.Add(New Categories.OnAction.OnAction(action, callback))
+        End Sub
     End Class
 End NameSpace
