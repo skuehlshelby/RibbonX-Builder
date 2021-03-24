@@ -1,6 +1,5 @@
-﻿Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.Enums
-Imports RibbonFactory.RibbonAttributes
+﻿Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.RibbonAttributes.Categories.Description
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID

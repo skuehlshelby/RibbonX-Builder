@@ -132,6 +132,7 @@
     <Compile Include="Component Interfaces\IImage.vb" />
     <Compile Include="Component Interfaces\IPressed.vb" />
     <Compile Include="Controls\Button.vb" />
+    <Compile Include="Controls\CheckBox.vb" />
     <Compile Include="Controls\DropdownItem.vb" />
     <Compile Include="Controls\LabelControl.vb" />
     <Compile Include="Controls\ToggleButton.vb" />
