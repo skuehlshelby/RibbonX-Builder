@@ -1,8 +1,8 @@
 ﻿Namespace RibbonAttributes.Categories.KeyTip
     Friend Class KeyTip
-        Inherits RibbonAttribute(Of Char, KeyTip)
+        Inherits RibbonAttribute(Of RibbonFactory.KeyTip, KeyTip)
 
-        Public Sub New(Value As Char)
+        Public Sub New(value As RibbonFactory.KeyTip)
             MyBase.New(Value)
         End Sub
 

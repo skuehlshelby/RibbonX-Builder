@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Enums
 
-Namespace Component_Interfaces
+Namespace Builder_Interfaces
     Public Interface IOrientable
         ReadOnly Property Orientation As BoxStyle
     End Interface

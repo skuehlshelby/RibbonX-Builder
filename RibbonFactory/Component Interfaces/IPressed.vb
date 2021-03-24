@@ -1,5 +1,5 @@
 ﻿Namespace Component_Interfaces
-    Public Interface IToggle
+    Public Interface IPressed
         Property Pressed As Boolean
     End Interface
 End NameSpace

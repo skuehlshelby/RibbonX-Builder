@@ -4,12 +4,12 @@
 
         Private ReadOnly _callback As String
 
-        Public Sub New(value As Char, callback As FromControl(Of Char))
+        Public Sub New(value As RibbonFactory.KeyTip, callback As FromControl(Of RibbonFactory.KeyTip))
             MyBase.New(value)
             _callback = callback.Method.Name
         End Sub
 
-        Public Sub SetValue(value As Char)
+        Public Sub SetValue(value As RibbonFactory.KeyTip)
             If Not Me.Value.Equals(value) Then
                 Me.Value = value
             End If

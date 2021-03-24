@@ -1,5 +1,5 @@
 ﻿Namespace Component_Interfaces
-    Public Interface IDescribe
+    Public Interface IDescription
         Property Description As String
     End Interface
 End NameSpace

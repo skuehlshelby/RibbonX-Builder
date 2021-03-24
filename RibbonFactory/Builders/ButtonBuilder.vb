@@ -1,15 +1,9 @@
-﻿Imports RibbonFactory.Builder_Interfaces
-Imports RibbonFactory.Controls
+﻿Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.Screentip
-Imports RibbonFactory.RibbonAttributes.Categories.Supertip
 
 Namespace Builders
     Public NotInheritable Class ButtonBuilder
         Inherits Builder(Of Button)
-        Implements IDescribable(Of ButtonBuilder)
 
         Public Overrides Function Build() As Button
             Return Build(Nothing)
@@ -19,7 +13,7 @@ Namespace Builders
             Return New Button(Attributes, tag)
         End Function
 
-        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithLabel
+        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As ButtonBuilder
             AddLabel(label)
             AddShowLabel(True)
 
@@ -30,7 +24,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithLabel
+        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As ButtonBuilder
             AddLabel(label, callback)
             AddShowLabel(True)
 
@@ -41,22 +35,22 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithScreenTip
+        Public Function WithScreenTip(screenTip As String) As ButtonBuilder
             AddScreenTip(screenTip)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithScreenTip
+        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As ButtonBuilder
             AddScreenTip(screenTip, callback)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithSupertip
+        Public Function WithSuperTip(superTip As String) As ButtonBuilder
             AddSuperTip(superTip)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As ButtonBuilder Implements IDescribable(Of ButtonBuilder).WithSupertip
+        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As ButtonBuilder
             AddSuperTip(superTip, callback)
             Return Me
         End Function

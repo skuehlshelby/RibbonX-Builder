@@ -94,34 +94,45 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builder Interfaces\ISetDescription.vb" />
+    <Compile Include="Builder Interfaces\ISetCharacterLimit.vb" />
+    <Compile Include="Builder Interfaces\IEnable.vb" />
+    <Compile Include="Builder Interfaces\IExecute.vb" />
+    <Compile Include="Builder Interfaces\IGraphic.vb" />
+    <Compile Include="Builder Interfaces\ILabel.vb" />
+    <Compile Include="Builder Interfaces\ILabelScreentipSupertip.vb" />
+    <Compile Include="Builder Interfaces\IOrientable.vb" />
+    <Compile Include="Builder Interfaces\IResizable.vb" />
+    <Compile Include="Builder Interfaces\ISetLabelVisibility.vb" />
+    <Compile Include="Builder Interfaces\ITip.vb" />
+    <Compile Include="Builder Interfaces\ISetVisibility.vb" />
     <Compile Include="Builders\GroupBuilder.vb" />
+    <Compile Include="Builders\LabelControlBuilder.vb" />
+    <Compile Include="Component Interfaces\IKeyTip.vb" />
     <Compile Include="Component Interfaces\ILabel.vb" />
-    <Compile Include="Component Interfaces\IDescribe.vb" />
-    <Compile Include="Builder Interfaces\IActionable.vb" />
-    <Compile Include="Builder Interfaces\IDescribable.vb" />
-    <Compile Include="Builder Interfaces\IDisablable.vb" />
-    <Compile Include="Builder Interfaces\IVeryDescribable.vb" />
+    <Compile Include="Component Interfaces\IDescription.vb" />
     <Compile Include="Builders\Builder.vb" />
     <Compile Include="Builders\ButtonBuilder.vb" />
     <Compile Include="Callbacks.vb" />
+    <Compile Include="Component Interfaces\IMaxLength.vb" />
+    <Compile Include="Component Interfaces\IOnAction.vb" />
+    <Compile Include="Component Interfaces\IOnChange.vb" />
+    <Compile Include="Component Interfaces\IScreenTip.vb" />
+    <Compile Include="Component Interfaces\IShowImage.vb" />
     <Compile Include="Component Interfaces\IShowLabel.vb" />
+    <Compile Include="Component Interfaces\ISize.vb" />
+    <Compile Include="Component Interfaces\ISuperTip.vb" />
     <Compile Include="Component Interfaces\IVisible.vb" />
     <Compile Include="Containers\Box.vb" />
     <Compile Include="Containers\Group.vb" />
     <Compile Include="Containers\Ribbon.vb" />
     <Compile Include="Containers\Tab.vb" />
-    <Compile Include="Component Interfaces\IExecute.vb" />
-    <Compile Include="Builder Interfaces\IBuilder.vb" />
-    <Compile Include="Component Interfaces\IContainer.vb" />
-    <Compile Include="Component Interfaces\ITip.vb" />
-    <Compile Include="Component Interfaces\IEnable.vb" />
+    <Compile Include="Component Interfaces\IEnabled.vb" />
     <Compile Include="Component Interfaces\IEditable.vb" />
-    <Compile Include="Component Interfaces\IGraphic.vb" />
-    <Compile Include="Component Interfaces\IOrientable.vb" />
-    <Compile Include="Component Interfaces\IResizable.vb" />
-    <Compile Include="Component Interfaces\ISelectable.vb" />
-    <Compile Include="Component Interfaces\IToggle.vb" />
+    <Compile Include="Component Interfaces\IImage.vb" />
+    <Compile Include="Component Interfaces\IPressed.vb" />
     <Compile Include="Controls\Button.vb" />
+    <Compile Include="Controls\DropdownItem.vb" />
     <Compile Include="Controls\LabelControl.vb" />
     <Compile Include="Controls\ToggleButton.vb" />
     <Compile Include="ElementUpdatedEventArgs.vb" />
@@ -131,6 +142,7 @@
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
     <Compile Include="IPictureDispConverter.vb" />
+    <Compile Include="KeyTip.vb" />
     <Compile Include="RibbonAttributes\AttributeGroup.vb" />
     <Compile Include="RibbonAttributes\Categories\Description\Description.vb" />
     <Compile Include="RibbonAttributes\Categories\Description\GetDescription.vb" />
@@ -138,6 +150,7 @@
     <Compile Include="RibbonAttributes\Categories\Enabled\GetEnabled.vb" />
     <Compile Include="RibbonAttributes\Categories\ID\IdQ.vb" />
     <Compile Include="RibbonAttributes\Categories\ID\Id.vb" />
+    <Compile Include="RibbonAttributes\Categories\Pressed\GetPressed.vb" />
     <Compile Include="RibbonAttributes\IRibbonAttribute.vb" />
     <Compile Include="RibbonAttributes\IMutableRibbonAttribute.vb" />
     <Compile Include="RibbonAttributes\Categories\Image\GetImage.vb" />
@@ -160,7 +173,7 @@
     <Compile Include="RibbonAttributes\Categories\Screentip\GetScreentip.vb" />
     <Compile Include="RibbonAttributes\Categories\Size\Size.vb" />
     <Compile Include="RibbonAttributes\Categories\Size\GetSize.vb" />
-    <Compile Include="RibbonAttributes\Categories\Supertip\GetSupertip.vb" />
+    <Compile Include="RibbonAttributes\Categories\Supertip\GetSuperTip.vb" />
     <Compile Include="RibbonAttributes\Categories\Supertip\Supertip.vb" />
     <Compile Include="RibbonAttributes\Categories\Visible\Visible.vb" />
     <Compile Include="RibbonAttributes\Categories\Visible\GetVisible.vb" />
@@ -209,6 +222,8 @@
   <ItemGroup>
     <Content Include="ExampleXML.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="RibbonAttributes\Categories\Text\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

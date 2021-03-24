@@ -10,7 +10,7 @@ Namespace Containers
     Public Class Group
         Inherits RibbonElement
         Implements ILabel
-        Implements IEnable
+        Implements IEnabled
         Implements IVisible
         Implements IReadOnlyCollection(Of RibbonElement)
 
@@ -51,7 +51,7 @@ Namespace Containers
             End Set
         End Property
 
-        Public Property Enabled As Boolean Implements IEnable.Enabled
+        Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
                 Return _attributes.Lookup(Of Enabled).GetValue()
             End Get

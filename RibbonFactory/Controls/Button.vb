@@ -16,14 +16,16 @@ Namespace Controls
 
     Public NotInheritable Class Button
         Inherits RibbonElement
-        Implements IExecute
-        Implements IEnable
+        Implements IOnAction
+        Implements IEnabled
         Implements ILabel
         Implements IShowLabel
-        Implements ITip
-        Implements IDescribe
-        Implements IGraphic
-        Implements IResizable
+        Implements IScreenTip
+        Implements ISupertip
+        Implements IDescription
+        Implements IImage
+        Implements IShowImage
+        Implements ISize
         Implements IVisible
 
         Private ReadOnly _attributes As AttributeGroup = New AttributeGroup()
@@ -47,7 +49,7 @@ Namespace Controls
             End Get
         End Property
 
-        Public Property Description As String Implements IDescribe.Description
+        Public Property Description As String Implements IDescription.Description
             Get
                 Return _attributes.Lookup(Of Description).GetValue()
             End Get
@@ -74,7 +76,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property ScreenTip As String Implements ITip.ScreenTip
+        Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
                 Return _attributes.Lookup(Of Screentip).GetValue()
             End Get
@@ -83,16 +85,16 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ITip.Supertip
+        Public Property SuperTip As String Implements ISupertip.Supertip
             Get
                 Return _attributes.Lookup(Of Supertip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetSupertip).SetValue(value)
+                _attributes.Lookup(Of GetSuperTip).SetValue(value)
             End Set
         End Property
 
-        Public Property Enabled As Boolean Implements IEnable.Enabled
+        Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
                 Return _attributes.Lookup(Of Enabled).GetValue()
             End Get
@@ -110,7 +112,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property Image As Object Implements IGraphic.Image
+        Public Property Image As Object Implements IImage.Image
             Get
                 If IsCustom Then
                     Return _attributes.Lookup(Of GetImage).GetValue()
@@ -127,22 +129,23 @@ Namespace Controls
             End Set
         End Property
 
-        Public ReadOnly Property IsCustom As Boolean Implements IGraphic.IsCustom
+        Public ReadOnly Property IsCustom As Boolean Implements IImage.IsCustom
             Get
                 Return TypeOf _attributes.Lookup(Of ImageBase) Is GetImage
             End Get
         End Property
 
-        Public Property ShowImage As Boolean Implements IGraphic.ShowImage
+        Public Property ShowImage As Boolean Implements IShowImage.ShowImage
             Get
-                Return _attributes.Lookup(Of ShowImage).GetValue()
+                Return _attributes.Lookup (Of ShowImage).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetShowImage).SetValue(value)
+                _attributes.Lookup (Of GetShowImage).SetValue(value)
+                Refresh()
             End Set
         End Property
 
-        Public Property Size As ControlSize Implements IResizable.Size
+        Public Property Size As ControlSize Implements ISize.Size
             Get
                 Return _attributes.Lookup(Of Size).GetValue()
             End Get
@@ -151,7 +154,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Sub Execute() Implements IExecute.Execute
+        Public Sub Execute() Implements IOnAction.Execute
             _attributes.Lookup(Of Categories.OnAction.OnAction).GetValue().Invoke()
         End Sub
 

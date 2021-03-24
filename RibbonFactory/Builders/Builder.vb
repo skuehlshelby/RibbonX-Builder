@@ -1,10 +1,12 @@
-﻿Imports RibbonFactory.Builder_Interfaces
+﻿Imports System.IO
+Imports RibbonFactory.Builder_Interfaces
 Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.RibbonAttributes.Categories.Description
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
+Imports RibbonFactory.RibbonAttributes.Categories.Insert
 Imports RibbonFactory.RibbonAttributes.Categories.Label
 Imports RibbonFactory.RibbonAttributes.Categories.Screentip
 Imports RibbonFactory.RibbonAttributes.Categories.Size
@@ -33,32 +35,26 @@ Namespace Builders
                 }
 
             For Each interfaceType As Type In GetType(T).GetInterfaces
-                If interfaceType Is GetType(IEnable) Then
-                    GetDefaults.Add(New Enabled(true))
-                    GetDefaults.Add(New Visible(True))
-
-                ElseIf interfaceType Is GetType(ITip) Then
-                    GetDefaults.Add(New ShowLabel(False))
-                    GetDefaults.Add(New Label(String.Empty))
-                    GetDefaults.Add(New Screentip(String.Empty))
-                    GetDefaults.Add(New Supertip(String.Empty))
-
-                ElseIf interfaceType Is GetType(IEditable) Then
-
-                ElseIf interfaceType Is GetType(IGraphic) Then
-                    GetDefaults.Add(New Categories.Image.ImageMso(ImageMSO.HappyFace))
-
-                ElseIf interfaceType Is GetType(IResizable) Then
-                    GetDefaults.Add(New Size(ControlSize.large))
-
-                ElseIf interfaceType Is GetType(ISelectable) Then
-
-                ElseIf interfaceType Is GetType(IToggle) Then
-
-                ElseIf interfaceType Is GetType(IDescribe) Then
-                    GetDefaults.Add(New Description(String.Empty))
-
-                End If
+                Select Case interfaceType
+                    Case GetType(IEnabled)
+                        GetDefaults.Add(New Enabled(true))
+                    Case GetType(IVisible)
+                        GetDefaults.Add(New Visible(true))
+                    Case GetType(ILabel)
+                        GetDefaults.Add(New Label(String.Empty))
+                    Case GetType(IShowLabel)
+                        GetDefaults.Add(New ShowLabel(False))
+                    Case GetType(IScreenTip)
+                        GetDefaults.Add(New Screentip(String.Empty))
+                    Case GetType(ISuperTip)
+                        GetDefaults.Add(New Supertip(String.Empty))
+                    Case GetType(ISize)
+                        GetDefaults.Add(New Size(ControlSize.large))
+                    Case GetType(IDescription)
+                        GetDefaults.Add(New Description(String.Empty))
+                    Case GetType(IImage)
+                        GetDefaults.Add(New Categories.Image.ImageMso(ImageMSO.HappyFace))
+                End Select
             Next interfaceType
 
         End Function
@@ -127,6 +123,10 @@ Namespace Builders
 
         Protected Sub AddImage(image As ImageMSO)
             Attributes.Add(New Categories.Image.ImageMso(image))
+        End Sub
+
+        Protected Sub InsertAfter(mso As String)
+            Attributes.Add(New InsertAfterMso(mso))
         End Sub
 
         Protected Sub AddAction(callback As OnAction, action As Action)

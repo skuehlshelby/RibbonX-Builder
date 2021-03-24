@@ -2,12 +2,7 @@
 Imports RibbonFactory.Enums
 Imports stdole
 
-Namespace Component_Interfaces
-    Public Interface IGraphic
-        Property Image As Object
-        ReadOnly Property IsCustom As Boolean
-        Property ShowImage As Boolean
-    End Interface
+Namespace Builder_Interfaces
     Public Interface IGraphic(Of T)
         Overloads Function WithImage(Image As ImageMSO) As T
         Overloads Function WithImage(Image As IPictureDisp, Optional CallbackName As String = "GetImage") As T

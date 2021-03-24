@@ -9,7 +9,7 @@ Namespace Containers
 
     Public NotInheritable Class Tab
         Inherits RibbonElement
-        Implements IEnable
+        Implements IEnabled
         Implements ILabel
         Implements IVisible
         Implements IEnumerable(Of RibbonElement)
@@ -41,7 +41,7 @@ Namespace Containers
             End Get
         End Property
 
-        Public Property Enabled As Boolean Implements IEnable.Enabled
+        Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
                 Return _attributes.Lookup(Of Enabled).GetValue()
             End Get

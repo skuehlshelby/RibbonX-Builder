@@ -1,5 +1,7 @@
 ﻿Namespace Component_Interfaces
-    Public Interface IExecute
+    Public Interface IOnChange
+        Property OnAction As Action
+
         Sub Execute()
     End Interface
 End NameSpace

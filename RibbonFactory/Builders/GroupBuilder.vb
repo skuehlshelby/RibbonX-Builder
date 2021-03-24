@@ -71,7 +71,8 @@ Namespace Builders
         End Function
 
         Public Function InsertAfterMSO(mso As String) As GroupBuilder
-
+            InsertAfter(mso)
+            Return Me
         End Function
     End Class
 End NameSpace

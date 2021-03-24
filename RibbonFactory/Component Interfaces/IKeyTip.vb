@@ -1,5 +1,5 @@
 ﻿Namespace Component_Interfaces
-    Public Interface IEnable
-        Property Enabled As Boolean
+    Public Interface IKeyTip
+        Property KeyTip As KeyTip
     End Interface
 End NameSpace

@@ -9,11 +9,12 @@ Imports RibbonFactory.RibbonAttributes.Categories.Visible
 Namespace Controls
     Public Class LabelControl
         Inherits RibbonElement
-        Implements IEnable
+        Implements IEnabled
         Implements IVisible
         Implements ILabel
         Implements IShowLabel
-        Implements ITip
+        Implements IScreenTip
+        Implements ISuperTip
 
         Private ReadOnly Attributes As AttributeGroup
 
@@ -31,7 +32,7 @@ Namespace Controls
             End Get
         End Property
 
-        Public Property Enabled As Boolean Implements IEnable.Enabled
+        Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
                 Return Attributes.Lookup(Of Enabled).GetValue()
             End Get
@@ -67,7 +68,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property ScreenTip As String Implements ITip.ScreenTip
+        Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
                 Return Attributes.Lookup(Of Screentip).GetValue()
             End Get
@@ -76,12 +77,13 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ITip.Supertip
+        Public Property SuperTip As String Implements ISuperTip.Supertip
             Get
                 Return Attributes.Lookup(Of Supertip).GetValue()
             End Get
             Set
                 Attributes.Lookup(Of GetSupertip).SetValue(value)
+                Refresh()
             End Set
         End Property
 

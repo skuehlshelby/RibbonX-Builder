@@ -1,4 +1,4 @@
-﻿Namespace Component_Interfaces
+﻿Namespace Builder_Interfaces
     Public Interface ITip
         Property ScreenTip As String
         Property SuperTip As String

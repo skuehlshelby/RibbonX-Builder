@@ -1,4 +1,4 @@
-﻿Namespace RibbonAttributes.Categories.Supertip
+﻿Namespace RibbonAttributes.Categories.SuperTip
     Friend Class Supertip
         Inherits RibbonAttribute(Of String, Supertip)
 

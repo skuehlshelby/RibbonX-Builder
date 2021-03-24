@@ -3,7 +3,6 @@ Imports System.Reflection
 Imports System.Xml
 Imports System.Xml.Schema
 Imports NetOffice.OfficeApi
-Imports RibbonFactory.Component_Interfaces
 
 Namespace Containers
 

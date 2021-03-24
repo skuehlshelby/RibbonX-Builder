@@ -1,15 +1,4 @@
-﻿Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.Enums
-Imports RibbonFactory.RibbonAttributes.Categories.Description
-Imports RibbonFactory.RibbonAttributes.Categories.Enabled
-Imports RibbonFactory.RibbonAttributes.Categories.ID
-Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.Screentip
-Imports RibbonFactory.RibbonAttributes.Categories.Size
-Imports RibbonFactory.RibbonAttributes.Categories.Supertip
-Imports RibbonFactory.RibbonAttributes.Categories.Visible
-
-Namespace RibbonAttributes
+﻿Namespace RibbonAttributes
     Public Class AttributeGroup
         Inherits HashSet(Of RibbonAttribute)
 

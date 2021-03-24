@@ -7,7 +7,7 @@
 
         Public Sub New(value As Action, callback As RibbonFactory.OnAction)
             MyBase.New(value)
-            Me._callback = callback.Method.Name
+            _callback = callback.Method.Name
         End Sub
 
         Public Overrides ReadOnly Property XML As String

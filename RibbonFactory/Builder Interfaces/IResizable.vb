@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Enums
 
-Namespace Component_Interfaces
+Namespace Builder_Interfaces
     Public Interface IResizable
         Property Size As ControlSize
     End Interface

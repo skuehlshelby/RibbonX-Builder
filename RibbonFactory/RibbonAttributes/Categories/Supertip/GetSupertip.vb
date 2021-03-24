@@ -1,23 +1,21 @@
-﻿Namespace RibbonAttributes.Categories.Supertip
-    Friend NotInheritable Class GetSupertip
+﻿Namespace RibbonAttributes.Categories.SuperTip
+    Friend NotInheritable Class GetSuperTip
         Inherits Supertip
 
-        Private ReadOnly Callback As String
+        Private ReadOnly _callback As String
 
-        Public Sub New(Value As String, Callback As FromControl(Of String))
-            MyBase.New(Value)
-            Me.Callback = Callback.Method.Name
+        Public Sub New(value As String, callback As FromControl(Of String))
+            MyBase.New(value)
+            Me._callback = callback.Method.Name
         End Sub
 
-        Public Sub SetValue(Value As String)
-            If Not Me.Value.Equals(Value) Then
-                Me.Value = Value
-            End If
+        Public Sub SetValue(value As String)
+                Me.Value = value
         End Sub
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, NameOf(GetSupertip), Callback)
+                Return String.Format(XML_TEMPLATE, NameOf(GetSuperTip), _callback)
             End Get
         End Property
     End Class
