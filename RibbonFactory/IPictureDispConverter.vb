@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports System.Runtime.InteropServices
 
+'This module supports the creation of custom images for the ribbon.
 Public Module IPictureDispConverter
 
     <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", CharSet:=CharSet.Ansi, ExactSpelling:=True, PreserveSig:=True)>
