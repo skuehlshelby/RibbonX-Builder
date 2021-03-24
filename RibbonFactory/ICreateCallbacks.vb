@@ -2,7 +2,8 @@
 Imports RibbonFactory.Enums
 Imports stdole
 
-
+'This interface exists only for convenience.
+'Implementing it will cause all possible callback signatures to be generated in the implementing class.
 Interface ICreateCallbacks
     Function GetEnabled(control As IRibbonControl) As Boolean
     Function GetVisible(control As IRibbonControl) As Boolean
