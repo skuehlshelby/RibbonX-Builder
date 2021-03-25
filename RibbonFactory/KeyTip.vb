@@ -37,5 +37,9 @@
         Return value.ToUpper()
     End Function
 
+    Public Shared Function GetNextAvailableKeyTip() As KeyTip
+        Throw new NotImplementedException
+    End Function
+
     Private Shared ReadOnly KeyTipsInUse As ISet(Of String) = New HashSet(Of String)
 End Structure

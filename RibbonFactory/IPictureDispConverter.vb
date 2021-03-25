@@ -1,22 +1,25 @@
 ﻿Imports System.Drawing
 Imports System.Runtime.InteropServices
 
-'This module supports the creation of custom images for the ribbon.
-Public Module IPictureDispConverter
+''' <summary>
+''' This module supports the creation of custom images for the ribbon.
+''' It provides a utility method for converting bitmaps to IPictureDisp.
+''' </summary>
+Public Module PictureDispConverter
 
     <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", CharSet:=CharSet.Ansi, ExactSpelling:=True, PreserveSig:=True)>
-    Private Function OleCreatePictureIndirect(ByRef pictdesc As PICTDESC, ByRef riid As Guid, fOwn As Boolean, <MarshalAs(UnmanagedType.IDispatch)> ByRef lplpvObj As Object) As Integer
+    Private Function OleCreatePictureIndirect(ByRef pictdesc As Pictdesc, ByRef riid As Guid, fOwn As Boolean, <MarshalAs(UnmanagedType.IDispatch)> ByRef lplpvObj As Object) As Integer
     End Function
 
     <StructLayout(LayoutKind.Sequential)>
-    Friend Structure PICTDESC
+    Friend Structure Pictdesc
         Public SizeOfStruct As Integer
         Public PicType As Integer
         Public Hbitmap As IntPtr
         Public Hpal As IntPtr
         Public Padding As Integer
         Public Sub New(hBmp As IntPtr)
-            SizeOfStruct = Marshal.SizeOf(GetType(PICTDESC))
+            SizeOfStruct = Marshal.SizeOf(GetType(Pictdesc))
             PicType = 1
             Hbitmap = hBmp
             Hpal = IntPtr.Zero
@@ -24,10 +27,10 @@ Public Module IPictureDispConverter
         End Sub
     End Structure
 
-    Public Function ImageToPictureDisp(Input As Bitmap) As stdole.IPictureDisp
-        Dim PictDesc As PICTDESC = New PICTDESC(Input.GetHbitmap())
-        Dim Pic As Object = Nothing
-        OleCreatePictureIndirect(PictDesc, GetType(stdole.IPictureDisp).GUID, True, Pic)
-        Return CType(Pic, stdole.IPictureDisp)
+    Public Function ImageToPictureDisp(input As Bitmap) As stdole.IPictureDisp
+        Dim pictDesc As Pictdesc = New Pictdesc(input.GetHbitmap())
+        Dim pic As Object = Nothing
+        OleCreatePictureIndirect(pictDesc, GetType(stdole.IPictureDisp).GUID, True, pic)
+        Return CType(pic, stdole.IPictureDisp)
     End Function
 End Module

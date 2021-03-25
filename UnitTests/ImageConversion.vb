@@ -13,7 +13,7 @@ Public Class ImageConversion
         Dim stream As Stream = assmbly.GetManifestResourceStream("UnitTests.CloudIcon.PNG")
         Dim image As Bitmap = New Bitmap(stream)
 
-        IPictureDispConverter.ImageToPictureDisp(image)
+        PictureDispConverter.ImageToPictureDisp(image)
     End Sub
 
 End Class

@@ -2,8 +2,11 @@
 Imports RibbonFactory.Enums
 Imports stdole
 
-'This interface exists only for convenience.
-'Implementing it will cause all possible callback signatures to be generated in the implementing class.
+''' <summary>
+''' This interface exists only for convenience.
+''' Implementing it will cause all possible callback signatures to be generated in the implementing class.
+''' This is useful for creating dynamic ribbon objects, since the objects require callback methods that already exist.
+''' </summary>
 Interface ICreateCallbacks
     Function GetEnabled(control As IRibbonControl) As Boolean
     Function GetVisible(control As IRibbonControl) As Boolean
@@ -20,7 +23,7 @@ Interface ICreateCallbacks
     Function GetItemID(control As IRibbonControl, index As Integer) As String
     Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp
     Function GetItemLabel(control As IRibbonControl, index As Integer) As String
-    Function GetItemScreentip(control As IRibbonControl, index As Integer) As String
+    Function GetItemScreenTip(control As IRibbonControl, index As Integer) As String
     Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String
     Function GetSelectedItemID(control As IRibbonControl) As String
     Function GetSelectedItemIndex(control As IRibbonControl) As Integer

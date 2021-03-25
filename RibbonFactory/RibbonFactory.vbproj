@@ -134,6 +134,7 @@
     <Compile Include="Component Interfaces\IPressed.vb" />
     <Compile Include="Controls\Button.vb" />
     <Compile Include="Controls\CheckBox.vb" />
+    <Compile Include="Controls\ComboBox.vb" />
     <Compile Include="Controls\DropdownItem.vb" />
     <Compile Include="Controls\EditBox.vb" />
     <Compile Include="Controls\LabelControl.vb" />
