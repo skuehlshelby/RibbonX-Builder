@@ -1,7 +1,6 @@
 ﻿Namespace RibbonAttributes
     Public MustInherit Class RibbonAttribute(Of T, K As RibbonAttribute)
         Inherits RibbonAttribute
-        Implements IRibbonAttribute(Of T)
 
         Protected Value As T
         Private ReadOnly _hashCode As Integer
@@ -11,7 +10,7 @@
             _hashCode = GetType(K).GetHashCode()
         End Sub
 
-        Public Function GetValue() As T Implements IRibbonAttribute(Of T).GetValue
+        Public Function GetValue() As T
             Return Value
         End Function
 

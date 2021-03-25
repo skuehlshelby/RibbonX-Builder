@@ -2,7 +2,6 @@
 
     Public Class GetPressed
         Inherits RibbonAttribute(Of Boolean, GetPressed)
-        Implements IMutableRibbonAttribute(Of Boolean)
 
         Private ReadOnly _callback As String
 
@@ -11,7 +10,7 @@
             _callback = callback.Method.Name
         End Sub
 
-        Public Sub SetValue(value As Boolean) Implements IMutableRibbonAttribute(Of Boolean).SetValue
+        Public Sub SetValue(value As Boolean)
             MyBase.Value = value
         End Sub
 

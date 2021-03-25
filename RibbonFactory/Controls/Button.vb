@@ -5,6 +5,7 @@ Imports RibbonFactory.RibbonAttributes.Categories.Description
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
 Imports RibbonFactory.RibbonAttributes.Categories.Image
+Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
 Imports RibbonFactory.RibbonAttributes.Categories.Label
 Imports RibbonFactory.RibbonAttributes.Categories.Screentip
 Imports RibbonFactory.RibbonAttributes.Categories.Size
@@ -16,17 +17,18 @@ Namespace Controls
 
     Public NotInheritable Class Button
         Inherits RibbonElement
-        Implements IOnAction
         Implements IEnabled
+        Implements IVisible
         Implements ILabel
         Implements IShowLabel
         Implements IScreenTip
         Implements ISupertip
+        Implements IKeyTip
         Implements IDescription
         Implements IImage
+        Implements IOnAction
         Implements IShowImage
         Implements ISize
-        Implements IVisible
 
         Private ReadOnly _attributes As AttributeGroup = New AttributeGroup()
 
@@ -151,6 +153,16 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetSize).SetValue(value)
+            End Set
+        End Property
+
+        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
+            Get
+                Return _attributes.Lookup (Of Categories.KeyTip.KeyTip).GetValue()
+            End Get
+            Set
+                _attributes.Lookup (Of GetKeyTip).SetValue(value)
+                Refresh()
             End Set
         End Property
 

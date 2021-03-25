@@ -122,6 +122,7 @@
     <Compile Include="Component Interfaces\IShowLabel.vb" />
     <Compile Include="Component Interfaces\ISize.vb" />
     <Compile Include="Component Interfaces\ISuperTip.vb" />
+    <Compile Include="Component Interfaces\IText.vb" />
     <Compile Include="Component Interfaces\IVisible.vb" />
     <Compile Include="Containers\Box.vb" />
     <Compile Include="Containers\Group.vb" />
@@ -134,6 +135,7 @@
     <Compile Include="Controls\Button.vb" />
     <Compile Include="Controls\CheckBox.vb" />
     <Compile Include="Controls\DropdownItem.vb" />
+    <Compile Include="Controls\EditBox.vb" />
     <Compile Include="Controls\LabelControl.vb" />
     <Compile Include="Controls\ToggleButton.vb" />
     <Compile Include="ElementUpdatedEventArgs.vb" />
@@ -151,9 +153,9 @@
     <Compile Include="RibbonAttributes\Categories\Enabled\GetEnabled.vb" />
     <Compile Include="RibbonAttributes\Categories\ID\IdQ.vb" />
     <Compile Include="RibbonAttributes\Categories\ID\Id.vb" />
+    <Compile Include="RibbonAttributes\Categories\MaxLength\MaxLength.vb" />
+    <Compile Include="RibbonAttributes\Categories\OnChange\OnChange.vb" />
     <Compile Include="RibbonAttributes\Categories\Pressed\GetPressed.vb" />
-    <Compile Include="RibbonAttributes\IRibbonAttribute.vb" />
-    <Compile Include="RibbonAttributes\IMutableRibbonAttribute.vb" />
     <Compile Include="RibbonAttributes\Categories\Image\GetImage.vb" />
     <Compile Include="RibbonAttributes\Categories\Image\GetShowImage.vb" />
     <Compile Include="RibbonAttributes\Categories\Image\ImageBase.vb" />
@@ -176,6 +178,7 @@
     <Compile Include="RibbonAttributes\Categories\Size\GetSize.vb" />
     <Compile Include="RibbonAttributes\Categories\Supertip\GetSuperTip.vb" />
     <Compile Include="RibbonAttributes\Categories\Supertip\Supertip.vb" />
+    <Compile Include="RibbonAttributes\Categories\Text\GetText.vb" />
     <Compile Include="RibbonAttributes\Categories\Visible\Visible.vb" />
     <Compile Include="RibbonAttributes\Categories\Visible\GetVisible.vb" />
     <Compile Include="RibbonAttributes\RibbonAttribute.vb" />
@@ -223,8 +226,6 @@
   <ItemGroup>
     <Content Include="ExampleXML.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RibbonAttributes\Categories\Text\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

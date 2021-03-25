@@ -1,5 +1,7 @@
 ﻿Namespace Component_Interfaces
-    Public Interface IOnChange
-        Sub Execute()
+    
+    Public Interface IText
+        Property Text As String
     End Interface
+
 End NameSpace

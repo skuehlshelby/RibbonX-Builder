@@ -1,7 +1,6 @@
 ﻿Namespace RibbonAttributes.Categories.Enabled
     Friend Class Enabled
         Inherits RibbonAttribute(Of Boolean, Enabled)
-        Implements IRibbonAttribute(Of Boolean)
 
         Public Sub New(Value As Boolean)
             MyBase.New(Value)

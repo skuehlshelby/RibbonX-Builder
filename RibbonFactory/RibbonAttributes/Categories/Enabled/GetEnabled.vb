@@ -1,7 +1,6 @@
 ﻿Namespace RibbonAttributes.Categories.Enabled
     Friend NotInheritable Class GetEnabled
         Inherits Enabled
-        Implements IMutableRibbonAttribute(Of Boolean)
 
         Private ReadOnly _callback As String
 
@@ -10,7 +9,7 @@
             Me._callback = Callback.Method.Name
         End Sub
 
-        Public Sub SetValue(value As Boolean) Implements IMutableRibbonAttribute(Of Boolean).SetValue
+        Public Sub SetValue(value As Boolean)
             If Not Me.Value.Equals(Value) Then
                 Me.Value = Value
             End If

@@ -1,6 +1,6 @@
-﻿Namespace RibbonAttributes.Categories.OnAction
-    Public NotInheritable Class OnAction
-        Inherits RibbonAttribute(Of Action, OnAction)
+﻿Namespace RibbonAttributes.Categories.OnChange
+    Public Class OnChange
+        Inherits RibbonAttribute(Of Action, OnChange)
 
         Private ReadOnly _callback As String
 
@@ -11,8 +11,8 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(OnAction)), _callback)
+                Return String.Format(XML_TEMPLATE, CamelCase(NameOf(OnChange)), _callback)
             End Get
         End Property
     End Class
-End Namespace
+End NameSpace

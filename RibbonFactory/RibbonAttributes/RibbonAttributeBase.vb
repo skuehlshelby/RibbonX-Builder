@@ -1,12 +1,9 @@
-﻿Imports RibbonFactory.RibbonAttributes.Categories.Enabled
-
-Namespace RibbonAttributes
+﻿Namespace RibbonAttributes
     Public MustInherit Class RibbonAttribute
-        Implements IRibbonAttribute
 
         Protected Const XML_TEMPLATE As String = "{0}=""{1}"""
 
-        Public MustOverride ReadOnly Property XML As String Implements IRibbonAttribute.XML
+        Public MustOverride ReadOnly Property XML As String
 
         Public Overrides Function ToString() As String
             Return XML

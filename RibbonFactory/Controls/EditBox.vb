@@ -1,38 +1,40 @@
-﻿Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.RibbonAttributes.Categories.Description
+﻿Imports RibbonFactory.Component_Interfaces
+Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
 Imports RibbonFactory.RibbonAttributes.Categories.Image
+Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
 Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.Pressed
+Imports RibbonFactory.RibbonAttributes.Categories.MaxLength
+Imports RibbonFactory.RibbonAttributes.Categories.OnChange
 Imports RibbonFactory.RibbonAttributes.Categories.Screentip
-Imports RibbonFactory.RibbonAttributes.Categories.Size
-Imports RibbonFactory.RibbonAttributes.Categories.Supertip
+Imports RibbonFactory.RibbonAttributes.Categories.SuperTip
+Imports RibbonFactory.RibbonAttributes.Categories.Text
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
+Imports stdole
 
 Namespace Controls
 
-    Public Class ToggleButton
+    Public Class EditBox
         Inherits RibbonElement
-        Implements IOnAction
         Implements IEnabled
+        Implements IVisible
+        Implements ILabel
         Implements IScreenTip
         Implements ISuperTip
-        Implements IDescription
-        Implements ILabel
         Implements IShowLabel
+        Implements IKeyTip
         Implements IImage
         Implements IShowImage
-        Implements ISize
-        Implements IPressed
-        Implements IVisible
+        Implements IText
+        Implements IMaxLength
+        Implements IOnChange
 
         Private ReadOnly _attributes As AttributeGroup
 
-        Friend Sub New(buttonAttributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
-            _attributes = buttonAttributes
+            _attributes = attributes
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -43,7 +45,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<toggleButton { String.Join(" ", _attributes) }/>"
+                Return $"<editBox { String.Join(" ", _attributes) }/>"
             End Get
         End Property
 
@@ -52,7 +54,7 @@ Namespace Controls
                 Return _attributes.Lookup(Of Enabled).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetEnabled).SetValue(value)
+                _attributes.Lookup(Of GetEnabled).SetValue(Value)
                 Refresh()
             End Set
         End Property
@@ -62,7 +64,7 @@ Namespace Controls
                 Return _attributes.Lookup(Of Visible).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetVisible).SetValue(value)
+                _attributes.Lookup(Of GetVisible).SetValue(Value)
                 Refresh()
             End Set
         End Property
@@ -72,17 +74,7 @@ Namespace Controls
                 Return _attributes.Lookup(Of Label).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetLabel).SetValue(value)
-                Refresh()
-            End Set
-        End Property
-
-        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
-            Get
-                Return _attributes.Lookup(Of ShowLabel).GetValue()
-            End Get
-            Set
-                _attributes.Lookup(Of GetShowLabel).SetValue(value)
+                _attributes.Lookup(Of GetLabel).SetValue(Value)
                 Refresh()
             End Set
         End Property
@@ -92,37 +84,37 @@ Namespace Controls
                 Return _attributes.Lookup(Of Screentip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetScreentip).SetValue(value)
+                _attributes.Lookup(Of GetScreentip).SetValue(Value)
                 Refresh()
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.Supertip
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Lookup(Of Supertip).GetValue()
+                Return _attributes.Lookup (Of SuperTip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetSuperTip).SetValue(value)
+                _attributes.Lookup (Of GetSuperTip).SetValue(value)
                 Refresh()
             End Set
         End Property
 
-        Public Property Size As Enums.ControlSize Implements ISize.Size
+        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Lookup (Of Size).GetValue()
+                Return _attributes.Lookup (Of ShowLabel).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetSize).SetValue(value)
+                _attributes.Lookup (Of GetShowLabel).SetValue(value)
                 Refresh()
             End Set
         End Property
 
-        Public Property Pressed As Boolean Implements IPressed.Pressed
+        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Lookup (Of GetPressed).GetValue()
+                Return _attributes.Lookup (Of Categories.KeyTip.KeyTip).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetPressed).SetValue(value)
+                _attributes.Lookup (Of GetKeyTip).SetValue(value)
                 Refresh()
             End Set
         End Property
@@ -132,13 +124,14 @@ Namespace Controls
                 If IsCustom Then
                     Return _attributes.Lookup(Of GetImage).GetValue()
                 Else
-                    Return _attributes.Lookup(Of ImageMso).GetValue()
+                    Return _attributes.Lookup(Of Categories.Image.ImageMso).GetValue()
                 End If
             End Get
             Set
                 If IsCustom Then
-                    _attributes.Lookup(Of GetImage).SetValue(CType(value, stdole.IPictureDisp))
-                    Refresh()
+                    _attributes.Lookup(Of GetImage).SetValue(CType(value, IPictureDisp))
+                Else
+                    _attributes.Lookup(Of ImageMso).GetValue()
                 End If
             End Set
         End Property
@@ -159,26 +152,29 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property Description As String Implements IDescription.Description
+        Public Property Text As String Implements IText.Text
             Get
-                Return _attributes.Lookup(Of Description).GetValue()
+                Return _attributes.Lookup (Of GetText).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetDescription).SetValue(value)
+                _attributes.Lookup (Of GetText).SetValue(value)
                 Refresh()
             End Set
         End Property
 
-        Public Sub Execute() Implements IOnAction.Execute
-            _attributes.Lookup(Of Categories.OnAction.OnAction).GetValue().Invoke()
+        Public ReadOnly Property MaxLength As UShort Implements IMaxLength.MaxLength
+            Get
+                Return _attributes.Lookup (Of MaxLength).GetValue()
+            End Get
+        End Property
+
+        Public Sub Execute() Implements IOnChange.Execute
+            _attributes.Lookup (Of OnChange).GetValue().Invoke()
         End Sub
 
-        Public Overrides Function ToString() As String
-            Return XML
-        End Function
-
         Public Overrides Function Equals(obj As Object) As Boolean
-            Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is ToggleButton
+            Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is Button
         End Function
     End Class
-End NameSpace
+
+End Namespace
