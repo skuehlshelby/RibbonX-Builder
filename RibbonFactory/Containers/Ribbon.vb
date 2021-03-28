@@ -27,50 +27,22 @@ Namespace Containers
         Public Sub New(Optional [nameSpace] As String = Nothing, Optional startFromScratch As Boolean = False)
             _nameSpace = [nameSpace]
             _startFromScratch = startFromScratch
-            Tabs = New List(Of Tab)()
         End Sub
 
-        Public ReadOnly Property Tabs As List(Of Tab)
-
-        Public ReadOnly Property AllElements As List(Of RibbonElement)
-            Get
-                Return _allElements
-            End Get
-        End Property
-
-        Public Function AddTab(displayName As String) As Tab
-            Dim newTab As Tab = New Tab(displayName)
-            Tabs.Add(newTab)
-            Return newTab
+        Public Function GetItem(Of T As RibbonElement)(itemID As String) As T
+            Throw New NotImplementedException
         End Function
+
+        Private Function SearchByID(itemID As String) As RibbonElement
+            Throw New NotImplementedException
+        End Function
+
+        Public ReadOnly Property Tabs As ICollection(Of Tab)
 
         Public Function Build() As String
             Dim ribbonX As String = String.Format(BoilerPlate, $"startFromScratch=""{_startFromScratch.ToString().ToLower()}""", String.Join(vbNewLine, Tabs.Select(Function(T) T.XML)))
             ValidateRibbon(ribbonX)
             Return ribbonX
-        End Function
-
-        Private Sub AddElements(container As IContainer)
-            For Each e As RibbonElement In container.Items
-                If Not _allElements.Contains(e) Then
-                    _allElements.Add(e)
-                End If
-                If TypeOf e Is IContainer Then
-                    'AddElements(E)
-                End If
-            Next e
-        End Sub
-
-        Private Function Flatten(container As IContainer) As List(Of RibbonElement)
-            Flatten = New List(Of RibbonElement)
-
-            If container.Items.Any(Function(item) TypeOf item Is IContainer) Then
-                For Each c As IContainer In container.Items.Where(Function(item) TypeOf item Is IContainer).Select(Function(item) (DirectCast(item, IContainer)))
-                    Flatten.AddRange(Flatten(c)) 
-                Next c
-            Else
-                Flatten.AddRange(container.Items)
-            End If
         End Function
 
         Public Sub AssignRibbonUI(ribbonUi As IRibbonUI)

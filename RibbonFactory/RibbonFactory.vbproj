@@ -118,6 +118,7 @@
     <Compile Include="Component Interfaces\IOnAction.vb" />
     <Compile Include="Component Interfaces\IOnChange.vb" />
     <Compile Include="Component Interfaces\IScreenTip.vb" />
+    <Compile Include="Component Interfaces\ISelectable.vb" />
     <Compile Include="Component Interfaces\IShowImage.vb" />
     <Compile Include="Component Interfaces\IShowLabel.vb" />
     <Compile Include="Component Interfaces\ISize.vb" />
@@ -135,6 +136,7 @@
     <Compile Include="Controls\Button.vb" />
     <Compile Include="Controls\CheckBox.vb" />
     <Compile Include="Controls\ComboBox.vb" />
+    <Compile Include="Controls\DropDown.vb" />
     <Compile Include="Controls\DropdownItem.vb" />
     <Compile Include="Controls\EditBox.vb" />
     <Compile Include="Controls\LabelControl.vb" />
@@ -148,6 +150,16 @@
     <Compile Include="IPictureDispConverter.vb" />
     <Compile Include="KeyTip.vb" />
     <Compile Include="RibbonAttributes\AttributeGroup.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemCount.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemID.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\Image\GetItemImage.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\Label\GetItemLabel.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\ScreenTip\GetItemScreenTip.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\SuperTip\GetItemSuperTip.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\GetSelectedItemID.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\GetSelectedItemIndex.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\Image\ShowItemImage.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\Label\ShowItemLabel.vb" />
     <Compile Include="RibbonAttributes\Categories\Description\Description.vb" />
     <Compile Include="RibbonAttributes\Categories\Description\GetDescription.vb" />
     <Compile Include="RibbonAttributes\Categories\Enabled\Enabled.vb" />

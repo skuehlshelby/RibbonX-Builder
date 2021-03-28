@@ -3,37 +3,33 @@ Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
 Imports RibbonFactory.RibbonAttributes.Categories.Image
-Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
 Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.MaxLength
 Imports RibbonFactory.RibbonAttributes.Categories.Screentip
 Imports RibbonFactory.RibbonAttributes.Categories.SuperTip
-Imports RibbonFactory.RibbonAttributes.Categories.Text
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
 Imports stdole
 
 Namespace Controls
 
-    Public Class ComboBox
+    Public Class DropDown
         Inherits RibbonElement
         Implements ICollection(Of DropdownItem)
+        Implements ISelectable
         Implements IEnabled
         Implements IVisible
         Implements ILabel
         Implements IScreenTip
         Implements ISuperTip
         Implements IShowLabel
-        Implements IKeyTip
         Implements IImage
         Implements IShowImage
-        Implements IMaxLength
-        Implements IOnChange
-        Implements IText
+        Implements IOnAction
 
+        Private _selected As DropdownItem
         Private ReadOnly _items As List(Of DropdownItem) = New List(Of DropdownItem)()
         Private ReadOnly _attributes As AttributeGroup
 
-        Public Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
         End Sub
@@ -46,7 +42,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<comboBox { String.Join(" ", _attributes) }/>"
+                Return $"<dropDown { String.Join(" ", _attributes) }/>"
             End Get
         End Property
 
@@ -110,17 +106,6 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
-
-            Get
-                Return _attributes.Lookup(Of Categories.KeyTip.KeyTip).GetValue()
-            End Get
-            Set
-                _attributes.Lookup(Of GetKeyTip).SetValue(Value)
-                Refresh()
-            End Set
-        End Property
-
         Public Property Image As Object Implements IImage.Image
             Get
                 If IsCustom Then
@@ -154,28 +139,21 @@ Namespace Controls
             End Set
         End Property
 
-        Public ReadOnly Property MaxLength As UShort Implements IMaxLength.MaxLength
+        Public Property Selected As DropdownItem Implements ISelectable.Selected
             Get
-                Return _attributes.Lookup(Of MaxLength).GetValue()
-            End Get
-        End Property
-
-        Public Property Text As String Implements IText.Text
-
-            Get
-                Return _attributes.Lookup(Of GetText).GetValue()
+                Return _selected
             End Get
             Set
-                _attributes.Lookup(Of GetText).SetValue(Value)
+                _selected = Value
                 Refresh()
             End Set
         End Property
 
-        Public Sub Execute() Implements IOnChange.Execute
-            _attributes.Lookup(Of Categories.OnChange.OnChange).GetValue().Invoke()
+        Public Sub Execute() Implements IOnAction.Execute
+            Throw New NotImplementedException()
         End Sub
 
-        #Region "Methods Pertaining to Dropdown Items"
+#Region "Methods Pertaining to Dropdown Items"
 
         Public Sub Add(item As DropdownItem) Implements ICollection(Of DropdownItem).Add
             _items.Add(item)
@@ -224,15 +202,15 @@ Namespace Controls
             Return _items.GetEnumerator()
         End Function
 
-        #End Region
+#End Region
 
-        #Region "Overriden Base Class Methods"
+#Region "Overriden Base Class Methods"
 
         Public Overrides Function Equals(obj As Object) As Boolean
             Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is ComboBox
         End Function
 
-        #End Region
+#End Region
     End Class
 
 End Namespace

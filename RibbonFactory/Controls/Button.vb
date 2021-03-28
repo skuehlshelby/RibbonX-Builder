@@ -30,11 +30,11 @@ Namespace Controls
         Implements IShowImage
         Implements ISize
 
-        Private ReadOnly _attributes As AttributeGroup = New AttributeGroup()
+        Private ReadOnly _attributes As AttributeGroup
 
-        Friend Sub New(buttonAttributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
-            _attributes.MergeWith(buttonAttributes)
+            _attributes = attributes
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -45,9 +45,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return _
-                    String.Format(String.Join(vbNewLine, "<button {0}/>"),
-                                  String.Join(vbNewLine & vbTab, _attributes))
+                 Return $"<button { String.Join(" ", _attributes) }/>"
             End Get
         End Property
 

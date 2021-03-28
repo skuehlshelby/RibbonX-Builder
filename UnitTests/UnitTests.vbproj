@@ -118,6 +118,7 @@
     </Compile>
     <Compile Include="RibbonAttributeTests.vb" />
     <Compile Include="SimpleRibbonTest.vb" />
+    <Compile Include="SyntaxTesting.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
