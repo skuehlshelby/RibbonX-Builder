@@ -10,7 +10,7 @@ Public Class SimpleRibbonTest
     <TestMethod()>
     Public Sub BuildSimple()
         _ribbon = New Ribbon(startFromScratch:= False, [nameSpace]:= "Testing")
-        _ribbon.AddTab("TestTab").AddGroup().Add(New ButtonBuilder() _
+        _ribbon.Tabs.Add("TestTab").AddGroup().Add(New ButtonBuilder() _
                                                     .WithLabel("My Button") _
                                                     .WithScreenTip("My favorite button.") _
                                                     .ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")) _

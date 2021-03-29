@@ -2,6 +2,9 @@
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports NetOffice.OfficeApi
 Imports RibbonFactory
+Imports RibbonFactory.Builders
+Imports RibbonFactory.Component_Interfaces
+Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports stdole
@@ -9,12 +12,23 @@ Imports stdole
 Public Class SyntaxTesting
     Implements RibbonFactory.ICreateCallbacks
 
+    Dim _ribbon As Ribbon = New Ribbon(startFromScratch:= False, [nameSpace]:= "Testing")
+
+    Private Sub BuilderTest()
+        With New TabBuilder
+            .WithLabel("dfhfds").Visible().Build()
+        End With
+        With New ButtonBuilder
+            .WithLabel("test").WithSuperTip("more test").ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")).Build()
+        End With
+    End Sub
+
     Public Sub OnAction(control As IRibbonControl) Implements ICreateCallbacks.OnAction
-        Throw New NotImplementedException()
+        _ribbon.GetItem(Of IOnAction)(control.Id).Execute()
     End Sub
 
     Public Sub OnChange(control As IRibbonControl, text As String) Implements ICreateCallbacks.OnChange
-        Throw New NotImplementedException()
+        _ribbon.GetItem(Of IOnChange)(control.Id).Execute()
     End Sub
 
     Public Sub SelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.SelectionChange
@@ -22,11 +36,11 @@ Public Class SyntaxTesting
     End Sub
 
     Public Sub ButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.ButtonToggle
-        Throw New NotImplementedException()
+        _ribbon.GetItem(Of IPressed)(control.Id).Pressed = pressed
     End Sub
 
     Public Function GetEnabled(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetEnabled
-        Throw New NotImplementedException()
+        Return _ribbon.GetItem(Of IEnabled)(control.Id).Enabled
     End Function
 
     Public Function GetVisible(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetVisible
@@ -70,11 +84,11 @@ Public Class SyntaxTesting
     End Function
 
     Public Function GetItemCount(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemCount
-        Throw New NotImplementedException()
+        Return _ribbon.GetItem(Of ICollection(Of DropdownItem))(control.Id).Count
     End Function
 
     Public Function GetItemID(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemID
-        Return New ComboBox().ElementAt(index).ID
+        Return _ribbon.GetItem(Of ICollection(Of DropdownItem))(control.Id).ElementAt(index).ID
     End Function
 
     Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp Implements ICreateCallbacks.GetItemImage

@@ -29,7 +29,7 @@ Namespace Containers
             _startFromScratch = startFromScratch
         End Sub
 
-        Public Function GetItem(Of T As RibbonElement)(itemID As String) As T
+        Public Function GetItem(Of T)(itemID As String) As T
             Throw New NotImplementedException
         End Function
 

@@ -96,18 +96,18 @@
   <ItemGroup>
     <Compile Include="Builder Interfaces\ISetDescription.vb" />
     <Compile Include="Builder Interfaces\ISetCharacterLimit.vb" />
-    <Compile Include="Builder Interfaces\IEnable.vb" />
-    <Compile Include="Builder Interfaces\IExecute.vb" />
+    <Compile Include="Builder Interfaces\ISetEnabled.vb" />
+    <Compile Include="Builder Interfaces\ISetAction.vb" />
     <Compile Include="Builder Interfaces\IGraphic.vb" />
-    <Compile Include="Builder Interfaces\ILabel.vb" />
-    <Compile Include="Builder Interfaces\ILabelScreentipSupertip.vb" />
+    <Compile Include="Builder Interfaces\ISetLabel.vb" />
+    <Compile Include="Builder Interfaces\ISetLabelScreenTipAndSuperTip.vb" />
     <Compile Include="Builder Interfaces\IOrientable.vb" />
-    <Compile Include="Builder Interfaces\IResizable.vb" />
+    <Compile Include="Builder Interfaces\ISetSize.vb" />
     <Compile Include="Builder Interfaces\ISetLabelVisibility.vb" />
-    <Compile Include="Builder Interfaces\ITip.vb" />
     <Compile Include="Builder Interfaces\ISetVisibility.vb" />
     <Compile Include="Builders\GroupBuilder.vb" />
     <Compile Include="Builders\LabelControlBuilder.vb" />
+    <Compile Include="Builders\TabBuilder.vb" />
     <Compile Include="Component Interfaces\IKeyTip.vb" />
     <Compile Include="Component Interfaces\ILabel.vb" />
     <Compile Include="Component Interfaces\IDescription.vb" />
@@ -153,6 +153,7 @@
     <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemCount.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemID.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\Image\GetItemImage.vb" />
+    <Compile Include="RibbonAttributes\Categories\ChildItems\InvalidateContentOnDrop.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\Label\GetItemLabel.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\ScreenTip\GetItemScreenTip.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\SuperTip\GetItemSuperTip.vb" />

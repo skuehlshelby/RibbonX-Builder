@@ -1,7 +1,7 @@
 ﻿Imports RibbonFactory.Builders
 
 Namespace Builder_Interfaces
-    Public Interface ISetCharacterLimit(Of T As RibbonElement)
-        Function WithCharacterLimit(limit As Byte) As Builder(Of T)
+    Public Interface ISetCharacterLimit(Of T As Builder)
+        Function WithCharacterLimit(limit As Byte) As T
     End Interface
 End NameSpace

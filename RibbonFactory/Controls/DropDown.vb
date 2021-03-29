@@ -150,7 +150,7 @@ Namespace Controls
         End Property
 
         Public Sub Execute() Implements IOnAction.Execute
-            Throw New NotImplementedException()
+            _attributes.Lookup(Of Categories.OnAction.OnAction).GetValue().Invoke()
         End Sub
 
 #Region "Methods Pertaining to Dropdown Items"
