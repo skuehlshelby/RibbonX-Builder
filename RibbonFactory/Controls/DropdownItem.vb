@@ -90,7 +90,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Property Image As Object Implements IImage.Image
+        Private Property Image As IPictureDisp Implements IImage.Image
             Get
                 Return _attributes.Lookup(Of GetImage).GetValue()
             End Get

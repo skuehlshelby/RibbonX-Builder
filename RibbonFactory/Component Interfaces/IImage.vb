@@ -1,6 +1,8 @@
-﻿Namespace Component_Interfaces
+﻿Imports stdole
+
+Namespace Component_Interfaces
     Public Interface IImage
-        Property Image As Object
+        Property Image As IPictureDisp
         ReadOnly Property IsCustom As Boolean
     End Interface
 End NameSpace

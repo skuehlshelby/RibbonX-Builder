@@ -18,9 +18,9 @@ Public Class SyntaxTesting
         With New TabBuilder
             .WithLabel("dfhfds").Visible().Build()
         End With
-        With New ButtonBuilder
-            .WithLabel("test").WithSuperTip("more test").ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")).Build()
-        End With
+
+        Dim MyButton As Button = New ButtonBuilder().Large().WithLabel("My Button").ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello!")).Build()
+        MyButton.Size = ControlSize.normal
     End Sub
 
     Public Sub OnAction(control As IRibbonControl) Implements ICreateCallbacks.OnAction

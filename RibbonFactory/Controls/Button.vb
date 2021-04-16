@@ -55,6 +55,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetDescription).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -64,6 +65,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetLabel).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -73,6 +75,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetShowLabel).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -82,6 +85,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetScreentip).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -91,6 +95,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetSuperTip).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -100,6 +105,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetEnabled).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -109,23 +115,17 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetVisible).SetValue(value)
+                Refresh()
             End Set
         End Property
 
-        Public Property Image As Object Implements IImage.Image
+        Public Property Image As IPictureDisp Implements IImage.Image
             Get
-                If IsCustom Then
-                    Return _attributes.Lookup(Of GetImage).GetValue()
-                Else
-                    Return _attributes.Lookup(Of Categories.Image.ImageMso).GetValue()
-                End If
+                Return _attributes.Lookup(Of GetImage).GetValue()
             End Get
             Set
-                If IsCustom Then
-                    _attributes.Lookup(Of GetImage).SetValue(CType(value, IPictureDisp))
-                Else
-                    _attributes.Lookup(Of Categories.Image.ImageMso).GetValue()
-                End If
+                _attributes.Lookup(Of GetImage).SetValue(value)
+                Refresh()
             End Set
         End Property
 
@@ -147,10 +147,11 @@ Namespace Controls
 
         Public Property Size As ControlSize Implements ISize.Size
             Get
-                Return _attributes.Lookup(Of Size).GetValue()
+                Return _attributes.Lookup (Of Size).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetSize).SetValue(value)
+                _attributes.Lookup (Of GetSize).SetValue(value)
+                Refresh()
             End Set
         End Property
 

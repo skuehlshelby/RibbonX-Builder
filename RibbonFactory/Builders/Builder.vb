@@ -2,6 +2,7 @@
 Imports RibbonFactory.Builder_Interfaces
 Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.Enums
+Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.RibbonAttributes.Categories.Description
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
@@ -53,7 +54,7 @@ Namespace Builders
                     Case GetType(IDescription)
                         GetDefaults.Add(New Description(String.Empty))
                     Case GetType(IImage)
-                        GetDefaults.Add(New Categories.Image.ImageMso(ImageMSO.HappyFace))
+                        GetDefaults.Add(New Categories.Image.ImageMso(Common.HappyFace))
                 End Select
             Next interfaceType
 
@@ -125,12 +126,28 @@ Namespace Builders
             Attributes.Add(New Categories.Image.ImageMso(image))
         End Sub
 
-        Protected Sub InsertAfter(mso As String)
+        Protected Sub AddInsertAfter(mso As String)
             Attributes.Add(New InsertAfterMso(mso))
         End Sub
 
         Protected Sub AddAction(callback As OnAction, action As Action)
             Attributes.Add(New Categories.OnAction.OnAction(action, callback))
+        End Sub
+        
+        Protected Sub InsertAfter(mso As MSO.MSO)
+            Attributes.Add(New InsertAfterMso(mso.ToString()))
+        End Sub
+        
+        Protected Sub InsertAfter(control As RibbonElement)
+            Attributes.Add(New InsertAfterQ(control.ID))
+        End Sub
+        
+        Protected Sub InsertBefore(mso As MSO.MSO)
+            Attributes.Add(New InsertBeforeMso(mso.ToString()))
+        End Sub
+        
+        Protected Sub InsertBefore(control As RibbonElement)
+            Attributes.Add(New InsertBeforeQ(control.ID))
         End Sub
     End Class
 End NameSpace

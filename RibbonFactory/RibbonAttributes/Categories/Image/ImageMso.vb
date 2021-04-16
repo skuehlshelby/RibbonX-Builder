@@ -2,14 +2,14 @@
     Friend Class ImageMso
         Inherits ImageBase
 
-        Private Value As Enums.ImageMSO
+        Private ReadOnly _value As Enums.ImageMSO.ImageMSO
 
-        Public Sub New(Value As Enums.ImageMSO)
-            Me.Value = Value
+        Public Sub New(value As Enums.ImageMSO.ImageMSO)
+            _value = value
         End Sub
 
-        Public Function GetValue() As Enums.ImageMSO
-            Return Value
+        Public Function GetValue() As Enums.ImageMSO.ImageMSO
+            Return _value
         End Function
 
         Public Overrides ReadOnly Property XML As String

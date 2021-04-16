@@ -11,7 +11,7 @@ Imports RibbonFactory.RibbonAttributes.Categories.SuperTip
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
 
 Namespace Controls
-
+    
     Public Class CheckBox
         Inherits RibbonElement
         Implements IEnabled

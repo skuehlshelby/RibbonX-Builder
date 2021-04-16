@@ -1,5 +1,6 @@
 ﻿Imports RibbonFactory.Containers
 Imports RibbonFactory.Enums
+Imports RibbonFactory.Enums.ImageMSO
 
 Namespace Builders
     Public Class GroupBuilder
@@ -67,11 +68,6 @@ Namespace Builders
 
         Public Function WithImage(image As ImageMSO) As GroupBuilder
             AddImage(image)
-            Return Me
-        End Function
-
-        Public Function InsertAfterMSO(mso As String) As GroupBuilder
-            InsertAfter(mso)
             Return Me
         End Function
     End Class

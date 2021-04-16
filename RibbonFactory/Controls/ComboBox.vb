@@ -121,20 +121,13 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property Image As Object Implements IImage.Image
+        Public Property Image As IPictureDisp Implements IImage.Image
             Get
-                If IsCustom Then
-                    Return _attributes.Lookup(Of GetImage).GetValue()
-                Else
-                    Return _attributes.Lookup(Of ImageMso).GetValue()
-                End If
+                Return _attributes.Lookup(Of GetImage).GetValue()
             End Get
             Set
-                If IsCustom Then
-                    _attributes.Lookup(Of GetImage).SetValue(CType(Value, IPictureDisp))
-                Else
-                    _attributes.Lookup(Of ImageMso).GetValue()
-                End If
+                _attributes.Lookup(Of GetImage).SetValue(value)
+                Refresh()
             End Set
         End Property
 
