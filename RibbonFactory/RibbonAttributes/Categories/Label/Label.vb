@@ -2,8 +2,8 @@
     Friend Class Label
         Inherits RibbonAttribute(Of String, Label)
 
-        Public Sub New(Value As String)
-            MyBase.New(Value)
+        Public Sub New(value As String)
+            MyBase.New(value)
         End Sub
 
         Public Overrides ReadOnly Property XML As String

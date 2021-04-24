@@ -159,6 +159,7 @@
     <Compile Include="IPictureDispConverter.vb" />
     <Compile Include="KeyTip.vb" />
     <Compile Include="RibbonAttributes\AttributeGroup.vb" />
+    <Compile Include="RibbonAttributes\Categories\BoxStyle\BoxStyle.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemCount.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemID.vb" />
     <Compile Include="RibbonAttributes\Categories\ChildItems\Image\GetItemImage.vb" />

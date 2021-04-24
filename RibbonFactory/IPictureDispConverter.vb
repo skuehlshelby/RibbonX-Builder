@@ -15,13 +15,13 @@ Public Module PictureDispConverter
     Friend Structure Pictdesc
         Public SizeOfStruct As Integer
         Public PicType As Integer
-        Public Hbitmap As IntPtr
+        Public bitmapHandle As IntPtr
         Public Hpal As IntPtr
         Public Padding As Integer
         Public Sub New(hBmp As IntPtr)
             SizeOfStruct = Marshal.SizeOf(GetType(Pictdesc))
             PicType = 1
-            Hbitmap = hBmp
+            bitmapHandle = hBmp
             Hpal = IntPtr.Zero
             Padding = 0
         End Sub

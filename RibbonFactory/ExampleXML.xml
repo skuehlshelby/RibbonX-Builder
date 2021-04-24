@@ -6,6 +6,9 @@
       <tab>
         <group >
           <toggleButton />
+          <box >
+            
+          </box>
           <button id="Button1"
                   enabled="true"
                   visible="true"
