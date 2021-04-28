@@ -18,17 +18,23 @@ Public Class SyntaxTesting
         With New TabBuilder
             .WithLabel("dfhfds").Visible().Build()
         End With
-
+        
+        Dim myGroup As Group
+        
         Dim MyButton As Button = New ButtonBuilder().Large().WithLabel("My Button").ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello!")).Build()
         MyButton.Size = ControlSize.normal
+        
+        Dim myDropdown As DropDown = new DropDown(Nothing, Nothing)
+        
+        myGroup.Add(BoxBuilder.Vertical(MyButton, myDropdown))
     End Sub
 
     Public Sub OnAction(control As IRibbonControl) Implements ICreateCallbacks.OnAction
-        _ribbon.GetItem(Of IOnAction)(control.Id).Execute()
+        _ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
 
     Public Sub OnChange(control As IRibbonControl, text As String) Implements ICreateCallbacks.OnChange
-        _ribbon.GetItem(Of IOnChange)(control.Id).Execute()
+        _ribbon.GetElement(Of IOnChange)(control.Id).Execute()
     End Sub
 
     Public Sub SelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.SelectionChange
@@ -36,11 +42,11 @@ Public Class SyntaxTesting
     End Sub
 
     Public Sub ButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.ButtonToggle
-        _ribbon.GetItem(Of IPressed)(control.Id).Pressed = pressed
+        _ribbon.GetElement(Of IPressed)(control.Id).Pressed = pressed
     End Sub
 
     Public Function GetEnabled(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetEnabled
-        Return _ribbon.GetItem(Of IEnabled)(control.Id).Enabled
+        Return _ribbon.GetElement(Of IEnabled)(control.Id).Enabled
     End Function
 
     Public Function GetVisible(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetVisible
@@ -84,11 +90,11 @@ Public Class SyntaxTesting
     End Function
 
     Public Function GetItemCount(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemCount
-        Return _ribbon.GetItem(Of ICollection(Of DropdownItem))(control.Id).Count
+        Return _ribbon.GetElement(Of ICollection(Of DropdownItem))(control.Id).Count
     End Function
 
     Public Function GetItemID(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemID
-        Return _ribbon.GetItem(Of ICollection(Of DropdownItem))(control.Id).ElementAt(index).ID
+        Return _ribbon.GetElement(Of ICollection(Of DropdownItem))(control.Id).ElementAt(index).ID
     End Function
 
     Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp Implements ICreateCallbacks.GetItemImage

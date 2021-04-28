@@ -1,33 +1,38 @@
 ﻿Imports RibbonFactory.Component_Interfaces
+Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.RibbonAttributes.Categories.Description
+Imports RibbonFactory.RibbonAttributes.Categories.Screentip
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
 Imports RibbonFactory.RibbonAttributes.Categories.Image
+Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
 Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.Screentip
+Imports RibbonFactory.RibbonAttributes.Categories.Size
 Imports RibbonFactory.RibbonAttributes.Categories.SuperTip
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
 Imports stdole
 
-Namespace Controls
+Namespace Containers
 
-    Public NotInheritable Class DropDown
+    Public NotInheritable Class Menu
         Inherits RibbonElement
-        Implements ICollection(Of DropdownItem)
-        Implements ISelectable
-        Implements IEnabled
+        Implements IEnumerable(Of RibbonElement)
+        Implements IReadonlyCollection(Of RibbonElement)
         Implements IVisible
+        Implements IEnabled
         Implements ILabel
+        Implements IShowLabel
+        Implements IDescription
         Implements IScreenTip
         Implements ISuperTip
-        Implements IShowLabel
+        Implements IKeyTip
         Implements IImage
         Implements IShowImage
-        Implements IOnAction
+        Implements ISize
 
-        Private _selected As DropdownItem
-        Private ReadOnly _items As List(Of DropdownItem) = New List(Of DropdownItem)()
         Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _items As List(Of RibbonElement) = New List(Of RibbonElement)()
 
         Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
@@ -42,18 +47,10 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<{NameOf(DropDown).CamelCase()} { String.Join(" ", _attributes) }/>"
+                Return _
+                    String.Join(Environment.NewLine, $"<{NameOf(Menu).ToLower()} {String.Join(" ", _attributes) }>",
+                                String.Join(Environment.NewLine, _items), $"</{NameOf(Menu).ToLower()}>")
             End Get
-        End Property
-
-        Public Property Enabled As Boolean Implements IEnabled.Enabled
-            Get
-                Return _attributes.Lookup(Of Enabled).GetValue()
-            End Get
-            Set
-                _attributes.Lookup(Of GetEnabled).SetValue(Value)
-                Refresh()
-            End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
@@ -62,6 +59,16 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetVisible).SetValue(Value)
+                Refresh()
+            End Set
+        End Property
+
+        Public Property Enabled As Boolean Implements IEnabled.Enabled
+            Get
+                Return _attributes.Lookup(Of Enabled).GetValue()
+            End Get
+            Set
+                _attributes.Lookup(Of GetEnabled).SetValue(Value)
                 Refresh()
             End Set
         End Property
@@ -77,31 +84,32 @@ Namespace Controls
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
+
             Get
                 Return _attributes.Lookup(Of Screentip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetScreentip).SetValue(Value)
+                _attributes.Lookup(Of GetScreenTip).SetValue(Value)
                 Refresh()
             End Set
         End Property
 
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Lookup(Of Supertip).GetValue()
+                Return _attributes.Lookup(Of SuperTip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetSuperTip).SetValue(Value)
+                _attributes.Lookup(Of GetSuperTip).SetValue(value)
                 Refresh()
             End Set
         End Property
 
-        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
+        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Lookup(Of ShowLabel).GetValue()
+                Return _attributes.Lookup (Of Categories.KeyTip.KeyTip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetShowLabel).SetValue(Value)
+                _attributes.Lookup (Of GetKeyTip).SetValue(value)
                 Refresh()
             End Set
         End Property
@@ -127,76 +135,54 @@ Namespace Controls
                 Return _attributes.Lookup(Of ShowImage).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetShowImage).SetValue(Value)
+                _attributes.Lookup(Of GetShowImage).SetValue(value)
                 Refresh()
             End Set
         End Property
 
-        Public Property Selected As DropdownItem Implements ISelectable.Selected
+        Public Property Description As String Implements IDescription.Description
             Get
-                Return _selected
+                Return _attributes.Lookup(Of Description).GetValue()
             End Get
             Set
-                _selected = Value
+                _attributes.Lookup(Of GetDescription).SetValue(value)
                 Refresh()
             End Set
         End Property
 
-        Public Sub Execute() Implements IOnAction.Execute
-            _attributes.Lookup(Of Categories.OnAction.OnAction).GetValue().Invoke()
-        End Sub
-
-#Region "Methods Pertaining to Dropdown Items"
-
-        Public Sub Add(item As DropdownItem) Implements ICollection(Of DropdownItem).Add
-            _items.Add(item)
-            Refresh()
-        End Sub
-
-        Public Sub Clear() Implements ICollection(Of DropdownItem).Clear
-            _items.Clear()
-            Refresh()
-        End Sub
-
-        Public Sub CopyTo(array() As DropdownItem, arrayIndex As Integer) Implements ICollection(Of DropdownItem).CopyTo
-            _items.CopyTo(array, arrayIndex)
-        End Sub
-
-        Public Function Contains(item As DropdownItem) As Boolean Implements ICollection(Of DropdownItem).Contains
-            Return _items.Contains(item)
-        End Function
-
-        Public ReadOnly Property Count As Integer Implements ICollection(Of DropdownItem).Count
+        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _items.Count
+                Return _attributes.Lookup(Of ShowLabel).GetValue()
             End Get
-        End Property
-
-        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of DropdownItem).IsReadOnly
-            Get
-                Return False
-            End Get
-        End Property
-
-        Public Function Remove(item As DropdownItem) As Boolean Implements ICollection(Of DropdownItem).Remove
-            If _items.Remove(item) Then
+            Set
+                _attributes.Lookup(Of GetShowLabel).SetValue(value)
                 Refresh()
-                Return True
-            Else
-                Return False
-            End If
-        End Function
+            End Set
+        End Property
 
-        Public Function GetEnumerator() As IEnumerator(Of DropdownItem) Implements IEnumerable(Of DropdownItem).GetEnumerator
-            Return _items.GetEnumerator()
+        Public Property Size As ControlSize Implements ISize.Size
+            Get
+                Return _attributes.Lookup(Of Size).GetValue()
+            End Get
+            Set
+                _attributes.Lookup(Of GetSize).SetValue(value)
+                Refresh()
+            End Set
+        End Property
+
+        Public ReadOnly Property Count As Integer Implements IReadOnlyCollection(Of RibbonElement).Count
+            Get
+                Return DirectCast(_items, IReadOnlyCollection(Of RibbonElement)).Count
+            End Get
+        End Property
+
+        Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
+            Return DirectCast(_items, IEnumerable(Of RibbonElement)).GetEnumerator()
         End Function
 
         Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return _items.GetEnumerator()
+            Return DirectCast(_items, IEnumerable).GetEnumerator()
         End Function
-
-#End Region
-        
     End Class
 
 End Namespace

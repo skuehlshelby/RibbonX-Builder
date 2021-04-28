@@ -1,7 +1,7 @@
 ﻿
 Namespace RibbonAttributes.Categories.BoxStyle
 
-    Public Class BoxStyle
+    Public NotInheritable Class BoxStyle
         Inherits RibbonAttribute(Of Enums.BoxStyle, BoxStyle)
     
         Public Sub New(value As Enums.BoxStyle)

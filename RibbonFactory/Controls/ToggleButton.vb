@@ -14,7 +14,7 @@ Imports stdole
 
 Namespace Controls
 
-    Public Class ToggleButton
+    Public NotInheritable Class ToggleButton
         Inherits RibbonElement
         Implements IOnAction
         Implements IEnabled

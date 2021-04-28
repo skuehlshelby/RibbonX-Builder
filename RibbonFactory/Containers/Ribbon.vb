@@ -29,14 +29,18 @@ Namespace Containers
             _startFromScratch = startFromScratch
         End Sub
 
-        Public Function GetItem(Of T)(itemID As String) As T
+        Public Function GetElement(itemID As String) As RibbonElement
             Throw New NotImplementedException
         End Function
-
-        Private Function SearchByID(itemID As String) As RibbonElement
+        
+        Public Function GetElement(Of T)(id As String) As T
             Throw New NotImplementedException
         End Function
-
+        
+        Public Function GetElementCollection(itemID As String) As IEnumerable(Of RibbonElement)
+            Throw New NotImplementedException
+        End Function
+        
         Public ReadOnly Property Tabs As ICollection(Of Tab)
 
         Public Function Build() As String
@@ -66,5 +70,6 @@ Namespace Containers
         Private Shared Sub LogXMLError(sender As Object, e As ValidationEventArgs)
             Debug.WriteLine($"{e.Severity.ToString().ToUpper}: {e.Message}")
         End Sub
+        
     End Class
 End NameSpace

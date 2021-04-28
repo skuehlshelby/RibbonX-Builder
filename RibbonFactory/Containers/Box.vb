@@ -1,12 +1,11 @@
 ﻿Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.RibbonAttributes.Categories.ID
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
 
 Namespace Containers
 
-    Public Class Box
+    Public NotInheritable Class Box
         Inherits RibbonElement
         Implements IList(Of RibbonElement)
         Implements IVisible
@@ -27,7 +26,9 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Join(Environment.NewLine,$"<{NameOf(Box).ToLower()} {String.Join(" ", _attributes) }>", String.Join(Environment.NewLine, _items), $"</{NameOf(Box).ToLower()}>")
+                Return _
+                    String.Join(Environment.NewLine, $"<{NameOf(Box).ToLower()} {String.Join(" ", _attributes) }>",
+                                String.Join(Environment.NewLine, _items), $"</{NameOf(Box).ToLower()}>")
             End Get
         End Property
 
@@ -39,7 +40,7 @@ Namespace Containers
                 _attributes.Lookup(Of GetVisible).SetValue(value)
             End Set
         End Property
-
+        
         Default Public Property Item(index As Integer) As RibbonElement Implements IList(Of RibbonElement).Item
             Get
                 Return DirectCast(_items, IList(Of RibbonElement))(index)

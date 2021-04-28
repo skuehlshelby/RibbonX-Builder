@@ -14,9 +14,9 @@ Imports stdole
 
 Namespace Controls
 
-    Public Class ComboBox
+    Public NotInheritable Class ComboBox
         Inherits RibbonElement
-        Implements ICollection(Of DropdownItem)
+        Implements IList(Of DropdownItem)
         Implements IEnabled
         Implements IVisible
         Implements ILabel
@@ -46,7 +46,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<comboBox { String.Join(" ", _attributes) }/>"
+                Return $"<{NameOf(ComboBox).CamelCase()} { String.Join(" ", _attributes) }/>"
             End Get
         End Property
 
@@ -170,8 +170,8 @@ Namespace Controls
 
         #Region "Methods Pertaining to Dropdown Items"
 
-        Public Sub Add(item As DropdownItem) Implements ICollection(Of DropdownItem).Add
-            _items.Add(item)
+        Public Sub Add(element As DropdownItem) Implements ICollection(Of DropdownItem).Add
+            _items.Add(element)
             Refresh()
         End Sub
 
@@ -180,28 +180,37 @@ Namespace Controls
             Refresh()
         End Sub
 
-        Public Sub CopyTo(array() As DropdownItem, arrayIndex As Integer) Implements ICollection(Of DropdownItem).CopyTo
+        Public Sub CopyTo(array() As DropdownItem, arrayIndex As Integer) Implements IList(Of DropdownItem).CopyTo
             _items.CopyTo(array, arrayIndex)
         End Sub
 
-        Public Function Contains(item As DropdownItem) As Boolean Implements ICollection(Of DropdownItem).Contains
-            Return _items.Contains(item)
+        Public Function Contains(element As DropdownItem) As Boolean Implements IList(Of DropdownItem).Contains
+            Return _items.Contains(element)
         End Function
 
-        Public ReadOnly Property Count As Integer Implements ICollection(Of DropdownItem).Count
+        Public ReadOnly Property Count As Integer Implements IList(Of DropdownItem).Count
             Get
                 Return _items.Count
             End Get
         End Property
 
-        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of DropdownItem).IsReadOnly
+        Public ReadOnly Property IsReadOnly As Boolean Implements IList(Of DropdownItem).IsReadOnly
             Get
                 Return False
             End Get
         End Property
 
-        Public Function Remove(item As DropdownItem) As Boolean Implements ICollection(Of DropdownItem).Remove
-            If _items.Remove(item) Then
+        Default Public Property Item(index As Integer) As DropdownItem Implements IList(Of DropdownItem).Item
+            Get
+                Return DirectCast(_items, IList(Of DropdownItem))(index)
+            End Get
+            Set
+                DirectCast(_items, IList(Of DropdownItem))(index) = value
+            End Set
+        End Property
+
+        Public Function Remove(element As DropdownItem) As Boolean Implements IList(Of DropdownItem).Remove
+            If _items.Remove(element) Then
                 Refresh()
                 Return True
             Else
@@ -217,15 +226,20 @@ Namespace Controls
             Return _items.GetEnumerator()
         End Function
 
-        #End Region
-
-        #Region "Overriden Base Class Methods"
-
-        Public Overrides Function Equals(obj As Object) As Boolean
-            Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is ComboBox
+        Public Function IndexOf(element As DropdownItem) As Integer Implements IList(Of DropdownItem).IndexOf
+            Return DirectCast(_items, IList(Of DropdownItem)).IndexOf(element)
         End Function
 
-        #End Region
+        Public Sub Insert(index As Integer, element As DropdownItem) Implements IList(Of DropdownItem).Insert
+            DirectCast(_items, IList(Of DropdownItem)).Insert(index, element)
+        End Sub
+
+        Public Sub RemoveAt(index As Integer) Implements IList(Of DropdownItem).RemoveAt
+            DirectCast(_items, IList(Of DropdownItem)).RemoveAt(index)
+        End Sub
+
+#End Region
+
     End Class
 
 End Namespace

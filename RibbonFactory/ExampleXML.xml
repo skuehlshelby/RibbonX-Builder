@@ -19,9 +19,16 @@
                   size="large"
                   onAction="OnAction"/>
           <comboBox  />
-          <menu>
+          <menu >
+            <
             <menuSeparator />
           </menu>
+          <splitButton >
+            
+          </splitButton>
+          <buttonGroup>
+            
+          </buttonGroup>
         </group>
       </tab>
     </tabs>

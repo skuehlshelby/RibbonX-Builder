@@ -8,7 +8,7 @@ Imports RibbonFactory.RibbonAttributes.Categories.Supertip
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
 
 Namespace Controls
-    Public Class LabelControl
+    Public NotInheritable Class LabelControl
         Inherits RibbonElement
         Implements IEnabled
         Implements IVisible

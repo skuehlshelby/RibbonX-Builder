@@ -65,7 +65,7 @@ Namespace Builders
     Public MustInherit Class Builder(Of T As RibbonElement)
         Inherits Builder
 
-        Protected ReadOnly Attributes As AttributeGroup = New AttributeGroup
+        Protected ReadOnly Attributes As AttributeGroup = GetDefaults(Of T)()
 
         Public MustOverride Function Build() As T
 
@@ -177,6 +177,10 @@ Namespace Builders
 
         Protected Sub AddImage(image As Bitmap, callback As FromControl(Of IPictureDisp))
             Attributes.Add(New Categories.Image.GetImage(PictureDispConverter.ImageToPictureDisp(image), callback))
+        End Sub
+        
+        Protected Sub AddOrientation(orientation As BoxStyle)
+            Attributes.Add(new Categories.BoxStyle.BoxStyle(orientation))
         End Sub
     End Class
 End NameSpace
