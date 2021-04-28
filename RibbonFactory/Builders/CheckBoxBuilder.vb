@@ -91,7 +91,8 @@ Namespace Builders
         End Function
 
         Public Function WithSuperTip(superTip As String) As CheckBoxBuilder Implements ISetLabelScreenTipAndSuperTip(Of CheckBoxBuilder).WithSuperTip
-            Throw New NotImplementedException()
+            AddSuperTip(superTip:= superTip)
+            Return Me
         End Function
 
         Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As CheckBoxBuilder Implements ISetLabelScreenTipAndSuperTip(Of CheckBoxBuilder).WithSuperTip
@@ -100,23 +101,28 @@ Namespace Builders
         End Function
 
         Public Function WithKeyTip(keyTip As KeyTip) As CheckBoxBuilder Implements ISetKeyTip(Of CheckBoxBuilder).WithKeyTip
-            Throw New NotImplementedException()
+            AddKeyTip(keyTip:= keyTip)
+            Return Me
         End Function
 
         Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As CheckBoxBuilder Implements ISetKeyTip(Of CheckBoxBuilder).WithKeyTip
-            Throw New NotImplementedException()
+            AddKeyTip(keyTip:= keyTip, callback:= callback)
+            Return Me
         End Function
 
         Public Function WithDescription(description As String) As CheckBoxBuilder Implements ISetDescription(Of CheckBoxBuilder).WithDescription
-            Throw New NotImplementedException()
+            AddDescription(description:= description)
+            Return Me
         End Function
 
         Public Function WithDescription(description As String, callback As FromControl(Of String)) As CheckBoxBuilder Implements ISetDescription(Of CheckBoxBuilder).WithDescription
-            Throw New NotImplementedException()
+            AddDescription(description:= description)
+            Return Me
         End Function
 
         Public Function ThatDoes(callback As OnAction, action As Action) As CheckBoxBuilder Implements ISetAction(Of CheckBoxBuilder).ThatDoes
-            Throw New NotImplementedException()
+            AddAction(callback:= callback, action:= action)
+            Return Me
         End Function
     End Class
     
