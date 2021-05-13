@@ -9,6 +9,11 @@
             _callback = callback.Method.Name
         End Sub
 
+        Public Sub New(value As Action, callback As ButtonPressed)
+            MyBase.New(value)
+            _callback = callback.Method.Name
+        End Sub
+        
         Public Overrides ReadOnly Property XML As String
             Get
                 Return String.Format(XML_TEMPLATE, CamelCase(NameOf(OnAction)), _callback)

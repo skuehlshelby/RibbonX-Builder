@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Builder_Interfaces
+﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
@@ -61,29 +61,28 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function InsertBeforeMSO(builtInControl As MSO) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertBefore
+        Public Function InsertBeforeMSO(builtInControl As MSO) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertBefore
             InsertBefore(builtInControl)
             Return Me
         End Function
 
-        Private Function InsertBeforeQ(qualifiedControl As RibbonElement) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertBefore
+        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertBefore
             InsertBefore(qualifiedControl)
             Return Me
         End Function
 
-        Private Function InsertAfterMSO(builtInControl As MSO) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertAfter
+        Public Function InsertAfterMSO(builtInControl As MSO) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertAfter
             InsertAfter(builtInControl)
             Return Me
         End Function
 
-        Private Function InsertAfterQ(qualifiedControl As RibbonElement) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertAfter
+        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As GroupBuilder Implements ISetInsertionPoint(Of GroupBuilder).InsertAfter
             InsertAfter(qualifiedControl)
             Return Me
         End Function
 
-        Private Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithLabel
+        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithLabel
             AddLabel(label:= label)
-            AddShowLabel(showLabel:= True)
             
             If copyToScreenTip Then
                 AddScreenTip(screenTip:= label)
@@ -92,9 +91,8 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithLabel
+        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithLabel
             AddLabel(label:= label, callback:= callback)
-            AddShowLabel(showLabel:= True)
             
             If copyToScreenTip Then
                 AddScreenTip(screenTip:= label, callback:= callback)
@@ -103,27 +101,27 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function WithScreenTip(screenTip As String) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithScreenTip
+        Public Function WithScreenTip(screenTip As String) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithScreenTip
             AddScreenTip(screenTip:= screenTip)
             Return Me
         End Function
 
-        Private Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithScreenTip
+        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithScreenTip
             AddScreenTip(screenTip:= screenTip, callback:= callback)
             Return Me
         End Function
 
-        Private Function WithSuperTip(superTip As String) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithSuperTip
+        Public Function WithSuperTip(superTip As String) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithSuperTip
             AddSuperTip(superTip:= superTip)
             Return Me
         End Function
 
-        Private Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithSuperTip
+        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder).WithSuperTip
             AddSuperTip(superTip:= superTip, callback:= callback)
             Return Me
         End Function
 
-        Private Function WithImage(image As ImageMSO) As GroupBuilder Implements ISetImage(Of GroupBuilder).WithImage
+        Public Function WithImage(image As ImageMSO) As GroupBuilder Implements ISetImage(Of GroupBuilder).WithImage
             AddImage(image:= image)
             Return Me
         End Function

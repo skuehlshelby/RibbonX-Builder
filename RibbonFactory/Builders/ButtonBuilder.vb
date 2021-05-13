@@ -1,5 +1,5 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.Builder_Interfaces
+Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
@@ -13,7 +13,7 @@ Namespace Builders
         Implements ISetVisibility(Of ButtonBuilder)
         Implements ISetLabelScreenTipAndSuperTip(Of ButtonBuilder)
         Implements ISetLabelVisibility(Of ButtonBuilder)
-        Implements ISetAction(Of ButtonBuilder)
+        Implements ISetClickAction(Of ButtonBuilder)
         Implements ISetSize(Of ButtonBuilder)
         Implements ISetImage(Of ButtonBuilder)
         Implements ISetDescription(Of ButtonBuilder)
@@ -115,12 +115,22 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function ShowLabel(callback As FromControl(Of Boolean)) As ButtonBuilder Implements ISetLabelVisibility(Of ButtonBuilder).ShowLabel
+            AddShowLabel(showLabel:= True, callback:= callback)
+            Return Me
+        End Function
+
         Public Function HideLabel() As ButtonBuilder Implements ISetLabelVisibility(Of ButtonBuilder).HideLabel
             AddShowLabel(showLabel:= False)
             Return Me
         End Function
 
-        Public Function ThatDoes(callback As OnAction, action As Action) As ButtonBuilder Implements ISetAction(Of ButtonBuilder).ThatDoes
+        Public Function HideLabel(callback As FromControl(Of Boolean)) As ButtonBuilder Implements ISetLabelVisibility(Of ButtonBuilder).HideLabel
+            AddShowLabel(showLabel:= False, callback:= callback)
+            Return Me
+        End Function
+
+        Public Function ThatDoes(callback As OnAction, action As Action) As ButtonBuilder Implements ISetClickAction(Of ButtonBuilder).ThatDoes
             AddAction(callback:= callback, action:= action)
             Return Me
         End Function

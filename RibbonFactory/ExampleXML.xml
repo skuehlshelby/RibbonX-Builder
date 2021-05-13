@@ -20,7 +20,6 @@
                   onAction="OnAction"/>
           <comboBox  />
           <menu >
-            <
             <menuSeparator />
           </menu>
           <splitButton >

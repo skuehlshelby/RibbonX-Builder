@@ -1,6 +1,5 @@
 ﻿Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
 Imports RibbonFactory.RibbonAttributes.Categories.Image
 Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
@@ -15,7 +14,6 @@ Namespace Containers
     Public Class Group
         Inherits RibbonElement
         Implements ILabel
-        Implements IEnabled
         Implements IVisible
         Implements IKeyTip
         Implements IImage
@@ -51,15 +49,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.Lookup(Of GetLabel).SetValue(Value)
-            End Set
-        End Property
-
-        Public Property Enabled As Boolean Implements IEnabled.Enabled
-            Get
-                Return _attributes.Lookup(Of Enabled).GetValue()
-            End Get
-            Set
-                _attributes.Lookup(Of GetEnabled).SetValue(Value)
             End Set
         End Property
 

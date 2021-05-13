@@ -3,7 +3,7 @@ Imports RibbonFactory.Builders
 Imports RibbonFactory.Enums.ImageMSO
 Imports stdole
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
     Public Interface ISetImage(Of T As Builder)
         Overloads Function WithImage(image As ImageMSO) As T
         Overloads Function WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) As T

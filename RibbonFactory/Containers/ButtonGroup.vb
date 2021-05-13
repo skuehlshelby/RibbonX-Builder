@@ -9,7 +9,6 @@ Namespace Containers
     Public Class ButtonGroup
         Inherits RibbonElement
         Implements IVisible
-        Implements IEnumerable(Of RibbonElement)
         Implements IReadOnlyCollection(Of RibbonElement)
 
         Private ReadOnly _attributes As AttributeGroup

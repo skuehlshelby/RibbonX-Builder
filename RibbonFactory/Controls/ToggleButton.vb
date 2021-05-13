@@ -31,9 +31,9 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeGroup
 
-        Friend Sub New(buttonAttributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
-            _attributes = buttonAttributes
+            _attributes = attributes
         End Sub
 
         Public Overrides ReadOnly Property ID As String

@@ -13,7 +13,6 @@ Namespace Containers
     
     Public Class SplitButton
         Inherits RibbonElement
-        Implements IEnumerable(Of RibbonElement)
         Implements IReadOnlyCollection(Of RibbonElement)
         Implements IVisible
         Implements IEnabled

@@ -2,16 +2,18 @@
 Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
+Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.RibbonAttributes.Categories.Description
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
+Imports RibbonFactory.RibbonAttributes.Categories.Image
 Imports RibbonFactory.RibbonAttributes.Categories.Insert
 Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
 Imports RibbonFactory.RibbonAttributes.Categories.Label
 Imports RibbonFactory.RibbonAttributes.Categories.Screentip
 Imports RibbonFactory.RibbonAttributes.Categories.Size
-Imports RibbonFactory.RibbonAttributes.Categories.Supertip
+Imports RibbonFactory.RibbonAttributes.Categories.SuperTip
 Imports RibbonFactory.RibbonAttributes.Categories.Visible
 Imports stdole
 
@@ -55,7 +57,7 @@ Namespace Builders
                     Case GetType(IDescription)
                         GetDefaults.Add(New Description(String.Empty))
                     Case GetType(IImage)
-                        GetDefaults.Add(New Categories.Image.ImageMso(Common.HappyFace))
+                        GetDefaults.Add(New RibbonAttributes.Categories.Image.ImageMso(Common.HappyFace))
                 End Select
             Next interfaceType
 
@@ -99,6 +101,10 @@ Namespace Builders
             Attributes.Add(New ShowLabel(showLabel))
         End Sub
 
+        Protected Sub AddShowLabel(showLabel As Boolean, callback As FromControl(Of Boolean))
+            Attributes.Add(New GetShowLabel(showLabel, callback))
+        End Sub
+        
         Protected Sub AddScreenTip(screenTip As String)
             Attributes.Add(New Screentip(screenTip))
         End Sub
@@ -127,7 +133,11 @@ Namespace Builders
             Attributes.Add(New Categories.OnAction.OnAction(action, callback))
         End Sub
         
-        Protected Sub InsertAfter(mso As MSO.MSO)
+        Protected Sub AddAction(callback As ButtonPressed, action As Action)
+            Attributes.Add(New Categories.OnAction.OnAction(action, callback))
+        End Sub
+        
+        Protected Sub InsertAfter(mso As MSO)
             Attributes.Add(New InsertAfterMso(mso.ToString()))
         End Sub
         
@@ -135,7 +145,7 @@ Namespace Builders
             Attributes.Add(New InsertAfterQ(control.ID))
         End Sub
         
-        Protected Sub InsertBefore(mso As MSO.MSO)
+        Protected Sub InsertBefore(mso As MSO)
             Attributes.Add(New InsertBeforeMso(mso.ToString()))
         End Sub
         
@@ -144,7 +154,7 @@ Namespace Builders
         End Sub
         
         Protected Sub AddLarge()
-            Attributes.Add(New Categories.Size.Size(ControlSize.large))
+            Attributes.Add(New RibbonAttributes.Categories.Size.Size(ControlSize.large))
         End Sub
         
         Protected Sub AddLarge(callback As FromControl(Of ControlSize))
@@ -152,7 +162,7 @@ Namespace Builders
         End Sub
         
         Protected Sub AddNormal()
-            Attributes.Add(New Categories.Size.Size(ControlSize.normal))
+            Attributes.Add(New RibbonAttributes.Categories.Size.Size(ControlSize.normal))
         End Sub
         
         Protected Sub AddNormal(callback As FromControl(Of ControlSize))
@@ -160,27 +170,27 @@ Namespace Builders
         End Sub
         
         Protected Sub AddKeyTip(keyTip As KeyTip)
-            Attributes.Add(New Categories.KeyTip.KeyTip(keyTip))
+            Attributes.Add(New RibbonAttributes.Categories.KeyTip.KeyTip(keyTip))
         End Sub
         
         Protected Sub AddKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip))
             Attributes.Add(New GetKeyTip(keyTip, callback))
         End Sub
 
-        Protected Sub AddImage(image As ImageMSO)
-            Attributes.Add(New Categories.Image.ImageMso(image))
+        Protected Sub AddImage(image As Enums.ImageMSO.ImageMSO)
+            Attributes.Add(New RibbonAttributes.Categories.Image.ImageMso(image))
         End Sub
 
         Protected Sub AddImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) 
-            Attributes.Add(New Categories.Image.GetImage(image, callback))
+            Attributes.Add(New GetImage(image, callback))
         End Sub
 
         Protected Sub AddImage(image As Bitmap, callback As FromControl(Of IPictureDisp))
-            Attributes.Add(New Categories.Image.GetImage(PictureDispConverter.ImageToPictureDisp(image), callback))
+            Attributes.Add(New GetImage(ImageToPictureDisp(image), callback))
         End Sub
         
         Protected Sub AddOrientation(orientation As BoxStyle)
-            Attributes.Add(new Categories.BoxStyle.BoxStyle(orientation))
+            Attributes.Add(new RibbonAttributes.Categories.BoxStyle.BoxStyle(orientation))
         End Sub
     End Class
 End NameSpace

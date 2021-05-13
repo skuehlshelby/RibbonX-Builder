@@ -27,6 +27,7 @@ Namespace Containers
         Public Sub New(Optional [nameSpace] As String = Nothing, Optional startFromScratch As Boolean = False)
             _nameSpace = [nameSpace]
             _startFromScratch = startFromScratch
+            Tabs = new List(Of Tab)
         End Sub
 
         Public Function GetElement(itemID As String) As RibbonElement
@@ -68,7 +69,10 @@ Namespace Containers
         End Sub
 
         Private Shared Sub LogXMLError(sender As Object, e As ValidationEventArgs)
-            Debug.WriteLine($"{e.Severity.ToString().ToUpper}: {e.Message}")
+            Dim message As String = $"{DirectCast(sender, XAttribute).Parent.Name.LocalName} {e.Severity.ToString().ToUpper}: {e.Message}"
+            
+            Console.WriteLine(message)
+            Debug.WriteLine(message)
         End Sub
         
     End Class

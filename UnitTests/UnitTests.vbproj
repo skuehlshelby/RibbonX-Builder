@@ -117,6 +117,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RibbonAttributeTests.vb" />
+    <Compile Include="RibbonTestBase.vb" />
     <Compile Include="SimpleRibbonTest.vb" />
     <Compile Include="SyntaxTesting.vb" />
   </ItemGroup>

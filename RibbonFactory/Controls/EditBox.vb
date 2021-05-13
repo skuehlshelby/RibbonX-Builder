@@ -164,10 +164,7 @@ Namespace Controls
         Public Sub Execute() Implements IOnChange.Execute
             _attributes.Lookup (Of OnChange).GetValue().Invoke()
         End Sub
-
-        Public Overrides Function Equals(obj As Object) As Boolean
-            Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is Button
-        End Function
+        
     End Class
 
 End Namespace

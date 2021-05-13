@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Builders
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
     Public Interface ISetLabel(Of T As Builder)
         Function WithLabel(label As String) As T
     End Interface

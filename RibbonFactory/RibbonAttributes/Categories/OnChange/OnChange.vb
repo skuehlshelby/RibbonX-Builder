@@ -4,7 +4,7 @@
 
         Private ReadOnly _callback As String
 
-        Public Sub New(value As Action, callback As RibbonFactory.OnAction)
+        Public Sub New(value As Action, callback As TextChanged)
             MyBase.New(value)
             _callback = callback.Method.Name
         End Sub

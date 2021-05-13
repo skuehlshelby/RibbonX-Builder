@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Builders
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
     Public Interface ISetVisibility(Of T As Builder)
         Function Visible() As T
 

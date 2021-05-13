@@ -1,7 +1,7 @@
 ﻿Imports RibbonFactory.Builders
 Imports RibbonFactory.Enums.MSO
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
 
     Public Interface ISetInsertionPoint(Of T As Builder)
         Function InsertBefore(builtInControl As MSO) As T

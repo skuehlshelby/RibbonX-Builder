@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Builders
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
     Public Interface ISetDescription(Of T As Builder)
         Function WithDescription(description As String) As T
 

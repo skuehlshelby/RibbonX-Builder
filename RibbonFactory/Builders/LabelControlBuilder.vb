@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Builder_Interfaces
+﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums.MSO
 
@@ -106,8 +106,18 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function ShowLabel(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).ShowLabel
+            AddShowLabel(showLabel:= True, callback:= callback)
+            Return Me
+        End Function
+
         Public Function HideLabel() As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).HideLabel
             AddShowLabel(showLabel:= False)
+            Return Me
+        End Function
+
+        Public Function HideLabel(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).HideLabel
+            AddShowLabel(showLabel:= False, callback:= callback)
             Return Me
         End Function
 

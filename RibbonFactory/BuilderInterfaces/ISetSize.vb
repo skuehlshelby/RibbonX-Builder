@@ -1,7 +1,7 @@
 ﻿Imports RibbonFactory.Builders
 Imports RibbonFactory.Enums
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
     Public Interface ISetSize(Of T As Builder)
         Overloads Function Large() As T
         Overloads Function Large(callback As FromControl(Of ControlSize)) As T

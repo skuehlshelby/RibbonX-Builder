@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Builders
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
 
     Public Interface ISetLabelScreenTipAndSuperTip(Of T As Builder)
         Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As T

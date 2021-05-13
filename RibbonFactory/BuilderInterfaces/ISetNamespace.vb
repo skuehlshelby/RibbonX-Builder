@@ -1,4 +1,4 @@
-﻿Namespace Builder_Interfaces
+﻿Namespace BuilderInterfaces
     Public Interface ISetNamespace
     
     End Interface

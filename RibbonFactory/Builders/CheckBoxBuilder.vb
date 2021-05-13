@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Builder_Interfaces
+﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Controls
 
 Namespace Builders
@@ -10,7 +10,7 @@ Namespace Builders
         Implements ISetLabelScreenTipAndSuperTip(Of CheckBoxBuilder)
         Implements ISetKeyTip(Of CheckBoxBuilder)
         Implements ISetDescription(Of CheckBoxBuilder)
-        Implements ISetAction(Of CheckBoxBuilder)
+        Implements ISetToggleAction(Of CheckBoxBuilder)
         
         Public Overrides Function Build() As CheckBox
             Return Build(tag:= Nothing)
@@ -120,10 +120,11 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(callback As OnAction, action As Action) As CheckBoxBuilder Implements ISetAction(Of CheckBoxBuilder).ThatDoes
+        Public Function ThatDoes(callback As ButtonPressed, action As Action) As CheckBoxBuilder Implements ISetToggleAction(Of CheckBoxBuilder).ThatDoes
             AddAction(callback:= callback, action:= action)
             Return Me
         End Function
+        
     End Class
     
 End NameSpace

@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Builders
 
-Namespace Builder_Interfaces
+Namespace BuilderInterfaces
 
     Public Interface ISetKeyTip(Of T As Builder)
         Function WithKeyTip(keyTip As KeyTip) As T

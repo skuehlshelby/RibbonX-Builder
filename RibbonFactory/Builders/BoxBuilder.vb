@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Builder_Interfaces
+﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Enums
 
