@@ -19,11 +19,11 @@ Public Class EditBoxBuilder
     Implements ISetTextChangeAction(Of EditBoxBuilder)
     
     Public Overrides Function Build() As EditBox
-        Throw New NotImplementedException
+        Return Build(tag:= Nothing)
     End Function
 
     Public Overrides Function Build(tag As Object) As EditBox
-        Throw New NotImplementedException
+        Return New EditBox(attributes:= Attributes, tag:= tag)
     End Function
 
     Public Function Enabled() As EditBoxBuilder Implements ISetEnabled(Of EditBoxBuilder).Enabled
