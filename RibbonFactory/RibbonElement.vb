@@ -1,4 +1,4 @@
-﻿Imports NetOffice.OfficeApi
+﻿Imports Microsoft.Office.Core
 
 Public MustInherit Class RibbonElement
     Implements IEquatable(Of RibbonElement)

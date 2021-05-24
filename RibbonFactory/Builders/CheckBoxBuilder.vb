@@ -11,10 +11,6 @@ Namespace Builders
         Implements ISetKeyTip(Of CheckBoxBuilder)
         Implements ISetDescription(Of CheckBoxBuilder)
         Implements ISetToggleAction(Of CheckBoxBuilder)
-        
-        Public Overrides Function Build() As CheckBox
-            Return Build(tag:= Nothing)
-        End Function
 
         Public Overrides Function Build(tag As Object) As CheckBox
             Return New CheckBox(attributes:= Attributes, tag:= tag)

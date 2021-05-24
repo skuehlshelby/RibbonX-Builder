@@ -19,10 +19,6 @@ Namespace Builders
         Implements ISetDescription(Of ButtonBuilder)
         Implements ISetKeyTip(Of ButtonBuilder)
         Implements ISetInsertionPoint(Of ButtonBuilder)
-        
-        Public Overrides Function Build() As Button
-            Return Build(Nothing)
-        End Function
 
         Public Overrides Function Build(tag As Object) As Button
             Return New Button(Attributes, tag)

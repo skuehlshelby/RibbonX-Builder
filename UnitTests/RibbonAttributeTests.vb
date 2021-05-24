@@ -1,6 +1,6 @@
 ﻿Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
-Imports NetOffice.OfficeApi
+Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes

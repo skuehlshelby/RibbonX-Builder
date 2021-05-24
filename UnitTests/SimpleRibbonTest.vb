@@ -1,6 +1,5 @@
 ﻿Imports System.IO
 Imports System.Text
-Imports NetOffice.OfficeApi
 Imports RibbonFactory.Builders
 Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.Containers

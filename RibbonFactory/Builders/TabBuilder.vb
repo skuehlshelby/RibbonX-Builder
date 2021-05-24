@@ -11,12 +11,8 @@ Namespace Builders
         Implements ISetLabel(Of TabBuilder)
         Implements ISetVisibility(Of TabBuilder)
 
-        Public Overrides Function Build() As Tab
-            Return Build(tag:= Nothing)
-        End Function
-
         Public Overrides Function Build(tag As Object) As Tab
-            Return New Tab(attributes:= Attributes, tag:= tag)
+            Return New Tab(attributes:=Attributes, tag:=tag)
         End Function
 
         Public Function Visible() As TabBuilder Implements ISetVisibility(Of TabBuilder).Visible

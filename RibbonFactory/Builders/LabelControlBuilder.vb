@@ -10,10 +10,6 @@ Namespace Builders
         Implements ISetVisibility(Of LabelControlBuilder)
         Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder)
         Implements ISetLabelVisibility(Of LabelControlBuilder)
-        
-        Public Overrides Function Build() As LabelControl
-            Return Build(Nothing)
-        End Function
 
         Public Overrides Function Build(tag As Object) As LabelControl
             Return New LabelControl(Attributes, tag)

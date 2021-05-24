@@ -8,10 +8,6 @@ Namespace Builders
         Inherits Builder(Of Box)
         Implements ISetOrientation(Of BoxBuilder)
         Implements ISetVisibility(Of BoxBuilder)
-        
-        Public Overrides Function Build() As Box
-            Return Build(Nothing)
-        End Function
 
         Public Overrides Function Build(tag As Object) As Box
             Return New Box(Attributes, tag)

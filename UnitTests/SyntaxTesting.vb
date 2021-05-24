@@ -1,6 +1,4 @@
-﻿Imports System.Text
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
-Imports NetOffice.OfficeApi
+﻿Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Builders
 Imports RibbonFactory.Component_Interfaces
@@ -10,7 +8,7 @@ Imports RibbonFactory.Enums
 Imports stdole
 
 Public Class SyntaxTesting
-    Implements RibbonFactory.ICreateCallbacks
+    Implements ICreateCallbacks
 
     Dim _ribbon As Ribbon = New Ribbon(startFromScratch:= False, [nameSpace]:= "Testing")
 
@@ -18,9 +16,9 @@ Public Class SyntaxTesting
         With New TabBuilder
             .WithLabel("dfhfds").Visible().Build()
         End With
-        
-        Dim myGroup As Group
-        
+
+        Dim myGroup As Group = New GroupBuilder().WithLabel("My Group").Build()
+
         Dim MyButton As Button = New ButtonBuilder().Large().WithLabel("My Button").ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello!")).Build()
         MyButton.Size = ControlSize.normal
         

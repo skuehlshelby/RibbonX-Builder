@@ -12,10 +12,6 @@ Namespace Builders
         Implements ISetLabelScreenTipAndSuperTip(Of GroupBuilder)
         Implements ISetKeyTip(Of GroupBuilder)
         Implements ISetImage(Of GroupBuilder)
-        
-        Public Overrides Function Build() As Group
-            Return Build(Nothing)
-        End Function
 
         Public Overrides Function Build(tag As Object) As Group
             Return New Group(Attributes, tag)

@@ -1,4 +1,4 @@
-﻿Imports NetOffice.OfficeApi
+﻿Imports Microsoft.Office.Core
 Imports RibbonFactory.Enums
 Imports stdole
 

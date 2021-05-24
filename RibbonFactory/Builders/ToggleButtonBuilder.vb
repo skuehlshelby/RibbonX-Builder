@@ -20,10 +20,6 @@ Namespace Builders
         Implements ISetDescription(Of ToggleButtonBuilder)
         Implements ISetSize(Of ToggleButtonBuilder)
         Implements ISetToggleAction(Of ToggleButtonBuilder)
-        
-        Public Overrides Function Build() As ToggleButton
-            Return Build(tag:= Nothing)
-        End Function
 
         Public Overrides Function Build(tag As Object) As ToggleButton
             Return New ToggleButton(attributes:= Attributes, tag:= tag)

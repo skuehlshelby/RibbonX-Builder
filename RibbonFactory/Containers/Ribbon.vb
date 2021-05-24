@@ -2,7 +2,7 @@
 Imports System.Reflection
 Imports System.Xml
 Imports System.Xml.Schema
-Imports NetOffice.OfficeApi
+Imports Microsoft.Office.Core
 
 Namespace Containers
 

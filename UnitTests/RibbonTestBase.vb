@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports System.Text
-Imports NetOffice.OfficeApi
+Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Enums
 Imports stdole

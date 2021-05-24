@@ -1,4 +1,4 @@
-﻿Imports NetOffice.OfficeApi
+﻿Imports Microsoft.Office.Core
 
 
 Public Delegate Function FromControl(Of T)(control As IRibbonControl) As T

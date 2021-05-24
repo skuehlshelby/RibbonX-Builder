@@ -21,7 +21,7 @@ Namespace Builders
     Public MustInherit Class Builder
         Private Shared ReadOnly ControlIDs As Dictionary(Of Type, Integer) = New Dictionary(Of Type, Integer)
 
-        Protected Shared Function FabricateID(Of T As RibbonElement)() As String
+        Protected Shared Function FabricateId(Of T As RibbonElement)() As String
             Dim ribbonElementType As Type = GetType(T)
 
             If Not ControlIDs.ContainsKey(ribbonElementType) Then
@@ -35,8 +35,8 @@ Namespace Builders
 
         Protected Shared Function GetDefaults(Of T As RibbonElement)() As AttributeGroup
             GetDefaults = New AttributeGroup From {
-                New Id(FabricateID(Of T))
-                }
+                New Id(FabricateId(Of T))
+            }
 
             For Each interfaceType As Type In GetType(T).GetInterfaces
                 Select Case interfaceType
@@ -69,7 +69,9 @@ Namespace Builders
 
         Protected ReadOnly Attributes As AttributeGroup = GetDefaults(Of T)()
 
-        Public MustOverride Function Build() As T
+        Public Overridable Function Build() As T
+            Return Build(tag:=Nothing)
+        End Function
 
         Public MustOverride Function Build(tag As Object) As T
 
@@ -136,7 +138,11 @@ Namespace Builders
         Protected Sub AddAction(callback As ButtonPressed, action As Action)
             Attributes.Add(New Categories.OnAction.OnAction(action, callback))
         End Sub
-        
+
+        Protected Sub AddAction(callback As TextChanged, action As Action)
+            Attributes.Add(New Categories.OnChange.OnChange(action, callback))
+        End Sub
+
         Protected Sub InsertAfter(mso As MSO)
             Attributes.Add(New InsertAfterMso(mso.ToString()))
         End Sub
@@ -188,9 +194,13 @@ Namespace Builders
         Protected Sub AddImage(image As Bitmap, callback As FromControl(Of IPictureDisp))
             Attributes.Add(New GetImage(ImageToPictureDisp(image), callback))
         End Sub
-        
+
         Protected Sub AddOrientation(orientation As BoxStyle)
-            Attributes.Add(new RibbonAttributes.Categories.BoxStyle.BoxStyle(orientation))
+            Attributes.Add(New Categories.BoxStyle.BoxStyle(orientation))
+        End Sub
+
+        Protected Sub AddMaxLength(maxLength As Byte)
+            Attributes.Add(New Categories.MaxLength.MaxLength(maxLength))
         End Sub
     End Class
 End NameSpace
