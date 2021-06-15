@@ -3,7 +3,7 @@
     Friend NotInheritable Class GetItemSuperTip
         Inherits RibbonAttribute(Of String, GetItemSuperTip)
 
-        Public Sub New (callback As FromControl(Of String))
+        Public Sub New(callback As FromControlAndIndex(Of String))
             MyBase.New(callback.Method.Name)
         End Sub
 

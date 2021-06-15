@@ -113,10 +113,10 @@ Namespace Controls
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
 
             Get
-                Return _attributes.Lookup(Of Categories.KeyTip.KeyTip).GetValue()
+                Return _attributes.Lookup(Of Categories.KeyTip.Keytip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetKeyTip).SetValue(Value)
+                _attributes.Lookup(Of GetKeytip).SetValue(Value)
                 Refresh()
             End Set
         End Property

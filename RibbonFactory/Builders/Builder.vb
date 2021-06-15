@@ -4,6 +4,11 @@ Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.RibbonAttributes.Categories.ChildItems
+Imports RibbonFactory.RibbonAttributes.Categories.ChildItems.Image
+Imports RibbonFactory.RibbonAttributes.Categories.ChildItems.Label
+Imports RibbonFactory.RibbonAttributes.Categories.ChildItems.ScreenTip
+Imports RibbonFactory.RibbonAttributes.Categories.ChildItems.SuperTip
 Imports RibbonFactory.RibbonAttributes.Categories.Description
 Imports RibbonFactory.RibbonAttributes.Categories.Enabled
 Imports RibbonFactory.RibbonAttributes.Categories.ID
@@ -41,9 +46,9 @@ Namespace Builders
             For Each interfaceType As Type In GetType(T).GetInterfaces
                 Select Case interfaceType
                     Case GetType(IEnabled)
-                        GetDefaults.Add(New Enabled(true))
+                        GetDefaults.Add(New Enabled(True))
                     Case GetType(IVisible)
-                        GetDefaults.Add(New Visible(true))
+                        GetDefaults.Add(New Visible(True))
                     Case GetType(ILabel)
                         GetDefaults.Add(New Label(String.Empty))
                     Case GetType(IShowLabel)
@@ -91,6 +96,36 @@ Namespace Builders
             Attributes.Add(New GetEnabled(visible, callback))
         End Sub
 
+        Protected Sub InsertAfter(mso As MSO)
+            Attributes.Add(New InsertAfterMso(mso.ToString()))
+        End Sub
+
+        Protected Sub InsertAfter(control As RibbonElement)
+            Attributes.Add(New InsertAfterQ(control.ID))
+        End Sub
+
+        Protected Sub InsertBefore(mso As MSO)
+            Attributes.Add(New InsertBeforeMso(mso.ToString()))
+        End Sub
+
+        Protected Sub InsertBefore(control As RibbonElement)
+            Attributes.Add(New InsertBeforeQ(control.ID))
+        End Sub
+
+        Protected Sub AddKeyTip(keyTip As KeyTip)
+            Attributes.Add(New Categories.KeyTip.Keytip(keyTip))
+        End Sub
+
+        Protected Sub AddKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip))
+            Attributes.Add(New GetKeytip(keyTip, callback))
+        End Sub
+
+        Protected Sub AddOrientation(orientation As BoxStyle)
+            Attributes.Add(New Categories.BoxStyle.BoxStyle(orientation))
+        End Sub
+
+#Region "Helptext Methods"
+
         Protected Sub AddLabel(label As String)
             Attributes.Add(New Label(label))
         End Sub
@@ -106,7 +141,7 @@ Namespace Builders
         Protected Sub AddShowLabel(showLabel As Boolean, callback As FromControl(Of Boolean))
             Attributes.Add(New GetShowLabel(showLabel, callback))
         End Sub
-        
+
         Protected Sub AddScreenTip(screenTip As String)
             Attributes.Add(New Screentip(screenTip))
         End Sub
@@ -116,26 +151,34 @@ Namespace Builders
         End Sub
 
         Protected Sub AddSuperTip(superTip As String)
-            Attributes.Add(New Supertip(supertip))
+            Attributes.Add(New Supertip(superTip))
         End Sub
 
         Protected Sub AddSuperTip(superTip As String, callback As FromControl(Of String))
-            Attributes.Add(New GetSupertip(supertip, callback))
+            Attributes.Add(New GetSuperTip(superTip, callback))
         End Sub
 
         Protected Sub AddDescription(description As String)
-            Attributes.Add(new Description(description))
+            Attributes.Add(New Description(description))
         End Sub
 
         Protected Sub AddDescription(description As String, callback As FromControl(Of String))
-            Attributes.Add(new GetDescription(description, callback))
+            Attributes.Add(New GetDescription(description, callback))
         End Sub
+
+#End Region
+
+#Region "Action Methods"
 
         Protected Sub AddAction(callback As OnAction, action As Action)
             Attributes.Add(New Categories.OnAction.OnAction(action, callback))
         End Sub
-        
+
         Protected Sub AddAction(callback As ButtonPressed, action As Action)
+            Attributes.Add(New Categories.OnAction.OnAction(action, callback))
+        End Sub
+
+        Protected Sub AddAction(callback As SelectionChanged, action As Action)
             Attributes.Add(New Categories.OnAction.OnAction(action, callback))
         End Sub
 
@@ -143,51 +186,15 @@ Namespace Builders
             Attributes.Add(New Categories.OnChange.OnChange(action, callback))
         End Sub
 
-        Protected Sub InsertAfter(mso As MSO)
-            Attributes.Add(New InsertAfterMso(mso.ToString()))
-        End Sub
-        
-        Protected Sub InsertAfter(control As RibbonElement)
-            Attributes.Add(New InsertAfterQ(control.ID))
-        End Sub
-        
-        Protected Sub InsertBefore(mso As MSO)
-            Attributes.Add(New InsertBeforeMso(mso.ToString()))
-        End Sub
-        
-        Protected Sub InsertBefore(control As RibbonElement)
-            Attributes.Add(New InsertBeforeQ(control.ID))
-        End Sub
-        
-        Protected Sub AddLarge()
-            Attributes.Add(New Categories.Size.Size(ControlSize.large))
-        End Sub
-        
-        Protected Sub AddLarge(callback As FromControl(Of ControlSize))
-            Attributes.Add(New GetSize(ControlSize.large, callback))
-        End Sub
-        
-        Protected Sub AddNormal()
-            Attributes.Add(New Categories.Size.Size(ControlSize.normal))
-        End Sub
-        
-        Protected Sub AddNormal(callback As FromControl(Of ControlSize))
-            Attributes.Add(New GetSize(ControlSize.normal, callback))
-        End Sub
-        
-        Protected Sub AddKeyTip(keyTip As KeyTip)
-            Attributes.Add(New Categories.KeyTip.KeyTip(keyTip))
-        End Sub
-        
-        Protected Sub AddKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip))
-            Attributes.Add(New GetKeyTip(keyTip, callback))
-        End Sub
+#End Region
+
+#Region "Image Methods"
 
         Protected Sub AddImage(image As Enums.ImageMSO.ImageMSO)
             Attributes.Add(New Categories.Image.ImageMso(image))
         End Sub
 
-        Protected Sub AddImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) 
+        Protected Sub AddImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp))
             Attributes.Add(New GetImage(image, callback))
         End Sub
 
@@ -195,12 +202,82 @@ Namespace Builders
             Attributes.Add(New GetImage(ImageToPictureDisp(image), callback))
         End Sub
 
-        Protected Sub AddOrientation(orientation As BoxStyle)
-            Attributes.Add(New Categories.BoxStyle.BoxStyle(orientation))
+        Protected Sub AddShowImage(showImage As Boolean)
+            Attributes.Add(New ShowImage(value:=showImage))
+        End Sub
+
+        Protected Sub AddShowImage(value As Boolean, callBack As FromControl(Of Boolean))
+            Attributes.Add(New GetShowImage(value:=value, callback:=callBack))
+        End Sub
+
+#End Region
+
+#Region "Size Methods"
+
+        Protected Sub AddLarge()
+            Attributes.Add(New Categories.Size.Size(ControlSize.large))
+        End Sub
+
+        Protected Sub AddLarge(callback As FromControl(Of ControlSize))
+            Attributes.Add(New GetSize(ControlSize.large, callback))
+        End Sub
+
+        Protected Sub AddNormal()
+            Attributes.Add(New Categories.Size.Size(ControlSize.normal))
+        End Sub
+
+        Protected Sub AddNormal(callback As FromControl(Of ControlSize))
+            Attributes.Add(New GetSize(ControlSize.normal, callback))
         End Sub
 
         Protected Sub AddMaxLength(maxLength As Byte)
             Attributes.Add(New Categories.MaxLength.MaxLength(maxLength))
         End Sub
+
+#End Region
+
+#Region "Child Item Methods"
+
+        Protected Sub AddGetItemId(itemIdSource As FromControlAndIndex(Of String))
+            Attributes.Add(New GetItemID(callback:=itemIdSource))
+        End Sub
+
+        Protected Sub AddGetItemCount(itemCountSource As FromControl(Of Integer))
+            Attributes.Add(New GetItemCount(callback:=itemCountSource))
+        End Sub
+
+        Protected Sub AddGetItemLabel(labelSource As FromControlAndIndex(Of String))
+            Attributes.Add(New GetItemLabel(callback:=labelSource))
+        End Sub
+
+        Protected Sub AddGetItemScreenTip(screenTipSource As FromControlAndIndex(Of String))
+            Attributes.Add(New GetItemScreenTip(callback:=screenTipSource))
+        End Sub
+
+        Protected Sub AddGetItemSuperTip(superTipSource As FromControlAndIndex(Of String))
+            Attributes.Add(New GetItemSuperTip(callback:=superTipSource))
+        End Sub
+
+        Protected Sub AddGetItemImage(imageSource As FromControlAndIndex(Of IPictureDisp))
+            Attributes.Add(New GetItemImage(callback:=imageSource))
+        End Sub
+
+        Protected Sub AddShowItemImage(showImage As Boolean)
+            Attributes.Add(New ShowItemImage(showImage))
+        End Sub
+
+        Protected Sub AddShowItemLabel(showLabel As Boolean)
+            Attributes.Add(New ShowItemLabel(value:=showLabel))
+        End Sub
+
+        Protected Sub AddGetSelectedItemId(selectedItemIdSource As FromControlAndIndex(Of String))
+            Attributes.Add(New GetItemID(callback:=selectedItemIdSource))
+        End Sub
+
+        Protected Sub AddGetSelectedItemIndex(selectedItemIndexSource As FromControl(Of Integer))
+            Attributes.Add(New GetSelectedItemIndex(callback:=selectedItemIndexSource))
+        End Sub
+
+#End Region
     End Class
 End NameSpace

@@ -3,7 +3,7 @@
     Friend NotInheritable Class GetItemScreenTip
         Inherits RibbonAttribute(Of String, GetItemScreenTip)
 
-        Public Sub New (callback As FromControl(Of String))
+        Public Sub New(callback As FromControlAndIndex(Of String))
             MyBase.New(callback.Method.Name)
         End Sub
 

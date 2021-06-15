@@ -17,7 +17,7 @@
                   screentip="My favorite button."
                   imageMso="HappyFace"
                   size="large"
-                  onAction="OnAction"/>
+                  onAction="OnAction" />
           <comboBox  />
           <menu >
             <menuSeparator />
@@ -28,6 +28,7 @@
           <buttonGroup>
             
           </buttonGroup>
+          <dropDown id="dropDown1" />
         </group>
       </tab>
     </tabs>

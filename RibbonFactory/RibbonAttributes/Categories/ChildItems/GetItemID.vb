@@ -3,7 +3,7 @@
     Friend NotInheritable Class GetItemID
         Inherits RibbonAttribute(Of String, GetItemID)
 
-        Public Sub New (callback As FromControl(Of String))
+        Public Sub New(callback As FromControlAndIndex(Of String))
             MyBase.New(callback.Method.Name)
         End Sub
 

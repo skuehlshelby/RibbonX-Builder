@@ -148,7 +148,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithCharacterLimit(limit As Byte) As EditBoxBuilder Implements ISetMaxLength(Of EditBoxBuilder).WithCharacterLimit
+        Public Function OfWidth(limit As Byte) As EditBoxBuilder Implements ISetMaxLength(Of EditBoxBuilder).OfWidth
             AddMaxLength(limit)
             Return Me
         End Function

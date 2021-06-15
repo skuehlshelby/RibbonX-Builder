@@ -5,7 +5,7 @@ Namespace RibbonAttributes.Categories.ChildItems.Image
     Friend NotInheritable Class GetItemImage
         Inherits RibbonAttribute(Of String, GetItemImage)
 
-        Public Sub New (callback As FromControl(Of IPictureDisp))
+        Public Sub New(callback As FromControlAndIndex(Of IPictureDisp))
             MyBase.New(callback.Method.Name)
         End Sub
 

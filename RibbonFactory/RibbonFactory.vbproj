@@ -82,7 +82,17 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuilderInterfaces\ISetChildItemCountSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemIDSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemImageSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemImageVisibility.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemLabelSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemLabelVisibility.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemScreenTipSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetSelectedItemIdSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetChildItemSuperTipSource.vb" />
     <Compile Include="BuilderInterfaces\ISetDescription.vb" />
+    <Compile Include="BuilderInterfaces\ISetImageVisibility.vb" />
     <Compile Include="BuilderInterfaces\ISetMaxLength.vb" />
     <Compile Include="BuilderInterfaces\ISetEnabled.vb" />
     <Compile Include="BuilderInterfaces\ISetClickAction.vb" />
@@ -93,6 +103,8 @@
     <Compile Include="BuilderInterfaces\ISetLabelScreenTipAndSuperTip.vb" />
     <Compile Include="BuilderInterfaces\ISetNamespace.vb" />
     <Compile Include="BuilderInterfaces\ISetOrientation.vb" />
+    <Compile Include="BuilderInterfaces\ISetSelectedItemIndexSource.vb" />
+    <Compile Include="BuilderInterfaces\ISetOnSelectionChange.vb" />
     <Compile Include="BuilderInterfaces\ISetSize.vb" />
     <Compile Include="BuilderInterfaces\ISetLabelVisibility.vb" />
     <Compile Include="BuilderInterfaces\ISetTextChangeAction.vb" />
@@ -101,6 +113,7 @@
     <Compile Include="Builders\BoxBuilder.vb" />
     <Compile Include="Builders\ButtonGroupBuilder.vb" />
     <Compile Include="Builders\CheckBoxBuilder.vb" />
+    <Compile Include="Builders\DropDownBuilder.vb" />
     <Compile Include="Builders\EditBoxBuilder.vb" />
     <Compile Include="Builders\GroupBuilder.vb" />
     <Compile Include="Builders\LabelControlBuilder.vb" />
@@ -118,7 +131,7 @@
     <Compile Include="Component Interfaces\IOnAction.vb" />
     <Compile Include="Component Interfaces\IOnChange.vb" />
     <Compile Include="Component Interfaces\IScreenTip.vb" />
-    <Compile Include="Component Interfaces\ISelectable.vb" />
+    <Compile Include="Component Interfaces\ISelect.vb" />
     <Compile Include="Component Interfaces\IShowImage.vb" />
     <Compile Include="Component Interfaces\IShowLabel.vb" />
     <Compile Include="Component Interfaces\ISize.vb" />
@@ -196,8 +209,8 @@
     <Compile Include="RibbonAttributes\Categories\Insert\InsertAfterQ.vb" />
     <Compile Include="RibbonAttributes\Categories\Insert\InsertBeforeMso.vb" />
     <Compile Include="RibbonAttributes\Categories\Insert\InsertBeforeQ.vb" />
-    <Compile Include="RibbonAttributes\Categories\Keytip\KeyTip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Keytip\GetKeyTip.vb" />
+    <Compile Include="RibbonAttributes\Categories\Keytip\Keytip.vb" />
+    <Compile Include="RibbonAttributes\Categories\Keytip\GetKeytip.vb" />
     <Compile Include="RibbonAttributes\Categories\Label\GetLabel.vb" />
     <Compile Include="RibbonAttributes\Categories\Label\GetShowLabel.vb" />
     <Compile Include="RibbonAttributes\Categories\Label\Label.vb" />
@@ -207,6 +220,7 @@
     <Compile Include="RibbonAttributes\Categories\Screentip\GetScreentip.vb" />
     <Compile Include="RibbonAttributes\Categories\Size\Size.vb" />
     <Compile Include="RibbonAttributes\Categories\Size\GetSize.vb" />
+    <Compile Include="RibbonAttributes\Categories\StartFromScratch\StartFromScratch.vb" />
     <Compile Include="RibbonAttributes\Categories\Supertip\GetSuperTip.vb" />
     <Compile Include="RibbonAttributes\Categories\Supertip\Supertip.vb" />
     <Compile Include="RibbonAttributes\Categories\Text\GetText.vb" />
