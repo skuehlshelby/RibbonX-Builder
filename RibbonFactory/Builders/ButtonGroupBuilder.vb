@@ -1,55 +1,64 @@
 ﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Enums.MSO
+Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
 
-    Public Class ButtonGroupBuilder
-        Inherits Builder(Of ButtonGroup)
-        Implements ISetInsertionPoint(Of ButtonGroupBuilder)
-        Implements ISetVisibility(Of ButtonGroupBuilder)
+    Public NotInheritable Class ButtonGroupBuilder
+        Implements IInsert(Of ButtonGroupBuilder)
+        Implements IVisible(Of ButtonGroupBuilder)
 
-        Public Overrides Function Build(tag As Object) As ButtonGroup
-            Return New ButtonGroup(attributes:=Attributes, tag:=tag)
+        Private ReadOnly _builder As ControlBuilder
+
+        Friend Sub New()
+            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of ButtonGroup)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(defaultProvider)
+            _builder = new ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As ButtonGroup
+            Return New ButtonGroup(_builder.Build(), tag:=tag)
         End Function
 
-        Public Function Visible() As ButtonGroupBuilder Implements ISetVisibility(Of ButtonGroupBuilder).Visible
-            AddVisible(visible:=True)
+        Public Function Visible() As ButtonGroupBuilder Implements IVisible(Of ButtonGroupBuilder).Visible
+            _builder.Visible()
             Return Me
         End Function
 
-        Public Function Visible(callback As FromControl(Of Boolean)) As ButtonGroupBuilder Implements ISetVisibility(Of ButtonGroupBuilder).Visible
-            AddVisible(visible:=True, callback:=callback)
+        Public Function Visible(callback As FromControl(Of Boolean)) As ButtonGroupBuilder Implements IVisible(Of ButtonGroupBuilder).Visible
+            _builder.Visible(callback)
             Return Me
         End Function
 
-        Public Function Invisible() As ButtonGroupBuilder Implements ISetVisibility(Of ButtonGroupBuilder).Invisible
-            AddVisible(visible:=False)
+        Public Function Invisible() As ButtonGroupBuilder Implements IVisible(Of ButtonGroupBuilder).Invisible
+            _builder.Invisible()
             Return Me
         End Function
 
-        Public Function Invisible(callback As FromControl(Of Boolean)) As ButtonGroupBuilder Implements ISetVisibility(Of ButtonGroupBuilder).Invisible
-            AddVisible(visible:=False, callback:=callback)
+        Public Function Invisible(callback As FromControl(Of Boolean)) As ButtonGroupBuilder Implements IVisible(Of ButtonGroupBuilder).Invisible
+            _builder.Invisible(callback)
             Return Me
         End Function
 
-        Public Function InsertBeforeMSO(builtInControl As MSO) As ButtonGroupBuilder Implements ISetInsertionPoint(Of ButtonGroupBuilder).InsertBefore
-            InsertBefore(builtInControl)
+        Public Function InsertBeforeMSO(builtInControl As MSO) As ButtonGroupBuilder Implements IInsert(Of ButtonGroupBuilder).InsertBefore
+            _builder.InsertBefore(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As ButtonGroupBuilder Implements ISetInsertionPoint(Of ButtonGroupBuilder).InsertBefore
-            InsertBefore(qualifiedControl)
+        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As ButtonGroupBuilder Implements IInsert(Of ButtonGroupBuilder).InsertBefore
+            _builder.InsertBefore(qualifiedControl)
             Return Me
         End Function
 
-        Public Function InsertAfterMSO(builtInControl As MSO) As ButtonGroupBuilder Implements ISetInsertionPoint(Of ButtonGroupBuilder).InsertAfter
-            InsertAfter(builtInControl)
+        Public Function InsertAfterMSO(builtInControl As MSO) As ButtonGroupBuilder Implements IInsert(Of ButtonGroupBuilder).InsertAfter
+            _builder.InsertAfter(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As ButtonGroupBuilder Implements ISetInsertionPoint(Of ButtonGroupBuilder).InsertAfter
-            InsertAfter(qualifiedControl)
+        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As ButtonGroupBuilder Implements IInsert(Of ButtonGroupBuilder).InsertAfter
+            _builder.InsertAfter(qualifiedControl)
             Return Me
         End Function
     End Class

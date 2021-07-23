@@ -1,7 +1,6 @@
 ﻿Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.ID
-Imports RibbonFactory.RibbonAttributes.Categories.Visible
+
 
 Namespace Controls
     
@@ -18,7 +17,7 @@ Namespace Controls
         
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Lookup(Of Id).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
             End Get
         End Property
 
@@ -30,11 +29,11 @@ Namespace Controls
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Lookup(Of Visible).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetVisible).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+                
             End Set
         End Property
     End Class

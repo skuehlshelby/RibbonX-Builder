@@ -1,24 +1,68 @@
-﻿Imports System.Text
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
-Imports Microsoft.Office.Core
-Imports RibbonFactory
-Imports RibbonFactory.Enums
+﻿Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.Size
 
-<TestClass()> Public Class RibbonAttributeTests
 
-    <TestMethod()> Public Sub TestMethod1()
-        Dim CUT As AttributeGroup = New AttributeGroup()
+<TestClass()>
+Public Class RibbonAttributeTests
+    Inherits RibbonTestBase
 
-        CUT.Add(New GetSize(ControlSize.large, AddressOf FromControl)).SetValue(ControlSize.normal)
+    <TestMethod()>
+    Public Sub AttributesAreMutuallyExclusive_SizeAndGetSize()
+        Dim cut As AttributeGroup = New AttributeGroup From {
+            New GetSize(ControlSize.large, AddressOf GetSize),
+            New Size(ControlSize.normal)
+        }
 
-        CUT.Add(New Size(ControlSize.normal))
-
-        Assert.AreEqual(CUT.Count, 1)
+        Assert.AreEqual(cut.Count, 1)
     End Sub
 
-    Public Function FromControl(ByVal Control As IRibbonControl) As ControlSize
-        Return ControlSize.large
-    End Function
+    <TestMethod()>
+    Public Sub AttributesAreMutuallyExclusive_LabelAndGetLabel()
+        Dim cut As AttributeGroup = New AttributeGroup From {
+                New GetLabel("My Label", AddressOf GetLabel),
+                New Label("My Label")
+        }
+
+        Assert.AreEqual(cut.Count, 1)
+    End Sub
+
+    <TestMethod()>
+    Public Sub AttributesAreMutuallyExclusive_ScreenTipAndGetScreenTip()
+        Dim cut As AttributeGroup = New AttributeGroup From {
+                New GetScreentip("My Screentip", AddressOf GetScreenTip),
+                New Screentip("My Screentip")
+                }
+
+        Assert.AreEqual(cut.Count, 1)
+    End Sub
+
+    <TestMethod()>
+    Public Sub AttributesAreMutuallyExclusive_SuperTipAndGetSuperTip()
+        Dim cut As AttributeGroup = New AttributeGroup From {
+                New GetSuperTip("My SuperTip", AddressOf GetSuperTip),
+                New Supertip("My SuperTip")
+                }
+
+        Assert.AreEqual(cut.Count, 1)
+    End Sub
+
+    <TestMethod()>
+    Public Sub AttributesAreMutuallyExclusive_DescriptionAndGetDescription()
+        Dim cut As AttributeGroup = New AttributeGroup From {
+                New GetDescription("My Description", AddressOf GetDescription),
+                New Description("My Description")
+                }
+
+        Assert.AreEqual(cut.Count, 1)
+    End Sub
+
+    <TestMethod()>
+    Public Sub AttributesAreMutuallyExclusive_IdAndIdQ()
+        Dim cut As AttributeGroup = New AttributeGroup From {
+                New Id("Id1"),
+                New IdQ("Testing", "Id1")
+                }
+
+        Assert.AreEqual(cut.Count, 1)
+    End Sub
 End Class

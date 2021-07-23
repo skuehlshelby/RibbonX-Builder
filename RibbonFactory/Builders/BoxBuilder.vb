@@ -1,45 +1,53 @@
 ﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
-Imports RibbonFactory.Enums
+Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
     
-    Public Class BoxBuilder
-        Inherits Builder(Of Box)
-        Implements ISetOrientation(Of BoxBuilder)
-        Implements ISetVisibility(Of BoxBuilder)
+    Public NotInheritable Class BoxBuilder
+        Implements IBoxStyle(Of BoxBuilder)
+        Implements IVisible(Of BoxBuilder)
 
-        Public Overrides Function Build(tag As Object) As Box
-            Return New Box(Attributes, tag)
+        Private ReadOnly _builder As ControlBuilder
+
+        Public Sub New()
+            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Box)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(defaultProvider)
+            _builder = new ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Function Build(tag As Object) As Box
+            Return New Box(_builder.Build(), tag)
         End Function
 
-        Public Function Horizontal() As BoxBuilder Implements ISetOrientation(Of BoxBuilder).Horizontal
-            AddOrientation(BoxStyle.vertical)
+        Public Function Horizontal() As BoxBuilder Implements IBoxStyle(Of BoxBuilder).Horizontal
+            _builder.Horizontal()
             Return Me
         End Function
 
-        Public Function Vertical() As BoxBuilder Implements ISetOrientation(Of BoxBuilder).Vertical
-            AddOrientation(BoxStyle.horizontal)
+        Public Function Vertical() As BoxBuilder Implements IBoxStyle(Of BoxBuilder).Vertical
+            _builder.Vertical()
             Return Me
         End Function
         
-        Public Function Visible() As BoxBuilder Implements ISetVisibility(Of BoxBuilder).Visible
-            AddVisible(visible:= True)
+        Public Function Visible() As BoxBuilder Implements IVisible(Of BoxBuilder).Visible
+            _builder.Visible()
             Return Me
         End Function
 
-        Public Function Visible(callback As FromControl(Of Boolean)) As BoxBuilder Implements ISetVisibility(Of BoxBuilder).Visible
-            AddVisible(visible:= True, callback:= callback)
+        Public Function Visible(callback As FromControl(Of Boolean)) As BoxBuilder Implements IVisible(Of BoxBuilder).Visible
+            _builder.Visible(callback:= callback)
             Return Me
         End Function
 
-        Public Function Invisible() As BoxBuilder Implements ISetVisibility(Of BoxBuilder).Invisible
-            AddVisible(visible:= False)
+        Public Function Invisible() As BoxBuilder Implements IVisible(Of BoxBuilder).Invisible
+            _builder.Invisible()
             Return Me
         End Function
 
-        Public Function Invisible(callback As FromControl(Of Boolean)) As BoxBuilder Implements ISetVisibility(Of BoxBuilder).Invisible
-            AddVisible(visible:= True, callback:= callback)
+        Public Function Invisible(callback As FromControl(Of Boolean)) As BoxBuilder Implements IVisible(Of BoxBuilder).Invisible
+            _builder.Invisible(callback:= callback)
             Return Me
         End Function
         

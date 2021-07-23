@@ -1,140 +1,139 @@
 ﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums.MSO
+Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
     Public Class LabelControlBuilder
-        Inherits Builder(Of LabelControl)
-        Implements ISetEnabled(Of LabelControlBuilder)
-        Implements ISetInsertionPoint(Of LabelControlBuilder)
-        Implements ISetVisibility(Of LabelControlBuilder)
-        Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder)
-        Implements ISetLabelVisibility(Of LabelControlBuilder)
+        Implements IEnabled(Of LabelControlBuilder)
+        Implements IInsert(Of LabelControlBuilder)
+        Implements IVisible(Of LabelControlBuilder)
+        Implements ILabelScreenTipSuperTip(Of LabelControlBuilder)
+        Implements IShowLabel(Of LabelControlBuilder)
 
-        Public Overrides Function Build(tag As Object) As LabelControl
-            Return New LabelControl(Attributes, tag)
+        Private ReadOnly _builder As ControlBuilder
+
+        Friend Sub New()
+            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of LabelControl)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(defaultProvider)
+            _builder = new ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As LabelControl
+            Return New LabelControl(_builder.Build(), tag)
         End Function
 
-        Public Function Enabled() As LabelControlBuilder Implements ISetEnabled(Of LabelControlBuilder).Enabled
-            AddEnabled(enabled:= True)
+        Public Function Enabled() As LabelControlBuilder Implements IEnabled(Of LabelControlBuilder).Enabled
+            _builder.Enabled()
             Return Me
         End Function
 
-        Public Function Enabled(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetEnabled(Of LabelControlBuilder).Enabled
-            AddEnabled(enabled:= True, callback:= callback)
+        Public Function Enabled(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements IEnabled(Of LabelControlBuilder).Enabled
+            _builder.Enabled(callback)
             Return Me
         End Function
 
-        Public Function Disabled() As LabelControlBuilder Implements ISetEnabled(Of LabelControlBuilder).Disabled
-            AddEnabled(enabled:= False)
+        Public Function Disabled() As LabelControlBuilder Implements IEnabled(Of LabelControlBuilder).Disabled
+            _builder.Disabled()
             Return Me
         End Function
 
-        Public Function Disabled(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetEnabled(Of LabelControlBuilder).Disabled
-            AddEnabled(enabled:= False, callback:= callback)
+        Public Function Disabled(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements IEnabled(Of LabelControlBuilder).Disabled
+            _builder.Disabled(callback)
             Return Me
         End Function
 
-        Public Function Visible() As LabelControlBuilder Implements ISetVisibility(Of LabelControlBuilder).Visible
-            AddVisible(visible:= True)
+        Public Function Visible() As LabelControlBuilder Implements IVisible(Of LabelControlBuilder).Visible
+            _builder.Visible()
             Return Me
         End Function
 
-        Public Function Visible(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetVisibility(Of LabelControlBuilder).Visible
-            AddVisible(visible:= True, callback := callback)
+        Public Function Visible(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements IVisible(Of LabelControlBuilder).Visible
+            _builder.Visible(callback)
             Return Me
         End Function
 
-        Public Function Invisible() As LabelControlBuilder Implements ISetVisibility(Of LabelControlBuilder).Invisible
-            AddVisible(visible:= True)
+        Public Function Invisible() As LabelControlBuilder Implements IVisible(Of LabelControlBuilder).Invisible
+            _builder.Invisible()
             Return Me
         End Function
 
-        Public Function Invisible(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetVisibility(Of LabelControlBuilder).Invisible
-            AddVisible(visible:= True, callback := callback)
+        Public Function Invisible(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements IVisible(Of LabelControlBuilder).Invisible
+            _builder.Invisible(callback)
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As LabelControlBuilder Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder).WithLabel
-            AddLabel(label:= label)
-            AddShowLabel(showLabel:= True)
-            
-            If copyToScreenTip Then
-                AddScreenTip(screenTip:= label)
-            End If
-
+        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithLabel
+            _builder.WithLabel(label, copyToScreenTip)
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As LabelControlBuilder Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder).WithLabel
-            AddLabel(label:= label, callback:= callback)
-            AddShowLabel(showLabel:= True)
-            
-            If copyToScreenTip Then
-                AddScreenTip(screenTip:= label, callback:= callback)
-            End If
-
+        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithLabel
+            _builder.WithLabel(label, callback, copyToScreenTip)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String) As LabelControlBuilder Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder).WithScreenTip
-            AddScreenTip(screenTip:= screenTip)
+        Public Function WithScreenTip(screenTip As String) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithScreenTip
+            _builder.WithScreentip(screenTip)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As LabelControlBuilder Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder).WithScreenTip
-            AddScreenTip(screenTip:= screenTip, callback:= callback)
+        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithScreenTip
+            _builder.WithScreentip(screenTip, callback)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String) As LabelControlBuilder Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder).WithSuperTip
-            AddSuperTip(superTip:= superTip)
+        Public Function WithSuperTip(superTip As String) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithSuperTip
+            _builder.WithSupertip(superTip)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As LabelControlBuilder Implements ISetLabelScreenTipAndSuperTip(Of LabelControlBuilder).WithSuperTip
-            AddSuperTip(superTip:= superTip, callback:= callback)
+        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithSuperTip
+            _builder.WithSupertip(superTip, callback)
             Return Me
         End Function
 
-        Public Function ShowLabel() As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).ShowLabel
-            AddShowLabel(showLabel:= True)
+        Public Function ShowLabel() As LabelControlBuilder Implements IShowLabel(Of LabelControlBuilder).ShowLabel
+            _builder.ShowLabel()
             Return Me
         End Function
 
-        Public Function ShowLabel(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).ShowLabel
-            AddShowLabel(showLabel:= True, callback:= callback)
+        Public Function ShowLabel(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements IShowLabel(Of LabelControlBuilder).ShowLabel
+            _builder.ShowLabel(callback)
             Return Me
         End Function
 
-        Public Function HideLabel() As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).HideLabel
-            AddShowLabel(showLabel:= False)
+        Public Function HideLabel() As LabelControlBuilder Implements IShowLabel(Of LabelControlBuilder).HideLabel
+            _builder.HideLabel()
             Return Me
         End Function
 
-        Public Function HideLabel(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements ISetLabelVisibility(Of LabelControlBuilder).HideLabel
-            AddShowLabel(showLabel:= False, callback:= callback)
+        Public Function HideLabel(callback As FromControl(Of Boolean)) As LabelControlBuilder Implements IShowLabel(Of LabelControlBuilder).HideLabel
+            _builder.HideLabel(callback)
             Return Me
         End Function
 
-        Private Function InsertBeforeMSO(builtInControl As MSO) As LabelControlBuilder Implements ISetInsertionPoint(Of LabelControlBuilder).InsertBefore
-            InsertBefore(builtInControl)
+        Public Function InsertBeforeMSO(builtInControl As MSO) As LabelControlBuilder Implements IInsert(Of LabelControlBuilder).InsertBefore
+            _builder.InsertBefore(builtInControl)
             Return Me
         End Function
 
-        Private Function InsertBeforeQ(qualifiedControl As RibbonElement) As LabelControlBuilder Implements ISetInsertionPoint(Of LabelControlBuilder).InsertBefore
-            InsertBefore(qualifiedControl)
+        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As LabelControlBuilder Implements IInsert(Of LabelControlBuilder).InsertBefore
+            _builder.InsertBefore(qualifiedControl)
             Return Me
         End Function
 
-        Private Function InsertAfterMSO(builtInControl As MSO) As LabelControlBuilder Implements ISetInsertionPoint(Of LabelControlBuilder).InsertAfter
-            InsertAfter(builtInControl)
+        Public Function InsertAfterMSO(builtInControl As MSO) As LabelControlBuilder Implements IInsert(Of LabelControlBuilder).InsertAfter
+            _builder.InsertAfter(builtInControl)
             Return Me
         End Function
 
-        Private Function InsertAfterQ(qualifiedControl As RibbonElement) As LabelControlBuilder Implements ISetInsertionPoint(Of LabelControlBuilder).InsertAfter
-            InsertAfter(qualifiedControl)
+        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As LabelControlBuilder Implements IInsert(Of LabelControlBuilder).InsertAfter
+            _builder.InsertAfter(qualifiedControl)
             Return Me
         End Function
+
     End Class
+
 End NameSpace

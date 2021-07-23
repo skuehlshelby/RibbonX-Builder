@@ -1,11 +1,5 @@
 ﻿Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.Enabled
-Imports RibbonFactory.RibbonAttributes.Categories.ID
-Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.Screentip
-Imports RibbonFactory.RibbonAttributes.Categories.Supertip
-Imports RibbonFactory.RibbonAttributes.Categories.Visible
 
 Namespace Controls
     Public NotInheritable Class LabelControl
@@ -26,73 +20,70 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Lookup(Of Id).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
             End Get
         End Property
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<checkBox { String.Join(" ", _attributes) }/>"
+                Return $"<checkBox { _attributes }/>"
             End Get
         End Property
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Lookup(Of Enabled).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetEnabled).SetValue(value)
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
             End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Lookup(Of Visible).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetVisible).SetValue(value)
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Lookup(Of Label).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetLabel).SetValue(value)
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Lookup(Of ShowLabel).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetShowLabel).SetValue(value)
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
             End Set
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.Lookup(Of Screentip).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetScreentip).SetValue(value)
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISuperTip.Supertip
+        Public Property SuperTip As String Implements ISupertip.Supertip
             Get
-                Return _attributes.Lookup(Of Supertip).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetSupertip).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
             End Set
         End Property
 
-        Public Overrides Function Equals(obj As Object) As Boolean
-            Return obj.GetHashCode() = GetHashCode() AndAlso TypeOf obj Is Button
-        End Function
     End Class
+
 End NameSpace

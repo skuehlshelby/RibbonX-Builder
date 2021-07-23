@@ -2,12 +2,7 @@
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.Enabled
-Imports RibbonFactory.RibbonAttributes.Categories.ID
-Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
-Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.Size
-Imports RibbonFactory.RibbonAttributes.Categories.Visible
+
 
 Namespace Containers
     
@@ -38,7 +33,7 @@ Namespace Containers
         
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Lookup(Of Id).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
             End Get
         End Property
 
@@ -56,31 +51,31 @@ Namespace Containers
         
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Lookup(Of Visible).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetVisible).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+                
             End Set
         End Property
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Lookup(Of Enabled).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetEnabled).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
+                
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Lookup (Of Categories.KeyTip.Keytip).GetValue()
+                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeName.Keytip).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetKeytip).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
+                
             End Set
         End Property
 
@@ -90,7 +85,7 @@ Namespace Containers
             End Get
             Set
                 _attributes.Lookup(Of GetSize).SetValue(value)
-                Refresh()
+                
             End Set
         End Property
 
@@ -100,7 +95,7 @@ Namespace Containers
             End Get
             Set
                 _attributes.Lookup(Of GetShowLabel).SetValue(value)
-                Refresh()
+                
             End Set
         End Property
 

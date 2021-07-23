@@ -1,16 +1,5 @@
 ﻿Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.RibbonAttributes.Categories.Enabled
-Imports RibbonFactory.RibbonAttributes.Categories.ID
-Imports RibbonFactory.RibbonAttributes.Categories.Image
-Imports RibbonFactory.RibbonAttributes.Categories.KeyTip
-Imports RibbonFactory.RibbonAttributes.Categories.Label
-Imports RibbonFactory.RibbonAttributes.Categories.MaxLength
-Imports RibbonFactory.RibbonAttributes.Categories.OnChange
-Imports RibbonFactory.RibbonAttributes.Categories.Screentip
-Imports RibbonFactory.RibbonAttributes.Categories.SuperTip
-Imports RibbonFactory.RibbonAttributes.Categories.Text
-Imports RibbonFactory.RibbonAttributes.Categories.Visible
 Imports stdole
 
 Namespace Controls
@@ -35,47 +24,45 @@ Namespace Controls
         Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf OnValueChanged
         End Sub
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Lookup(Of Id).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
             End Get
         End Property
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<editBox { String.Join(" ", _attributes) }/>"
+                Return $"<editBox { _attributes }/>"
             End Get
         End Property
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Lookup(Of Enabled).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetEnabled).SetValue(Value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.Enabled).SetValue(value)
             End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Lookup(Of Visible).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetVisible).SetValue(Value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.Visible).SetValue(value)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Lookup(Of Label).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetLabel).SetValue(Value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of String)(AttributeName.Label).SetValue(value)
             End Set
         End Property
 
@@ -85,7 +72,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetScreentip).SetValue(Value)
-                Refresh()
+                
             End Set
         End Property
 
@@ -95,7 +82,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup (Of GetSuperTip).SetValue(value)
-                Refresh()
+                
             End Set
         End Property
 
@@ -105,17 +92,17 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup (Of GetShowLabel).SetValue(value)
-                Refresh()
+                
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Lookup (Of Categories.KeyTip.KeyTip).GetValue()
+                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeName.Keytip).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetKeyTip).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
+                
             End Set
         End Property
 
@@ -125,14 +112,8 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup(Of GetImage).SetValue(value)
-                Refresh()
+                
             End Set
-        End Property
-
-        Public ReadOnly Property IsCustom As Boolean Implements IImage.IsCustom
-            Get
-                Return TypeOf _attributes.Lookup(Of ImageBase) Is GetImage
-            End Get
         End Property
 
         Public Property ShowImage As Boolean Implements IShowImage.ShowImage
@@ -141,7 +122,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup (Of GetShowImage).SetValue(value)
-                Refresh()
+                
             End Set
         End Property
 
@@ -151,7 +132,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.Lookup (Of GetText).SetValue(value)
-                Refresh()
+                
             End Set
         End Property
 

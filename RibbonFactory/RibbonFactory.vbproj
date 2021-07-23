@@ -82,49 +82,58 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuilderInterfaces\ISetChildItemCountSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemIDSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemImageSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemImageVisibility.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemLabelSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemLabelVisibility.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemScreenTipSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetSelectedItemIdSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetChildItemSuperTipSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetDescription.vb" />
-    <Compile Include="BuilderInterfaces\ISetImageVisibility.vb" />
-    <Compile Include="BuilderInterfaces\ISetMaxLength.vb" />
-    <Compile Include="BuilderInterfaces\ISetEnabled.vb" />
-    <Compile Include="BuilderInterfaces\ISetClickAction.vb" />
-    <Compile Include="BuilderInterfaces\ISetImage.vb" />
-    <Compile Include="BuilderInterfaces\ISetInsertionPoint.vb" />
-    <Compile Include="BuilderInterfaces\ISetKeytip.vb" />
-    <Compile Include="BuilderInterfaces\ISetLabel.vb" />
-    <Compile Include="BuilderInterfaces\ISetLabelScreenTipAndSuperTip.vb" />
-    <Compile Include="BuilderInterfaces\ISetNamespace.vb" />
-    <Compile Include="BuilderInterfaces\ISetOrientation.vb" />
-    <Compile Include="BuilderInterfaces\ISetSelectedItemIndexSource.vb" />
-    <Compile Include="BuilderInterfaces\ISetOnSelectionChange.vb" />
-    <Compile Include="BuilderInterfaces\ISetSize.vb" />
-    <Compile Include="BuilderInterfaces\ISetLabelVisibility.vb" />
-    <Compile Include="BuilderInterfaces\ISetTextChangeAction.vb" />
-    <Compile Include="BuilderInterfaces\ISetToggleAction.vb" />
-    <Compile Include="BuilderInterfaces\ISetVisibility.vb" />
+    <Compile Include="BuilderInterfaces\IGetPressed.vb" />
+    <Compile Include="BuilderInterfaces\IGetText.vb" />
+    <Compile Include="BuilderInterfaces\IInvalidateContentOnDrop.vb" />
+    <Compile Include="BuilderInterfaces\IItemDimensions.vb" />
+    <Compile Include="BuilderInterfaces\ILoadImage.vb" />
+    <Compile Include="BuilderInterfaces\IOnLoad.vb" />
+    <Compile Include="BuilderInterfaces\IRowsAndColumns.vb" />
+    <Compile Include="BuilderInterfaces\IGetItemCount.vb" />
+    <Compile Include="BuilderInterfaces\IGetItemId.vb" />
+    <Compile Include="BuilderInterfaces\IGetItemImage.vb" />
+    <Compile Include="BuilderInterfaces\IShowItemImage.vb" />
+    <Compile Include="BuilderInterfaces\IGetItemLabel.vb" />
+    <Compile Include="BuilderInterfaces\IShowItemLabel.vb" />
+    <Compile Include="BuilderInterfaces\IGetItemScreentip.vb" />
+    <Compile Include="BuilderInterfaces\IGetSelectedItemId.vb" />
+    <Compile Include="BuilderInterfaces\IGetItemSupertip.vb" />
+    <Compile Include="BuilderInterfaces\IDescription.vb" />
+    <Compile Include="BuilderInterfaces\IShowImage.vb" />
+    <Compile Include="BuilderInterfaces\IMaxLength.vb" />
+    <Compile Include="BuilderInterfaces\IEnabled.vb" />
+    <Compile Include="BuilderInterfaces\IOnActionClick.vb" />
+    <Compile Include="BuilderInterfaces\IImage.vb" />
+    <Compile Include="BuilderInterfaces\IInsert.vb" />
+    <Compile Include="BuilderInterfaces\IKeyTip.vb" />
+    <Compile Include="BuilderInterfaces\ILabelOnly.vb" />
+    <Compile Include="BuilderInterfaces\ILabelScreenTipSuperTip.vb" />
+    <Compile Include="BuilderInterfaces\IBoxStyle.vb" />
+    <Compile Include="BuilderInterfaces\IGetSelectedItemIndex.vb" />
+    <Compile Include="BuilderInterfaces\IOnActionSelectionChanged.vb" />
+    <Compile Include="BuilderInterfaces\ISize.vb" />
+    <Compile Include="BuilderInterfaces\IShowLabel.vb" />
+    <Compile Include="BuilderInterfaces\IOnChange.vb" />
+    <Compile Include="BuilderInterfaces\IOnActionToggle.vb" />
+    <Compile Include="BuilderInterfaces\ISizeString.vb" />
+    <Compile Include="BuilderInterfaces\IStartFromScratch.vb" />
+    <Compile Include="BuilderInterfaces\IVisible.vb" />
     <Compile Include="Builders\BoxBuilder.vb" />
     <Compile Include="Builders\ButtonGroupBuilder.vb" />
     <Compile Include="Builders\CheckBoxBuilder.vb" />
+    <Compile Include="Builders\ControlBuilder.vb" />
     <Compile Include="Builders\DropDownBuilder.vb" />
     <Compile Include="Builders\EditBoxBuilder.vb" />
     <Compile Include="Builders\GroupBuilder.vb" />
     <Compile Include="Builders\LabelControlBuilder.vb" />
     <Compile Include="Builders\MenuBuilder.vb" />
+    <Compile Include="Builders\RibbonBuilder.vb" />
     <Compile Include="Builders\SplitButtonBuilder.vb" />
     <Compile Include="Builders\TabBuilder.vb" />
     <Compile Include="Builders\ToggleButtonBuilder.vb" />
     <Compile Include="Component Interfaces\IKeyTip.vb" />
     <Compile Include="Component Interfaces\ILabel.vb" />
     <Compile Include="Component Interfaces\IDescription.vb" />
-    <Compile Include="Builders\Builder.vb" />
     <Compile Include="Builders\ButtonBuilder.vb" />
     <Compile Include="Callbacks.vb" />
     <Compile Include="Component Interfaces\IMaxLength.vb" />
@@ -178,58 +187,16 @@
     <Compile Include="KeyTip.vb" />
     <Compile Include="NullGuard.vb" />
     <Compile Include="RibbonAttributes\AttributeGroup.vb" />
-    <Compile Include="RibbonAttributes\Categories\BoxStyle\BoxStyle.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemCount.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\GetItemID.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\Image\GetItemImage.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\InvalidateContentOnDrop.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\ItemSize.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\Label\GetItemLabel.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\ScreenTip\GetItemScreenTip.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\SuperTip\GetItemSuperTip.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\GetSelectedItemID.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\GetSelectedItemIndex.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\Image\ShowItemImage.vb" />
-    <Compile Include="RibbonAttributes\Categories\ChildItems\Label\ShowItemLabel.vb" />
-    <Compile Include="RibbonAttributes\Categories\Description\Description.vb" />
-    <Compile Include="RibbonAttributes\Categories\Description\GetDescription.vb" />
-    <Compile Include="RibbonAttributes\Categories\Enabled\Enabled.vb" />
-    <Compile Include="RibbonAttributes\Categories\Enabled\GetEnabled.vb" />
-    <Compile Include="RibbonAttributes\Categories\ID\IdQ.vb" />
-    <Compile Include="RibbonAttributes\Categories\ID\Id.vb" />
-    <Compile Include="RibbonAttributes\Categories\MaxLength\MaxLength.vb" />
-    <Compile Include="RibbonAttributes\Categories\OnChange\OnChange.vb" />
-    <Compile Include="RibbonAttributes\Categories\Pressed\GetPressed.vb" />
-    <Compile Include="RibbonAttributes\Categories\Image\GetImage.vb" />
-    <Compile Include="RibbonAttributes\Categories\Image\GetShowImage.vb" />
-    <Compile Include="RibbonAttributes\Categories\Image\ImageBase.vb" />
-    <Compile Include="RibbonAttributes\Categories\Image\ImageMso.vb" />
-    <Compile Include="RibbonAttributes\Categories\Image\ShowImage.vb" />
-    <Compile Include="RibbonAttributes\Categories\Insert\InsertAfterMso.vb" />
-    <Compile Include="RibbonAttributes\Categories\Insert\InsertAfterQ.vb" />
-    <Compile Include="RibbonAttributes\Categories\Insert\InsertBeforeMso.vb" />
-    <Compile Include="RibbonAttributes\Categories\Insert\InsertBeforeQ.vb" />
-    <Compile Include="RibbonAttributes\Categories\Keytip\Keytip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Keytip\GetKeytip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Label\GetLabel.vb" />
-    <Compile Include="RibbonAttributes\Categories\Label\GetShowLabel.vb" />
-    <Compile Include="RibbonAttributes\Categories\Label\Label.vb" />
-    <Compile Include="RibbonAttributes\Categories\Label\ShowLabel.vb" />
-    <Compile Include="RibbonAttributes\Categories\OnAction\OnAction.vb" />
-    <Compile Include="RibbonAttributes\Categories\Screentip\Screentip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Screentip\GetScreentip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Size\Size.vb" />
-    <Compile Include="RibbonAttributes\Categories\Size\GetSize.vb" />
-    <Compile Include="RibbonAttributes\Categories\StartFromScratch\StartFromScratch.vb" />
-    <Compile Include="RibbonAttributes\Categories\Supertip\GetSuperTip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Supertip\Supertip.vb" />
-    <Compile Include="RibbonAttributes\Categories\Text\GetText.vb" />
-    <Compile Include="RibbonAttributes\Categories\Title\GetTitle.vb" />
-    <Compile Include="RibbonAttributes\Categories\Title\Title.vb" />
-    <Compile Include="RibbonAttributes\Categories\Visible\Visible.vb" />
-    <Compile Include="RibbonAttributes\Categories\Visible\GetVisible.vb" />
+    <Compile Include="RibbonAttributes\AttributeGroupBuilder.vb" />
+    <Compile Include="RibbonAttributes\AttributeName.vb" />
+    <Compile Include="RibbonAttributes\DefaultProviderDropDownItem.vb" />
+    <Compile Include="RibbonAttributes\DefaultProviderRibbon.vb" />
+    <Compile Include="RibbonAttributes\DefaultProvider.vb" />
+    <Compile Include="RibbonAttributes\IDefaultProvider.vb" />
+    <Compile Include="RibbonAttributes\IdManager.vb" />
     <Compile Include="RibbonAttributes\RibbonAttribute.vb" />
-    <Compile Include="RibbonAttributes\RibbonAttributeBase.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeReadOnly.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeReadWrite.vb" />
     <Compile Include="RibbonElement.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -246,6 +213,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RibbonErrorLog.vb" />
+    <Compile Include="RibbonExtensions.vb" />
+    <Compile Include="ValueChangedEventArgs.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -256,6 +226,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

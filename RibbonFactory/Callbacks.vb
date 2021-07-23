@@ -1,5 +1,9 @@
 ﻿Imports Microsoft.Office.Core
+Imports stdole
 
+Public Delegate Sub OnLoad(ribbon As IRibbonUI)
+
+Public Delegate Function LoadImage(imageID As String) As IPictureDisp
 
 Public Delegate Function FromControl(Of T)(control As IRibbonControl) As T
 

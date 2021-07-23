@@ -1,26 +1,14 @@
-﻿Imports Microsoft.Office.Core
-
-Public MustInherit Class RibbonElement
+﻿Public MustInherit Class RibbonElement
     Implements IEquatable(Of RibbonElement)
     
-    Private Shared _ribbon As IRibbonUI
+    Public Event ValueChanged(sender As Object, e As ValueChangedEventArgs)
 
-    Public Shared Sub SetRibbon(ribbon As IRibbonUI)
-        _ribbon = If(_ribbon, ribbon)
+    Protected Sub OnValueChanged()
+        RaiseEvent ValueChanged(Me, New ValueChangedEventArgs(ID))
     End Sub
-    
+
     Protected Friend Sub New(Optional tag As Object = Nothing)
         Me.Tag = tag
-    End Sub
-
-    Public ReadOnly Property Ribbon As IRibbonUI
-        Get
-            Return _ribbon
-        End Get
-    End Property
-
-    Protected Sub Refresh()
-        Ribbon.InvalidateControl(ID)
     End Sub
 
     Public MustOverride ReadOnly Property ID As String
@@ -44,4 +32,5 @@ Public MustInherit Class RibbonElement
     Public Overloads Function Equals(other As RibbonElement) As Boolean Implements IEquatable(Of RibbonElement).Equals
         Return other IsNot Nothing AndAlso other.ID.Equals(ID)
     End Function
+
 End Class

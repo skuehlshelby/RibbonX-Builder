@@ -1,9 +1,8 @@
 ﻿Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.RibbonAttributes.Categories.ID
-Imports RibbonFactory.RibbonAttributes.Categories.Title
 
 Namespace Controls
+
     Public NotInheritable Class MenuSeparator
         Inherits RibbonElement
         Implements ITitle
@@ -17,24 +16,25 @@ Namespace Controls
         
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Lookup(Of Id).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
             End Get
         End Property
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<{NameOf(Separator).CamelCase()} { String.Join(" ", _attributes) }/>"
+                Return $"<menuSeparator { _attributes }/>"
             End Get
         End Property
 
         Public Property Title As String Implements ITitle.Title
             Get
-                Return _attributes.Lookup(Of Title).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Title).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetTitle).SetValue(value)
-                Refresh()
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetTitle).SetValue(value)
             End Set
         End Property
+
     End Class
+
 End NameSpace

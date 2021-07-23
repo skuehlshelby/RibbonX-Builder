@@ -25,6 +25,8 @@ Interface ICreateCallbacks
     Function GetItemLabel(control As IRibbonControl, index As Integer) As String
     Function GetItemScreenTip(control As IRibbonControl, index As Integer) As String
     Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String
+    Function GetItemHeight(control As IRibbonControl) As Integer
+    Function GetItemWidth(control As IRibbonControl) As Integer
     Function GetSelectedItemID(control As IRibbonControl) As String
     Function GetSelectedItemIndex(control As IRibbonControl) As Integer
     Sub OnAction(control As IRibbonControl)

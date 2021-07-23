@@ -1,0 +1,4 @@
+﻿[*.vb]
+
+# IDE0140: Object creation can be simplified
+visual_basic_style_prefer_simplified_object_creation = false
