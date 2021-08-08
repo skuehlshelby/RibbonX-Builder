@@ -1,4 +1,4 @@
-﻿Namespace Component_Interfaces
+﻿Namespace ComponentInterfaces
     Public Interface IPressed
         Property Pressed As Boolean
     End Interface

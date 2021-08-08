@@ -17,7 +17,7 @@ Namespace Builders
         Implements IShowLabel(Of DropDownBuilder)
         Implements IImage(Of DropDownBuilder)
         Implements IShowImage(Of DropDownBuilder)
-        Implements IMaxLength(Of DropDownBuilder)
+        Implements ISizeString(Of DropDownBuilder)
         Implements IOnActionSelectionChanged(Of DropDownBuilder)
         Implements IGetItemId(Of DropDownBuilder)
         Implements IGetItemCount(Of DropDownBuilder)
@@ -183,8 +183,8 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithMaximumInputLength(maxLength As Byte) As DropDownBuilder Implements IMaxLength(Of DropDownBuilder).WithMaximumInputLength
-            _builder.WithMaxLength(maxLength)
+        Public Function WithSize(sizeString As String) As DropDownBuilder Implements ISizeString(Of DropDownBuilder).WithSize
+            _builder.WithSize(sizeString)
             Return Me
         End Function
 

@@ -1,8 +1,7 @@
-﻿Imports RibbonFactory.Component_Interfaces
+﻿Imports RibbonFactory.ComponentInterfaces
+Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
-
-
 Imports stdole
 
 Namespace Containers
@@ -10,7 +9,6 @@ Namespace Containers
     Public NotInheritable Class Menu
         Inherits RibbonElement
         Implements IEnumerable(Of RibbonElement)
-        Implements IReadonlyCollection(Of RibbonElement)
         Implements IVisible
         Implements IEnabled
         Implements ILabel
@@ -22,13 +20,15 @@ Namespace Containers
         Implements IImage
         Implements IShowImage
         Implements ISize
+        Implements IItemSize
 
         Private ReadOnly _attributes As AttributeGroup
-        Private ReadOnly _items As List(Of RibbonElement) = New List(Of RibbonElement)()
+        Private ReadOnly _items As IEnumerable(Of RibbonElement)
 
-        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
+            _items = items
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -39,9 +39,19 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
+                Dim items As ICollection(Of String) = New List(Of String)
+
+                For Each item As RibbonElement In _items
+                    If TypeOf item Is ISize Then
+                        items.Add(item.XML.Replace("size=""large""", String.Empty).Replace("size=""normal""", String.Empty))
+                    Else
+                        items.Add(item.XML)
+                    End If
+                Next
+
                 Return _
-                    String.Join(Environment.NewLine, $"<{NameOf(Menu).ToLower()} {String.Join(" ", _attributes) }>",
-                                String.Join(Environment.NewLine, _items), $"</{NameOf(Menu).ToLower()}>")
+                    String.Join(Environment.NewLine, $"<menu { _attributes }>",
+                                String.Join(Environment.NewLine, items), "</menu>")
             End Get
         End Property
 
@@ -139,23 +149,23 @@ Namespace Containers
             End Set
         End Property
 
+        Public Readonly Property ItemSize As ControlSize Implements IItemSize.ItemSize
+            Get
+                Return _attributes.ReadOnlyLookup(Of ControlSize)(AttributeName.ItemSize).GetValue()
+            End Get
+        End Property
+
         Public Property Size As ControlSize Implements ISize.Size
             Get
                 Return _attributes.ReadOnlyLookup(Of ControlSize)(AttributeName.Size).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of ControlSize)(AttributeName.GetSize).SetValue(Value)
+                _attributes.ReadWriteLookup(Of ControlSize)(AttributeName.GetSize).SetValue(value)
             End Set
         End Property
 
-        Public ReadOnly Property Count As Integer Implements IReadOnlyCollection(Of RibbonElement).Count
-            Get
-                Return DirectCast(_items, IReadOnlyCollection(Of RibbonElement)).Count
-            End Get
-        End Property
-
         Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return DirectCast(_items, IEnumerable(Of RibbonElement)).GetEnumerator()
+            Return _items.GetEnumerator()
         End Function
 
         Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator

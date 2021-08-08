@@ -114,6 +114,7 @@
     <Compile Include="RibbonTestBase.vb" />
     <Compile Include="ButtonTests.vb" />
     <Compile Include="DropDown.vb" />
+    <Compile Include="MenuTests.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

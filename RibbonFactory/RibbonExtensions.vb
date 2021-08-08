@@ -8,7 +8,7 @@ Imports RibbonFactory.Containers
 Public Module RibbonExtensions
     <Extension>
     Public Function GetErrors(ribbon As Ribbon) As RibbonErrorLog
-        Return GetErrors(ribbon.Build())
+        Return GetErrors(ribbon.RibbonX)
     End Function
 
     Public Function GetErrors(ribbonX As String) As RibbonErrorLog

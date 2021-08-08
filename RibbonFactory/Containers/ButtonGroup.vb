@@ -1,21 +1,20 @@
-﻿Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.Controls
+﻿Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.RibbonAttributes
-
 
 Namespace Containers
     
-    Public Class ButtonGroup
+    Public NotInheritable Class ButtonGroup
         Inherits RibbonElement
         Implements IVisible
-        Implements IReadOnlyCollection(Of RibbonElement)
+        Implements IEnumerable(Of RibbonElement)
 
         Private ReadOnly _attributes As AttributeGroup
-        Private ReadOnly _items As List(Of RibbonElement) = New List(Of RibbonElement)()
+        Private ReadOnly _items As IEnumerable(Of RibbonElement)
         
-        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
+            _items = items
         End Sub
         
         Public Overrides ReadOnly Property ID As String
@@ -27,8 +26,8 @@ Namespace Containers
         Public Overrides ReadOnly Property XML As String
             Get
                 Return _
-                    String.Join(Environment.NewLine, $"<{NameOf(ButtonGroup).CamelCase()} {String.Join(" ", _attributes) }>",
-                                String.Join(Environment.NewLine, _items), $"</{NameOf(ButtonGroup).CamelCase()}>")
+                    String.Join(Environment.NewLine, $"<buttonGroup { _attributes }>",
+                                String.Join(Environment.NewLine, _items), "</buttonGroup")
             End Get
         End Property
 
@@ -41,26 +40,6 @@ Namespace Containers
                 
             End Set
         End Property
-
-        Public ReadOnly Property Count As Integer Implements IReadOnlyCollection(Of RibbonElement).Count
-            Get
-                Return DirectCast(_items, IReadOnlyCollection(Of RibbonElement)).Count
-            End Get
-        End Property
-
-        Public Sub Add(control As Button)
-            _items.Add(control)
-        End Sub
-        
-        Public Sub Add(control As ToggleButton)
-            _items.Add(control)
-        End Sub
-        
-        Public Sub Add(control As Menu)
-            _items.Add(control)
-        End Sub
-        
-        'TODO: Add the rest of the supported control types
         
         Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
             Return _items.GetEnumerator()
@@ -69,6 +48,7 @@ Namespace Containers
         Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Return _items.GetEnumerator()
         End Function
+
     End Class
     
 End NameSpace

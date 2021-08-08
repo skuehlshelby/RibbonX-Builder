@@ -1,4 +1,4 @@
-﻿Namespace Component_Interfaces
+﻿Namespace ComponentInterfaces
     Public Interface IEditable
         Property Text As String
         ReadOnly Property CharacterLimit As Byte

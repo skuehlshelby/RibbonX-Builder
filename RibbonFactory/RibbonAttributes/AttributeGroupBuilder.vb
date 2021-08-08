@@ -243,6 +243,10 @@ Namespace RibbonAttributes
             _attributes.Add(New RibbonAttributeReadWrite(Of Integer)(itemWidth, callback.Method.Name, AttributeName.GetItemWidth, AttributeName.ItemWidth))
         End Sub
 
+        Public Sub AddItemSize(size As ControlSize)
+            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(size, AttributeName.ItemSize))
+        End Sub
+
         Public Sub AddStartFromScratch(startFromScratch As Boolean)
             _attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(startFromScratch, AttributeName.StartFromScratch))
         End Sub

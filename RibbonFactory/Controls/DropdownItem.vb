@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Component_Interfaces
+﻿Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
@@ -9,32 +9,6 @@ Namespace Controls
         Implements IScreenTip
         Implements ISuperTip
         Implements IImage
-
-#Region "Shared Methods"
-        'TODO Move this somewhere else
-        Private Shared ReadOnly IdsInCirculation As IDictionary(Of UShort, WeakReference(Of DropdownItem)) = New Dictionary(Of UShort, WeakReference(Of DropdownItem))
-
-        Private Shared Function GetIdSuffix() As UShort
-            CleanUpUnusedIds()
-
-            For idSuffix As UShort = UShort.MinValue To UShort.MaxValue
-                If Not IdsInCirculation.Keys.Contains(idSuffix) Then
-                    Return idSuffix
-                End If
-            Next
-
-            Throw New Exception($"All available {NameOf(DropdownItem)} IDs are currently in use.")
-        End Function
-
-        Private Shared Sub CleanUpUnusedIds()
-            For Each id As UShort In IdsInCirculation.Keys
-                If Not IdsInCirculation.Item(id).TryGetTarget(Nothing) Then 'Does it still reference something?
-                    IdsInCirculation.Remove(id)
-                End If
-            Next id
-        End Sub
-
-#End Region
 
         Private ReadOnly _attributes As AttributeGroup
 

@@ -4,7 +4,9 @@ Public NotInheritable Class RibbonErrorLog
     Private Readonly _errors As ICollection(Of String)
 
     Public Sub New(ribbonX As String, ParamArray xmlSchemas As XmlSchema())
-        NullGuard.NotNull(xmlSchemas, NameOf(xmlSchemas))
+        Require(Of ArgumentNullException)(xmlSchemas IsNot Nothing, "An XML schema is required in order to validate the ribbon.")
+        Require(Of ArgumentException)(xmlSchemas.Any(), "At least one XML schema must be supplied.")
+
         _errors = New List(Of String)
         ValidateRibbon(ribbonX, xmlSchemas)
     End Sub
@@ -22,7 +24,7 @@ Public NotInheritable Class RibbonErrorLog
     End Property
 
     Private Sub ValidateRibbon(ribbonX As String, ParamArray xmlSchemas As XmlSchema())
-        Dim xsd As XmlSchemaSet = New XmlSchemaSet()
+        Dim xsd As New XmlSchemaSet()
 
         Array.ForEach(xmlSchemas, Sub(schema) xsd.Add(schema))
         

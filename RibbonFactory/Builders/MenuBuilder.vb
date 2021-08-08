@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
+Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
@@ -15,23 +16,67 @@ Namespace Builders
         Implements ILabelScreenTipSuperTip(Of MenuBuilder)
         Implements IShowLabel(Of MenuBuilder)
         Implements IImage(Of MenuBuilder)
+        Implements IItemSize(Of MenuBuilder)
         Implements IDescription(Of MenuBuilder)
         Implements ISize(Of MenuBuilder)
         Implements IKeyTip(Of MenuBuilder)
 
         Private ReadOnly _builder As ControlBuilder
-
-        'TODO Create Interface to set size of child menu items
+        Private ReadOnly _controls As IList(Of RibbonElement)
 
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Menu)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
+            _controls = New List(Of RibbonElement)
         End Sub
 
-        Public Function Build(tag As Object) As Menu
-            Return New Menu(_builder.Build(), tag:=tag)
+
+        Public Function Build(Optional tag As Object = Nothing) As Menu
+            Return New Menu(_controls, _builder.Build(), tag)
+        End Function
+
+        Public Function WithControl(button As Button) As MenuBuilder
+            Require(Of ArgumentNullException)(button IsNot Nothing, $"Parameter '{NameOf(button)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(button)
+            Return Me
+        End Function
+
+        Public Function WithControl(checkBox As CheckBox) As MenuBuilder
+            Require(Of ArgumentNullException)(checkBox IsNot Nothing, $"Parameter '{NameOf(checkBox)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(checkBox)
+            Return Me
+        End Function
+
+        Public Function WithControl(gallery As Gallery) As MenuBuilder
+            Require(Of ArgumentNullException)(gallery IsNot Nothing, $"Parameter '{NameOf(gallery)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(gallery)
+            Return Me
+        End Function
+
+        Public Function WithControl(menu As Menu) As MenuBuilder
+            Require(Of ArgumentNullException)(menu IsNot Nothing, $"Parameter '{NameOf(menu)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(menu)
+            Return Me
+        End Function
+
+        Public Function WithControl(menuSeparator As MenuSeparator) As MenuBuilder
+            Require(Of ArgumentNullException)(menuSeparator IsNot Nothing, $"Parameter '{NameOf(menuSeparator)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(menuSeparator)
+            Return Me
+        End Function
+
+        Public Function WithControl(splitButton As SplitButton) As MenuBuilder
+            Require(Of ArgumentNullException)(splitButton IsNot Nothing, $"Parameter '{NameOf(splitButton)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(splitButton)
+            Return Me
+        End Function
+
+        Public Function WithControl(toggleButton As ToggleButton) As MenuBuilder
+            Require(Of ArgumentNullException)(toggleButton IsNot Nothing, $"Parameter '{NameOf(toggleButton)}', given to {NameOf(MenuBuilder)}, cannot be null.")
+            _controls.Add(toggleButton)
+            Return Me
         End Function
 
         Public Function Enabled() As MenuBuilder Implements IEnabled(Of MenuBuilder).Enabled
@@ -171,6 +216,16 @@ Namespace Builders
 
         Public Function Normal(callback As FromControl(Of ControlSize)) As MenuBuilder Implements ISize(Of MenuBuilder).Normal
             _builder.Normal(callback)
+            Return Me
+        End Function
+
+        Public Function WithLargeItems() As MenuBuilder Implements IItemSize(Of MenuBuilder).WithLargeItems
+            _builder.WithLargeItems()
+            Return Me
+        End Function
+
+        Public Function WithNormalSizeItems() As MenuBuilder Implements IItemSize(Of MenuBuilder).WithNormalSizeItems
+            _builder.WithNormalSizeItems()
             Return Me
         End Function
 

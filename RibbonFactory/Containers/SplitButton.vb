@@ -1,14 +1,13 @@
-﻿Imports RibbonFactory.Component_Interfaces
-Imports RibbonFactory.Controls
+﻿Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 
 
 Namespace Containers
     
-    Public Class SplitButton
+    Public NotInheritable Class SplitButton
         Inherits RibbonElement
-        Implements IReadOnlyCollection(Of RibbonElement)
+        Implements IEnumerable(Of RibbonElement)
         Implements IVisible
         Implements IEnabled
         Implements IKeyTip
@@ -17,15 +16,11 @@ Namespace Containers
         
         Private ReadOnly _attributes As AttributeGroup
         
-        Friend Sub New(button As Button, menu As Menu, attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(button As RibbonElement, menu As Menu, attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
-            Me.Button = button
-            Me.Menu = menu
-            _attributes = attributes
-        End Sub
-        
-        Friend Sub New(button As ToggleButton, menu As Menu, attributes As AttributeGroup, Optional tag As Object = Nothing)
-            MyBase.New(tag)
+            Require(Of ArgumentNullException)(button IsNot Nothing, $"Split buttons must be initialized with either a button or a toggle-button.")
+            Require(Of ArgumentNullException)(menu IsNot Nothing, $"Split buttons must be initialized with a valid menu.")
+
             Me.Button = button
             Me.Menu = menu
             _attributes = attributes
@@ -40,8 +35,8 @@ Namespace Containers
         Public Overrides ReadOnly Property XML As String
             Get
                 Return _
-                    String.Join(Environment.NewLine, $"<{NameOf(SplitButton).CamelCase()} {String.Join(" ", _attributes) }>",
-                                String.Join(Environment.NewLine, WrapComponentsAsIEnumerable()), $"</{NameOf(SplitButton).CamelCase()}>")
+                    String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
+                                String.Join(Environment.NewLine, WrapComponentsAsIEnumerable()), "</splitButton>")
             End Get
         End Property
         
@@ -81,28 +76,20 @@ Namespace Containers
 
         Public Property Size As ControlSize Implements ISize.Size
             Get
-                Return _attributes.Lookup(Of Size).GetValue()
+                Return _attributes.ReadOnlyLookup(Of ControlSize)(AttributeName.Size).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetSize).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of ControlSize)(AttributeName.GetSize).SetValue(Value)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Lookup(Of ShowLabel).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetShowLabel).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
             End Set
-        End Property
-
-        Public ReadOnly Property Count As Integer Implements IReadOnlyCollection(Of RibbonElement).Count
-            Get
-                Return 2
-            End Get
         End Property
 
         Private Function WrapComponentsAsIEnumerable() As IEnumerable(Of RibbonElement)
@@ -116,6 +103,7 @@ Namespace Containers
         Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Return WrapComponentsAsIEnumerable().GetEnumerator()
         End Function
+
     End Class
     
 End NameSpace

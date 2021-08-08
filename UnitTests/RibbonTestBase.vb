@@ -1,47 +1,43 @@
-﻿Imports System.IO
-Imports System.Text
-Imports Microsoft.Office.Core
+﻿Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Builders
-Imports RibbonFactory.Component_Interfaces
+Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
+Imports RibbonFactory.Enums.ImageMSO
+Imports RibbonFactory.Enums.MSO
 Imports stdole
 
 Public Class RibbonTestBase
     Implements IRibbonExtensibility
     Implements ICreateCallbacks
 
-    Private _originalConsoleOutputStream As TextWriter
-    Private ReadOnly _builder As StringBuilder = New StringBuilder()
-    Private ReadOnly _redirectedConsoleOutput As StringWriter = New StringWriter(_builder)
-
     Protected Ribbon As Ribbon
 
     Public Function GetCustomUI(ribbonID As String) As String Implements IRibbonExtensibility.GetCustomUI
-        Return Ribbon.Build()
+        Return Ribbon.RibbonX
     End Function
 
-    Protected Sub RedirectConsoleOutput()
-        _originalConsoleOutputStream = Console.Out
-        Console.SetOut(_redirectedConsoleOutput)
-    End Sub
-
-    Protected Sub RestoreOriginalConsoleOutput()
-        Console.SetOut(_originalConsoleOutputStream)
-    End Sub
-
-    Protected Function GetContentsOfRedirectedConsoleOutput() As String
-        Return _builder.ToString()
+    Protected Function GetButton() As Button
+        Return New ButtonBuilder() _
+                .WithLabel("My Button") _
+                .WithSuperTip("Super") _
+                .WithImage(Common.DollarSign) _
+                .Build()
     End Function
 
-    Protected Function RibbonWithOneTabAndOneGroup() As Ribbon
-        Dim temp As Ribbon = New Ribbon()
+    Protected Function GetMenu() As Menu
+        Return New MenuBuilder() _
+            .WithLabel("My Menu").InsertBeforeMSO(Excel.Calculator).WithControl(GetButton()).WithLargeItems().
+            ShowLabel().WithImage(Common.SadFace).Build()
+    End Function
 
-        temp.AddTab(New TabBuilder().WithLabel("Test Tab").Build()).AddGroup(New GroupBuilder().WithLabel("Test Group").Build())
-
-        Return temp
+    Protected Function RibbonWithOneTabAndOneGroup(ParamArray controls As RibbonElement()) As Ribbon
+        Return New RibbonBuilder() _
+            .WithTab(New TabBuilder().WithLabel("Test Tab") _
+                        .WithGroup(New GroupBuilder().WithLabel("Test Group") _
+                                      .WithControls(controls).Build()).Build()).Build()
     End Function
 
     Public Function GetEnabled(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetEnabled
@@ -93,23 +89,23 @@ Public Class RibbonTestBase
     End Function
 
     Public Function GetItemID(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemID
-        Return Ribbon.GetChildItem(control.Id, index).ID
+        Return Ribbon.GetDropdownItem(control.Id, index).ID
     End Function
 
     Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp Implements ICreateCallbacks.GetItemImage
-        Return Ribbon.GetChildItem(control.Id, index).Image
+        Return Ribbon.GetDropdownItem(control.Id, index).Image
     End Function
 
     Public Function GetItemLabel(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemLabel
-        Return Ribbon.GetChildItem(control.Id, index).Label
+        Return Ribbon.GetDropdownItem(control.Id, index).Label
     End Function
 
     Public Function GetItemScreenTip(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemScreenTip
-        Return Ribbon.GetChildItem(control.Id, index).ScreenTip
+        Return Ribbon.GetDropdownItem(control.Id, index).ScreenTip
     End Function
 
     Public Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemSuperTip
-        Return Ribbon.GetChildItem(control.Id, index).SuperTip
+        Return Ribbon.GetDropdownItem(control.Id, index).SuperTip
     End Function
 
     Public Function GetSelectedItemID(control As IRibbonControl) As String Implements ICreateCallbacks.GetSelectedItemID
@@ -130,7 +126,7 @@ Public Class RibbonTestBase
     End Sub
 
     Public Sub SelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.SelectionChange
-        Ribbon.GetElement(Of ISelect)(control.Id).Selected = Ribbon.GetChildItem(control.Id, selectedIndex)
+        Ribbon.GetElement(Of ISelect)(control.Id).Selected = Ribbon.GetDropdownItem(control.Id, selectedIndex)
         Ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
 
@@ -143,4 +139,12 @@ Public Class RibbonTestBase
             End If
         End With
     End Sub
+
+    Public Function GetItemHeight(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemHeight
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function GetItemWidth(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemWidth
+        Throw New NotImplementedException()
+    End Function
 End Class

@@ -290,6 +290,14 @@ Namespace Builders
             _attributeGroupBuilder.AddGetItemWidth(itemWidth:= width, callback:= callback)
         End Sub
 
+        Public Sub WithLargeItems()
+            _attributeGroupBuilder.AddItemSize(ControlSize.large)
+        End Sub
+
+        Public Sub WithNormalSizeItems()
+            _attributeGroupBuilder.AddItemSize(ControlSize.normal)
+        End Sub
+
         Public Sub GetItemCountFrom(callback As FromControl(Of Integer))
             _attributeGroupBuilder.AddGetItemCount(callback:= callback)
         End Sub
@@ -336,6 +344,14 @@ Namespace Builders
 
         Public Sub StartFromScratch()
             _attributeGroupBuilder.AddStartFromScratch(startFromScratch:= True)
+        End Sub
+
+        Public Sub OnLoad(callback As OnLoad)
+            _attributeGroupBuilder.AddOnLoad(callback:= callback)
+        End Sub
+
+        Public Sub LoadImage(callback As LoadImage)
+            _attributeGroupBuilder.AddLoadImage(callback:= callback)
         End Sub
 
 #End Region

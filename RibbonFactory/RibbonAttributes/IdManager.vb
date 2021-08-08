@@ -1,4 +1,5 @@
-﻿Namespace RibbonAttributes
+﻿
+Namespace RibbonAttributes
 
     Friend NotInheritable Class IdManager
         Private Shared ReadOnly ControlIDs As IDictionary(Of Type, Integer) = New Dictionary(Of Type, Integer)
@@ -17,6 +18,7 @@
 
             Return ribbonElementType.Name & ControlIDs.Item(ribbonElementType).ToString
         End Function
+
     End Class
 
 End NameSpace

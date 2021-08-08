@@ -1,5 +1,5 @@
 ﻿Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Component_Interfaces
+Imports RibbonFactory.ComponentInterfaces
 
 Namespace Controls
 

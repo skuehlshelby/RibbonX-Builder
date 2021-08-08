@@ -12,16 +12,18 @@ Namespace Builders
         Implements IVisible(Of TabBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _groups As ICollection(Of Group)
 
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Tab)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)
+            _groups = New List(Of Group)
         End Sub
 
-        Public Function Build(tag As Object) As Tab
-            Return New Tab(_builder.Build(), tag:=tag)
+        Public Function Build(Optional tag As Object = Nothing) As Tab
+            Return New Tab(_groups, _builder.Build(), tag:=tag)
         End Function
 
         Public Function Visible() As TabBuilder Implements IVisible(Of TabBuilder).Visible
@@ -76,6 +78,19 @@ Namespace Builders
 
         Public Function InsertAfterQ(qualifiedControl As RibbonElement) As TabBuilder Implements IInsert(Of TabBuilder).InsertAfter
             _builder.InsertAfter(qualifiedControl)
+            Return Me
+        End Function
+
+        Public Function WithGroup(group As Group) As TabBuilder
+            _groups.Add(group)
+            Return Me
+        End Function
+
+        Public Function WithGroups(ParamArray groups As Group()) As TabBuilder
+            For Each group As Group In groups
+                _groups.Add(group)
+            Next
+
             Return Me
         End Function
 

@@ -15,7 +15,13 @@
 
         Public Overrides ReadOnly Property Xml As String
             Get
-                Return String.Format(XmlTemplate, Name.CamelCase(), Value)
+                If TypeOf Value Is Boolean Then
+                    Return String.Format(XmlTemplate, Name.CamelCase(), Value.CamelCase())
+                ElseIf Value.ToString() = String.Empty
+                    Return String.Empty
+                Else 
+                    Return String.Format(XmlTemplate, Name.CamelCase(), Value)
+                End If
             End Get
         End Property
     End Class

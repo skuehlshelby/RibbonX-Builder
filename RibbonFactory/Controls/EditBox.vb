@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Component_Interfaces
+﻿Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
@@ -68,31 +68,28 @@ Namespace Controls
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.Lookup(Of Screentip).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetScreentip).SetValue(Value)
-                
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
             End Set
         End Property
 
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Lookup (Of SuperTip).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetSuperTip).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Lookup (Of ShowLabel).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetShowLabel).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
             End Set
         End Property
 
@@ -108,42 +105,39 @@ Namespace Controls
 
         Public Property Image As IPictureDisp Implements IImage.Image
             Get
-                Return _attributes.Lookup(Of GetImage).GetValue()
+                Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
             End Get
             Set
-                _attributes.Lookup(Of GetImage).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
             End Set
         End Property
 
         Public Property ShowImage As Boolean Implements IShowImage.ShowImage
             Get
-                Return _attributes.Lookup (Of ShowImage).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowImage).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetShowImage).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowImage).SetValue(Value)
             End Set
         End Property
 
         Public Property Text As String Implements IText.Text
             Get
-                Return _attributes.Lookup (Of GetText).GetValue()
+                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
             End Get
             Set
-                _attributes.Lookup (Of GetText).SetValue(value)
-                
+                _attributes.ReadWriteLookup(Of String)(AttributeName.GetText).SetValue(Value)
             End Set
         End Property
 
-        Public ReadOnly Property MaxLength As UShort Implements IMaxLength.MaxLength
+        Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
             Get
-                Return _attributes.Lookup (Of MaxLength).GetValue()
+                Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.MaxLength).GetValue()
             End Get
         End Property
 
         Public Sub Execute() Implements IOnChange.Execute
-            _attributes.Lookup (Of OnChange).GetValue().Invoke()
+            _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
         
     End Class

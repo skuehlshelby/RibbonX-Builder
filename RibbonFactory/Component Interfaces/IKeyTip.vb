@@ -1,4 +1,4 @@
-﻿Namespace Component_Interfaces
+﻿Namespace ComponentInterfaces
     Public Interface IKeyTip
         Property KeyTip As KeyTip
     End Interface

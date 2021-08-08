@@ -1,4 +1,4 @@
-﻿Namespace Component_Interfaces
+﻿Namespace ComponentInterfaces
     Public Interface ISuperTip
         Property SuperTip As String
     End Interface

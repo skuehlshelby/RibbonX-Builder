@@ -16,7 +16,8 @@ Namespace Builders
         Implements ISize(Of SplitButtonBuilder)
 
         Private ReadOnly _builder As ControlBuilder
-
+        Private _button As RibbonElement
+        Private _menu As Menu
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
@@ -24,15 +25,23 @@ Namespace Builders
             _builder = new ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(button As Button, menu As Menu, Optional tag As Object = Nothing) As SplitButton
-            Return New SplitButton(button:=button, menu:=menu, attributes:=_builder.Build(), tag:=tag)
+        Public Function Build(Optional tag As Object = Nothing) As SplitButton
+            Return New SplitButton(button:=_button, menu:=_menu, attributes:=_builder.Build(), tag:=tag)
         End Function
 
-        Public Function Build(toggleButton As ToggleButton, menu As Menu, Optional tag As Object = Nothing) As SplitButton
-            Contract.Requires(toggleButton IsNot Nothing)
-            Contract.Requires(menu IsNot Nothing)
+        Public Function WithButton(button As Button) As SplitButtonBuilder
+            _button = button
+            Return Me
+        End Function
 
-            Return New SplitButton(button:=toggleButton, menu:=menu, attributes:=_builder.Build(), tag:=tag)
+        Public Function WithToggleButton(toggleButton As ToggleButton) As SplitButtonBuilder
+            _button = toggleButton
+            Return Me
+        End Function
+
+        Public Function WithMenu(menu As Menu) As SplitButtonBuilder
+            _menu = menu
+            Return Me
         End Function
 
         Public Function Enabled() As SplitButtonBuilder Implements IEnabled(Of SplitButtonBuilder).Enabled

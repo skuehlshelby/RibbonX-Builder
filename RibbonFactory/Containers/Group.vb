@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Component_Interfaces
+﻿Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
@@ -15,11 +15,12 @@ Namespace Containers
         Implements IEnumerable(Of RibbonElement)
 
         Private ReadOnly _attributes As AttributeGroup
-        Private ReadOnly _controls As List(Of RibbonElement) = New List(Of RibbonElement)()
+        Private ReadOnly _controls As IEnumerable(Of RibbonElement)
 
-        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(controls As IEnumerable(Of RibbonElement), attributes As AttributeGroup, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
+            _controls = controls
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -30,20 +31,9 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, Controls), $"</group>")
+                Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, _controls), $"</group>")
             End Get
         End Property
-
-        Public ReadOnly Property Controls As IReadOnlyList(Of RibbonElement)
-            Get
-                Return _controls
-            End Get
-        End Property
-
-        Public Function AddControl(control As RibbonElement) As RibbonElement
-            _controls.Add(control)
-            Return control
-        End Function
 
         Public Property Label As String Implements ILabel.Label
             Get
@@ -102,11 +92,11 @@ Namespace Containers
         End Property
 
         Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return Controls.GetEnumerator()
+            Return _controls.GetEnumerator()
         End Function
 
         Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return DirectCast(Controls, IEnumerable).GetEnumerator()
+            Return DirectCast(_controls, IEnumerable).GetEnumerator()
         End Function
 
     End Class

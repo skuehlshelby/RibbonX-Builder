@@ -1,4 +1,6 @@
-﻿Namespace RibbonAttributes
+﻿Imports System.Reflection
+
+Namespace RibbonAttributes
 
     Friend NotInheritable Class AttributeName
         Implements IEquatable(Of AttributeName)
@@ -6,13 +8,9 @@
         Private Sub New(value As Byte, name As String)
             Me.Name = name
             Me.Value = value
-
-            HashCode = Tuple.Create(name, value).GetHashCode()
         End Sub
 
 #Region "Instance Members"
-
-        Private ReadOnly Property HashCode As Integer
 
         Public ReadOnly Property Name As String
 
@@ -35,7 +33,7 @@
         End Function
 
         Public Overrides Function GetHashCode() As Integer
-            Return HashCode
+            Return Value
         End Function
 
         Public Shared Operator =(left as AttributeName, right as AttributeName) as Boolean
@@ -47,6 +45,13 @@
         End Operator
 
 #End Region
+
+        Public Shared Function Values() As IEnumerable(Of AttributeName)
+            Return _
+                GetType(AttributeName).GetProperties(
+                    BindingFlags.Public Or BindingFlags.GetProperty Or BindingFlags.Static).Select(
+                        Function(info) info.GetValue(Nothing)).Cast(Of AttributeName)()
+        End Function
 
         Public Shared Property Enabled As AttributeName _
             = New AttributeName(value := 0, name := NameOf(Enabled).CamelCase())
@@ -197,25 +202,31 @@
         Public Shared Property Rows As AttributeName = New AttributeName(value := 51, name := NameOf(Rows).CamelCase())
 
         Public Shared Property GetItemHeight As AttributeName _
-            = New AttributeName(value := 53, name := NameOf(GetItemHeight).CamelCase())
+            = New AttributeName(value := 52, name := NameOf(GetItemHeight).CamelCase())
 
         Public Shared Property GetItemWidth As AttributeName _
-            = New AttributeName(value := 54, name := NameOf(GetItemWidth).CamelCase())
+            = New AttributeName(value := 53, name := NameOf(GetItemWidth).CamelCase())
 
         Public Shared Property StartFromScratch As AttributeName _
-            = New AttributeName(value := 55, name := NameOf(StartFromScratch).CamelCase())
+            = New AttributeName(value := 54, name := NameOf(StartFromScratch).CamelCase())
 
         Public Shared Property OnLoad As AttributeName _
-            = New AttributeName(value := 56, name := NameOf(OnLoad).CamelCase())
+            = New AttributeName(value := 55, name := NameOf(OnLoad).CamelCase())
 
         Public Shared Property LoadImage As AttributeName _
-            = New AttributeName(value := 57, name := NameOf(LoadImage).CamelCase())
+            = New AttributeName(value := 56, name := NameOf(LoadImage).CamelCase())
 
-        Public Shared Property BoxStyle As AttributeName = New AttributeName(value:= 58, name:= NameOf(BoxStyle).CamelCase())
+        Public Shared Property BoxStyle As AttributeName _
+            = New AttributeName(value := 57, name := NameOf(BoxStyle).CamelCase())
 
-        Public Shared Property Title As AttributeName = New AttributeName(value:= 59, name:= NameOf(Title).CamelCase())
+        Public Shared Property Title As AttributeName _
+            = New AttributeName(value := 58, name := NameOf(Title).CamelCase())
 
-        Public Shared Property GetTitle As AttributeName = New AttributeName(value:= 60, name:= NameOf(GetTitle).CamelCase())
+        Public Shared Property GetTitle As AttributeName _
+            = New AttributeName(value := 59, name := NameOf(GetTitle).CamelCase())
+
+        Public Shared Property ItemSize As AttributeName _
+            = New AttributeName(value := 60, name := NameOf(ItemSize).CamelCase())
 
     End Class
 

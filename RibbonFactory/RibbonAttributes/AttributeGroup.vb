@@ -35,6 +35,11 @@
             Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadWrite(Of T))
         End Function
 
+        Public Function HasAttribute(sampleMember As AttributeName) As Boolean
+            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategoryMember(sampleMember)
+            Return _attributes.Any(Function(attribute) equatable.Equals(attribute))
+        End Function
+
         Public Overrides Function ToString() As String
             Return String.Join(" ", _attributes)
         End Function

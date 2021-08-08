@@ -1,4 +1,5 @@
 ﻿
+Imports RibbonFactory
 Imports RibbonFactory.Builders
 
 <TestClass()>
@@ -7,51 +8,35 @@ Public Class DropDown
 
     <TestMethod()>
     Public Sub Builds()
-        Try
-            RedirectConsoleOutput()
+        Dim dropDown As Controls.DropDown =
+                New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
+                    "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithSize(New String("l"c, 50)).HideImage().GetItemIdFrom(
+                        AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
+                            AddressOf GetItemImage).GetItemLabelFrom(AddressOf GetItemLabel).GetItemScreenTipFrom(
+                                AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(
+                                    AddressOf GetEnabled).Build()
 
-            Dim dropDown As RibbonFactory.Controls.DropDown =
-                    New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
-                        "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithMaximumInputLength(50).HideImage().GetItemIdFrom(
-                            AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
-                                AddressOf GetItemImage).GetItemLabelFrom(AddressOf GetItemLabel).GetItemScreenTipFrom(
-                                    AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(
-                                        AddressOf GetEnabled).Build()
 
-            Ribbon = RibbonWithOneTabAndOneGroup()
+        Dim errors As RibbonErrorLog = GetErrors(RibbonWithOneTabAndOneGroup(dropDown).RibbonX)
 
-            ribbon.Tabs.First().Groups.First().AddControl(dropDown)
-
-            Dim unused As String = ribbon.Build()
-        Finally
-            RestoreOriginalConsoleOutput()
-        End Try
-
-        Assert.AreEqual(String.Empty, GetContentsOfRedirectedConsoleOutput())
+        Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
     End Sub
 
     <TestMethod()>
     Public Sub BuildWithAsManyAttributesAsPossible()
-        Try
-            RedirectConsoleOutput()
+        Dim dropDown As Controls.DropDown =
+                New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
+                    "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithSize(New String("l"c, 50)).HideImage().GetItemIdFrom(
+                        AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
+                            AddressOf GetItemImage).GetItemLabelFrom(AddressOf GetItemLabel).GetItemScreenTipFrom(
+                                AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(
+                                    AddressOf GetEnabled).Build()
 
-            Dim dropDown As RibbonFactory.Controls.DropDown =
-                    New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
-                        "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithMaximumInputLength(50).HideImage().GetItemIdFrom(
-                            AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
-                                AddressOf GetItemImage).GetItemLabelFrom(AddressOf GetItemLabel).GetItemScreenTipFrom(
-                                    AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(
-                                        AddressOf GetEnabled).Build()
+        Ribbon = RibbonWithOneTabAndOneGroup(dropDown)
 
-            Ribbon = RibbonWithOneTabAndOneGroup()
+        Dim errors As RibbonErrorLog = GetErrors(Ribbon.RibbonX)
 
-            ribbon.Tabs.First().Groups.First().AddControl(dropDown)
-
-            Dim unused As String = ribbon.Build()
-        Finally
-            RestoreOriginalConsoleOutput()
-        End Try
-
-        Assert.AreEqual(String.Empty, GetContentsOfRedirectedConsoleOutput())
+        Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
+        Console.Write(Ribbon.RibbonX)
     End Sub
 End Class

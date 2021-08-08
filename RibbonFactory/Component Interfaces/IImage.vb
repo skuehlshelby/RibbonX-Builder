@@ -1,6 +1,6 @@
 ﻿Imports stdole
 
-Namespace Component_Interfaces
+Namespace ComponentInterfaces
 
     Public Interface IImage
 

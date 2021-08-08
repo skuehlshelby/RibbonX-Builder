@@ -5,9 +5,6 @@
         Protected ReadOnly CategoryMembers As ISet(Of AttributeName)
 
         Protected Sub New(name As AttributeName, ParamArray categoryMembers() As AttributeName)
-            Debug.Assert(categoryMembers.All(Function(attribute) [Enum].IsDefined(GetType(AttributeName), attribute)))
-            Debug.Assert([Enum].IsDefined(GetType(AttributeName), name))
-
             Me.Name = name
             Me.CategoryMembers = New HashSet(Of AttributeName)(categoryMembers) From {
                 name
@@ -36,7 +33,9 @@
             End Function
 
             Public Overloads Function GetHashCode(obj As RibbonAttribute) As Integer Implements IEqualityComparer(Of RibbonAttribute).GetHashCode
-                Return obj.GetHashCode()
+                Dim hash As Integer
+
+                Return obj.CategoryMembers.Aggregate(hash, Function(current, member) (current Xor member.GetHashCode()))
             End Function
         End Class
 

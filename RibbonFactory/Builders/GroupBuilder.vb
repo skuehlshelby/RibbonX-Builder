@@ -15,16 +15,18 @@ Namespace Builders
         Implements IImage(Of GroupBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _controls As ICollection(Of RibbonElement)
 
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Group)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)
+            _controls = New List(Of RibbonElement)
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As Group
-            Return New Group(_builder.Build(), tag)
+            Return New Group(_controls, _builder.Build(), tag)
         End Function
 
         Public Function Visible() As GroupBuilder Implements IVisible(Of GroupBuilder).Visible
@@ -124,6 +126,19 @@ Namespace Builders
 
         Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithSuperTip
             _builder.WithSupertip(superTip, callback)
+            Return Me
+        End Function
+
+        Public Function WithControl(control As RibbonElement) As GroupBuilder
+            _controls.Add(control)
+            Return Me
+        End Function
+
+        Public Function WithControls(ParamArray controls As RibbonElement()) As GroupBuilder
+            For Each control As RibbonElement In controls
+                _controls.Add(control)
+            Next
+            
             Return Me
         End Function
 

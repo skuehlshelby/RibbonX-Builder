@@ -4,6 +4,9 @@ Imports RibbonFactory
 
 Namespace Stubs
 
+    ''' <summary>
+    ''' A test class for simulating requests from Excel.
+    ''' </summary>
     Public Class Excel
         Implements IRibbonUI
         Private ReadOnly _extensibility As IRibbonExtensibility
@@ -14,11 +17,15 @@ Namespace Stubs
             _extensibility = ribbonExtensibility
         End Sub
 
+        ''' <summary>
+        ''' Simulates a click on a ribbon element, as performed by a user in Excel.
+        ''' </summary>
+        ''' <param name="element"></param>
         Public Sub Click(element As RibbonElement)
-            Dim control As XElement = GetElementByID(element.ID)
-            Dim method As MethodInfo = GetMethodFromControl(control, "onAction")
+            Dim controlXML As XElement = GetElementByID(element.ID)
+            Dim method As MethodInfo = GetMethodFromControl(controlXML, "onAction")
 
-            method.Invoke(_extensibility, new Object(){GetRibbonControl(control)})
+            method.Invoke(_extensibility, new Object(){GetRibbonControl(controlXML)}) 'Send a faked IRibbonControl to the onAction method.
         End Sub
 
         Private Function GetElementByID(id As String) As XElement
@@ -32,7 +39,13 @@ Namespace Stubs
                 .GetMethod(control.Attribute(methodName).Value, BindingFlags.Public Or BindingFlags.Instance)
         End Function
 
-        Private Shared Function GetRibbonControl(control As XElement) As RibbonControl
+        ''' <summary>
+        ''' Creates a fake IRibbonControl object, for purposes of faking requests from Excel.
+        ''' Real requests from Excel will be very similar.
+        ''' </summary>
+        ''' <param name="control">The control to turn into an IRibbonControl</param>
+        ''' <returns></returns>
+        Private Shared Function GetRibbonControl(control As XElement) As IRibbonControl
             Dim id As String = control.Attribute(NameOf(id)).Value
             Dim tag As String
 
@@ -49,20 +62,28 @@ Namespace Stubs
             'Do Nothing
         End Sub
 
+        ''' <summary>
+        ''' Simulates an Excel request for updated control information.
+        ''' </summary>
+        ''' <param name="controlID">The id on the control </param>
         Public Sub InvalidateControl(controlID As String) Implements IRibbonUI.InvalidateControl
-            Dim control As XElement = GetElementByID(controlID)
-            Dim stub As RibbonControl = GetRibbonControl(control)
+            Dim controlXML As XElement = GetElementByID(controlID)
+            Dim fakedIRibbonControl As IRibbonControl = GetRibbonControl(controlXML) 'This will be passed to the IRibbonExtensibility object, which houses all the callbacks pointed to in the XML.
 
-            For Each attribute As XAttribute In control.Attributes()
-                If attribute.Name.LocalName.StartsWith("get") Then
-                    Dim method As MethodInfo = GetMethodFromControl(control, attribute.Name.LocalName)
+            For Each attribute As XAttribute In controlXML.Attributes() 'Iterate through the attributes on the control, looking for ones that point to methods.
+                If IsMethod(attribute) Then
+                    Dim method As MethodInfo = GetMethodFromControl(controlXML, attribute.Name.LocalName)
 
                     If method.GetParameters().Length = 1 Then
-                        method.Invoke(_extensibility, New Object(){stub})
+                        method.Invoke(_extensibility, New Object(){fakedIRibbonControl})
                     End If
                 End If
             Next
         End Sub
+
+        Private Shared Function IsMethod(attribute As XAttribute) As Boolean
+            Return attribute.Name.LocalName.StartsWith("get")
+        End Function
 
         Public Sub InvalidateControlMso(ControlID As String) Implements IRibbonUI.InvalidateControlMso
             'Do Nothing

@@ -5,64 +5,58 @@ Imports RibbonFactory.RibbonAttributes
 <TestClass()>
 Public Class RibbonAttributeTests
     Inherits RibbonTestBase
+    Private _builder As AttributeGroupBuilder
+
+    <TestInitialize()>
+    Public Sub Initialize()
+        _builder = new AttributeGroupBuilder()
+    End Sub
 
     <TestMethod()>
     Public Sub AttributesAreMutuallyExclusive_SizeAndGetSize()
-        Dim cut As AttributeGroup = New AttributeGroup From {
-            New GetSize(ControlSize.large, AddressOf GetSize),
-            New Size(ControlSize.normal)
-        }
+        _builder.AddSize(ControlSize.large)
+        _builder.AddGetSize(ControlSize.large, AddressOf GetSize)
 
-        Assert.AreEqual(cut.Count, 1)
+        Assert.AreEqual(1, _builder.Build().Count)
     End Sub
 
     <TestMethod()>
     Public Sub AttributesAreMutuallyExclusive_LabelAndGetLabel()
-        Dim cut As AttributeGroup = New AttributeGroup From {
-                New GetLabel("My Label", AddressOf GetLabel),
-                New Label("My Label")
-        }
+        _builder.AddLabel("Label")
+        _builder.AddGetLabel("Label", AddressOf GetLabel)
 
-        Assert.AreEqual(cut.Count, 1)
+        Assert.AreEqual(1, _builder.Build().Count)
     End Sub
 
     <TestMethod()>
     Public Sub AttributesAreMutuallyExclusive_ScreenTipAndGetScreenTip()
-        Dim cut As AttributeGroup = New AttributeGroup From {
-                New GetScreentip("My Screentip", AddressOf GetScreenTip),
-                New Screentip("My Screentip")
-                }
+        _builder.AddScreentip("Screentip")
+        _builder.AddGetScreentip("Screentip", AddressOf GetScreenTip)
 
-        Assert.AreEqual(cut.Count, 1)
+        Assert.AreEqual(1, _builder.Build().Count)
     End Sub
 
     <TestMethod()>
     Public Sub AttributesAreMutuallyExclusive_SuperTipAndGetSuperTip()
-        Dim cut As AttributeGroup = New AttributeGroup From {
-                New GetSuperTip("My SuperTip", AddressOf GetSuperTip),
-                New Supertip("My SuperTip")
-                }
+        _builder.AddSupertip("Super")
+        _builder.AddGetSupertip("Super", AddressOf GetSuperTip)
 
-        Assert.AreEqual(cut.Count, 1)
+        Assert.AreEqual(1, _builder.Build().Count)
     End Sub
 
     <TestMethod()>
     Public Sub AttributesAreMutuallyExclusive_DescriptionAndGetDescription()
-        Dim cut As AttributeGroup = New AttributeGroup From {
-                New GetDescription("My Description", AddressOf GetDescription),
-                New Description("My Description")
-                }
+        _builder.AddDescription("The Thing")
+        _builder.AddGetDescription("The Thing", AddressOf GetDescription)
 
-        Assert.AreEqual(cut.Count, 1)
+        Assert.AreEqual(1, _builder.Build().Count)
     End Sub
 
     <TestMethod()>
     Public Sub AttributesAreMutuallyExclusive_IdAndIdQ()
-        Dim cut As AttributeGroup = New AttributeGroup From {
-                New Id("Id1"),
-                New IdQ("Testing", "Id1")
-                }
+        _builder.AddID("id")
+        _builder.AddIdQ("namespace", "id")
 
-        Assert.AreEqual(cut.Count, 1)
+        Assert.AreEqual(1, _builder.Build().Count)
     End Sub
 End Class

@@ -1,4 +1,4 @@
-﻿Namespace Component_Interfaces
+﻿Namespace ComponentInterfaces
     ''' <summary>
     ''' Provides the <c>Enabled</c> method, which indicates whether or not a control is enabled.
     ''' </summary>

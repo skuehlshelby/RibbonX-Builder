@@ -86,6 +86,7 @@
     <Compile Include="BuilderInterfaces\IGetText.vb" />
     <Compile Include="BuilderInterfaces\IInvalidateContentOnDrop.vb" />
     <Compile Include="BuilderInterfaces\IItemDimensions.vb" />
+    <Compile Include="BuilderInterfaces\IItemSize.vb" />
     <Compile Include="BuilderInterfaces\ILoadImage.vb" />
     <Compile Include="BuilderInterfaces\IOnLoad.vb" />
     <Compile Include="BuilderInterfaces\IRowsAndColumns.vb" />
@@ -131,6 +132,7 @@
     <Compile Include="Builders\SplitButtonBuilder.vb" />
     <Compile Include="Builders\TabBuilder.vb" />
     <Compile Include="Builders\ToggleButtonBuilder.vb" />
+    <Compile Include="Component Interfaces\IItemSize.vb" />
     <Compile Include="Component Interfaces\IKeyTip.vb" />
     <Compile Include="Component Interfaces\ILabel.vb" />
     <Compile Include="Component Interfaces\IDescription.vb" />
@@ -185,7 +187,7 @@
     <Compile Include="InternalsVisibleTo.vb" />
     <Compile Include="IPictureDispConverter.vb" />
     <Compile Include="KeyTip.vb" />
-    <Compile Include="NullGuard.vb" />
+    <Compile Include="Contracts.vb" />
     <Compile Include="RibbonAttributes\AttributeGroup.vb" />
     <Compile Include="RibbonAttributes\AttributeGroupBuilder.vb" />
     <Compile Include="RibbonAttributes\AttributeName.vb" />

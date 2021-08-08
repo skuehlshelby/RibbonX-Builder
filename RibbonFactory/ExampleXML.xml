@@ -23,8 +23,7 @@
                   size="large"
                   onAction="OnAction" />
           <comboBox  />
-          <menu >
-            <menuSeparator />
+          <menu>
           </menu>
           <splitButton >
             

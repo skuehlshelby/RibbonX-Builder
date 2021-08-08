@@ -10,16 +10,18 @@ Namespace Builders
         Implements IVisible(Of ButtonGroupBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _controls As IList(Of RibbonElement)
 
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of ButtonGroup)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)
+            _controls = new List(Of RibbonElement)
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As ButtonGroup
-            Return New ButtonGroup(_builder.Build(), tag:=tag)
+            Return New ButtonGroup(_controls, _builder.Build(), tag:=tag)
         End Function
 
         Public Function Visible() As ButtonGroupBuilder Implements IVisible(Of ButtonGroupBuilder).Visible
