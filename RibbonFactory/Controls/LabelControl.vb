@@ -26,7 +26,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<checkBox { _attributes }/>"
+                Return $"<labelControl { _attributes }/>"
             End Get
         End Property
 

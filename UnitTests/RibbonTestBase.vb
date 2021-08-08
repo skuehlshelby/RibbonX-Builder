@@ -147,4 +147,12 @@ Public Class RibbonTestBase
     Public Function GetItemWidth(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemWidth
         Throw New NotImplementedException()
     End Function
+
+    Public Sub OnLoad(ribbon As IRibbonUI) Implements ICreateCallbacks.OnLoad
+        Throw New NotImplementedException()
+    End Sub
+
+    Public Function LoadImage(imageID As String) As IPictureDisp Implements ICreateCallbacks.LoadImage
+        Throw New NotImplementedException()
+    End Function
 End Class

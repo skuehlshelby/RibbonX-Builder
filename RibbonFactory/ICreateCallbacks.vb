@@ -8,6 +8,8 @@ Imports stdole
 ''' This is useful for creating dynamic ribbon objects, since the objects require callback methods that already exist.
 ''' </summary>
 Interface ICreateCallbacks
+    Sub OnLoad(ribbon As IRibbonUI)
+    Function LoadImage(imageID As String) As IPictureDisp
     Function GetEnabled(control As IRibbonControl) As Boolean
     Function GetVisible(control As IRibbonControl) As Boolean
     Function GetLabel(control As IRibbonControl) As String

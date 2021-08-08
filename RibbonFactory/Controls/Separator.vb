@@ -23,7 +23,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return $"<{NameOf(Separator).CamelCase()} { String.Join(" ", _attributes) }/>"
+                Return $"<separator { _attributes }/>"
             End Get
         End Property
 
