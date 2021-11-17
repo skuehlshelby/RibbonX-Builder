@@ -4,21 +4,31 @@ Imports stdole
 
 Namespace Controls
 
-    Public NotInheritable Class DropdownItem
+    ''' <summary>
+    ''' Represents an item in a combobox, dropdown, or gallery.
+    ''' </summary>
+    Public NotInheritable Class Item
+        Inherits RibbonElement
         Implements ILabel
         Implements IScreenTip
         Implements ISuperTip
         Implements IImage
 
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(attributes As AttributeGroup)
+        Friend Sub New(attributes As AttributeSet)
             _attributes = attributes
         End Sub
 
-        Public ReadOnly Property ID As String
+        Public Overrides ReadOnly Property ID As String
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property XML As String
+            Get
+                Return $"<item { _attributes }/>"
             End Get
         End Property
 

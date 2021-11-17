@@ -9,6 +9,7 @@ Imports stdole
 Namespace Builders
 
     Public NotInheritable Class DropDownBuilder
+        Implements IAddButton(Of DropDownBuilder)
         Implements IEnabled(Of DropDownBuilder)
         Implements IInsert(Of DropDownBuilder)
         Implements IVisible(Of DropDownBuilder)
@@ -31,6 +32,7 @@ Namespace Builders
         Implements IGetSelectedItemIndex(Of DropDownBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _buttons As ICollection(Of Button) = New List(Of Button)
 
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of DropDown)
@@ -40,7 +42,12 @@ Namespace Builders
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As DropDown
-            Return New DropDown(_builder.Build(), tag:=tag)
+            Return New DropDown(_builder.Build(), _buttons.ToArray(), tag:=tag)
+        End Function
+
+        Public Function Add(button As Button) As DropDownBuilder Implements IAddButton(Of DropDownBuilder).Add
+            _buttons.Add(button)
+            Return Me
         End Function
 
         Public Function Enabled() As DropDownBuilder Implements IEnabled(Of DropDownBuilder).Enabled
