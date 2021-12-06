@@ -1,5 +1,3 @@
-Imports System.Drawing
-Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports Extensibility
 Imports Microsoft.Office.Core
@@ -9,7 +7,6 @@ Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
-Imports stdole
 
 <
     ComVisible(True),
@@ -27,12 +24,6 @@ Public Class Ribbon
     End Sub
 
     Private Function BuildRibbon() As Containers.Ribbon
-        Dim piButton As Button = New ButtonBuilder().
-                WithLabel("Pi").
-                WithSuperTip("What is Pi?").
-                WithImage(ImageMSO.Misc.Chart3DPieChart).
-                ThatDoes(AddressOf OnAction, Sub() MsgBox(Math.PI.ToString("#.##"), MsgBoxStyle.OkOnly, My.Application.Info.Title)).
-                Build()
 
         Dim messageBoxButton As Button = New ButtonBuilder().
                 WithLabel("Example Button").
@@ -42,7 +33,7 @@ Public Class Ribbon
                 Build()
 
         Dim group As Group = New GroupBuilder().
-                WithControls(messageBoxButton, piButton).
+                WithControls(messageBoxButton).
                 WithLabel("Example Group").
                 Build()
 
@@ -55,8 +46,6 @@ Public Class Ribbon
             OnLoad(AddressOf OnLoad).
             WithTab(tab).
             Build()
-
-        Dim errors As RibbonErrorLog = ribbon.GetErrors()
 
         Return ribbon
     End Function
@@ -72,10 +61,6 @@ Public Class Ribbon
     Public Sub OnAction(control As IRibbonControl)
         _ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
-
-    Public Function GetImage(control As IRibbonControl) As IPictureDisp
-        Return _ribbon.GetElement(Of IImage)(control.Id).Image
-    End Function
 
     Public Sub OnConnection(Application As Object, ConnectMode As ext_ConnectMode, AddInInst As Object, ByRef custom As Array) Implements IDTExtensibility2.OnConnection
         MsgBox("Connected!")
