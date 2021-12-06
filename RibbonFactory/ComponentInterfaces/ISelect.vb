@@ -4,7 +4,7 @@ Namespace ComponentInterfaces
 
     Public Interface ISelect
 
-        Property Selected As DropdownItem
+        Property Selected As Item
 
         ReadOnly Property SelectedItemIndex As Integer
 

@@ -44,7 +44,7 @@ Namespace Containers
             Return CType(CType(GetElement(id), Object), TInterface)
         End Function
 
-        Public Function GetDropdownItem(parentId As String, index As Integer) As DropdownItem
+        Public Function GetDropdownItem(parentId As String, index As Integer) As Item
             Return GetElement(Of Dropdown)(parentId).ElementAt(index)
         End Function
 

@@ -5,7 +5,7 @@ Namespace RibbonAttributes
     Friend NotInheritable Class DefaultProviderDropDownItem
         Implements IDefaultProvider
 
-        Public Function GetDefaults() As AttributeGroup Implements IDefaultProvider.GetDefaults
+        Public Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Dim defaults As AttributeGroupBuilder = New AttributeGroupBuilder()
 
             With defaults
@@ -20,7 +20,7 @@ Namespace RibbonAttributes
 
 #Region "ID Management"
 
-        Private Shared ReadOnly DropDownItemIDs As IDictionary(Of String, WeakReference(Of DropdownItem)) = New Dictionary(Of String, WeakReference(Of DropdownItem))
+        Private Shared ReadOnly DropDownItemIDs As IDictionary(Of String, WeakReference(Of Item)) = New Dictionary(Of String, WeakReference(Of Item))
 
         Private Shared Function GetId() As String
             CleanUpUnusedIds()
@@ -31,7 +31,7 @@ Namespace RibbonAttributes
                 End If
             Next
 
-            Throw New Exception($"All available {NameOf(DropdownItem)} IDs are currently in use.")
+            Throw New Exception($"All available {NameOf(Item)} IDs are currently in use.")
         End Function
 
         Private Shared Sub CleanUpUnusedIds()

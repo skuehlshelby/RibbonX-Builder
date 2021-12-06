@@ -1,6 +1,8 @@
-﻿Imports System.Xml
+﻿Imports System.Reflection
+Imports System.Xml
 Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
+Imports RibbonFactory.Controls
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
@@ -22,7 +24,7 @@ Namespace Builders
         End Sub
 
         Public Function Build() As Ribbon
-            Dim attributes As AttributeGroup = _builder.Build()
+            Dim attributes As AttributeSet = _builder.Build()
 
             Dim ribbonX As String = 
                     $"<?xml version=""1.0"" encoding=""utf-8"" ?>
@@ -45,11 +47,23 @@ Namespace Builders
             For Each element As RibbonElement In elements
                 flattened.Add(element)
 
-                Dim ribbonElements As IEnumerable(Of RibbonElement) = TryCast(element, IEnumerable(Of RibbonElement))
 
-                If ribbonElements IsNot Nothing Then
-                    Flatten(ribbonElements, flattened)
-                End If
+                Select Case element.GetType()
+                    Case GetType(DropDown)
+                        Dim dropDown As DropDown = DirectCast(element, DropDown)
+                        Flatten(dropDown, flattened)
+                        Flatten(dropDown.Buttons, flattened)
+                    Case GetType(Gallery)
+                        Dim gallery As Gallery = DirectCast(element, Gallery)
+                        Flatten(gallery, flattened)
+                        Flatten(gallery.Buttons, flattened)
+                    Case Else
+                        Dim ribbonElements As IEnumerable(Of RibbonElement) = TryCast(element, IEnumerable(Of RibbonElement))
+
+                        If ribbonElements IsNot Nothing Then
+                            Flatten(ribbonElements, flattened)
+                        End If
+                End Select
             Next
         End Sub
 

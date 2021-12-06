@@ -8,7 +8,7 @@ Public Class DropDown
 
     <TestMethod()>
     Public Sub Builds()
-        Dim dropDown As Controls.DropDown =
+        Dim dropDown As Containers.DropDown =
                 New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
                     "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithSize(New String("l"c, 50)).HideImage().GetItemIdFrom(
                         AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
@@ -17,14 +17,14 @@ Public Class DropDown
                                     AddressOf GetEnabled).Build()
 
 
-        Dim errors As RibbonErrorLog = GetErrors(RibbonWithOneTabAndOneGroup(dropDown).RibbonX)
+        Dim errors As RibbonErrorLog = GetErrors(MakeRibbonWithOneTabAndOneGroup(dropDown).RibbonX)
 
         Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
     End Sub
 
     <TestMethod()>
     Public Sub BuildWithAsManyAttributesAsPossible()
-        Dim dropDown As Controls.DropDown =
+        Dim dropDown As Containers.DropDown =
                 New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
                     "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithSize(New String("l"c, 50)).HideImage().GetItemIdFrom(
                         AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
@@ -32,7 +32,7 @@ Public Class DropDown
                                 AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(
                                     AddressOf GetEnabled).Build()
 
-        Ribbon = RibbonWithOneTabAndOneGroup(dropDown)
+        Ribbon = MakeRibbonWithOneTabAndOneGroup(dropDown)
 
         Dim errors As RibbonErrorLog = GetErrors(Ribbon.RibbonX)
 

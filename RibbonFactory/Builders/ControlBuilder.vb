@@ -20,7 +20,7 @@ Namespace Builders
             _attributeGroupBuilder = attributeGroupBuilder
         End Sub
 
-        Public Function Build() As AttributeGroup
+        Public Function Build() As AttributeSet
             Return _attributeGroupBuilder.Build()
         End Function
 

@@ -17,7 +17,7 @@ Public Class ButtonTests
                 .ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")) _
                 .Build()
 
-        Dim errors As RibbonErrorLog = GetErrors(RibbonWithOneTabAndOneGroup(button).RibbonX)
+        Dim errors As RibbonErrorLog = GetErrors(MakeRibbonWithOneTabAndOneGroup(button).RibbonX)
 
         Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
     End Sub
@@ -42,7 +42,7 @@ Public Class ButtonTests
                 .ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")) _
                 .Build()
 
-        Dim errors As RibbonErrorLog = GetErrors(RibbonWithOneTabAndOneGroup(button, buttonTwo).RibbonX)
+        Dim errors As RibbonErrorLog = GetErrors(MakeRibbonWithOneTabAndOneGroup(button, buttonTwo).RibbonX)
 
         Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
     End Sub
@@ -54,7 +54,7 @@ Public Class ButtonTests
                 .ThatDoes(AddressOf OnAction, Sub() button.Label = "After Click") _
                 .Build()
 
-        Ribbon = RibbonWithOneTabAndOneGroup(button)
+        Ribbon = MakeRibbonWithOneTabAndOneGroup(button)
 
         Dim excel As Stubs.Excel = New Stubs.Excel(ribbonExtensibility:= Me)
         Ribbon.AssignRibbonUI(excel)

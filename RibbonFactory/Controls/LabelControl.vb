@@ -11,11 +11,12 @@ Namespace Controls
         Implements IScreenTip
         Implements ISuperTip
 
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(buttonAttributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(buttonAttributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = buttonAttributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String

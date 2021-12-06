@@ -18,6 +18,7 @@ Namespace Controls
 
         Friend Sub New(attributes As AttributeSet)
             _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String

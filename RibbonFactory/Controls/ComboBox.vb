@@ -5,8 +5,7 @@ Imports stdole
 Namespace Controls
 
     Public NotInheritable Class ComboBox
-        Inherits RibbonElement
-        Implements IList(Of DropdownItem)
+        Inherits Container(Of Item)
         Implements IEnabled
         Implements IVisible
         Implements ILabel
@@ -20,12 +19,12 @@ Namespace Controls
         Implements IOnChange
         Implements IText
 
-        Private ReadOnly _items As IList(Of DropdownItem) = New List(Of DropdownItem)()
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(attributes As AttributeGroup, Optional tag As Object = Nothing)
-            MyBase.New(tag)
+        Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(New List(Of Item), tag)
             _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -39,6 +38,44 @@ Namespace Controls
                 Return $"<comboBox { _attributes }/>"
             End Get
         End Property
+
+        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
+            results.Add(Me)
+        End Sub
+
+        Public Overrides Sub Add(item As Item)
+            AddHandler item.ValueChanged, AddressOf OnChildItemChange
+
+            MyBase.Add(item)
+        End Sub
+
+        Public Overrides Function Remove(item As Item) As Boolean
+            If Items.Remove(item) Then
+                RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+
+                RefreshNeeded()
+
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        Public Overrides Sub Clear()
+            If Items.Any() Then
+
+                For Each item As Item In Me
+                    RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+                Next
+
+                Items.Clear()
+                RefreshNeeded()
+            End If
+        End Sub
+
+        Private Sub OnChildItemChange(sender As Object, e As ValueChangedEventArgs)
+            RefreshNeeded()
+        End Sub
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
@@ -139,76 +176,6 @@ Namespace Controls
         Public Sub Execute() Implements IOnChange.Execute
             _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
-
-        #Region "Methods Pertaining to Dropdown Items"
-
-        Public Sub Add(element As DropdownItem) Implements ICollection(Of DropdownItem).Add
-            _items.Add(element)
-        End Sub
-
-        Public Sub Clear() Implements ICollection(Of DropdownItem).Clear
-            _items.Clear()
-        End Sub
-
-        Public Sub CopyTo(array() As DropdownItem, arrayIndex As Integer) Implements IList(Of DropdownItem).CopyTo
-            _items.CopyTo(array, arrayIndex)
-        End Sub
-
-        Public Function Contains(element As DropdownItem) As Boolean Implements IList(Of DropdownItem).Contains
-            Return _items.Contains(element)
-        End Function
-
-        Public ReadOnly Property Count As Integer Implements IList(Of DropdownItem).Count
-            Get
-                Return _items.Count
-            End Get
-        End Property
-
-        Public ReadOnly Property IsReadOnly As Boolean Implements IList(Of DropdownItem).IsReadOnly
-            Get
-                Return False
-            End Get
-        End Property
-
-        Default Public Property Item(index As Integer) As DropdownItem Implements IList(Of DropdownItem).Item
-            Get
-                Return _items(index)
-            End Get
-            Set
-                _items(index) = value
-            End Set
-        End Property
-
-        Public Function Remove(element As DropdownItem) As Boolean Implements IList(Of DropdownItem).Remove
-            If _items.Remove(element) Then
-                
-                Return True
-            Else
-                Return False
-            End If
-        End Function
-
-        Public Function GetEnumerator() As IEnumerator(Of DropdownItem) Implements IEnumerable(Of DropdownItem).GetEnumerator
-            Return _items.GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return _items.GetEnumerator()
-        End Function
-
-        Public Function IndexOf(element As DropdownItem) As Integer Implements IList(Of DropdownItem).IndexOf
-            Return _items.IndexOf(element)
-        End Function
-
-        Public Sub Insert(index As Integer, element As DropdownItem) Implements IList(Of DropdownItem).Insert
-            _items.Insert(index, element)
-        End Sub
-
-        Public Sub RemoveAt(index As Integer) Implements IList(Of DropdownItem).RemoveAt
-            _items.RemoveAt(index)
-        End Sub
-
-#End Region
 
     End Class
 

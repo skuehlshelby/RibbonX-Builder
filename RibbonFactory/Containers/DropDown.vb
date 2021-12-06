@@ -1,12 +1,12 @@
 ﻿Imports RibbonFactory.ComponentInterfaces
+Imports RibbonFactory.Controls
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
-Namespace Controls
+Namespace Containers
 
     Public NotInheritable Class DropDown
-        Inherits RibbonElement
-        Implements ICollection(Of Item)
+        Inherits Container(Of Item)
         Implements ISelect
         Implements IEnabled
         Implements IVisible
@@ -20,12 +20,12 @@ Namespace Controls
 
         Private _selected As Item
         Private _selectedItemIndex As Integer
-        Private ReadOnly _items As List(Of Item) = New List(Of Item)()
         Private ReadOnly _attributes As AttributeSet
 
         Friend Sub New(attributes As AttributeSet, buttons As ICollection(Of Button), Optional tag As Object = Nothing)
-            MyBase.New(tag)
+            MyBase.New(New List(Of Item), tag)
             _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
             Me.Buttons = buttons
         End Sub
 
@@ -45,6 +45,60 @@ Namespace Controls
             End Get
         End Property
 
+        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
+            results.Add(Me)
+
+            For Each button As Button In Buttons
+                results.Add(button)
+            Next
+        End Sub
+
+        Public Overrides Sub Add(item As Item)
+            If Count = 0 Then
+                _selected = item
+                _selectedItemIndex = 0
+            End If
+
+            AddHandler item.ValueChanged, AddressOf OnChildItemChange
+
+            MyBase.Add(item)
+        End Sub
+
+        Public Overrides Function Remove(item As Item) As Boolean
+            If Items.Remove(item) Then
+                RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+
+                If _selected.Equals(item) Then
+                    _selected = Items.FirstOrDefault()
+                    _selectedItemIndex = 0
+                End If
+
+                RefreshNeeded()
+
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        Public Overrides Sub Clear()
+            If Items.Any() Then
+                _selected = Nothing
+                _selectedItemIndex = 0
+
+                For Each dropdownItem As Item In Me
+                    RemoveHandler dropdownItem.ValueChanged, AddressOf OnChildItemChange
+                Next
+
+                Items.Clear()
+                RefreshNeeded()
+            End If
+        End Sub
+
+        Private Sub OnChildItemChange(sender As Object, e As ValueChangedEventArgs)
+            RefreshNeeded()
+        End Sub
+
         Public ReadOnly Property Buttons As ICollection(Of Button)
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
@@ -53,7 +107,6 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
-                
             End Set
         End Property
 
@@ -63,7 +116,6 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-                
             End Set
         End Property
 
@@ -73,7 +125,6 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
-                
             End Set
         End Property
 
@@ -86,7 +137,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.Supertip
+        Public Property SuperTip As String Implements ISupertip.SuperTip
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
@@ -129,7 +180,7 @@ Namespace Controls
             Set
                 If Value IsNot Nothing AndAlso Not _selected.Equals(Value) Then
                     _selected = Value
-                    _selectedItemIndex = _items.IndexOf(Value)
+                    _selectedItemIndex = Items.IndexOf(Value)
                 End If
             End Set
         End Property
@@ -143,55 +194,6 @@ Namespace Controls
         Public Sub Execute() Implements IOnAction.Execute
             _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
-
-#Region "ICollection Members"
-
-        Public Sub Add(item As Item) Implements ICollection(Of Item).Add
-            _items.Add(item)
-        End Sub
-
-        Public Sub Add(ParamArray items As Item())
-            _items.AddRange(items)
-        End Sub
-
-        Public Sub Clear() Implements ICollection(Of Item).Clear
-            _items.Clear()
-        End Sub
-
-        Public Sub CopyTo(array() As Item, arrayIndex As Integer) Implements ICollection(Of Item).CopyTo
-            _items.CopyTo(array, arrayIndex)
-        End Sub
-
-        Public Function Contains(item As Item) As Boolean Implements ICollection(Of Item).Contains
-            Return _items.Contains(item)
-        End Function
-
-        Public ReadOnly Property Count As Integer Implements ICollection(Of Item).Count
-            Get
-                Return _items.Count
-            End Get
-        End Property
-
-        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of Item).IsReadOnly
-            Get
-                Return False
-            End Get
-        End Property
-
-        Public Function Remove(item As Item) As Boolean Implements ICollection(Of Item).Remove
-            Return _items.Remove(item)
-        End Function
-
-        Public Function GetEnumerator() As IEnumerator(Of Item) _
-            Implements IEnumerable(Of Item).GetEnumerator
-            Return _items.GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return _items.GetEnumerator()
-        End Function
-
-#End Region
 
     End Class
 

@@ -1,19 +1,19 @@
-﻿Imports RibbonFactory.ComponentInterfaces
+﻿Imports System.Reflection
+Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Containers
 
     Public NotInheritable Class Box
-        Inherits RibbonElement
-        Implements IList(Of RibbonElement)
+        Inherits Container(Of RibbonElement)
         Implements IVisible
 
-        Private ReadOnly _attributes As AttributeGroup
-        Private ReadOnly _items As IList(Of RibbonElement) = New List(Of RibbonElement)
+        Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(buttonAttributes As AttributeGroup, Optional tag As Object = Nothing)
-            MyBase.New(tag)
-            _attributes = buttonAttributes
+        Friend Sub New(attributes As AttributeSet, items As ICollection(Of RibbonElement), Optional tag As Object = Nothing)
+            MyBase.New(items, tag)
+            _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -26,9 +26,23 @@ Namespace Containers
             Get
                 Return _
                     String.Join(Environment.NewLine, $"<box { _attributes }>",
-                                String.Join(Environment.NewLine, _items), $"</box>")
+                                String.Join(Environment.NewLine, Items), $"</box>")
             End Get
         End Property
+
+        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
+            Dim genericContainer As Type = GetType(Container(Of )).GetGenericTypeDefinition()
+
+            For Each item As RibbonElement In Items
+                Dim itemType As Type = item.GetType()
+
+                If itemType.IsSubclassOf(genericContainer) Then
+                    itemType.InvokeMember(NameOf(Flatten), BindingFlags.Default, Nothing, item, New Object(){results})
+                Else
+                    results.Add(item)
+                End If
+            Next
+        End Sub
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
@@ -39,65 +53,5 @@ Namespace Containers
             End Set
         End Property
 
-        Default Public Property Item(index As Integer) As RibbonElement Implements IList(Of RibbonElement).Item
-            Get
-                Return _items(index)
-            End Get
-            Set
-                _items(index) = Value
-            End Set
-        End Property
-
-        Public ReadOnly Property Count As Integer Implements ICollection(Of RibbonElement).Count
-            Get
-                Return _items.Count
-            End Get
-        End Property
-
-        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of RibbonElement).IsReadOnly
-            Get
-                Return _items.IsReadOnly
-            End Get
-        End Property
-
-        Public Sub Insert(index As Integer, element As RibbonElement) Implements IList(Of RibbonElement).Insert
-            _items.Insert(index, element)
-        End Sub
-
-        Public Sub RemoveAt(index As Integer) Implements IList(Of RibbonElement).RemoveAt
-            _items.RemoveAt(index)
-        End Sub
-
-        Public Sub Add(element As RibbonElement) Implements ICollection(Of RibbonElement).Add
-            _items.Add(element)
-        End Sub
-
-        Public Sub Clear() Implements ICollection(Of RibbonElement).Clear
-            _items.Clear()
-        End Sub
-
-        Public Sub CopyTo(array() As RibbonElement, arrayIndex As Integer) Implements ICollection(Of RibbonElement).CopyTo
-            _items.CopyTo(array, arrayIndex)
-        End Sub
-
-        Public Function IndexOf(element As RibbonElement) As Integer Implements IList(Of RibbonElement).IndexOf
-            Return _items.IndexOf(element)
-        End Function
-
-        Public Function Contains(element As RibbonElement) As Boolean Implements ICollection(Of RibbonElement).Contains
-            Return _items.Contains(element)
-        End Function
-
-        Public Function Remove(element As RibbonElement) As Boolean Implements ICollection(Of RibbonElement).Remove
-            Return _items.Remove(element)
-        End Function
-
-        Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return _items.GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return DirectCast(_items, IEnumerable).GetEnumerator()
-        End Function
     End Class
 End Namespace

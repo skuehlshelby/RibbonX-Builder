@@ -3,7 +3,7 @@
     
     Public Event ValueChanged(sender As Object, e As ValueChangedEventArgs)
 
-    Protected Sub OnValueChanged()
+    Protected Sub RefreshNeeded()
         RaiseEvent ValueChanged(Me, New ValueChangedEventArgs(ID))
     End Sub
 
@@ -21,7 +21,7 @@
         Return XML
     End Function
 
-    Public  Overrides Function GetHashCode() As Integer
+    Public Overrides Function GetHashCode() As Integer
         Return ID.GetHashCode()
     End Function
 

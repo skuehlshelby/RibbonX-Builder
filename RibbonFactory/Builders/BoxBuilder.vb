@@ -3,22 +3,24 @@ Imports RibbonFactory.Containers
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
-    
+
     Public NotInheritable Class BoxBuilder
         Implements IBoxStyle(Of BoxBuilder)
         Implements IVisible(Of BoxBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _items As ICollection(Of RibbonElement)
 
         Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Box)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)
+            _items = New List(Of RibbonElement)
         End Sub
 
         Public Function Build(tag As Object) As Box
-            Return New Box(_builder.Build(), tag)
+            Return New Box(_builder.Build(), _items.ToArray(), tag)
         End Function
 
         Public Function Horizontal() As BoxBuilder Implements IBoxStyle(Of BoxBuilder).Horizontal
@@ -51,24 +53,26 @@ Namespace Builders
             Return Me
         End Function
         
-        Public Shared Function Horizontal(ParamArray items() As RibbonElement) As Box
-            Dim horizontalBox As Box = new BoxBuilder().Horizontal().Build(tag:= Nothing)
-            
+        Public Function WithItems(ParamArray items() As RibbonElement) As BoxBuilder
             For Each item As RibbonElement In items
-                horizontalBox.Add(item)
+                _items.Add(item)
             Next item
-            
-            Return horizontalBox
+
+            Return Me
+        End Function
+
+        Public Shared Function Horizontal(ParamArray items() As RibbonElement) As Box
+            Return New BoxBuilder() _
+                .Horizontal() _
+                .WithItems(items) _
+                .Build(tag:= Nothing)
         End Function
         
         Public Shared Function Vertical(ParamArray items() As RibbonElement) As Box
-            Dim verticalBox As Box = new BoxBuilder().Vertical().Build(tag:= Nothing)
-            
-            For Each item As RibbonElement In items
-                verticalBox.Add(item)
-            Next item
-            
-            Return verticalBox
+            Return New BoxBuilder() _
+                .Vertical() _
+                .WithItems(items) _
+                .Build(tag:= Nothing)
         End Function
         
     End Class

@@ -6,7 +6,7 @@ Namespace RibbonAttributes
     Friend NotInheritable Class DefaultProvider(Of T As RibbonElement)
         Implements IDefaultProvider
 
-        Public Function GetDefaults() as AttributeGroup Implements IDefaultProvider.GetDefaults
+        Public Function GetDefaults() as AttributeSet Implements IDefaultProvider.GetDefaults
             Dim defaults As AttributeGroupBuilder = New AttributeGroupBuilder()
 
             defaults.AddID(IdManager.GetID(Of T)())

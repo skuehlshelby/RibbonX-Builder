@@ -1,5 +1,4 @@
 ﻿Imports RibbonFactory.ComponentInterfaces
-Imports RibbonFactory.Component_Interfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
@@ -22,12 +21,13 @@ Namespace Containers
         Implements ISize
         Implements IItemSize
 
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _items As IEnumerable(Of RibbonElement)
 
-        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
             _items = items
         End Sub
 

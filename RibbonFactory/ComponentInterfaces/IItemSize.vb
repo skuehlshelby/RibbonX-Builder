@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Enums
 
-Namespace Component_Interfaces
+Namespace ComponentInterfaces
 
     Public Interface IItemSize
         

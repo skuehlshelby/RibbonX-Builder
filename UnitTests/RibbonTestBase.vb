@@ -19,21 +19,26 @@ Public Class RibbonTestBase
         Return Ribbon.RibbonX
     End Function
 
-    Protected Function GetButton() As Button
+    Protected Sub AssignFakeIRibbonUI()
+        Ribbon.AssignRibbonUI(New Stubs.Excel(Me))
+    End Sub
+
+    Protected Function MakeButton() As Button
         Return New ButtonBuilder() _
                 .WithLabel("My Button") _
                 .WithSuperTip("Super") _
                 .WithImage(Common.DollarSign) _
+                .Disabled(AddressOf GetEnabled) _
                 .Build()
     End Function
 
     Protected Function GetMenu() As Menu
         Return New MenuBuilder() _
-            .WithLabel("My Menu").InsertBeforeMSO(Excel.Calculator).WithControl(GetButton()).WithLargeItems().
+            .WithLabel("My Menu").InsertBeforeMSO(Excel.Calculator).WithControl(MakeButton()).WithLargeItems().
             ShowLabel().WithImage(Common.SadFace).Build()
     End Function
 
-    Protected Function RibbonWithOneTabAndOneGroup(ParamArray controls As RibbonElement()) As Ribbon
+    Protected Function MakeRibbonWithOneTabAndOneGroup(ParamArray controls As RibbonElement()) As Ribbon
         Return New RibbonBuilder() _
             .WithTab(New TabBuilder().WithLabel("Test Tab") _
                         .WithGroup(New GroupBuilder().WithLabel("Test Group") _

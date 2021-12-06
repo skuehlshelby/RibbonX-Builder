@@ -8,13 +8,14 @@ Namespace Containers
         Implements IVisible
         Implements IEnumerable(Of RibbonElement)
 
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _items As IEnumerable(Of RibbonElement)
         
-        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
             _items = items
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
         
         Public Overrides ReadOnly Property ID As String

@@ -6,8 +6,8 @@
 
         Private ReadOnly _callback As String
 
-        Public Sub New(value As T, callback As String, name As AttributeName , ParamArray categoryMembers As AttributeName())
-            MyBase.New(value, name, categoryMembers)
+        Public Sub New(value As T, callback As String, name As AttributeName , category As AttributeCategory)
+            MyBase.New(value, name, category)
             _callback = callback
         End Sub
 

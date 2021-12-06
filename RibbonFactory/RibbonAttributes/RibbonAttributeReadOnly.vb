@@ -4,8 +4,8 @@
 
         Protected Value As T
 
-        Public Sub New(value As T, name As AttributeName, ParamArray categoryMembers As AttributeName())
-            MyBase.New(name, categoryMembers)
+        Public Sub New(value As T, name As AttributeName, category As AttributeCategory)
+            MyBase.New(name, category)
             Me.Value = value
         End Sub
 

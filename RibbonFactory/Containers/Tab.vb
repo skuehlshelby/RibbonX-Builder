@@ -11,13 +11,14 @@ Namespace Containers
         Implements IKeyTip
         Implements ILabel
 
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _groups As IEnumerable(Of Group)
 
-        Friend Sub New(groups As IEnumerable(Of Group), attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(groups As IEnumerable(Of Group), attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
             _groups = groups
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String

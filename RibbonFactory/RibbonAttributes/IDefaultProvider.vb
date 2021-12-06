@@ -2,7 +2,7 @@
 
     Friend Interface IDefaultProvider
 
-        Function GetDefaults() As AttributeGroup
+        Function GetDefaults() As AttributeSet
 
     End Interface
 

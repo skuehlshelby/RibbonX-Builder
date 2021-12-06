@@ -5,7 +5,7 @@
 
     <TestMethod()> 
     Public Sub Builds()
-        Dim errors As RibbonErrorLog = RibbonWithOneTabAndOneGroup(GetMenu()).GetErrors()
+        Dim errors As RibbonErrorLog = MakeRibbonWithOneTabAndOneGroup(GetMenu()).GetErrors()
 
         Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
     End Sub

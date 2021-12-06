@@ -115,6 +115,7 @@
     <Compile Include="ButtonTests.vb" />
     <Compile Include="DropDown.vb" />
     <Compile Include="MenuTests.vb" />
+    <Compile Include="DynamicUpdating.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

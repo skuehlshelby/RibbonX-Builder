@@ -9,8 +9,11 @@
           <box >
           </box>
           <checkBox/>
-          <gallery>
-            
+
+          <gallery >
+            <item />
+            <button />
+            <button />
           </gallery>
 
           <button id="Button1"
@@ -22,16 +25,32 @@
                   imageMso="HappyFace"
                   size="large"
                   onAction="OnAction" />
-          <comboBox  />
+          
+          <comboBox>
+            <item/>
+          </comboBox>
+
           <menu>
+            
           </menu>
+
           <splitButton >
             
           </splitButton>
+
           <buttonGroup>
             
           </buttonGroup>
-          <dropDown id="dropDown1" sizeString=""/>
+
+          <dropDown id="dropDown1" sizeString="">
+            <item />
+            <button />
+            <button />
+            <button />
+            <button />
+            <button />
+          </dropDown>
+
         </group>
       </tab>
     </tabs>

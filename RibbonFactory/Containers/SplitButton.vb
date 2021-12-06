@@ -14,9 +14,9 @@ Namespace Containers
         Implements ISize
         Implements IShowLabel
         
-        Private ReadOnly _attributes As AttributeGroup
+        Private ReadOnly _attributes As AttributeSet
         
-        Friend Sub New(button As RibbonElement, menu As Menu, attributes As AttributeGroup, Optional tag As Object = Nothing)
+        Friend Sub New(button As RibbonElement, menu As Menu, attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             Require(Of ArgumentNullException)(button IsNot Nothing, $"Split buttons must be initialized with either a button or a toggle-button.")
             Require(Of ArgumentNullException)(menu IsNot Nothing, $"Split buttons must be initialized with a valid menu.")
@@ -24,6 +24,7 @@ Namespace Containers
             Me.Button = button
             Me.Menu = menu
             _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
         
         Public Overrides ReadOnly Property ID As String

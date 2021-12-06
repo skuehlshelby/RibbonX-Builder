@@ -1,5 +1,5 @@
 ﻿Namespace RibbonAttributes
-    Friend Class AttributeGroup
+    Friend Class AttributeSet
         Implements ISet(Of RibbonAttribute)
         
         Public Event AttributeChanged
@@ -26,17 +26,27 @@
         End Function
 
         Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadOnly(Of T)
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategoryMember(sampleMember)
+            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(sampleMember)
             Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadOnly(Of T))
         End Function
 
+        Public Function ReadOnlyLookup(Of T)(category As AttributeCategory) As RibbonAttributeReadOnly(Of T)
+            Dim compare As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(category)
+            Return DirectCast(_attributes.First(Function(attribute) compare.Equals(attribute)), RibbonAttributeReadOnly(Of T))
+        End Function
+
         Public Function ReadWriteLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadWrite(Of T)
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategoryMember(sampleMember)
+            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(sampleMember)
+            Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadWrite(Of T))
+        End Function
+
+        Public Function ReadWriteLookup(Of T)(category As AttributeCategory) As RibbonAttributeReadWrite(Of T)
+            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(category)
             Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadWrite(Of T))
         End Function
 
         Public Function HasAttribute(sampleMember As AttributeName) As Boolean
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategoryMember(sampleMember)
+            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(sampleMember)
             Return _attributes.Any(Function(attribute) equatable.Equals(attribute))
         End Function
 

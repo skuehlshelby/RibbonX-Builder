@@ -3,7 +3,7 @@
     Friend NotInheritable Class DefaultProviderRibbon
         Implements IDefaultProvider
 
-        Public Function GetDefaults() As AttributeGroup Implements IDefaultProvider.GetDefaults
+        Public Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Dim defaults As AttributeGroupBuilder = New AttributeGroupBuilder()
 
             With defaults
