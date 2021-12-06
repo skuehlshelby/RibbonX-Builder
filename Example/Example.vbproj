@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Example</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Interop.Microsoft.Office.Core" Version="2.8.0" />
+    <PackageReference Include="stdole" Version="17.0.31902.203" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RibbonFactory\RibbonFactory.vbproj" />
+  </ItemGroup>
+
+</Project>

@@ -7,7 +7,7 @@ Imports stdole
 ''' Implementing it will cause all possible callback signatures to be generated in the implementing class.
 ''' This is useful for creating dynamic ribbon objects, since the objects require callback methods that already exist.
 ''' </summary>
-Interface ICreateCallbacks
+Public Interface ICreateCallbacks
     Sub OnLoad(ribbon As IRibbonUI)
     Function LoadImage(imageID As String) As IPictureDisp
     Function GetEnabled(control As IRibbonControl) As Boolean

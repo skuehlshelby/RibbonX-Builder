@@ -7,7 +7,7 @@ Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
 Namespace Builders
-    Public Class GroupBuilder
+    Public NotInheritable Class GroupBuilder
         Implements IInsert(Of GroupBuilder)
         Implements IVisible(Of GroupBuilder)
         Implements ILabelScreenTipSuperTip(Of GroupBuilder)
@@ -17,7 +17,7 @@ Namespace Builders
         Private ReadOnly _builder As ControlBuilder
         Private ReadOnly _controls As ICollection(Of RibbonElement)
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Group)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)

@@ -5,7 +5,7 @@ Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
 
-    Public Class TabBuilder
+    Public NotInheritable Class TabBuilder
         Implements IInsert(Of TabBuilder)
         Implements IKeyTip(Of TabBuilder)
         Implements ILabelOnly(Of TabBuilder)
@@ -14,7 +14,7 @@ Namespace Builders
         Private ReadOnly _builder As ControlBuilder
         Private ReadOnly _groups As ICollection(Of Group)
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Tab)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
