@@ -5,10 +5,9 @@ Imports System.Runtime.InteropServices
 ''' This module supports the creation of custom images for the ribbon.
 ''' It provides a utility method for converting bitmaps to IPictureDisp.
 ''' </summary>
-Public Module PictureDispConverter
-
-    <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", CharSet:=CharSet.Ansi, ExactSpelling:=True, PreserveSig:=True)>
-    Private Function OleCreatePictureIndirect(ByRef pictdesc As Pictdesc, ByRef riid As Guid, fOwn As Boolean, <MarshalAs(UnmanagedType.IDispatch)> ByRef lplpvObj As Object) As Integer
+Public Module ImageConverter
+    <DllImport("OleAut32.dll", EntryPoint:="OleCreatePictureIndirect", ExactSpelling:=True, PreserveSig:=False)>
+    Private Function OleCreatePictureIndirect(<MarshalAs(UnmanagedType.AsAny)>picdesc As Object, ByRef iid As Guid, <MarshalAs(UnmanagedType.Bool)>fOwn As Boolean) As stdole.IPictureDisp
     End Function
 
     <StructLayout(LayoutKind.Sequential)>
@@ -27,10 +26,9 @@ Public Module PictureDispConverter
         End Sub
     End Structure
 
-    Public Function ImageToPictureDisp(input As Bitmap) As stdole.IPictureDisp
+    Public Function ConvertToIPictureDisplay(input As Bitmap) As stdole.IPictureDisp
         Dim pictDesc As Pictdesc = New Pictdesc(input.GetHbitmap())
-        Dim pic As Object = Nothing
-        OleCreatePictureIndirect(pictDesc, GetType(stdole.IPictureDisp).GUID, True, pic)
-        Return CType(pic, stdole.IPictureDisp)
+        
+        Return OleCreatePictureIndirect(pictDesc, GetType(stdole.IPictureDisp).GUID, True)
     End Function
 End Module

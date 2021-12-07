@@ -156,11 +156,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) As DropDownBuilder Implements IImage(Of DropDownBuilder).WithImage
-            _builder.WithImage(image, callback)
-            Return Me
-        End Function
-
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As DropDownBuilder Implements IImage(Of DropDownBuilder).WithImage
             _builder.WithImage(image, callback)
             Return Me

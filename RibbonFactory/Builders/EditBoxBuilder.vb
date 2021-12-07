@@ -117,11 +117,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) As EditBoxBuilder Implements IImage(Of EditBoxBuilder).WithImage
-            _builder.WithImage(image, callback)
-            Return Me
-        End Function
-
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As EditBoxBuilder Implements IImage(Of EditBoxBuilder).WithImage
             _builder.WithImage(image, callback)
             Return Me

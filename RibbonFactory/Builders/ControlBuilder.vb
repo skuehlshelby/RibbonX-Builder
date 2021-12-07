@@ -167,7 +167,7 @@ Namespace Builders
         End Sub
 
         Public Sub WithImage(image As BitMap, callback As FromControl(Of IPictureDisp))
-            _attributeGroupBuilder.AddGetImage(image:= ImageToPictureDisp(image), callback:= callback)
+            _attributeGroupBuilder.AddGetImage(image:= ConvertToIPictureDisplay(image), callback:= callback)
         End Sub
 
         Public Sub WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp))

@@ -174,11 +174,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) As MenuBuilder Implements IImage(Of MenuBuilder).WithImage
-            _builder.WithImage(image, callback)
-            Return Me
-        End Function
-
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As MenuBuilder Implements IImage(Of MenuBuilder).WithImage
             _builder.WithImage(image, callback)
             Return Me

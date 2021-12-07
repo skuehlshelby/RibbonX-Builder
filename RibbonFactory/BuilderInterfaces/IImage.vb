@@ -9,8 +9,6 @@ Namespace BuilderInterfaces
          Function WithImage(imagePath As String) As T
 
          Function WithImage(image As ImageMSO) As T
-
-         Function WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) As T
          
          Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As T
 

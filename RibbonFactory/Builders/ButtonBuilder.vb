@@ -155,12 +155,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp)) As ButtonBuilder Implements IImage(Of ButtonBuilder).WithImage
-            _builder.WithImage(image, callback)
-            _builder.ShowImage()
-            Return Me
-        End Function
-
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As ButtonBuilder Implements IImage(Of ButtonBuilder).WithImage
             _builder.WithImage(image, callback)
             _builder.ShowImage()

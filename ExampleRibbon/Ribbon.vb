@@ -1,4 +1,8 @@
+Imports System.Drawing
+Imports System.Reflection
+Imports System.Runtime.ExceptionServices
 Imports System.Runtime.InteropServices
+Imports System.Text
 Imports Extensibility
 Imports Microsoft.Office.Core
 Imports RibbonFactory
@@ -6,7 +10,7 @@ Imports RibbonFactory.Builders
 Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
-Imports RibbonFactory.Enums
+Imports stdole
 
 <
     ComVisible(True),
@@ -18,22 +22,35 @@ Public Class Ribbon
     Implements IRibbonExtensibility
 
     Private ReadOnly _ribbon As Containers.Ribbon
+    Private ReadOnly _displayDebugInfo As Boolean = False
 
     Public Sub New()
+        If _displayDebugInfo Then
+            AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnUnhandledException
+            AddHandler AppDomain.CurrentDomain.FirstChanceException, AddressOf OnExceptionThrown
+        End If
+
         _ribbon = BuildRibbon()
     End Sub
 
     Private Function BuildRibbon() As Containers.Ribbon
 
-        Dim messageBoxButton As Button = New ButtonBuilder().
-                WithLabel("Example Button").
+        Dim piButton As Button = New ButtonBuilder().
+                WithLabel("Calculate Pi").
+                WithSuperTip("So that you too can know the value of Pi.").
+                WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.pi.png")), AddressOf GetImage).
+                ThatDoes(AddressOf OnAction, Sub() MessageBox($"The value of Pi is {Math.PI:#.#####}...")).
+                Build()
+
+        Dim helloButton As Button = New ButtonBuilder().
+                WithLabel("Example Button", AddressOf GetLabel).
                 WithSuperTip("This button is an example. Click me!").
-                WithImage(ImageMSO.Common.DollarSign).
-                ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!", MsgBoxStyle.OkOnly, My.Application.Info.Title)).
+                WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.hello.png")), AddressOf GetImage).
+                ThatDoes(AddressOf OnAction, Sub() MessageBox("Hello World!")).
                 Build()
 
         Dim group As Group = New GroupBuilder().
-                WithControls(messageBoxButton).
+                WithControls(helloButton, piButton).
                 WithLabel("Example Group").
                 Build()
 
@@ -62,23 +79,69 @@ Public Class Ribbon
         _ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
 
+    Public Function GetLabel(control As IRibbonControl) As String
+        Return _ribbon.GetElement(Of ILabel)(control.Id).Label
+    End Function
+
+    Public Function GetImage(control As IRibbonControl) As IPictureDisp
+        Return _ribbon.GetElement(Of IImage)(control.Id).Image
+    End Function
+
+#Region "Troubleshooting"
+
+    Private Sub OnExceptionThrown(sender As Object, e As FirstChanceExceptionEventArgs)
+        MessageBox(FormatException(e.Exception))
+    End Sub
+
+    Private Sub OnUnhandledException(sender As Object, e As UnhandledExceptionEventArgs)
+        MessageBox(FormatException(e.ExceptionObject))
+    End Sub
+
     Public Sub OnConnection(Application As Object, ConnectMode As ext_ConnectMode, AddInInst As Object, ByRef custom As Array) Implements IDTExtensibility2.OnConnection
-        MsgBox("Connected!")
+        If _displayDebugInfo Then MessageBox("Connected!")
     End Sub
 
     Public Sub OnDisconnection(RemoveMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
-        MsgBox("Disconnected!")
+        If _displayDebugInfo Then MessageBox("Disconnected!")
     End Sub
 
     Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
-        MsgBox("Add-Ins Updated!")
+        If _displayDebugInfo Then MessageBox("Add-Ins Updated!")
     End Sub
 
     Public Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
-        MsgBox("Startup Complete!")
+        If _displayDebugInfo Then MessageBox("Startup Complete!")
     End Sub
 
     Public Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBeginShutdown
-        MsgBox("Shutdown Starting!")
+        If _displayDebugInfo Then MessageBox("Shutdown Starting!")
     End Sub
+
+    Private Sub MessageBox(prompt As String)
+        MsgBox(prompt, MsgBoxStyle.OkOnly, My.Application.Info.Title)
+    End Sub
+
+    Private Function FormatException(e As Exception) As String
+        With New StringBuilder()
+            .AppendLine($"A '{e.GetType().Name}' was thrown in method '{e.TargetSite.Name}'.")
+            .AppendLine()
+            .AppendLine("---------Message----------")
+            .AppendLine(e.Message)
+            .AppendLine()
+            .AppendLine("-------Stack Trace--------")
+            .AppendLine(e.StackTrace)
+
+            If e.Data IsNot Nothing AndAlso e.Data.Count > 0 Then
+                .AppendLine()
+                .AppendLine("----------Data------------")
+                For Each datum As Object In e.Data
+                    .AppendLine(datum.ToString())
+                Next
+            End If
+
+            Return .ToString()
+        End With
+    End Function
+#End Region
+
 End Class

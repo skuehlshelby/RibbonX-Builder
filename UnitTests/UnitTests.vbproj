@@ -74,6 +74,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -92,6 +93,9 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PicConverterAxHost.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Stubs\Excel.vb" />
     <Compile Include="Stubs\RibbonControl.vb" />
     <Compile Include="ImageConversion.vb" />

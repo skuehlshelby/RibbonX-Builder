@@ -189,7 +189,7 @@
     <Compile Include="ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
-    <Compile Include="IPictureDispConverter.vb" />
+    <Compile Include="ImageConverter.vb" />
     <Compile Include="KeyTip.vb" />
     <Compile Include="Contracts.vb" />
     <Compile Include="RibbonAttributes\AttributeCategory.vb" />
