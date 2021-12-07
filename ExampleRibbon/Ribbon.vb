@@ -43,8 +43,8 @@ Public Class Ribbon
                 Build()
 
         Dim helloButton As Button = New ButtonBuilder().
-                WithLabel("Example Button", AddressOf GetLabel).
-                WithSuperTip("This button is an example. Click me!").
+                WithLabel("Hello World").
+                WithSuperTip("The classic introductory exercise. Click me!").
                 WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.hello.png")), AddressOf GetImage).
                 ThatDoes(AddressOf OnAction, Sub() MessageBox("Hello World!")).
                 Build()
@@ -78,10 +78,6 @@ Public Class Ribbon
     Public Sub OnAction(control As IRibbonControl)
         _ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
-
-    Public Function GetLabel(control As IRibbonControl) As String
-        Return _ribbon.GetElement(Of ILabel)(control.Id).Label
-    End Function
 
     Public Function GetImage(control As IRibbonControl) As IPictureDisp
         Return _ribbon.GetElement(Of IImage)(control.Id).Image
