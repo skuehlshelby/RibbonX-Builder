@@ -12,11 +12,9 @@ Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
 Imports stdole
 
-<
-    ComVisible(True),
-    Guid("C2C29BAF-8F1B-46EF-A071-8A286423F4C4"),
-    ProgId("ExampleRibbon.Ribbon")
->
+<ComVisible(True)>
+<Guid("C2C29BAF-8F1B-46EF-A071-8A286423F4C4")>
+<ProgId("ExampleRibbon.Ribbon")>
 Public Class Ribbon
     Implements IDTExtensibility2
     Implements IRibbonExtensibility
