@@ -123,7 +123,7 @@
     <EmbeddedResource Include="Images\pi.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\RibbonFactoryExampe.PNG" />
+    <None Include="Images\RibbonFactoryExample.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
