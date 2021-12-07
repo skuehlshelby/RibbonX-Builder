@@ -15,7 +15,7 @@ Imports stdole
 <
     ComVisible(True),
     Guid("C2C29BAF-8F1B-46EF-A071-8A286423F4C4"),
-    ProgId("ExampleRibbon." & NameOf(Ribbon))
+    ProgId("ExampleRibbon.Ribbon")
 >
 Public Class Ribbon
     Implements IDTExtensibility2
@@ -36,14 +36,14 @@ Public Class Ribbon
     Private Function BuildRibbon() As Containers.Ribbon
 
         Dim piButton As Button = New ButtonBuilder().
-                WithLabel("Calculate Pi").
+                WithLabel("Calculate Pi", copyToScreenTip:= True).
                 WithSuperTip("So that you too can know the value of Pi.").
                 WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.pi.png")), AddressOf GetImage).
                 ThatDoes(AddressOf OnAction, Sub() MessageBox($"The value of Pi is {Math.PI:#.#####}...")).
                 Build()
 
         Dim helloButton As Button = New ButtonBuilder().
-                WithLabel("Hello World").
+                WithLabel("Hello World", copyToScreenTip:= True).
                 WithSuperTip("The classic introductory exercise. Click me!").
                 WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.hello.png")), AddressOf GetImage).
                 ThatDoes(AddressOf OnAction, Sub() MessageBox("Hello World!")).
@@ -59,12 +59,10 @@ Public Class Ribbon
                 WithLabel("Example Tab").
                 Build()
 
-        Dim ribbon As Containers.Ribbon = New RibbonBuilder().
+        Return New RibbonBuilder().
             OnLoad(AddressOf OnLoad).
             WithTab(tab).
             Build()
-
-        Return ribbon
     End Function
 
     Public Function GetCustomUI(RibbonID As String) As String Implements IRibbonExtensibility.GetCustomUI
