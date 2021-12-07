@@ -7,10 +7,10 @@ The created ribbon uses a mix of static and dynamic content. It includes custom 
 </p>
 
 ### Additional Steps To Run
-	* Build the project.
-	* Add the path to the resulting .dll to the included .reg file.
-	* Use the .reg file.
-	* Project Properties > Debug > Start External Program > 'C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE' (If not already set.)
-	* Run
+1. Build the project.
+2. Add the path to the resulting .dll to the included .reg file.
+3. Use the .reg file.
+4. Project Properties > Debug > Start External Program > 'C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE' (If not already set.)
+5. Run
 
 Note to self: Automate the above steps in the future.
