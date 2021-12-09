@@ -185,10 +185,14 @@ Namespace Containers
             End Set
         End Property
 
-        Public ReadOnly Property SelectedItemIndex As Integer Implements ISelect.SelectedItemIndex
+        Public Property SelectedItemIndex As Integer Implements ISelect.SelectedItemIndex
             Get
                 Return _selectedItemIndex
             End Get
+            Set
+                _selected = Items(value)
+                _selectedItemIndex = value
+            End Set
         End Property
 
         Public Sub Execute() Implements IOnAction.Execute

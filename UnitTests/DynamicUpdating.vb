@@ -18,7 +18,7 @@ Public Class DynamicUpdating
 
         AssignFakeIRibbonUI()
 
-        With DirectCast(Ribbon.GetElement("Button1"), Button)
+        With Ribbon.GetElement(Function(e As Button) TypeOf e Is Button)
             AddHandler .ValueChanged, AddressOf ChangeTriggered
             .Enabled = False
             .Enabled = True

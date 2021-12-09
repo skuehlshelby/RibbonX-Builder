@@ -13,7 +13,7 @@ Namespace Builders
 
         Private ReadOnly _builder As ControlBuilder
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of LabelControl)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)

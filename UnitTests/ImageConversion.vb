@@ -15,7 +15,8 @@ Public Class ImageConversion
 
         Dim pic As IPictureDisp = ConvertToIPictureDisplay(image)
 
-        Assert.IsNotNull(pic)
+        Assert.IsTrue(pic.Height > 0)
+        Assert.IsTrue(pic.Width > 0)
     End Sub
 
     <TestMethod()>
@@ -26,7 +27,8 @@ Public Class ImageConversion
 
         Dim pic As IPictureDisp = New PicConverterAxHost().ToIPictureDisp(image)
 
-        Assert.IsNotNull(pic)
+        Assert.IsTrue(pic.Height > 0)
+        Assert.IsTrue(pic.Width > 0)
     End Sub
 
 End Class

@@ -1,5 +1,4 @@
-﻿Imports System.Reflection
-Imports RibbonFactory.ComponentInterfaces
+﻿Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Containers
@@ -29,20 +28,6 @@ Namespace Containers
                                 String.Join(Environment.NewLine, Items), $"</box>")
             End Get
         End Property
-
-        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
-            Dim genericContainer As Type = GetType(Container(Of )).GetGenericTypeDefinition()
-
-            For Each item As RibbonElement In Items
-                Dim itemType As Type = item.GetType()
-
-                If itemType.IsSubclassOf(genericContainer) Then
-                    itemType.InvokeMember(NameOf(Flatten), BindingFlags.Default, Nothing, item, New Object(){results})
-                Else
-                    results.Add(item)
-                End If
-            Next
-        End Sub
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get

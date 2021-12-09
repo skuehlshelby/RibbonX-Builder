@@ -14,13 +14,13 @@ Public MustInherit Class Container(Of TRibbonElement As RibbonElement)
     Friend Overridable Sub Flatten(results As ICollection(Of RibbonElement))
         results.Add(Me)
 
-        Dim genericContainer As Type = GetType(Container(Of )).GetGenericTypeDefinition()
+        Dim genericContainer As Type = GetType(Container(Of ))
 
-        For Each item As TRibbonElement In Items
-            Dim itemType As Type = item.GetType()
+        For Each item As RibbonElement In Items
+            If item.GetType().IsDerivedFromGenericType(genericContainer) Then
+                Dim method As MethodBase = item.GetType().GetMethod("Flatten", BindingFlags.Instance Or BindingFlags.NonPublic)
 
-            If itemType.IsSubclassOf(genericContainer) Then
-                itemType.InvokeMember(NameOf(Flatten), BindingFlags.Default, Nothing, item, New Object(){results})
+                method.Invoke(item, New Object(){results})
             Else
                 results.Add(item)
             End If

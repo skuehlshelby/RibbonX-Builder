@@ -16,7 +16,8 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(attributes As AttributeSet)
+        Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(tag)
             _attributes = attributes
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub

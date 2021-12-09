@@ -35,7 +35,7 @@ Namespace Builders
         Private ReadOnly _builder As ControlBuilder
         Private ReadOnly _buttons As ICollection(Of Button) = New List(Of Button)
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of DropDown)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
@@ -157,6 +157,11 @@ Namespace Builders
         End Function
 
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As DropDownBuilder Implements IImage(Of DropDownBuilder).WithImage
+            _builder.WithImage(image, callback)
+            Return Me
+        End Function
+
+        Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As DropDownBuilder Implements IImage(Of DropDownBuilder).WithImage
             _builder.WithImage(image, callback)
             Return Me
         End Function

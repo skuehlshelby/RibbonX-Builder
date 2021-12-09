@@ -69,6 +69,11 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As GroupBuilder Implements IImage(Of GroupBuilder).WithImage
+            _builder.WithImage(image, callback)
+            Return Me
+        End Function
+
         Public Function WithImage(imagePath As String) As GroupBuilder Implements IImage(Of GroupBuilder).WithImage
             _builder.WithImage(imagePath)
             Return Me

@@ -5,7 +5,7 @@ Imports stdole
 Namespace Containers
 
     Public Class Group
-        Inherits RibbonElement
+        Inherits Container(Of RibbonElement)
         Implements ILabel
         Implements IVisible
         Implements IKeyTip
@@ -15,13 +15,11 @@ Namespace Containers
         Implements IEnumerable(Of RibbonElement)
 
         Private ReadOnly _attributes As AttributeSet
-        Private ReadOnly _controls As IEnumerable(Of RibbonElement)
 
-        Friend Sub New(controls As IEnumerable(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
-            MyBase.New(tag)
+        Friend Sub New(controls As ICollection(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(controls, tag)
             _attributes = attributes
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
-            _controls = controls
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -32,7 +30,7 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, _controls), $"</group>")
+                Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, Items), $"</group>")
             End Get
         End Property
 
@@ -42,7 +40,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
-                
             End Set
         End Property
 
@@ -52,7 +49,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-                
             End Set
         End Property
 
@@ -92,13 +88,6 @@ Namespace Containers
             End Set
         End Property
 
-        Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return _controls.GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return DirectCast(_controls, IEnumerable).GetEnumerator()
-        End Function
-
     End Class
+
 End Namespace

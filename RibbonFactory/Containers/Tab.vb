@@ -5,19 +5,16 @@ Imports RibbonFactory.RibbonAttributes
 Namespace Containers
 
     Public NotInheritable Class Tab
-        Inherits RibbonElement
-        Implements IEnumerable(Of RibbonElement)
+        Inherits Container(Of Group)
         Implements IVisible
         Implements IKeyTip
         Implements ILabel
 
         Private ReadOnly _attributes As AttributeSet
-        Private ReadOnly _groups As IEnumerable(Of Group)
 
-        Friend Sub New(groups As IEnumerable(Of Group), attributes As AttributeSet, Optional tag As Object = Nothing)
-            MyBase.New(tag)
+        Friend Sub New(groups As ICollection(Of Group), attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(groups, tag)
             _attributes = attributes
-            _groups = groups
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
@@ -31,9 +28,17 @@ Namespace Containers
             Get
                 Return _
                     String.Join(Environment.NewLine, $"<tab { _attributes }>",
-                                String.Join(Environment.NewLine, _groups), "</tab>")
+                                String.Join(Environment.NewLine, Items), "</tab>")
             End Get
         End Property
+
+        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
+            results.Add(Me)
+
+            For Each group As Group In Items
+                group.Flatten(results)
+            Next
+        End Sub
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
@@ -61,14 +66,6 @@ Namespace Containers
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
             End Set
         End Property
-
-        Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return _groups.GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return _groups.GetEnumerator()
-        End Function
 
     End Class
 End NameSpace

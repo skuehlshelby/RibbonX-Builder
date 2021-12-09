@@ -128,6 +128,7 @@
     <Compile Include="Builders\EditBoxBuilder.vb" />
     <Compile Include="Builders\GalleryBuilder.vb" />
     <Compile Include="Builders\GroupBuilder.vb" />
+    <Compile Include="Builders\ItemBuilder.vb" />
     <Compile Include="Builders\LabelControlBuilder.vb" />
     <Compile Include="Builders\MenuBuilder.vb" />
     <Compile Include="Builders\RibbonBuilder.vb" />

@@ -6,8 +6,7 @@ Imports stdole
 Namespace Containers
 
     Public NotInheritable Class Menu
-        Inherits RibbonElement
-        Implements IEnumerable(Of RibbonElement)
+        Inherits Container(Of RibbonElement)
         Implements IVisible
         Implements IEnabled
         Implements ILabel
@@ -22,13 +21,11 @@ Namespace Containers
         Implements IItemSize
 
         Private ReadOnly _attributes As AttributeSet
-        Private ReadOnly _items As IEnumerable(Of RibbonElement)
 
-        Friend Sub New(items As IEnumerable(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
-            MyBase.New(tag)
+        Friend Sub New(items As ICollection(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(items, tag)
             _attributes = attributes
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
-            _items = items
         End Sub
 
         Public Overrides ReadOnly Property ID As String
@@ -39,19 +36,9 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Dim items As ICollection(Of String) = New List(Of String)
-
-                For Each item As RibbonElement In _items
-                    If TypeOf item Is ISize Then
-                        items.Add(item.XML.Replace("size=""large""", String.Empty).Replace("size=""normal""", String.Empty))
-                    Else
-                        items.Add(item.XML)
-                    End If
-                Next
-
-                Return _
-                    String.Join(Environment.NewLine, $"<menu { _attributes }>",
-                                String.Join(Environment.NewLine, items), "</menu>")
+                Return String.Join(Environment.NewLine, $"<menu { _attributes }>", String.Join(Environment.NewLine, items), "</menu>").
+                    Replace("size=""large""", String.Empty).
+                    Replace("size=""normal""", String.Empty)
             End Get
         End Property
 
@@ -61,7 +48,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-                
             End Set
         End Property
 
@@ -71,7 +57,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
-                
             End Set
         End Property
 
@@ -81,7 +66,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
-                
             End Set
         End Property
 
@@ -164,13 +148,6 @@ Namespace Containers
             End Set
         End Property
 
-        Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return _items.GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return DirectCast(_items, IEnumerable).GetEnumerator()
-        End Function
     End Class
 
 End Namespace

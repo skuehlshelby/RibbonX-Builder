@@ -170,6 +170,10 @@ Namespace Builders
             _attributeGroupBuilder.AddGetImage(image:= ConvertToIPictureDisplay(image), callback:= callback)
         End Sub
 
+        Public Sub WithImage(image As Icon, callback As FromControl(Of IPictureDisp))
+            _attributeGroupBuilder.AddGetImage(image:= ConvertToIPictureDisplay(image), callback:= callback)
+        End Sub
+
         Public Sub WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp))
             _attributeGroupBuilder.AddGetImage(image:= image, callback:= callback)
         End Sub
@@ -355,6 +359,7 @@ Namespace Builders
         End Sub
 
 #End Region
+
 
     End Class
 

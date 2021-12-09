@@ -37,35 +37,18 @@ Namespace Builders
                         </ribbon>
                     </customUI>"
 
-            Dim flattened As ICollection(Of RibbonElement) = New List(Of RibbonElement)
-            Flatten(_tabs, flattened)
-
-            Return New Ribbon(flattened, ribbonX)
+            Return New Ribbon(Flatten().ToArray(), ribbonX)
         End Function
 
-        Private Shared Sub Flatten(elements As IEnumerable(Of RibbonElement), flattened As ICollection(Of RibbonElement))
-            For Each element As RibbonElement In elements
-                flattened.Add(element)
+        Private Function Flatten() As ICollection(Of RibbonElement)
+            Dim results As ICollection(Of RibbonElement) = New List(Of RibbonElement)
 
-
-                Select Case element.GetType()
-                    Case GetType(DropDown)
-                        Dim dropDown As DropDown = DirectCast(element, DropDown)
-                        Flatten(dropDown, flattened)
-                        Flatten(dropDown.Buttons, flattened)
-                    Case GetType(Gallery)
-                        Dim gallery As Gallery = DirectCast(element, Gallery)
-                        Flatten(gallery, flattened)
-                        Flatten(gallery.Buttons, flattened)
-                    Case Else
-                        Dim ribbonElements As IEnumerable(Of RibbonElement) = TryCast(element, IEnumerable(Of RibbonElement))
-
-                        If ribbonElements IsNot Nothing Then
-                            Flatten(ribbonElements, flattened)
-                        End If
-                End Select
+            For Each tab As Tab In _tabs
+                tab.Flatten(results)
             Next
-        End Sub
+
+            Return results
+        End Function
 
         Public Function StartFromScratch() As RibbonBuilder Implements IStartFromScratch(Of RibbonBuilder).StartFromScratch
             _builder.StartFromScratch()

@@ -129,9 +129,7 @@ Namespace RibbonAttributes
 
         Public Shared ReadOnly Property ItemSupertip As AttributeCategory = New AttributeCategory(27, NameOf(ItemSupertip), AttributeName.GetItemSupertip)
 
-        Public Shared ReadOnly Property SelectedItemId As AttributeCategory = New AttributeCategory(28, NameOf(SelectedItemId), AttributeName.GetSelectedItemID)
-
-        Public Shared ReadOnly Property SelectedItemIndex As AttributeCategory = New AttributeCategory(29, NameOf(SelectedItemIndex), AttributeName.GetSelectedItemIndex)
+        Public Shared ReadOnly Property SelectedItemPosition As AttributeCategory = New AttributeCategory(28, NameOf(SelectedItemPosition), AttributeName.GetSelectedItemIndex, AttributeName.GetSelectedItemID)
 
         Public Shared ReadOnly Property Columns As AttributeCategory = New AttributeCategory(30, NameOf(Columns), AttributeName.Columns)
 

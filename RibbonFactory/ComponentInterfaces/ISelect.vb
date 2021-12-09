@@ -6,7 +6,7 @@ Namespace ComponentInterfaces
 
         Property Selected As Item
 
-        ReadOnly Property SelectedItemIndex As Integer
+        Property SelectedItemIndex As Integer
 
     End Interface
 

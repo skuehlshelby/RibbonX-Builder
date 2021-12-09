@@ -212,11 +212,11 @@ Namespace RibbonAttributes
         End Sub
 
         Public Sub AddGetSelectedItemID(callback As FromControl(Of String))
-            _attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemId))
+            _attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition))
         End Sub
 
         Public Sub AddGetSelectedItemIndex(callback As FromControl(Of Integer))
-            _attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemIndex))
+            _attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
         End Sub
 
         Public Sub AddColumns(numberOfColumns As Integer)
