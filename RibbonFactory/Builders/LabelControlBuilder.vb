@@ -66,11 +66,13 @@ Namespace Builders
 
         Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithLabel
             _builder.WithLabel(label, copyToScreenTip)
+            _builder.ShowLabel()
             Return Me
         End Function
 
         Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As LabelControlBuilder Implements ILabelScreenTipSuperTip(Of LabelControlBuilder).WithLabel
             _builder.WithLabel(label, callback, copyToScreenTip)
+            _builder.ShowLabel()
             Return Me
         End Function
 

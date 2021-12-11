@@ -69,11 +69,13 @@ Namespace Builders
 
         Public Function Invisible(callback As FromControl(Of Boolean)) As EditBoxBuilder Implements IVisible(Of EditBoxBuilder).Invisible
             _builder.Invisible(callback)
+            _builder.ShowLabel()
             Return Me
         End Function
 
         Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As EditBoxBuilder Implements ILabelScreenTipSuperTip(Of EditBoxBuilder).WithLabel
             _builder.WithLabel(label, copyToScreenTip)
+            _builder.ShowLabel()
             Return Me
         End Function
 
