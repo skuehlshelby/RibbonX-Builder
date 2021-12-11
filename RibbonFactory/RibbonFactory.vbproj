@@ -159,6 +159,7 @@
     <Compile Include="Containers\ButtonGroup.vb" />
     <Compile Include="Containers\Group.vb" />
     <Compile Include="Containers\Menu.vb" />
+    <Compile Include="Controls\DialogLauncher.vb" />
     <Compile Include="Controls\MenuSeparator.vb" />
     <Compile Include="Containers\Ribbon.vb" />
     <Compile Include="Controls\Separator.vb" />
