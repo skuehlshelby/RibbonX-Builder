@@ -1,4 +1,5 @@
 ﻿Imports System.Reflection
+Imports RibbonFactory.Utilities
 
 Public MustInherit Class Container(Of TRibbonElement As RibbonElement)
     Inherits RibbonElement

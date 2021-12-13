@@ -1,14 +1,13 @@
 Imports System.Drawing
+Imports System.IO
 Imports System.Reflection
-Imports System.Runtime.ExceptionServices
 Imports System.Runtime.InteropServices
-Imports System.Text
 Imports Extensibility
 Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Builders
-Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.Containers
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
 Imports stdole
 
@@ -20,15 +19,11 @@ Public Class Ribbon
     Implements IRibbonExtensibility
 
     Private ReadOnly _ribbon As Containers.Ribbon
-    Private ReadOnly _displayDebugInfo As Boolean = False
+    Private ReadOnly _extensions As ICollection(Of IDTExtensibility2)
 
     Public Sub New()
-        If _displayDebugInfo Then
-            AddHandler AppDomain.CurrentDomain.UnhandledException, AddressOf OnUnhandledException
-            AddHandler AppDomain.CurrentDomain.FirstChanceException, AddressOf OnExceptionThrown
-        End If
-
         _ribbon = BuildRibbon()
+        _extensions = New IDTExtensibility2() { New Troubleshooter() }
     End Sub
 
     Private Function BuildRibbon() As Containers.Ribbon
@@ -52,8 +47,39 @@ Public Class Ribbon
                 WithLabel("Example Group").
                 Build()
 
+        Dim fileDropDown As Dropdown = New DropdownBuilder().
+                WithScreenTip("Desktop Files").
+                WithSuperTip("The files on your desktop.").
+                WithSize("A DropDown This Big").
+                GetItemCountFrom(AddressOf GetItemCount).
+                GetItemIdFrom(AddressOf GetItemId).
+                GetItemImageFrom(AddressOf GetItemImage).
+                GetItemLabelFrom(AddressOf GetItemLabel).
+                GetItemSuperTipFrom(AddressOf GetItemSuperTip).
+                GetItemScreenTipFrom(AddressOf GetItemScreenTip).
+                GetSelectedItemIdFrom(AddressOf GetSelectedItemId).
+                ThatDoes(Sub() Return, AddressOf OnSelectionChanged).
+                Build()
+
+        Dim dropDownLabel As LabelControl = New LabelControlBuilder().
+                WithLabel("Desktop Files:").
+                ShowLabel().
+                Build()
+
+        Dim launchButton As Button = New ButtonBuilder().
+                WithLabel("Open File").
+                WithSuperTip("Open or launch the selected file/program.").
+                WithImage(Enums.ImageMSO.Common.FileOpen).
+                ThatDoes(AddressOf OnAction, Sub() OpenFile(fileDropDown.Selected.SuperTip)).
+                Build()
+
+        Dim dropDownGroup As Group = New GroupBuilder().
+                WithControl(BoxBuilder.Horizontal(launchButton, BoxBuilder.Vertical(dropDownLabel, fileDropDown))).
+                WithLabel("Desktop Files").
+                Build()
+
         Dim tab As Tab = New TabBuilder().
-                WithGroup(group).
+                WithGroups(group, dropDownGroup).
                 WithLabel("Example Tab").
                 Build()
 
@@ -65,6 +91,44 @@ Public Class Ribbon
 
     Public Function GetCustomUI(RibbonID As String) As String Implements IRibbonExtensibility.GetCustomUI
         Return _ribbon.RibbonX
+    End Function
+
+#Region "Callbacks"
+
+    Public Sub OnSelectionChanged(control As IRibbonControl, selectedId As String, selectedIndex As Integer)
+        _ribbon.GetElement(Of ISelect)(control.Id).SelectedItemIndex = selectedIndex
+    End Sub
+
+    Private Function GetSelectedItemIndex(control As IRibbonControl) As Integer
+        Return _ribbon.GetElement(Of ISelect)(control.Id).SelectedItemIndex
+    End Function
+
+    Public Function GetSelectedItemId(control As IRibbonControl) As String
+        Return _ribbon.GetElement(Of ISelect)(control.Id).Selected.ID
+    End Function
+
+    Public Function GetItemScreenTip(control As IRibbonControl, index As Integer) As String
+        Return _ribbon.GetDropdownItem(control.Id, index).ScreenTip
+    End Function
+
+    Public Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String
+        Return _ribbon.GetDropdownItem(control.Id, index).SuperTip
+    End Function
+
+    Public Function GetItemLabel(control As IRibbonControl, index As Integer) As String
+        Return _ribbon.GetDropdownItem(control.Id, index).Label
+    End Function
+
+    Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp
+        Return _ribbon.GetDropdownItem(control.Id, index).Image
+    End Function
+
+    Public Function GetItemId(control As IRibbonControl, index As Integer) As String
+        Return _ribbon.GetDropdownItem(control.Id, index).ID
+    End Function
+
+    Public Function GetItemCount(control As IRibbonControl) As Integer
+        Return _ribbon.GetElement(Function(c As Container(Of Item)) c.ID.Equals(control.Id)).Count
     End Function
 
     Public Sub OnLoad(ribbon As IRibbonUI)
@@ -79,61 +143,50 @@ Public Class Ribbon
         Return _ribbon.GetElement(Of IImage)(control.Id).Image
     End Function
 
-#Region "Troubleshooting"
-
-    Private Sub OnExceptionThrown(sender As Object, e As FirstChanceExceptionEventArgs)
-        MessageBox(FormatException(e.Exception))
-    End Sub
-
-    Private Sub OnUnhandledException(sender As Object, e As UnhandledExceptionEventArgs)
-        MessageBox(FormatException(e.ExceptionObject))
-    End Sub
+#End Region
 
     Public Sub OnConnection(Application As Object, ConnectMode As ext_ConnectMode, AddInInst As Object, ByRef custom As Array) Implements IDTExtensibility2.OnConnection
-        If _displayDebugInfo Then MessageBox("Connected!")
+        _ribbon.SuspendLayout()
+
+        With _ribbon.GetElement(Function(d As DropDown) True)
+            For Each file As FileInfo In GetFilesOnDesktop()
+                .Add(ConvertFileToDropDownItem(file, AddressOf GetImage))
+            Next
+        End With
+
+        _ribbon.ResumeLayout()
+
+        For Each extension In _extensions
+            extension.OnConnection(Application, ConnectMode, AddInInst, custom)
+        Next
     End Sub
 
     Public Sub OnDisconnection(RemoveMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
-        If _displayDebugInfo Then MessageBox("Disconnected!")
+        For Each extension In _extensions
+            extension.OnDisconnection(RemoveMode, custom)
+        Next
     End Sub
 
     Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
-        If _displayDebugInfo Then MessageBox("Add-Ins Updated!")
+        For Each extension In _extensions
+            extension.OnAddInsUpdate(custom)
+        Next
     End Sub
 
     Public Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
-        If _displayDebugInfo Then MessageBox("Startup Complete!")
+        For Each extension In _extensions
+            extension.OnStartupComplete(custom)
+        Next
     End Sub
 
     Public Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBeginShutdown
-        If _displayDebugInfo Then MessageBox("Shutdown Starting!")
+        For Each extension In _extensions
+            extension.OnBeginShutdown(custom)
+        Next
     End Sub
 
     Private Sub MessageBox(prompt As String)
         MsgBox(prompt, MsgBoxStyle.OkOnly, My.Application.Info.Title)
     End Sub
-
-    Private Function FormatException(e As Exception) As String
-        With New StringBuilder()
-            .AppendLine($"A '{e.GetType().Name}' was thrown in method '{e.TargetSite.Name}'.")
-            .AppendLine()
-            .AppendLine("---------Message----------")
-            .AppendLine(e.Message)
-            .AppendLine()
-            .AppendLine("-------Stack Trace--------")
-            .AppendLine(e.StackTrace)
-
-            If e.Data IsNot Nothing AndAlso e.Data.Count > 0 Then
-                .AppendLine()
-                .AppendLine("----------Data------------")
-                For Each datum As Object In e.Data
-                    .AppendLine(datum.ToString())
-                Next
-            End If
-
-            Return .ToString()
-        End With
-    End Function
-#End Region
 
 End Class

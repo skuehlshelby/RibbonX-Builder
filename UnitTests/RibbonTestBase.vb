@@ -1,8 +1,8 @@
 ﻿Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Builders
-Imports RibbonFactory.ComponentInterfaces
 Imports RibbonFactory.Containers
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
@@ -130,12 +130,12 @@ Public Class RibbonTestBase
         Ribbon.GetElement(Of IOnChange)(control.Id).Execute()
     End Sub
 
-    Public Sub SelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.SelectionChange
+    Public Sub OnSelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.OnSelectionChange
         Ribbon.GetElement(Of ISelect)(control.Id).Selected = Ribbon.GetDropdownItem(control.Id, selectedIndex)
         Ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
 
-    Public Sub ButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.ButtonToggle
+    Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
         With Ribbon.GetElement(Of ToggleButton)(control.Id)
             .Pressed = pressed
 

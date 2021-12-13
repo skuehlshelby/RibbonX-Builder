@@ -249,7 +249,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <EmbeddedResource Include="RibbonX.xsd">
+    <EmbeddedResource Include="Utilities\RibbonX.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

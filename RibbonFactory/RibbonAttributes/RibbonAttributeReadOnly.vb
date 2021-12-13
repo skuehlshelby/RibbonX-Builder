@@ -1,4 +1,6 @@
-﻿Namespace RibbonAttributes
+﻿Imports RibbonFactory.Utilities
+
+Namespace RibbonAttributes
     Friend Class RibbonAttributeReadOnly(Of T)
         Inherits RibbonAttribute
 

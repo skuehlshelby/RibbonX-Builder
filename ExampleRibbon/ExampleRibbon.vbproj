@@ -71,6 +71,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DesktopFilesGroup.vb" />
+    <Compile Include="DropDownDataSource.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -87,6 +89,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Ribbon.vb" />
+    <Compile Include="Troubleshooter.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -124,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\RibbonFactoryExample.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\fart.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

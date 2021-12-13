@@ -1,4 +1,5 @@
 ﻿Imports RibbonFactory
+Imports RibbonFactory.Utilities
 
 <TestClass()> Public Class MenuTests
     Inherits RibbonTestBase

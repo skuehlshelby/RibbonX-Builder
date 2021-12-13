@@ -1,6 +1,7 @@
 ﻿Imports RibbonFactory
 Imports RibbonFactory.Builders
 Imports RibbonFactory.Controls
+Imports RibbonFactory.Utilities
 
 <TestClass()>
 Public Class ButtonTests
