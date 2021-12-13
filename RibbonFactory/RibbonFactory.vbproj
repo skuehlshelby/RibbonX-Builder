@@ -135,25 +135,25 @@
     <Compile Include="Builders\SplitButtonBuilder.vb" />
     <Compile Include="Builders\TabBuilder.vb" />
     <Compile Include="Builders\ToggleButtonBuilder.vb" />
-    <Compile Include="ComponentInterfaces\IItemDimensions.vb" />
-    <Compile Include="ComponentInterfaces\IItemSize.vb" />
-    <Compile Include="ComponentInterfaces\IKeyTip.vb" />
-    <Compile Include="ComponentInterfaces\ILabel.vb" />
-    <Compile Include="ComponentInterfaces\IDescription.vb" />
+    <Compile Include="ControlInterfaces\IItemDimensions.vb" />
+    <Compile Include="ControlInterfaces\IItemSize.vb" />
+    <Compile Include="ControlInterfaces\IKeyTip.vb" />
+    <Compile Include="ControlInterfaces\ILabel.vb" />
+    <Compile Include="ControlInterfaces\IDescription.vb" />
     <Compile Include="Builders\ButtonBuilder.vb" />
-    <Compile Include="Callbacks.vb" />
-    <Compile Include="ComponentInterfaces\IMaxLength.vb" />
-    <Compile Include="ComponentInterfaces\IOnAction.vb" />
-    <Compile Include="ComponentInterfaces\IOnChange.vb" />
-    <Compile Include="ComponentInterfaces\IScreenTip.vb" />
-    <Compile Include="ComponentInterfaces\ISelect.vb" />
-    <Compile Include="ComponentInterfaces\IShowImage.vb" />
-    <Compile Include="ComponentInterfaces\IShowLabel.vb" />
-    <Compile Include="ComponentInterfaces\ISize.vb" />
-    <Compile Include="ComponentInterfaces\ISuperTip.vb" />
-    <Compile Include="ComponentInterfaces\IText.vb" />
-    <Compile Include="ComponentInterfaces\ITitle.vb" />
-    <Compile Include="ComponentInterfaces\IVisible.vb" />
+    <Compile Include="CallbackDelegates.vb" />
+    <Compile Include="ControlInterfaces\IMaxLength.vb" />
+    <Compile Include="ControlInterfaces\IOnAction.vb" />
+    <Compile Include="ControlInterfaces\IOnChange.vb" />
+    <Compile Include="ControlInterfaces\IScreenTip.vb" />
+    <Compile Include="ControlInterfaces\ISelect.vb" />
+    <Compile Include="ControlInterfaces\IShowImage.vb" />
+    <Compile Include="ControlInterfaces\IShowLabel.vb" />
+    <Compile Include="ControlInterfaces\ISize.vb" />
+    <Compile Include="ControlInterfaces\ISuperTip.vb" />
+    <Compile Include="ControlInterfaces\IText.vb" />
+    <Compile Include="ControlInterfaces\ITitle.vb" />
+    <Compile Include="ControlInterfaces\IVisible.vb" />
     <Compile Include="Container.vb" />
     <Compile Include="Containers\Box.vb" />
     <Compile Include="Containers\ButtonGroup.vb" />
@@ -165,10 +165,10 @@
     <Compile Include="Controls\Separator.vb" />
     <Compile Include="Containers\SplitButton.vb" />
     <Compile Include="Containers\Tab.vb" />
-    <Compile Include="ComponentInterfaces\IEnabled.vb" />
-    <Compile Include="ComponentInterfaces\IEditable.vb" />
-    <Compile Include="ComponentInterfaces\IImage.vb" />
-    <Compile Include="ComponentInterfaces\IPressed.vb" />
+    <Compile Include="ControlInterfaces\IEnabled.vb" />
+    <Compile Include="ControlInterfaces\IEditable.vb" />
+    <Compile Include="ControlInterfaces\IImage.vb" />
+    <Compile Include="ControlInterfaces\IPressed.vb" />
     <Compile Include="Controls\Button.vb" />
     <Compile Include="Controls\CheckBox.vb" />
     <Compile Include="Controls\ComboBox.vb" />
@@ -188,12 +188,13 @@
     <Compile Include="Enums\MSO\Excel.vb" />
     <Compile Include="Enums\MSO\MSO.vb" />
     <Compile Include="Enums\MSO\Word.vb" />
-    <Compile Include="ExtensionMethods.vb" />
+    <Compile Include="IRibbonElementSource.vb" />
+    <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
-    <Compile Include="ImageConverter.vb" />
+    <Compile Include="Utilities\ImageConverter.vb" />
     <Compile Include="KeyTip.vb" />
-    <Compile Include="Contracts.vb" />
+    <Compile Include="Utilities\Contracts.vb" />
     <Compile Include="RibbonAttributes\AttributeCategory.vb" />
     <Compile Include="RibbonAttributes\AttributeSet.vb" />
     <Compile Include="RibbonAttributes\AttributeGroupBuilder.vb" />
@@ -222,8 +223,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RibbonErrorLog.vb" />
-    <Compile Include="RibbonExtensions.vb" />
+    <Compile Include="Utilities\RibbonErrorLog.vb" />
+    <Compile Include="Utilities\RibbonExtensions.vb" />
     <Compile Include="ValueChangedEventArgs.vb" />
   </ItemGroup>
   <ItemGroup>

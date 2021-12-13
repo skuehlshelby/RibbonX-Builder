@@ -1,5 +1,4 @@
-﻿Imports System.Diagnostics.Contracts
-Imports RibbonFactory.BuilderInterfaces
+﻿Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums

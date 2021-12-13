@@ -18,6 +18,7 @@ Public Interface ICreateCallbacks
     Function GetScreenTip(control As IRibbonControl) As String
     Function GetSuperTip(control As IRibbonControl) As String
     Function GetSize(control As IRibbonControl) As ControlSize
+    Function GetImage(control As IRibbonControl) As IPictureDisp
     Function GetShowImage(control As IRibbonControl) As Boolean
     Function GetPressed(control As IRibbonControl) As Boolean
     Function GetText(control As IRibbonControl) As String
@@ -33,6 +34,6 @@ Public Interface ICreateCallbacks
     Function GetSelectedItemIndex(control As IRibbonControl) As Integer
     Sub OnAction(control As IRibbonControl)
     Sub OnChange(control As IRibbonControl, text As String)
-    Sub SelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer)
-    Sub ButtonToggle(control As IRibbonControl, pressed As Boolean)
+    Sub OnSelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer)
+    Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean)
 End Interface
