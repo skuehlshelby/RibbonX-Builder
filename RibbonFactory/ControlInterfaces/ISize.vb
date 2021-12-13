@@ -1,4 +1,4 @@
-﻿Namespace ComponentInterfaces
+﻿Namespace ControlInterfaces
     Public Interface ISize
         Property Size As Enums.ControlSize
     End Interface

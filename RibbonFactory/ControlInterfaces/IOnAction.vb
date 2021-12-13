@@ -1,4 +1,4 @@
-﻿Namespace ComponentInterfaces
+﻿Namespace ControlInterfaces
     Public Interface IOnAction
         Sub Execute()
     End Interface

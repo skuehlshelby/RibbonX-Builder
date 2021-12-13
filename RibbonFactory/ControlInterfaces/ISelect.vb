@@ -1,6 +1,6 @@
 ﻿Imports RibbonFactory.Controls
 
-Namespace ComponentInterfaces
+Namespace ControlInterfaces
 
     Public Interface ISelect
 

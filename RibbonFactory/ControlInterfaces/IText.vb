@@ -1,4 +1,4 @@
-﻿Namespace ComponentInterfaces
+﻿Namespace ControlInterfaces
     
     Public Interface IText
         Property Text As String

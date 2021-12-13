@@ -1,4 +1,5 @@
-﻿Imports RibbonFactory.ComponentInterfaces
+﻿
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 Imports stdole

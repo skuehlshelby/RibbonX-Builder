@@ -1,4 +1,4 @@
-﻿Namespace ComponentInterfaces
+﻿Namespace ControlInterfaces
     Public Interface IShowImage
         Property ShowImage As Boolean
     End Interface
