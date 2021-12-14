@@ -1,5 +1,4 @@
-﻿
-Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.Utilities

@@ -3,6 +3,7 @@ Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Utilities
 Imports stdole
 
 Namespace Builders
@@ -167,15 +168,19 @@ Namespace Builders
         End Sub
 
         Public Sub WithImage(image As BitMap, callback As FromControl(Of IPictureDisp))
-            _attributeGroupBuilder.AddGetImage(image:= ConvertToIPictureDisplay(image), callback:= callback)
+            _attributeGroupBuilder.AddGetImage(image:= New AdapterForIPicture(image), callback:= callback)
         End Sub
 
         Public Sub WithImage(image As Icon, callback As FromControl(Of IPictureDisp))
-            _attributeGroupBuilder.AddGetImage(image:= ConvertToIPictureDisplay(image), callback:= callback)
+            _attributeGroupBuilder.AddGetImage(image:= New AdapterForIPicture(image), callback:= callback)
         End Sub
 
-        Public Sub WithImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp))
-            _attributeGroupBuilder.AddGetImage(image:= image, callback:= callback)
+        Public Sub WithItemImage(image As BitMap)
+            _attributeGroupBuilder.AddItemImage(image:= New AdapterForIPicture(image))
+        End Sub
+
+        Public Sub WithItemImage(image As Icon)
+            _attributeGroupBuilder.AddItemImage(image:= New AdapterForIPicture(image))
         End Sub
 
         Public Sub ShowImage()

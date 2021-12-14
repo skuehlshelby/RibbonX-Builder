@@ -6,10 +6,11 @@ Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Utilities
 Imports stdole
 
 Namespace Builders
-    Public Class MenuBuilder
+    Public NotInheritable Class MenuBuilder
         Implements IInsert(Of MenuBuilder)
         Implements IEnabled(Of MenuBuilder)
         Implements IVisible(Of MenuBuilder)

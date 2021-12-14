@@ -1,7 +1,5 @@
-﻿
-Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
-
 
 Namespace Containers
 

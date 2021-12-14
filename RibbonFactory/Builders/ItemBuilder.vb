@@ -8,7 +8,6 @@ Imports stdole
 Namespace Builders
     Public NotInheritable Class ItemBuilder
         Implements ILabelScreenTipSuperTip(Of ItemBuilder)
-        Implements IImage(Of ItemBuilder)
 
         Private ReadOnly _builder As ControlBuilder
 
@@ -19,8 +18,8 @@ Namespace Builders
             _builder = new ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build() As Item
-            Return New Item(_builder.Build())
+        Public Function Build(Optional tag As Object = Nothing) As Item
+            Return New Item(_builder.Build(), tag)
         End Function
 
         Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As ItemBuilder Implements ILabelScreenTipSuperTip(Of ItemBuilder).WithLabel
@@ -53,23 +52,13 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(imagePath As String) As ItemBuilder Implements IImage(Of ItemBuilder).WithImage
-            _builder.WithImage(imagePath)
+        Public Function WithImage(image As Bitmap) As ItemBuilder
+            _builder.WithItemImage(image)
             Return Me
         End Function
 
-        Public Function WithImage(image As ImageMSO) As ItemBuilder Implements IImage(Of ItemBuilder).WithImage
-            _builder.WithImage(image)
-            Return Me
-        End Function
-
-        Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As ItemBuilder Implements IImage(Of ItemBuilder).WithImage
-            _builder.WithImage(image, callback)
-            Return Me
-        End Function
-
-        Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As ItemBuilder Implements IImage(Of ItemBuilder).WithImage
-            _builder.WithImage(image, callback)
+        Public Function WithImage(image As Icon) As ItemBuilder
+            _builder.WithItemImage(image)
             Return Me
         End Function
     End Class

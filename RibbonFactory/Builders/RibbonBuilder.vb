@@ -77,6 +77,7 @@ Namespace Builders
 
             Return Me
         End Function
+
     End Class
 
 End NameSpace

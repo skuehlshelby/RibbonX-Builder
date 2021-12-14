@@ -54,7 +54,7 @@ Namespace Utilities
                 Public Sub New(input As Drawing.Icon)
                     SizeOfStruct = Marshal.SizeOf(GetType(PICTDESC.Icon))
                     picType = PICTDESC.PicType.Icon
-                    IconHandle = input.ToBitmap().GetHicon()
+                    IconHandle = input.Handle
                     Padding = 0
                     MorePadding = 0
                 End Sub
@@ -62,11 +62,13 @@ Namespace Utilities
         End Class
 
         Public Function ConvertToIPictureDisplay(input As Bitmap) As stdole.IPictureDisp
-            Return OleCreatePictureIndirect(New PICTDESC.Bitmap(input), GetType(stdole.IPictureDisp).GUID, True)
+            Dim bitmap As PICTDESC.Bitmap = New PICTDESC.Bitmap(input)
+            Return OleCreatePictureIndirect(bitmap, GetType(stdole.IPictureDisp).GUID, True)
         End Function
 
         Public Function ConvertToIPictureDisplay(input As Icon) As stdole.IPictureDisp
-            Return OleCreatePictureIndirect(New PICTDESC.Icon(input), GetType(stdole.IPictureDisp).GUID, True)
+            Dim icon As PICTDESC.Icon = New PICTDESC.Icon(input)
+            Return OleCreatePictureIndirect(icon, GetType(stdole.IPictureDisp).GUID, True)
         End Function
     End Module
 End NameSpace

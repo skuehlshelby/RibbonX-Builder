@@ -188,7 +188,6 @@
     <Compile Include="Enums\MSO\Excel.vb" />
     <Compile Include="Enums\MSO\MSO.vb" />
     <Compile Include="Enums\MSO\Word.vb" />
-    <Compile Include="IRibbonElementSource.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
@@ -223,6 +222,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Utilities\AdapterForIPicture.vb" />
     <Compile Include="Utilities\RibbonErrorLog.vb" />
     <Compile Include="Utilities\RibbonExtensions.vb" />
     <Compile Include="ValueChangedEventArgs.vb" />

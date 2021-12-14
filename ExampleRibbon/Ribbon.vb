@@ -1,6 +1,3 @@
-Imports System.Drawing
-Imports System.IO
-Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports Extensibility
 Imports Microsoft.Office.Core
@@ -27,59 +24,8 @@ Public Class Ribbon
     End Sub
 
     Private Function BuildRibbon() As Containers.Ribbon
-
-        Dim piButton As Button = New ButtonBuilder().
-                WithLabel("Calculate Pi", copyToScreenTip:= True).
-                WithSuperTip("So that you too can know the value of Pi.").
-                WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.pi.png")), AddressOf GetImage).
-                ThatDoes(AddressOf OnAction, Sub() MessageBox($"The value of Pi is {Math.PI:#.#####}...")).
-                Build()
-
-        Dim helloButton As Button = New ButtonBuilder().
-                WithLabel("Hello World", copyToScreenTip:= True).
-                WithSuperTip("The classic introductory exercise. Click me!").
-                WithImage(New Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("ExampleRibbon.hello.png")), AddressOf GetImage).
-                ThatDoes(AddressOf OnAction, Sub() MessageBox("Hello World!")).
-                Build()
-
-        Dim group As Group = New GroupBuilder().
-                WithControls(helloButton, piButton).
-                WithLabel("Example Group").
-                Build()
-
-        Dim fileDropDown As Dropdown = New DropdownBuilder().
-                WithScreenTip("Desktop Files").
-                WithSuperTip("The files on your desktop.").
-                WithSize("A DropDown This Big").
-                GetItemCountFrom(AddressOf GetItemCount).
-                GetItemIdFrom(AddressOf GetItemId).
-                GetItemImageFrom(AddressOf GetItemImage).
-                GetItemLabelFrom(AddressOf GetItemLabel).
-                GetItemSuperTipFrom(AddressOf GetItemSuperTip).
-                GetItemScreenTipFrom(AddressOf GetItemScreenTip).
-                GetSelectedItemIdFrom(AddressOf GetSelectedItemId).
-                ThatDoes(Sub() Return, AddressOf OnSelectionChanged).
-                Build()
-
-        Dim dropDownLabel As LabelControl = New LabelControlBuilder().
-                WithLabel("Desktop Files:").
-                ShowLabel().
-                Build()
-
-        Dim launchButton As Button = New ButtonBuilder().
-                WithLabel("Open File").
-                WithSuperTip("Open or launch the selected file/program.").
-                WithImage(Enums.ImageMSO.Common.FileOpen).
-                ThatDoes(AddressOf OnAction, Sub() OpenFile(fileDropDown.Selected.SuperTip)).
-                Build()
-
-        Dim dropDownGroup As Group = New GroupBuilder().
-                WithControl(BoxBuilder.Horizontal(launchButton, BoxBuilder.Vertical(dropDownLabel, fileDropDown))).
-                WithLabel("Desktop Files").
-                Build()
-
         Dim tab As Tab = New TabBuilder().
-                WithGroups(group, dropDownGroup).
+                WithGroups(New ButtonsGroup(Me).AsGroup(), New DesktopFilesGroup(Me).AsGroup()).
                 WithLabel("Example Tab").
                 Build()
 
@@ -99,7 +45,7 @@ Public Class Ribbon
         _ribbon.GetElement(Of ISelect)(control.Id).SelectedItemIndex = selectedIndex
     End Sub
 
-    Private Function GetSelectedItemIndex(control As IRibbonControl) As Integer
+    Public Function GetSelectedItemIndex(control As IRibbonControl) As Integer
         Return _ribbon.GetElement(Of ISelect)(control.Id).SelectedItemIndex
     End Function
 
@@ -146,47 +92,33 @@ Public Class Ribbon
 #End Region
 
     Public Sub OnConnection(Application As Object, ConnectMode As ext_ConnectMode, AddInInst As Object, ByRef custom As Array) Implements IDTExtensibility2.OnConnection
-        _ribbon.SuspendLayout()
-
-        With _ribbon.GetElement(Function(d As DropDown) True)
-            For Each file As FileInfo In GetFilesOnDesktop()
-                .Add(ConvertFileToDropDownItem(file, AddressOf GetImage))
-            Next
-        End With
-
-        _ribbon.ResumeLayout()
-
-        For Each extension In _extensions
+        For Each extension As IDTExtensibility2 In _extensions
             extension.OnConnection(Application, ConnectMode, AddInInst, custom)
         Next
     End Sub
 
     Public Sub OnDisconnection(RemoveMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
-        For Each extension In _extensions
+        For Each extension As IDTExtensibility2 In _extensions
             extension.OnDisconnection(RemoveMode, custom)
         Next
     End Sub
 
     Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
-        For Each extension In _extensions
+        For Each extension As IDTExtensibility2 In _extensions
             extension.OnAddInsUpdate(custom)
         Next
     End Sub
 
     Public Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
-        For Each extension In _extensions
+        For Each extension As IDTExtensibility2 In _extensions
             extension.OnStartupComplete(custom)
         Next
     End Sub
 
     Public Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBeginShutdown
-        For Each extension In _extensions
+        For Each extension As IDTExtensibility2 In _extensions
             extension.OnBeginShutdown(custom)
         Next
-    End Sub
-
-    Private Sub MessageBox(prompt As String)
-        MsgBox(prompt, MsgBoxStyle.OkOnly, My.Application.Info.Title)
     End Sub
 
 End Class

@@ -41,7 +41,7 @@ Friend Class Troubleshooter
     End Sub
 
     Private Shared Sub OnUnhandledException(sender As Object, e As UnhandledExceptionEventArgs)
-        MessageBox(FormatException(e.ExceptionObject))
+        MessageBox(FormatException(CType(e.ExceptionObject, Exception)))
     End Sub
 
     Private Shared Function FormatException(e As Exception) As String

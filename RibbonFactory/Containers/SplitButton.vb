@@ -19,8 +19,8 @@ Namespace Containers
         
         Friend Sub New(button As RibbonElement, menu As Menu, attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
-            Require(Of ArgumentNullException)(button IsNot Nothing, $"Split buttons must be initialized with either a button or a toggle-button.")
-            Require(Of ArgumentNullException)(menu IsNot Nothing, $"Split buttons must be initialized with a valid menu.")
+            Utilities.Require(Of ArgumentNullException)(button IsNot Nothing, $"Split buttons must be initialized with either a button or a toggle-button.")
+            Utilities.Require(Of ArgumentNullException)(menu IsNot Nothing, $"Split buttons must be initialized with a valid menu.")
 
             Me.Button = button
             Me.Menu = menu

@@ -62,7 +62,7 @@ Public MustInherit Class Container(Of TRibbonElement As RibbonElement)
         Return Items.Contains(item)
     End Function
 
-    Public Overridable Function Remove(item As TRibbonElement) As Boolean Implements ICollection(Of TRibbonElement).Remove
+    Public Overridable Overloads Function Remove(item As TRibbonElement) As Boolean Implements ICollection(Of TRibbonElement).Remove
         If Items.Remove(item) Then
             RefreshNeeded()
             Return True
@@ -70,6 +70,31 @@ Public MustInherit Class Container(Of TRibbonElement As RibbonElement)
             Return False
         End If
     End Function
+
+    Public Overridable Overloads Function Remove(selector As Func(Of TRibbonElement, Boolean)) As Boolean
+        If Items.Any(selector) Then
+            Items.Remove(Items.Single(selector))
+            RefreshNeeded()
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Overridable Overloads Sub Replace(original As TRibbonElement, replacement As TRibbonElement)
+        If Items.Remove(original) Then
+            Items.Add(replacement)
+            RefreshNeeded()
+        End If
+    End Sub
+
+    Public Overridable Overloads Sub Replace(selector As Func(Of TRibbonElement, Boolean), replacement As TRibbonElement)
+        If Items.Any(selector) Then
+            Items.Remove(Items.Single(selector))
+            Items.Add(replacement)
+            RefreshNeeded()
+        End If
+    End Sub
 
     Public Overridable Function GetEnumerator() As IEnumerator(Of TRibbonElement) Implements IEnumerable(Of TRibbonElement).GetEnumerator
         Return Items.GetEnumerator()

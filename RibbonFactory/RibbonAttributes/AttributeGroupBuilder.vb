@@ -115,6 +115,8 @@ Namespace RibbonAttributes
             _attributes.Add(New RibbonAttributeReadWrite(Of KeyTip)(keyTip, callback.Method.Name, AttributeName.GetKeytip, AttributeCategory.KeyTip))
         End Sub
 
+#Region "Images"
+
         Public Sub AddImage(path As String)
             _attributes.Add(New RibbonAttributeReadOnly(Of String)(path, AttributeName.Image, AttributeCategory.Image))
         End Sub
@@ -126,6 +128,14 @@ Namespace RibbonAttributes
         Public Sub AddGetImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp))
             _attributes.Add(New RibbonAttributeReadWrite(Of IPictureDisp)(image, callback.Method.Name, AttributeName.GetImage, AttributeCategory.Image))
         End Sub
+
+        Public Sub AddItemImage(image As IPictureDisp)
+            _attributes.Add(New RibbonAttributeReadWrite(Of IPictureDisp)(image, String.Empty, AttributeName.GetImage, AttributeCategory.Image))
+        End Sub
+
+#End Region
+
+
 
         Public Sub AddShowImage(showImage As Boolean)
             _attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(showImage, AttributeName.ShowImage, AttributeCategory.ImageVisibility))
