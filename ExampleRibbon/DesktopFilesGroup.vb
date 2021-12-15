@@ -41,6 +41,7 @@ Public Class DesktopFilesGroup
         Next
 
         _openButton = New ButtonBuilder().
+            Normal().
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
             WithImage(Enums.ImageMSO.Common.FileOpen).
@@ -62,7 +63,10 @@ Public Class DesktopFilesGroup
             Case WatcherChangeTypes.Renamed
                 For Each item As Item In _dropDown
                     If Not DirectCast(item.Tag, FileInfo).Exists Then
-                        _dropDown.Replace(item, ConvertFileToDropDownItem(New FileInfo(e.FullPath)))
+                        With item
+                            .Label = e.Name
+                            .SuperTip = e.FullPath
+                        End With
                         Exit For
                     End If
                 Next
@@ -70,13 +74,8 @@ Public Class DesktopFilesGroup
     End Sub
 
     Public Function AsGroup() As Group
-        Dim dropDownLabel As LabelControl = New LabelControlBuilder().
-                WithLabel("Desktop Files:").
-                ShowLabel().
-                Build()
-
         Return New GroupBuilder().
-                WithControl(BoxBuilder.Horizontal(_openButton, BoxBuilder.Vertical(dropDownLabel, _dropDown))).
+                WithControl(BoxBuilder.Horizontal(_openButton,  _dropDown)).
                 WithLabel("Desktop Files").
                 Build()
     End Function
