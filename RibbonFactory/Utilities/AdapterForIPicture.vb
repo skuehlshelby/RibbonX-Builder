@@ -11,7 +11,6 @@ Namespace Utilities
 
         Private _image As Bitmap
         Private _handle As IntPtr
-        Private _disposedValue As Boolean
 
         <DllImport("gdi32.dll")>
         Private Shared Sub DeleteObject(handle As IntPtr)
@@ -106,31 +105,27 @@ Namespace Utilities
             End Get
         End Property
 
-        Protected Overridable Sub Dispose(disposing As Boolean)
-            If Not _disposedValue Then
-                If disposing Then
+        Protected Overridable Sub Dispose(itIsSafeToFreeManagedResources As Boolean)
+            If itIsSafeToFreeManagedResources Then
+                If _image IsNot Nothing Then
                     _image.Dispose()
+                    _image = Nothing
                 End If
+            End If
 
-                If _handle <> IntPtr.Zero Then
-                    DeleteObject(_handle)
-                End If
-            
-                _image = Nothing
+            If _handle <> IntPtr.Zero Then
+                DeleteObject(_handle)
                 _handle = Nothing
-                _disposedValue = True
             End If
         End Sub
 
         Protected Overrides Sub Finalize()
-            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
-            Dispose(disposing:=False)
+            Dispose(itIsSafeToFreeManagedResources:= False)
             MyBase.Finalize()
         End Sub
 
         Public Sub Dispose() Implements IDisposable.Dispose
-            ' Do not change this code. Put cleanup code in 'Dispose(disposing As Boolean)' method
-            Dispose(disposing:=True)
+            Dispose(itIsSafeToFreeManagedResources:= True)
             GC.SuppressFinalize(Me)
         End Sub
     End Class
