@@ -4,7 +4,7 @@
 
         Private ReadOnly _button As Button
 
-        Friend Sub New(button As Button)
+        Public Sub New(button As Button)
             _button = button
         End Sub
 
