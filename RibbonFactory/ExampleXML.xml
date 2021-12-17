@@ -5,6 +5,7 @@
     <tabs>
       <tab>
         <group >
+          <button idMso="test" description="test"></button>
           <gallery >
             <item />
             <button />

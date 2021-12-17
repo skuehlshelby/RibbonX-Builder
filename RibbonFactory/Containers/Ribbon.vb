@@ -6,14 +6,12 @@ Namespace Containers
     Public NotInheritable Class Ribbon
         Implements IRibbonUI
         Private _ribbon As IRibbonUI
-        Private _layoutIsSuspended As Boolean
         Private ReadOnly _elements As IDictionary(Of String, RibbonElement)
 
 #Region "Initialization"
 
         Friend Sub New(elements As IEnumerable(Of RibbonElement), ribbonX As String)
             _elements = elements.ToDictionary(Function(element) element.ID)
-            _layoutIsSuspended = False
             RegisterEvents(_elements.Values)
             Me.RibbonX = ribbonX
         End Sub
@@ -25,9 +23,7 @@ Namespace Containers
         End Sub
 
         Private Sub HandleValueChanged(sender As Object, e As ValueChangedEventArgs)
-            If Not _layoutIsSuspended Then
-                _ribbon.InvalidateControl(e.ID)
-            End If
+            _ribbon.InvalidateControl(e.ID)
         End Sub
 
 #End Region
@@ -52,17 +48,13 @@ Namespace Containers
             Return CType(CType(GetElement(id), Object), TInterface)
         End Function
 
-        Public Function GetDropdownItem(parentId As String, index As Integer) As Item
-            Return GetElement(Of Dropdown)(parentId).ElementAt(index)
+        Public Function GetContainer(Of TRibbonElement As RibbonElement)(id As String) As Container(Of TRibbonElement)
+            Return CType(GetElement(id), Container(Of TRibbonElement))
         End Function
 
-        Public Sub SuspendLayout()
-            _layoutIsSuspended = True
-        End Sub
-
-        Public Sub ResumeLayout()
-            _layoutIsSuspended = False
-        End Sub
+        Public Function GetContainerItem(parentId As String, index As Integer) As Item
+            Return GetContainer(Of Item)(parentId)(index)
+        End Function
 
         Public Sub RefreshAll() Implements IRibbonUI.Invalidate
             _ribbon.Invalidate()

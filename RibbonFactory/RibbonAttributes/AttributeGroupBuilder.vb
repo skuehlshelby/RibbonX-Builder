@@ -36,7 +36,7 @@ Namespace RibbonAttributes
         End Sub
 
         Public Sub AddIdMso(idMso As MSO)
-            _attributes.Add(New RibbonAttributeReadOnly(Of MSO)(idMso, AttributeName.IdMso, AttributeCategory.IdType))
+            _attributes.Add(New RibbonAttributeReadOnly(Of String)(idMso.ToString(), AttributeName.IdMso, AttributeCategory.IdType))
         End Sub
 
         Public Sub AddIdQ([namespace] As String, id As String)

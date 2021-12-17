@@ -1,10 +1,10 @@
 ﻿Namespace BuilderInterfaces
 
-    Public Interface IBoxStyle(Of T)
+    Public Interface IBoxStyle(Of Out TBuilder)
 
-        Function Horizontal() As T
+        Function Horizontal() As TBuilder
 
-        Function Vertical() As T
+        Function Vertical() As TBuilder
 
     End Interface
 

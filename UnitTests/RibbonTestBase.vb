@@ -94,23 +94,23 @@ Public Class RibbonTestBase
     End Function
 
     Public Function GetItemID(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemID
-        Return Ribbon.GetDropdownItem(control.Id, index).ID
+        Return Ribbon.GetContainerItem(control.Id, index).ID
     End Function
 
     Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp Implements ICreateCallbacks.GetItemImage
-        Return Ribbon.GetDropdownItem(control.Id, index).Image
+        Return Ribbon.GetContainerItem(control.Id, index).Image
     End Function
 
     Public Function GetItemLabel(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemLabel
-        Return Ribbon.GetDropdownItem(control.Id, index).Label
+        Return Ribbon.GetContainerItem(control.Id, index).Label
     End Function
 
     Public Function GetItemScreenTip(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemScreenTip
-        Return Ribbon.GetDropdownItem(control.Id, index).ScreenTip
+        Return Ribbon.GetContainerItem(control.Id, index).ScreenTip
     End Function
 
     Public Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemSuperTip
-        Return Ribbon.GetDropdownItem(control.Id, index).SuperTip
+        Return Ribbon.GetContainerItem(control.Id, index).SuperTip
     End Function
 
     Public Function GetSelectedItemID(control As IRibbonControl) As String Implements ICreateCallbacks.GetSelectedItemID
@@ -131,7 +131,7 @@ Public Class RibbonTestBase
     End Sub
 
     Public Sub OnSelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.OnSelectionChange
-        Ribbon.GetElement(Of ISelect)(control.Id).Selected = Ribbon.GetDropdownItem(control.Id, selectedIndex)
+        Ribbon.GetElement(Of ISelect)(control.Id).Selected = Ribbon.GetContainerItem(control.Id, selectedIndex)
         Ribbon.GetElement(Of IOnAction)(control.Id).Execute()
     End Sub
 

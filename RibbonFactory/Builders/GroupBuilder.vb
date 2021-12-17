@@ -8,6 +8,7 @@ Imports stdole
 
 Namespace Builders
     Public NotInheritable Class GroupBuilder
+        Implements IID(Of GroupBuilder)
         Implements IInsert(Of GroupBuilder)
         Implements IVisible(Of GroupBuilder)
         Implements ILabelScreenTipSuperTip(Of GroupBuilder)
@@ -27,6 +28,21 @@ Namespace Builders
 
         Public Function Build(Optional tag As Object = Nothing) As Group
             Return New Group(_controls, _builder.Build(), tag)
+        End Function
+
+        Public Function WithId(id As String) As GroupBuilder Implements IID(Of GroupBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As GroupBuilder Implements IID(Of GroupBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As GroupBuilder Implements IID(Of GroupBuilder).WithIdMso
+            _builder.WithId(mso)
+            Return Me
         End Function
 
         Public Function Visible() As GroupBuilder Implements IVisible(Of GroupBuilder).Visible
@@ -143,4 +159,5 @@ Namespace Builders
         End Function
 
     End Class
+
 End NameSpace

@@ -9,6 +9,7 @@ Imports stdole
 
 Namespace Builders
     Public NotInheritable Class ButtonBuilder
+        Implements IID(Of ButtonBuilder)
         Implements IEnabled(Of ButtonBuilder)
         Implements IVisible(Of ButtonBuilder)
         Implements ILabelScreenTipSuperTip(Of ButtonBuilder)
@@ -32,6 +33,21 @@ Namespace Builders
 
         Public Function Build(Optional tag As Object = Nothing) As Button
             Return New Button(_builder.Build(), tag)
+        End Function
+
+        Public Function WithId(id As String) As ButtonBuilder Implements IID(Of ButtonBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As ButtonBuilder Implements IID(Of ButtonBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As ButtonBuilder Implements IID(Of ButtonBuilder).WithIdMso
+            _builder.WithId(mso)
+            Return Me
         End Function
 
         Public Function Enabled() As ButtonBuilder Implements IEnabled(Of ButtonBuilder).Enabled
@@ -126,7 +142,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(callback As OnAction, action As Action) As ButtonBuilder Implements IOnActionClick(Of ButtonBuilder).ThatDoes
+        Public Function ThatDoes(action As Action, callback As OnAction) As ButtonBuilder Implements IOnActionClick(Of ButtonBuilder).ThatDoes
             _builder.ThatDoes(action, callback)
             Return Me
         End Function

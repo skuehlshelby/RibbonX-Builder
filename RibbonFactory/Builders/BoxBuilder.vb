@@ -5,6 +5,7 @@ Imports RibbonFactory.RibbonAttributes
 Namespace Builders
 
     Public NotInheritable Class BoxBuilder
+        Implements IBuilder(Of Box)
         Implements IBoxStyle(Of BoxBuilder)
         Implements IVisible(Of BoxBuilder)
 
@@ -19,7 +20,7 @@ Namespace Builders
             _items = New List(Of RibbonElement)
         End Sub
 
-        Public Function Build(tag As Object) As Box
+        Public Function Build(Optional tag As Object = Nothing) As Box Implements IBuilder(Of Box).Build
             Return New Box(_builder.Build(), _items.ToArray(), tag)
         End Function
 
@@ -74,7 +75,7 @@ Namespace Builders
                 .WithItems(items) _
                 .Build(tag:= Nothing)
         End Function
-        
+
     End Class
     
 End NameSpace

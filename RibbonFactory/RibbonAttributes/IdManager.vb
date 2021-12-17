@@ -1,7 +1,7 @@
 ﻿
 Namespace RibbonAttributes
 
-    Friend NotInheritable Class IdManager
+    Public NotInheritable Class IdManager
         Private Shared ReadOnly ControlIDs As IDictionary(Of Type, Integer) = New Dictionary(Of Type, Integer)
 
         Private Sub New()

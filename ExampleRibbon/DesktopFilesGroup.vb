@@ -1,5 +1,4 @@
-﻿Imports System.Collections.ObjectModel
-Imports System.Drawing
+﻿Imports System.Drawing
 Imports System.IO
 Imports RibbonFactory
 Imports RibbonFactory.Builders
@@ -12,7 +11,7 @@ Public Class DesktopFilesGroup
     Private ReadOnly _openButton As Button
     Private Readonly _fileWatcher As FileSystemWatcher
 
-    Public Sub New(ribbon As Ribbon)
+    Public Sub New(ribbon As ICreateCallbacks)
         _fileWatcher = New FileSystemWatcher(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
         
         With _fileWatcher
@@ -33,7 +32,7 @@ Public Class DesktopFilesGroup
             GetItemSuperTipFrom(AddressOf ribbon.GetItemSuperTip).
             GetItemScreenTipFrom(AddressOf ribbon.GetItemScreenTip).
             GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex).
-            ThatDoes(Sub() Return, AddressOf ribbon.OnSelectionChanged).
+            ThatDoes(Sub() Return, AddressOf ribbon.OnSelectionChange).
             Build()
 
         For Each file As FileInfo In GetFilesOnDesktop()
@@ -45,7 +44,7 @@ Public Class DesktopFilesGroup
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
             WithImage(Enums.ImageMSO.Common.FileOpen).
-            ThatDoes(AddressOf ribbon.OnAction, Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName)).
+            ThatDoes(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName), AddressOf ribbon.OnAction).
             Build()
     End Sub
 
@@ -64,8 +63,11 @@ Public Class DesktopFilesGroup
                 For Each item As Item In _dropDown
                     If Not DirectCast(item.Tag, FileInfo).Exists Then
                         With item
+                            .SuspendAutomaticRefreshing()
                             .Label = e.Name
+                            .ScreenTip = e.Name
                             .SuperTip = e.FullPath
+                            .ResumeAutomaticRefreshing()
                         End With
                         Exit For
                     End If
@@ -81,13 +83,9 @@ Public Class DesktopFilesGroup
     End Function
 
     Private Shared Function GetFilesOnDesktop() As IEnumerable(Of FileInfo)
-        Dim results As ICollection(Of FileInfo) = New Collection(Of FileInfo)
-
-        For Each path As String In Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
-            results.Add(New FileInfo(path))
-        Next
-
-        Return results
+        Return Directory.
+            GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)).
+            Select(Function(filePath) New FileInfo(filePath))
     End Function
 
     Private Shared Function ConvertFileToDropDownItem(filePath As String) As Item

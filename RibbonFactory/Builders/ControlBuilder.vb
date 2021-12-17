@@ -25,6 +25,18 @@ Namespace Builders
             Return _attributeGroupBuilder.Build()
         End Function
 
+        Public Sub WithId(id As String)
+            _attributeGroupBuilder.AddID(id)
+        End Sub
+
+        Public Sub WithId([namespace] As String, id As String)
+            _attributeGroupBuilder.AddIdQ([namespace], id)
+        End Sub
+
+        Public Sub WithId(mso As MSO)
+            _attributeGroupBuilder.AddIdMso(mso)
+        End Sub
+
         Public Sub Enabled()
             _attributeGroupBuilder.AddEnabled(enabled:= True)
         End Sub

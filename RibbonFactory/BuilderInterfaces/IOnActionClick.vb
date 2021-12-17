@@ -2,7 +2,7 @@
 
     Public Interface IOnActionClick(Of T)
 
-        Function ThatDoes(callback As OnAction, action As Action) As T
+        Function ThatDoes(action As Action, callback As OnAction) As T
 
     End Interface
 

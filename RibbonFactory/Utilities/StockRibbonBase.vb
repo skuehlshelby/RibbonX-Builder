@@ -1,12 +1,15 @@
-﻿Imports Extensibility
+﻿Imports System.Runtime.InteropServices
+Imports Extensibility
 Imports Microsoft.Office.Core
 Imports RibbonFactory.Containers
 Imports RibbonFactory.ControlInterfaces
+Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports stdole
 
 Namespace Utilities
 
+    <ComVisible(True)>
     Public MustInherit Class StockRibbonBase
         Implements IDTExtensibility2
         Implements IRibbonExtensibility
@@ -17,10 +20,12 @@ Namespace Utilities
         Protected ReadOnly ImageCache As IDictionary(Of String, IPictureDisp) = New Dictionary(Of String, IPictureDisp)
         Protected HostApp As Object
 
-        Protected Sub New(ribbon As Ribbon, ParamArray extensions() As IDTExtensibility2)
-            Me.Ribbon = ribbon
+        Protected Sub New(ParamArray extensions() As IDTExtensibility2)
+            Ribbon = BuildRibbon()
             Me.Extensions = extensions
         End Sub
+
+        Protected MustOverride Function BuildRibbon() As Ribbon
 
         Public Function GetCustomUI(ribbonID As String) As String Implements IRibbonExtensibility.GetCustomUI
             Return Ribbon.RibbonX
@@ -38,7 +43,7 @@ Namespace Utilities
 
         Public Sub OnDisconnection(removeMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
             For Each extension As IDTExtensibility2 In Extensions
-                extension.OnBeginShutdown(custom)
+                extension.OnDisconnection(removeMode, custom)
             Next
         End Sub
 
@@ -121,27 +126,27 @@ Namespace Utilities
         End Function
 
         Public Function GetItemCount(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemCount
-            Return Ribbon.GetElement(Of Container(Of RibbonElement))(control.Id).Count
+            Return Ribbon.GetContainer(Of Item)(control.Id).Count
         End Function
 
         Public Function GetItemID(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemID
-            Return Ribbon.GetDropdownItem(control.Id, index).ID
+            Return Ribbon.GetContainerItem(control.Id, index).ID
         End Function
 
         Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp Implements ICreateCallbacks.GetItemImage
-            Return Ribbon.GetDropdownItem(control.Id, index).Image
+            Return Ribbon.GetContainerItem(control.Id, index).Image
         End Function
 
         Public Function GetItemLabel(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemLabel
-            Return Ribbon.GetDropdownItem(control.Id, index).Label
+            Return Ribbon.GetContainerItem(control.Id, index).Label
         End Function
 
         Public Function GetItemScreenTip(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemScreenTip
-            Return Ribbon.GetDropdownItem(control.Id, index).ScreenTip
+            Return Ribbon.GetContainerItem(control.Id, index).ScreenTip
         End Function
 
         Public Function GetItemSuperTip(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemSuperTip
-            Return Ribbon.GetDropdownItem(control.Id, index).SuperTip
+            Return Ribbon.GetContainerItem(control.Id, index).SuperTip
         End Function
 
         Public Function GetItemHeight(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemHeight

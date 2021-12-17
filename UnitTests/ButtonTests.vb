@@ -15,7 +15,7 @@ Public Class ButtonTests
                 .InsertAfterMSO(Enums.MSO.Excel.Calculator) _
                 .WithKeyTip("Z3") _
                 .Disabled(AddressOf GetEnabled) _
-                .ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")) _
+                .ThatDoes(Sub() MsgBox("Hello World!"), AddressOf OnAction) _
                 .Build()
 
         Dim errors As RibbonErrorLog = GetErrors(MakeRibbonWithOneTabAndOneGroup(button).RibbonX)
@@ -31,7 +31,7 @@ Public Class ButtonTests
                 .InsertAfterMSO(Enums.MSO.Excel.Calculator) _
                 .WithKeyTip("Z4") _
                 .Disabled(AddressOf GetEnabled) _
-                .ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")) _
+                .ThatDoes(Sub() MsgBox("Hello World!"), AddressOf OnAction) _
                 .Build()
 
         Dim buttonTwo As Button = New ButtonBuilder() _
@@ -40,7 +40,7 @@ Public Class ButtonTests
                 .InsertAfterMSO(Enums.MSO.Excel.Calculator) _
                 .WithKeyTip("Z5") _
                 .Disabled(AddressOf GetEnabled) _
-                .ThatDoes(AddressOf OnAction, Sub() MsgBox("Hello World!")) _
+                .ThatDoes(Sub() MsgBox("Hello World!"), AddressOf OnAction) _
                 .Build()
 
         Dim errors As RibbonErrorLog = GetErrors(MakeRibbonWithOneTabAndOneGroup(button, buttonTwo).RibbonX)
@@ -52,7 +52,7 @@ Public Class ButtonTests
     Public Sub ActionExecutes()
         Dim button As Button = New ButtonBuilder() _
                 .WithLabel("Before Click", AddressOf GetLabel) _
-                .ThatDoes(AddressOf OnAction, Sub() button.Label = "After Click") _
+                .ThatDoes(Sub() button.Label = "After Click", AddressOf OnAction) _
                 .Build()
 
         Ribbon = MakeRibbonWithOneTabAndOneGroup(button)

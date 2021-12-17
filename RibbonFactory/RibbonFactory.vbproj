@@ -86,8 +86,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuilderInterfaces\IAddButton.vb" />
+    <Compile Include="BuilderInterfaces\IBuilder.vb" />
     <Compile Include="BuilderInterfaces\IGetPressed.vb" />
     <Compile Include="BuilderInterfaces\IGetText.vb" />
+    <Compile Include="BuilderInterfaces\IID.vb" />
     <Compile Include="BuilderInterfaces\IInvalidateContentOnDrop.vb" />
     <Compile Include="BuilderInterfaces\IItemDimensions.vb" />
     <Compile Include="BuilderInterfaces\IItemSize.vb" />
@@ -191,6 +193,7 @@
     <Compile Include="Enums\MSO\Excel.vb" />
     <Compile Include="Enums\MSO\MSO.vb" />
     <Compile Include="Enums\MSO\Word.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeDefault.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
@@ -201,7 +204,6 @@
     <Compile Include="RibbonAttributes\AttributeSet.vb" />
     <Compile Include="RibbonAttributes\AttributeGroupBuilder.vb" />
     <Compile Include="RibbonAttributes\AttributeName.vb" />
-    <Compile Include="RibbonAttributes\DefaultProviderDropDownItem.vb" />
     <Compile Include="RibbonAttributes\DefaultProviderRibbon.vb" />
     <Compile Include="RibbonAttributes\DefaultProvider.vb" />
     <Compile Include="RibbonAttributes\IDefaultProvider.vb" />
