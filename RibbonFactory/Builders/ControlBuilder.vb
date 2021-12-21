@@ -22,7 +22,19 @@ Namespace Builders
         End Sub
 
         Public Function Build() As AttributeSet
+            If IsBuiltInControl() Then
+                Require(Of InvalidOperationException)(
+                    _attributeGroupBuilder.Except(
+                        _attributeGroupBuilder.Where(Function(a) a.IsNamed(AttributeName.IdMso))).All(
+                            Function(a) a.GetType().IsDerivedFromGenericType(GetType(RibbonAttributeDefault(Of )))), 
+                    "If the IdMso attribute is specified, no other attributes may be specified.")
+            End If
+            
             Return _attributeGroupBuilder.Build()
+        End Function
+
+        Public Function IsBuiltInControl() As Boolean
+            Return _attributeGroupBuilder.Any(Function(a) a.IsNamed(AttributeName.IdMso))
         End Function
 
         Public Sub WithId(id As String)

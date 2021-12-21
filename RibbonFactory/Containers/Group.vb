@@ -31,7 +31,11 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, Items), $"</group>")
+                If Items.Any() Then
+                    Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, Items), $"</group>")
+                Else
+                    Return $"<group { _attributes } />"
+                End If
             End Get
         End Property
 

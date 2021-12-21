@@ -11,7 +11,7 @@ Public Class DropDown
     Public Sub Builds()
         Dim dropDown As Containers.DropDown =
                 New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
-                    "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithSize(New String("l"c, 50)).HideImage().GetItemIdFrom(
+                    "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).AsWideAs(New String("l"c, 50)).HideImage().GetItemIdFrom(
                         AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
                             AddressOf GetItemImage).GetItemLabelFrom(AddressOf GetItemLabel).GetItemScreenTipFrom(
                                 AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(
@@ -27,7 +27,7 @@ Public Class DropDown
     Public Sub BuildWithAsManyAttributesAsPossible()
         Dim dropDown As Containers.DropDown =
                 New DropDownBuilder().WithLabel("Dropdown One").WithScreenTip(
-                    "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).WithSize(New String("l"c, 50)).HideImage().GetItemIdFrom(
+                    "A super cool dropdown. Tell your friends.", AddressOf GetScreenTip).AsWideAs(New String("l"c, 50)).HideImage().GetItemIdFrom(
                         AddressOf GetItemID).GetItemCountFrom(AddressOf GetItemCount).GetItemImageFrom(
                             AddressOf GetItemImage).GetItemLabelFrom(AddressOf GetItemLabel).GetItemScreenTipFrom(
                                 AddressOf GetItemScreenTip).GetItemSuperTipFrom(AddressOf GetItemSuperTip).Enabled(

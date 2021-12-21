@@ -7,8 +7,7 @@ Imports RibbonFactory.RibbonAttributes
 Namespace Containers
     
     Public NotInheritable Class SplitButton
-        Inherits RibbonElement
-        Implements IEnumerable(Of RibbonElement)
+        Inherits Container(Of RibbonElement)
         Implements IVisible
         Implements IEnabled
         Implements IKeyTip
@@ -17,13 +16,16 @@ Namespace Containers
         
         Private ReadOnly _attributes As AttributeSet
         
-        Friend Sub New(button As RibbonElement, menu As Menu, attributes As AttributeSet, Optional tag As Object = Nothing)
-            MyBase.New(tag)
-            Utilities.Require(Of ArgumentNullException)(button IsNot Nothing, $"Split buttons must be initialized with either a button or a toggle-button.")
-            Utilities.Require(Of ArgumentNullException)(menu IsNot Nothing, $"Split buttons must be initialized with a valid menu.")
+        Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(New RibbonElement() {Nothing, Nothing}, tag)
 
-            Me.Button = button
-            Me.Menu = menu
+            _attributes = attributes
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
+        End Sub
+
+        Friend Sub New(button As RibbonElement, menu As Menu, attributes As AttributeSet, Optional tag As Object = Nothing)
+            MyBase.New(New RibbonElement() {button, menu}, tag)
+
             _attributes = attributes
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
@@ -36,15 +38,25 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return _
-                    String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
-                                String.Join(Environment.NewLine, WrapComponentsAsIEnumerable()), "</splitButton>")
+                If Items.Any() Then
+                    Return String.Join(Environment.NewLine, $"<splitButton { _attributes }>", String.Join(Environment.NewLine, Items), "</splitButton>")
+                Else
+                    Return $"<splitButton { _attributes } />"
+                End If
             End Get
         End Property
         
         Public ReadOnly Property Button As RibbonElement
+            Get
+                Return Items(0)
+            End Get
+        End Property
         
         Public ReadOnly Property Menu As Menu
+            Get
+                Return DirectCast(Items(1), Menu)
+            End Get
+        End Property
         
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
@@ -52,7 +64,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-                
             End Set
         End Property
 
@@ -62,7 +73,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
-                
             End Set
         End Property
 
@@ -72,7 +82,6 @@ Namespace Containers
             End Get
             Set
                 _attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
-                
             End Set
         End Property
 
@@ -93,18 +102,6 @@ Namespace Containers
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
             End Set
         End Property
-
-        Private Function WrapComponentsAsIEnumerable() As IEnumerable(Of RibbonElement)
-            Return New RibbonElement() { Button, Menu }
-        End Function
-        
-        Public Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
-            Return WrapComponentsAsIEnumerable().GetEnumerator()
-        End Function
-
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return WrapComponentsAsIEnumerable().GetEnumerator()
-        End Function
 
     End Class
     

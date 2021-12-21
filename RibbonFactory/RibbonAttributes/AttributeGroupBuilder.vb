@@ -6,6 +6,7 @@ Imports stdole
 Namespace RibbonAttributes
 
     Friend Class AttributeGroupBuilder
+        Implements IEnumerable(Of RibbonAttribute)
 
         Private ReadOnly _attributes As AttributeSet = New AttributeSet()
 
@@ -134,8 +135,6 @@ Namespace RibbonAttributes
         End Sub
 
 #End Region
-
-
 
         Public Sub AddShowImage(showImage As Boolean)
             _attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(showImage, AttributeName.ShowImage, AttributeCategory.ImageVisibility))
@@ -281,6 +280,13 @@ Namespace RibbonAttributes
             _attributes.Add(New RibbonAttributeReadWrite(Of String)(title, callback.Method.Name,  AttributeName.GetTitle, AttributeCategory.Title))
         End Sub
 
+        Public Function GetEnumerator() As IEnumerator(Of RibbonAttribute) Implements IEnumerable(Of RibbonAttribute).GetEnumerator
+            Return _attributes.GetEnumerator()
+        End Function
+
+        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Return _attributes.GetEnumerator()
+        End Function
     End Class
 
 End NameSpace

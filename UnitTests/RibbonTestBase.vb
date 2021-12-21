@@ -160,4 +160,8 @@ Public Class RibbonTestBase
     Public Function LoadImage(imageID As String) As IPictureDisp Implements ICreateCallbacks.LoadImage
         Throw New NotImplementedException()
     End Function
+
+    Public Function GetImage(control As IRibbonControl) As IPictureDisp Implements ICreateCallbacks.GetImage
+        Throw New NotImplementedException()
+    End Function
 End Class

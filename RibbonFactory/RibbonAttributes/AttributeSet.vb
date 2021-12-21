@@ -8,7 +8,7 @@
             RaiseEvent AttributeChanged
         End Sub
 
-        Private ReadOnly _attributes As ISet(Of RibbonAttribute) = New HashSet(Of RibbonAttribute)(RibbonAttribute.ByCategory())
+        Private ReadOnly _attributes As ISet(Of RibbonAttribute) = New HashSet(Of RibbonAttribute)(RibbonAttribute.CompareByCategory())
 
         Public Function Add(item As RibbonAttribute) As Boolean Implements ISet(Of RibbonAttribute).Add
             If Not _attributes.Add(item) Then
@@ -26,28 +26,23 @@
         End Function
 
         Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadOnly(Of T)
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(sampleMember)
-            Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadOnly(Of T))
+            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), RibbonAttributeReadOnly(Of T))
         End Function
 
         Public Function ReadOnlyLookup(Of T)(category As AttributeCategory) As RibbonAttributeReadOnly(Of T)
-            Dim compare As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(category)
-            Return DirectCast(_attributes.First(Function(attribute) compare.Equals(attribute)), RibbonAttributeReadOnly(Of T))
+            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(category)), RibbonAttributeReadOnly(Of T))
         End Function
 
         Public Function ReadWriteLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadWrite(Of T)
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(sampleMember)
-            Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadWrite(Of T))
+            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), RibbonAttributeReadWrite(Of T))
         End Function
 
         Public Function ReadWriteLookup(Of T)(category As AttributeCategory) As RibbonAttributeReadWrite(Of T)
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(category)
-            Return DirectCast(_attributes.First(Function(attribute) equatable.Equals(attribute)), RibbonAttributeReadWrite(Of T))
+            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(category)), RibbonAttributeReadWrite(Of T))
         End Function
 
         Public Function HasAttribute(sampleMember As AttributeName) As Boolean
-            Dim equatable As IEquatable(Of RibbonAttribute) = RibbonAttribute.ByCategory(sampleMember)
-            Return _attributes.Any(Function(attribute) equatable.Equals(attribute))
+            Return _attributes.Any(Function(attribute) attribute.IsExclusiveWith(sampleMember))
         End Function
 
         Public Overrides Function ToString() As String

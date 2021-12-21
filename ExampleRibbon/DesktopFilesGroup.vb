@@ -24,7 +24,7 @@ Public Class DesktopFilesGroup
         _dropDown = New DropdownBuilder().
             WithScreenTip("Desktop Files").
             WithSuperTip("The files on your desktop.").
-            WithSize("A DropDown This Big").
+            AsWideAs("A DropDown This Big").
             GetItemCountFrom(AddressOf ribbon.GetItemCount).
             GetItemIdFrom(AddressOf ribbon.GetItemId).
             GetItemImageFrom(AddressOf ribbon.GetItemImage).

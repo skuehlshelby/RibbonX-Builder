@@ -13,7 +13,7 @@ Public Class ImageConversion
         Dim stream As Stream = assembly.GetManifestResourceStream("UnitTests.CloudIcon.PNG")
         Dim image As Bitmap = New Bitmap(stream)
 
-        Dim pic As IPictureDisp = ConvertToIPictureDisplay(image)
+        Dim pic As IPictureDisp = Utilities.ConvertToIPictureDisplay(image)
 
         Assert.IsTrue(pic.Height > 0)
         Assert.IsTrue(pic.Width > 0)

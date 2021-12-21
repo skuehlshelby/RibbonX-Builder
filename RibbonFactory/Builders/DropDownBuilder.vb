@@ -193,7 +193,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithSize(sizeString As String) As DropDownBuilder Implements ISizeString(Of DropDownBuilder).WithSize
+        Public Function AsWideAs(sizeString As String) As DropDownBuilder Implements ISizeString(Of DropDownBuilder).AsWideAs
             _builder.WithSize(sizeString)
             Return Me
         End Function

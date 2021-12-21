@@ -25,7 +25,17 @@ Namespace Builders
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As SplitButton
-            Return New SplitButton(button:=_button, menu:=_menu, attributes:=_builder.Build(), tag:=tag)
+            Utilities.Require (Of InvalidOperationException)(
+                If(_builder.IsBuiltInControl(),
+                   _button Is Nothing AndAlso _menu Is Nothing,
+                   _button IsNot Nothing AndAlso _menu IsNot Nothing),
+                "When a control is a copy of a built-in control, no other properties may be specified. Otherwise, both a button and a menu are required.")
+
+            If _builder.IsBuiltInControl() Then
+                Return New SplitButton(_builder.Build())
+            Else
+                Return New SplitButton(button:=_button, menu:=_menu, attributes:=_builder.Build(), tag:=tag)
+            End If
         End Function
 
         Public Function WithButton(button As Button) As SplitButtonBuilder

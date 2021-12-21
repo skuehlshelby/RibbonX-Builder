@@ -25,9 +25,11 @@ Namespace Containers
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return _
-                    String.Join(Environment.NewLine, $"<tab { _attributes }>",
-                                String.Join(Environment.NewLine, Items), "</tab>")
+                If Items.Any() Then
+                    Return String.Join(Environment.NewLine, $"<tab { _attributes }>", String.Join(Environment.NewLine, Items), "</tab>")
+                Else
+                    Return $"<tab { _attributes } />"
+                End If
             End Get
         End Property
 

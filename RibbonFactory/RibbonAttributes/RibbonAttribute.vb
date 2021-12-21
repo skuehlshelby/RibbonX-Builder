@@ -1,6 +1,7 @@
 ﻿Namespace RibbonAttributes
 
     Friend MustInherit Class RibbonAttribute
+        Implements IEquatable(Of RibbonAttribute)
         Protected Const XmlTemplate As String = "{0}=""{1}"""
         Protected ReadOnly Name As AttributeName
         Protected ReadOnly Category As AttributeCategory
@@ -14,61 +15,53 @@
             End If
         End Sub
 
+        Public Function IsNamed(otherName As AttributeName) As Boolean
+            Return Name.Equals(otherName)
+        End Function
+
+        Public Function IsExclusiveWith(other As AttributeName) As Boolean
+            Return Category.Contains(other)
+        End Function
+
+        Public Function IsExclusiveWith(other As AttributeCategory) As Boolean
+            Return Category.Equals(other)
+        End Function
+
+        Public Function IsExclusiveWith(other As RibbonAttribute) As Boolean
+            Return Category.Equals(other.Category)
+        End Function
+
         Public MustOverride ReadOnly Property Xml As String
 
         Public Overrides Function ToString() As String
             Return Xml
         End Function
 
-        Public Shared Function ByCategory() As IEqualityComparer(Of RibbonAttribute)
-            Return New AttributeComparer()
+        Public Overrides Function GetHashCode() As Integer
+            Return Name.GetHashCode() Xor Category.GetHashCode()
         End Function
 
-        Public Shared Function ByCategory(category As AttributeCategory) As IEquatable(Of RibbonAttribute)
-            Return New CategoryComparer(category)
+        Public Overrides Function Equals(obj As Object) As Boolean
+            Return Equals(TryCast(obj, RibbonAttribute))
         End Function
 
-        Public Shared Function ByCategory(sampleCategoryMember As AttributeName) As IEquatable(Of RibbonAttribute)
-            Return New NameComparer(sampleCategoryMember)
+        Public Overloads Function Equals(other As RibbonAttribute) As Boolean Implements IEquatable(Of RibbonAttribute).Equals
+            Return other IsNot Nothing AndAlso Name.Equals(other.Name) AndAlso Category.Equals(other.Category)
         End Function
 
-        Private NotInheritable Class AttributeComparer
-            Implements IEqualityComparer(Of RibbonAttribute)
+        Public Shared Function CompareByCategory() As IEqualityComparer(Of RibbonAttribute)
+            Return New AttributesAreEqualWhenTheyAreMutuallyExclusive()
+        End Function
 
-            Public Overloads Function Equals(x As RibbonAttribute, y As RibbonAttribute) As Boolean Implements IEqualityComparer(Of RibbonAttribute).Equals
-                Return x IsNot Nothing AndAlso y IsNot Nothing AndAlso x.Category.Equals(y.Category)
+        Private NotInheritable Class AttributesAreEqualWhenTheyAreMutuallyExclusive
+            Inherits EqualityComparer(Of RibbonAttribute)
+
+            Public Overrides Function Equals(x As RibbonAttribute, y As RibbonAttribute) As Boolean
+                Return x.IsExclusiveWith(y)
             End Function
 
-            Public Overloads Function GetHashCode(obj As RibbonAttribute) As Integer Implements IEqualityComparer(Of RibbonAttribute).GetHashCode
+            Public Overrides Function GetHashCode(obj As RibbonAttribute) As Integer
                 Return obj.Category.GetHashCode()
-            End Function
-        End Class
-
-        Private NotInheritable Class CategoryComparer
-            Implements IEquatable(Of RibbonAttribute)
-
-            Private ReadOnly _category As AttributeCategory
-
-            Public Sub New(category As AttributeCategory)
-                _category = category
-            End Sub
-
-            Public Overloads Function Equals(other As RibbonAttribute) As Boolean Implements IEquatable(Of RibbonAttribute).Equals
-                Return other IsNot Nothing AndAlso _category.Equals(other.Category)
-            End Function
-        End Class
-
-        Private NotInheritable Class NameComparer
-            Implements IEquatable(Of RibbonAttribute)
-
-            Private ReadOnly _name As AttributeName
-
-            Public Sub New(name As AttributeName)
-                _name = name
-            End Sub
-
-            Public Overloads Function Equals(other As RibbonAttribute) As Boolean Implements IEquatable(Of RibbonAttribute).Equals
-                Return other IsNot Nothing AndAlso other.Category.Contains(_name)
             End Function
         End Class
 
