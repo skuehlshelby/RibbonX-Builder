@@ -1,4 +1,4 @@
-﻿# Example Ribbon Using The RibbonFactory Library
+﻿# Example Ribbon Using The RibbonX Builder Library
 This project creates a simple ribbon using the RibbonFactory library. All ribbon creation code is contained inside the method 'BuildRibbon' in the 'Ribbon' class.
 The created ribbon uses a mix of static and dynamic content. It includes custom images for each button that are supplied at runtime. The output looks like this:
 
