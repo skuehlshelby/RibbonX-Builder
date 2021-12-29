@@ -4,6 +4,7 @@ Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Builders
@@ -17,19 +18,24 @@ Namespace Builders
         Implements IImage(Of EditBoxBuilder)
         Implements IShowLabel(Of EditBoxBuilder)
         Implements IMaxLength(Of EditBoxBuilder)
+        Implements ISizeString(Of EditBoxBuilder)
         Implements IOnChange(Of EditBoxBuilder)
+        Implements IValidateText(Of EditBoxBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of EditBox)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)
+
+            _validationRules = New List(Of IValidate(Of String))
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As EditBox
-            Return New EditBox(_builder.Build(), tag:=tag)
+            Return New EditBox(_builder.Build(), _validationRules.ToArray(), tag:=tag)
         End Function
 
         Public Function Enabled() As EditBoxBuilder Implements IEnabled(Of EditBoxBuilder).Enabled
@@ -183,5 +189,20 @@ Namespace Builders
             _builder.InsertAfter(qualifiedControl)
             Return Me
         End Function
+
+        Public Function WithTextValidationRule(rule As Predicate(Of String)) As EditBoxBuilder Implements IValidateText(Of EditBoxBuilder).WithTextValidationRule
+            Return WithTextValidationRule(rule, String.Empty)
+        End Function
+
+        Public Function WithTextValidationRule(rule As Predicate(Of String), failureMessage As String) As EditBoxBuilder Implements IValidateText(Of EditBoxBuilder).WithTextValidationRule
+            _validationRules.Add(New TextValidator(rule, failureMessage))
+            Return Me
+        End Function
+
+        Public Function AsWideAs(sizeString As String) As EditBoxBuilder Implements ISizeString(Of EditBoxBuilder).AsWideAs
+            _builder.WithSize(sizeString)
+            Return Me
+        End Function
     End Class
+
 End Namespace

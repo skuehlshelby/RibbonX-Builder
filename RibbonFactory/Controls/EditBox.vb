@@ -1,6 +1,6 @@
-﻿
-Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Controls
@@ -18,13 +18,16 @@ Namespace Controls
         Implements IShowImage
         Implements IText
         Implements IMaxLength
-        Implements IOnChange
 
         Private ReadOnly _attributes As AttributeSet
+        Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
 
-        Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
+        Public Event TextChanged As EventHandler(Of String)
+
+        Friend Sub New(attributes As AttributeSet, validationRules As ICollection(Of IValidate(Of String)), Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
+            _validationRules = validationRules
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
@@ -105,10 +108,10 @@ Namespace Controls
 
         Public Property Image As IPictureDisp Implements IImage.Image
             Get
-                Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
+                Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeCategory.Image).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
+                _attributes.ReadWriteLookup(Of IPictureDisp)(AttributeCategory.Image).SetValue(Value)
             End Set
         End Property
 
@@ -126,19 +129,47 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetText).SetValue(Value)
+                Dim validationFailed As Boolean
+
+                Try
+                    SuspendAutomaticRefreshing()
+
+                    For Each rule As IValidate(Of String) In _validationRules
+                        Dim validationResult As IValidationResult = rule.Validate(value)
+
+                        validationFailed = Not validationResult.Success
+
+                        If validationFailed Then
+                            DisplayErrorMessage(validationResult.FailureMessage)
+                            Exit For
+                        Else
+                            HideErrorMessage(validationResult.FailureMessage)
+                        End If
+                    Next
+                Finally
+                    ResumeAutomaticRefreshing(triggerRefreshNow:= False)
+                End Try
+
+                If Not validationFailed Then
+                    _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(Value)
+                    RaiseEvent TextChanged(Me, Value)
+                End If
             End Set
         End Property
+
+        Private Sub DisplayErrorMessage(message As String)
+            SuperTip = String.Join(Environment.NewLine & Environment.NewLine, SuperTip, message)
+        End Sub
+
+        Private Sub HideErrorMessage(message As String)
+            SuperTip = SuperTip.Replace(message, String.Empty).TrimEnd(Environment.NewLine.ToCharArray())
+        End Sub
 
         Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
             Get
                 Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.MaxLength).GetValue()
             End Get
         End Property
-
-        Public Sub Execute() Implements IOnChange.Execute
-            _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
-        End Sub
         
     End Class
 
