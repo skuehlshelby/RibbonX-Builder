@@ -170,8 +170,7 @@ Namespace Utilities
         End Sub
 
         Public Sub OnChange(control As IRibbonControl, text As String) Implements ICreateCallbacks.OnChange
-            Ribbon.GetElement(Of IEditable)(control.Id).Text = text
-            Ribbon.GetElement(Of IOnChange)(control.Id).Execute() 'TODO API for this is a bit awkward.
+            Ribbon.GetElement(Of IText)(control.Id).Text = text
         End Sub
 
         Public Sub OnSelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.OnSelectionChange

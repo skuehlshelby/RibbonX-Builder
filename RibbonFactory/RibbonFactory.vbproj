@@ -120,6 +120,7 @@
     <Compile Include="BuilderInterfaces\IOnActionToggle.vb" />
     <Compile Include="BuilderInterfaces\ISizeString.vb" />
     <Compile Include="BuilderInterfaces\IStartFromScratch.vb" />
+    <Compile Include="BuilderInterfaces\IValidateText.vb" />
     <Compile Include="BuilderInterfaces\IVisible.vb" />
     <Compile Include="Builders\BoxBuilder.vb" />
     <Compile Include="Builders\ButtonGroupBuilder.vb" />
@@ -167,7 +168,6 @@
     <Compile Include="Containers\SplitButton.vb" />
     <Compile Include="Containers\Tab.vb" />
     <Compile Include="ControlInterfaces\IEnabled.vb" />
-    <Compile Include="ControlInterfaces\IEditable.vb" />
     <Compile Include="ControlInterfaces\IImage.vb" />
     <Compile Include="ControlInterfaces\IPressed.vb" />
     <Compile Include="Controls\Button.vb" />
@@ -193,7 +193,7 @@
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
-    <Compile Include="Utilities\ImageConverter.vb" />
+    <Compile Include="Utilities\ImageConversion\ImageConverter.vb" />
     <Compile Include="KeyTip.vb" />
     <Compile Include="Utilities\Contracts.vb" />
     <Compile Include="RibbonAttributes\AttributeCategory.vb" />
@@ -223,10 +223,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Utilities\AdapterForIPicture.vb" />
+    <Compile Include="Utilities\ImageConversion\AdapterForIPicture.vb" />
+    <Compile Include="Utilities\Validation\IValidate.vb" />
+    <Compile Include="Utilities\Validation\IValidationResult.vb" />
     <Compile Include="Utilities\RibbonErrorLog.vb" />
     <Compile Include="Utilities\RibbonExtensions.vb" />
     <Compile Include="Utilities\StockRibbonBase.vb" />
+    <Compile Include="Utilities\Validation\TextValidator.vb" />
     <Compile Include="ValueChangedEventArgs.vb" />
   </ItemGroup>
   <ItemGroup>
