@@ -17,7 +17,8 @@ Namespace Builders
         Private ReadOnly _builder As ControlBuilder
         Private _button As RibbonElement
         Private _menu As Menu
-        Friend Sub New()
+
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)

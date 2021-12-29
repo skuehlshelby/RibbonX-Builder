@@ -25,7 +25,7 @@ Namespace Builders
         Private ReadOnly _builder As ControlBuilder
         Private ReadOnly _controls As IList(Of RibbonElement)
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Menu)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
