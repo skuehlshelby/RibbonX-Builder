@@ -1,8 +1,6 @@
-﻿
-Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
-
 
 Namespace Containers
     
@@ -39,7 +37,13 @@ Namespace Containers
         Public Overrides ReadOnly Property XML As String
             Get
                 If Items.Any() Then
-                    Return String.Join(Environment.NewLine, $"<splitButton { _attributes }>", String.Join(Environment.NewLine, Items), "</splitButton>")
+                    Return _
+                        String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
+                                    String.Join(Environment.NewLine, Items).                            
+                                       Replace("size=""large""",String.Empty).
+                                       Replace("size=""normal""", String.Empty), 
+                                    "</splitButton>")
+
                 Else
                     Return $"<splitButton { _attributes } />"
                 End If
