@@ -20,6 +20,7 @@ Namespace Controls
         Implements IOnAction
         Implements IShowImage
         Implements ISize
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
 
@@ -143,6 +144,10 @@ Namespace Controls
         Public Sub Execute() Implements IOnAction.Execute
             _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
 
     End Class
 

@@ -31,6 +31,13 @@ Namespace Builders
             _builder = new ControlBuilder(attributeGroupBuilder)
         End Sub
 
+        Public Sub New(template As Button)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of Button)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
         Public Function Build(Optional tag As Object = Nothing) As Button
             Return New Button(_builder.Build(), tag)
         End Function
