@@ -11,7 +11,7 @@ Namespace Containers
 #Region "Initialization"
 
         Friend Sub New(elements As IEnumerable(Of RibbonElement), ribbonX As String)
-            _elements = elements.ToDictionary(Function(element) element.ID)
+            _elements = elements.Distinct().ToDictionary(Function(element) element.ID)
             RegisterEvents(_elements.Values)
             Me.RibbonX = ribbonX
         End Sub
