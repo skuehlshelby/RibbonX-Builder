@@ -37,6 +37,8 @@ Namespace RibbonAttributes
                         defaults.Add(New RibbonAttributeDefault(Of Boolean)(False, AttributeName.ShowImage, AttributeCategory.ImageVisibility))
                     Case GetType(ITitle)
                         defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Title, AttributeCategory.Title))
+                    Case GetType(IOnAction)
+                        defaults.Add(New RibbonAttributeDefault(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.OnAction))
                 End Select
             Next interfaceType
 
