@@ -1,33 +1,40 @@
 ﻿Imports RibbonFactory
+Imports RibbonFactory.Builders
 Imports RibbonFactory.Controls
 
 <TestClass()>
 Public Class DynamicUpdating
-    Inherits RibbonTestBase
+	Inherits RibbonTestBase
 
-    Private _changeTriggered As Boolean = False
+	Private _changeTriggered As Boolean = False
 
-    <TestCleanup()>
-    Public Sub Teardown()
-        _changeTriggered = False
-    End Sub
+	Protected Overrides Function CreateRibbon() As Containers.Ribbon
+		Dim button As Button = New ButtonBuilder(ControlGenerator.MakeButton()).
+			Enabled(AddressOf GetEnabled).
+			Build()
 
-    <TestMethod()>
-    Public Sub ChangeTriggersRefresh()
-        Ribbon = MakeRibbonWithOneTabAndOneGroup(MakeButton())
+		Return MakeRibbonWithOneTabAndOneGroup(button)
+	End Function
 
-        AssignFakeIRibbonUI()
+	<TestMethod()>
+	Public Sub ChangeTriggersRefresh()
+		With Ribbon.GetElement(Function(e As Button) TypeOf e Is Button)
+			AddHandler .ValueChanged, AddressOf ChangeTriggered
+			.Enabled = False
+			.Enabled = True
+		End With
 
-        With Ribbon.GetElement(Function(e As Button) TypeOf e Is Button)
-            AddHandler .ValueChanged, AddressOf ChangeTriggered
-            .Enabled = False
-            .Enabled = True
-        End With
+		Assert.IsTrue(_changeTriggered)
+	End Sub
 
-        Assert.IsTrue(_changeTriggered)
-    End Sub
+	Private Sub ChangeTriggered(sender As Object, e As ValueChangedEventArgs)
+		_changeTriggered = True
+	End Sub
 
-    Private Sub ChangeTriggered(sender As Object, e As ValueChangedEventArgs)
-        _changeTriggered = True
-    End Sub
+	<TestCleanup()>
+	Public Overrides Sub Cleanup()
+		MyBase.Cleanup()
+		_changeTriggered = False
+	End Sub
+
 End Class

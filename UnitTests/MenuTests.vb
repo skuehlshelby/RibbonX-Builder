@@ -1,14 +1,10 @@
-﻿Imports RibbonFactory
-Imports RibbonFactory.Utilities
+﻿Imports RibbonFactory.Containers
 
 <TestClass()> Public Class MenuTests
     Inherits RibbonTestBase
 
-    <TestMethod()> 
-    Public Sub Builds()
-        Dim errors As RibbonErrorLog = MakeRibbonWithOneTabAndOneGroup(GetMenu()).GetErrors()
-
-        Assert.IsTrue(errors.None, String.Join(Environment.NewLine, errors.Errors))
-    End Sub
+    Protected Overrides Function CreateRibbon() As Ribbon
+        Return MakeRibbonWithOneTabAndOneGroup(MakeMenu())
+    End Function
 
 End Class

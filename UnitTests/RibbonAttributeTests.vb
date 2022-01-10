@@ -1,15 +1,15 @@
-﻿Imports RibbonFactory.Enums
+﻿Imports Microsoft.Office.Core
+Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 
 
 <TestClass()>
 Public Class RibbonAttributeTests
-    Inherits RibbonTestBase
     Private _builder As AttributeGroupBuilder
 
     <TestInitialize()>
     Public Sub Initialize()
-        _builder = new AttributeGroupBuilder()
+        _builder = New AttributeGroupBuilder()
     End Sub
 
     <TestMethod()>
@@ -59,4 +59,25 @@ Public Class RibbonAttributeTests
 
         Assert.AreEqual(1, _builder.Build().Count)
     End Sub
+
+    Private Function GetSize(control As IRibbonControl) As ControlSize
+        Throw New NotImplementedException()
+    End Function
+
+    Private Function GetLabel(control As IRibbonControl) As String
+        Throw New NotImplementedException()
+    End Function
+
+    Private Function GetScreenTip(control As IRibbonControl) As String
+        Throw New NotImplementedException()
+    End Function
+
+    Private Function GetSuperTip(control As IRibbonControl) As String
+        Throw New NotImplementedException()
+    End Function
+
+    Private Function GetDescription(control As IRibbonControl) As String
+        Throw New NotImplementedException()
+    End Function
+
 End Class

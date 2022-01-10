@@ -19,16 +19,4 @@ Public Class ImageConversion
         Assert.IsTrue(pic.Width > 0)
     End Sub
 
-    <TestMethod()>
-    Public Sub ToIPictureDispWithAxHost()
-        Dim assembly As Assembly = Assembly.GetExecutingAssembly()
-        Dim stream As Stream = assembly.GetManifestResourceStream("UnitTests.CloudIcon.PNG")
-        Dim image As Bitmap = New Bitmap(stream)
-
-        Dim pic As IPictureDisp = New PicConverterAxHost().ToIPictureDisp(image)
-
-        Assert.IsTrue(pic.Height > 0)
-        Assert.IsTrue(pic.Width > 0)
-    End Sub
-
 End Class

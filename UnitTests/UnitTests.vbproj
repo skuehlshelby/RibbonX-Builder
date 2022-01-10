@@ -93,11 +93,9 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PicConverterAxHost.vb">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Stubs\Excel.vb" />
-    <Compile Include="Stubs\RibbonControl.vb" />
+    <Compile Include="CheckboxTests.vb" />
+    <Compile Include="ComboBoxTests.vb" />
+    <Compile Include="RandomExtensions.vb" />
     <Compile Include="ImageConversion.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -117,9 +115,11 @@
     <Compile Include="RibbonAttributeTests.vb" />
     <Compile Include="RibbonTestBase.vb" />
     <Compile Include="ButtonTests.vb" />
-    <Compile Include="DropDown.vb" />
+    <Compile Include="DropDownTests.vb" />
     <Compile Include="MenuTests.vb" />
     <Compile Include="DynamicUpdating.vb" />
+    <Compile Include="KeyTipTests.vb" />
+    <Compile Include="EditBoxTests.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
