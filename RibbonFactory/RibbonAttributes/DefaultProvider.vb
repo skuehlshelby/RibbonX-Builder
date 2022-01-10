@@ -31,6 +31,8 @@ Namespace RibbonAttributes
                         defaults.Add(New RibbonAttributeDefault(Of ControlSize)(ControlSize.normal, AttributeName.Size, AttributeCategory.Size))
                     Case GetType(IDescription)
                         defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Description, AttributeCategory.Description))
+                    Case GetType(IKeyTip)
+                        defaults.Add(New RibbonAttributeDefault(Of KeyTip)(KeyTip.NextAvailable(), AttributeName.Keytip, AttributeCategory.KeyTip))
                     Case GetType(IImage)
                         defaults.Add(New RibbonAttributeDefault(Of ImageMSO.ImageMSO)(ImageMSO.Common.HappyFace, AttributeName.Image, AttributeCategory.Image))
                     Case GetType(IShowImage)
