@@ -1,15 +1,17 @@
-﻿Namespace BuilderInterfaces
+﻿Imports System.Drawing
 
-    Public Interface IItemDimensions(Of T)
-    
-        Function WithItemHeight(height As Integer) As T
+Namespace BuilderInterfaces
 
-        Function WithItemHeight(height As Integer, callback As FromControl(Of Integer)) As T
+	Public Interface IItemDimensions(Of T)
 
-        Function WithItemWidth(width As Integer) As T
+		Function WithItemDimensions(dimensions As Size) As T
 
-        Function WithItemWidth(width As Integer, callback As FromControl(Of Integer)) As T
+		Function WithItemDimensions(height As Integer, width As Integer) As T
 
-    End Interface
+		Function WithItemDimensions(dimensions As Size, heightCallback As FromControl(Of Integer), widthCallback As FromControl(Of Integer)) As T
 
-End NameSpace
+		Function WithItemDimensions(height As Integer, width As Integer, heightCallback As FromControl(Of Integer), widthCallback As FromControl(Of Integer)) As T
+
+	End Interface
+
+End Namespace
