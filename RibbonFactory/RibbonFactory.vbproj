@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -95,6 +96,7 @@
     <Compile Include="BuilderInterfaces\IGetItemCount.vb" />
     <Compile Include="BuilderInterfaces\IGetItemId.vb" />
     <Compile Include="BuilderInterfaces\IGetItemImage.vb" />
+    <Compile Include="BuilderInterfaces\IShowInRibbon.vb" />
     <Compile Include="BuilderInterfaces\IShowItemImage.vb" />
     <Compile Include="BuilderInterfaces\IGetItemLabel.vb" />
     <Compile Include="BuilderInterfaces\IShowItemLabel.vb" />
@@ -125,6 +127,7 @@
     <Compile Include="Builders\BoxBuilder.vb" />
     <Compile Include="Builders\ButtonGroupBuilder.vb" />
     <Compile Include="Builders\CheckBoxBuilder.vb" />
+    <Compile Include="Builders\ComboBoxBuilder.vb" />
     <Compile Include="Builders\ControlBuilder.vb" />
     <Compile Include="Builders\DropDownBuilder.vb" />
     <Compile Include="Builders\EditBoxBuilder.vb" />
@@ -224,10 +227,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Utilities\ImageConversion\AdapterForIPicture.vb" />
+    <Compile Include="Utilities\Testing\OfficeHostAppilcation.vb" />
+    <Compile Include="Utilities\Testing\RandomControlGenerator.vb" />
     <Compile Include="Utilities\Validation\IValidate.vb" />
     <Compile Include="Utilities\Validation\IValidationResult.vb" />
-    <Compile Include="Utilities\RibbonErrorLog.vb" />
-    <Compile Include="Utilities\RibbonExtensions.vb" />
+    <Compile Include="Utilities\Testing\RibbonErrorLog.vb" />
     <Compile Include="Utilities\StockRibbonBase.vb" />
     <Compile Include="Utilities\Validation\TextValidator.vb" />
     <Compile Include="ValueChangedEventArgs.vb" />
