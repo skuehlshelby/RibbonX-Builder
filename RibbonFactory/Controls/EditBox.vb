@@ -18,6 +18,7 @@ Namespace Controls
         Implements IShowImage
         Implements IText
         Implements IMaxLength
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
@@ -48,7 +49,7 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.Enabled).SetValue(value)
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.Enabled).SetValue(Value)
             End Set
         End Property
 
@@ -57,7 +58,7 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.Visible).SetValue(value)
+                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.Visible).SetValue(Value)
             End Set
         End Property
 
@@ -66,7 +67,7 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.Label).SetValue(value)
+                _attributes.ReadWriteLookup(Of String)(AttributeName.Label).SetValue(Value)
             End Set
         End Property
 
@@ -135,7 +136,7 @@ Namespace Controls
                     SuspendAutomaticRefreshing()
 
                     For Each rule As IValidate(Of String) In _validationRules
-                        Dim validationResult As IValidationResult = rule.Validate(value)
+                        Dim validationResult As IValidationResult = rule.Validate(Value)
 
                         validationFailed = Not validationResult.Success
 
@@ -147,7 +148,7 @@ Namespace Controls
                         End If
                     Next
                 Finally
-                    ResumeAutomaticRefreshing(triggerRefreshNow:= False)
+                    ResumeAutomaticRefreshing(triggerRefreshNow:=False)
                 End Try
 
                 If Not validationFailed Then
@@ -165,12 +166,16 @@ Namespace Controls
             SuperTip = SuperTip.Replace(message, String.Empty).TrimEnd(Environment.NewLine.ToCharArray())
         End Sub
 
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
+
         Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
             Get
                 Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.MaxLength).GetValue()
             End Get
         End Property
-        
+
     End Class
 
 End Namespace

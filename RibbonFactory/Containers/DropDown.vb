@@ -12,6 +12,7 @@ Namespace Containers
         Implements ISelect
         Implements IEnabled
         Implements IVisible
+        Implements IKeyTip
         Implements ILabel
         Implements IScreenTip
         Implements ISuperTip
@@ -19,6 +20,7 @@ Namespace Containers
         Implements IImage
         Implements IShowImage
         Implements IOnAction
+        Implements IDefaultProvider
 
         Private _selected As Item
         Private _selectedItemIndex As Integer
@@ -139,7 +141,7 @@ Namespace Containers
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.SuperTip
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
@@ -192,14 +194,27 @@ Namespace Containers
                 Return _selectedItemIndex
             End Get
             Set
-                _selected = Items(value)
-                _selectedItemIndex = value
+                _selected = Items(Value)
+                _selectedItemIndex = Value
+            End Set
+        End Property
+
+        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
+            Get
+                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeCategory.KeyTip).GetValue()
+            End Get
+            Set
+                _attributes.ReadWriteLookup(Of KeyTip)(AttributeCategory.KeyTip).SetValue(Value)
             End Set
         End Property
 
         Public Sub Execute() Implements IOnAction.Execute
             _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
 
     End Class
 

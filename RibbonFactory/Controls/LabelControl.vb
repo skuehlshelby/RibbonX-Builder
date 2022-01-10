@@ -1,5 +1,4 @@
-﻿
-Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Controls
@@ -11,6 +10,7 @@ Namespace Controls
         Implements IShowLabel
         Implements IScreenTip
         Implements ISuperTip
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
 
@@ -77,7 +77,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.Supertip
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
@@ -85,6 +85,10 @@ Namespace Controls
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
             End Set
         End Property
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
 
     End Class
 

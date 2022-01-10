@@ -16,6 +16,7 @@ Namespace Controls
         Implements IKeyTip
         Implements IOnAction
         Implements IPressed
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
 
@@ -44,7 +45,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
-                
+
             End Set
         End Property
 
@@ -55,7 +56,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-                
+
             End Set
         End Property
 
@@ -65,7 +66,7 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
-                
+
             End Set
         End Property
 
@@ -78,7 +79,7 @@ Namespace Controls
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.Supertip
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
@@ -117,6 +118,10 @@ Namespace Controls
         Public Sub Execute() Implements IOnAction.Execute
             _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
 
     End Class
 

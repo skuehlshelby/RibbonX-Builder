@@ -19,6 +19,7 @@ Namespace Containers
         Implements ISuperTip
         Implements ISelect
         Implements IOnAction
+        Implements IDefaultProvider
 
         Private _selected As Item
         Private _selectedItemIndex As Integer
@@ -101,7 +102,7 @@ Namespace Containers
             RefreshNeeded()
         End Sub
 
-        Public ReadOnly Property Buttons as ICollection(Of Button)
+        Public ReadOnly Property Buttons As ICollection(Of Button)
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
@@ -193,7 +194,7 @@ Namespace Containers
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.SuperTip
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
@@ -219,8 +220,8 @@ Namespace Containers
                 Return _selectedItemIndex
             End Get
             Set
-                _selected = Items(value)
-                _selectedItemIndex = value
+                _selected = Items(Value)
+                _selectedItemIndex = Value
             End Set
         End Property
 
@@ -228,6 +229,10 @@ Namespace Containers
             _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
         End Sub
 
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
+
     End Class
-    
+
 End NameSpace

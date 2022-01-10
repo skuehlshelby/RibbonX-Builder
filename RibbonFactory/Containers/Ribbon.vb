@@ -30,7 +30,7 @@ Namespace Containers
 
 #Region "API"
 
-        Public Property RibbonX as String
+        Public ReadOnly Property RibbonX As String
 
         Public Sub AssignRibbonUI(ribbonUi As IRibbonUI)
             _ribbon = If(_ribbon, ribbonUi)
@@ -48,6 +48,10 @@ Namespace Containers
             Return CType(CType(GetElement(id), Object), TInterface)
         End Function
 
+        Public Function GetElements() As IEnumerable(Of RibbonElement)
+            Return _elements.Values
+        End Function
+
         Public Function GetContainer(Of TRibbonElement As RibbonElement)(id As String) As Container(Of TRibbonElement)
             Return CType(GetElement(id), Container(Of TRibbonElement))
         End Function
@@ -55,6 +59,8 @@ Namespace Containers
         Public Function GetContainerItem(parentId As String, index As Integer) As Item
             Return GetContainer(Of Item)(parentId)(index)
         End Function
+
+#Region "IRibbonUI Members"
 
         Public Sub RefreshAll() Implements IRibbonUI.Invalidate
             _ribbon.Invalidate()
@@ -79,6 +85,8 @@ Namespace Containers
         Public Sub ActivateTabQ(controlID As String, [namespace] As String) Implements IRibbonUI.ActivateTabQ
             _ribbon.ActivateTabQ(controlID, [namespace])
         End Sub
+
+#End Region
 
 #End Region
 

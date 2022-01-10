@@ -11,9 +11,10 @@ Namespace Containers
         Implements IKeyTip
         Implements ISize
         Implements IShowLabel
-        
+        Implements IDefaultProvider
+
         Private ReadOnly _attributes As AttributeSet
-        
+
         Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(New RibbonElement() {Nothing, Nothing}, tag)
 
@@ -27,7 +28,7 @@ Namespace Containers
             _attributes = attributes
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
-        
+
         Public Overrides ReadOnly Property ID As String
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
@@ -39,9 +40,9 @@ Namespace Containers
                 If Items.Any() Then
                     Return _
                         String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
-                                    String.Join(Environment.NewLine, Items).                            
-                                       Replace("size=""large""",String.Empty).
-                                       Replace("size=""normal""", String.Empty), 
+                                    String.Join(Environment.NewLine, Items).
+                                       Replace("size=""large""", String.Empty).
+                                       Replace("size=""normal""", String.Empty),
                                     "</splitButton>")
 
                 Else
@@ -49,19 +50,19 @@ Namespace Containers
                 End If
             End Get
         End Property
-        
+
         Public ReadOnly Property Button As RibbonElement
             Get
                 Return Items(0)
             End Get
         End Property
-        
+
         Public ReadOnly Property Menu As Menu
             Get
                 Return DirectCast(Items(1), Menu)
             End Get
         End Property
-        
+
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
                 Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
@@ -107,6 +108,10 @@ Namespace Containers
             End Set
         End Property
 
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
+
     End Class
-    
+
 End NameSpace

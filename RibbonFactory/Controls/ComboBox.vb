@@ -18,6 +18,7 @@ Namespace Controls
         Implements IShowImage
         Implements IMaxLength
         Implements IText
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
@@ -179,7 +180,7 @@ Namespace Controls
                     SuspendAutomaticRefreshing()
 
                     For Each rule As IValidate(Of String) In _validationRules
-                        Dim validationResult As IValidationResult = rule.Validate(value)
+                        Dim validationResult As IValidationResult = rule.Validate(Value)
 
                         validationFailed = Not validationResult.Success
 
@@ -191,7 +192,7 @@ Namespace Controls
                         End If
                     Next
                 Finally
-                    ResumeAutomaticRefreshing(triggerRefreshNow:= False)
+                    ResumeAutomaticRefreshing(triggerRefreshNow:=False)
                 End Try
 
                 If Not validationFailed Then
@@ -208,6 +209,10 @@ Namespace Controls
         Private Sub HideErrorMessage(message As String)
             SuperTip = SuperTip.Replace(message, String.Empty).TrimEnd(Environment.NewLine.ToCharArray())
         End Sub
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
 
     End Class
 
