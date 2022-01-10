@@ -9,8 +9,10 @@ Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
 Namespace Builders
-    
+
     Public Class ToggleButtonBuilder
+        Implements IBuilder(Of ToggleButton)
+        Implements IID(Of ToggleButtonBuilder)
         Implements IVisible(Of ToggleButtonBuilder)
         Implements IEnabled(Of ToggleButtonBuilder)
         Implements IInsert(Of ToggleButtonBuilder)
@@ -29,11 +31,48 @@ Namespace Builders
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As ToggleButton
-            Return New ToggleButton(_builder.Build(), tag:= tag)
+        Public Sub New(template As ToggleButton)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of ToggleButton)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim toggleButtonAttributes As AttributeSet = New DefaultProvider(Of ToggleButton)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) toggleButtonAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of ToggleButton)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(ToggleButton)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As ToggleButton Implements IBuilder(Of ToggleButton).Build
+            Return New ToggleButton(_builder.Build(), tag:=tag)
+        End Function
+
+        Public Function WithId(id As String) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithIdMso
+            _builder.WithId(mso)
+            Return Me
         End Function
 
         Public Function Enabled() As ToggleButtonBuilder Implements IEnabled(Of ToggleButtonBuilder).Enabled
@@ -234,5 +273,5 @@ Namespace Builders
         End Function
 
     End Class
-    
+
 End NameSpace

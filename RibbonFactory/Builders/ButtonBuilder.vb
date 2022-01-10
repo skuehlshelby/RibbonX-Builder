@@ -9,6 +9,7 @@ Imports stdole
 
 Namespace Builders
     Public NotInheritable Class ButtonBuilder
+        Implements IBuilder(Of Button)
         Implements IID(Of ButtonBuilder)
         Implements IEnabled(Of ButtonBuilder)
         Implements IVisible(Of ButtonBuilder)
@@ -28,7 +29,7 @@ Namespace Builders
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Button)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
         Public Sub New(template As Button)
@@ -38,7 +39,22 @@ Namespace Builders
             _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As Button
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim buttonAttributes As AttributeSet = New DefaultProvider(Of Button)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) buttonAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of Button)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(Button)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As Button Implements IBuilder(Of Button).Build
             Return New Button(_builder.Build(), tag)
         End Function
 

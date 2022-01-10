@@ -4,8 +4,10 @@ Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
-    
+
     Public Class CheckBoxBuilder
+        Implements IBuilder(Of CheckBox)
+        Implements IID(Of CheckBoxBuilder)
         Implements IEnabled(Of CheckBoxBuilder)
         Implements IVisible(Of CheckBoxBuilder)
         Implements ILabelScreenTipSuperTip(Of CheckBoxBuilder)
@@ -16,15 +18,37 @@ Namespace Builders
 
         Private ReadOnly _builder As ControlBuilder
 
-        Friend Sub New()
+        Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of CheckBox)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As CheckBox
-            Return New CheckBox(_builder.Build(), tag:= tag)
+        Public Sub New(template As CheckBox)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of CheckBox)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Sub New(template As Object)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim checkBoxAttributes As AttributeSet = New DefaultProvider(Of CheckBox)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) checkBoxAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of CheckBox)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(CheckBox)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As CheckBox Implements IBuilder(Of CheckBox).Build
+            Return New CheckBox(_builder.Build(), tag:=tag)
         End Function
 
         Public Function Enabled() As CheckBoxBuilder Implements IEnabled(Of CheckBoxBuilder).Enabled
@@ -69,13 +93,11 @@ Namespace Builders
 
         Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As CheckBoxBuilder Implements ILabelScreenTipSuperTip(Of CheckBoxBuilder).WithLabel
             _builder.WithLabel(label, copyToScreenTip)
-            _builder.ShowLabel()
             Return Me
         End Function
 
         Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As CheckBoxBuilder Implements ILabelScreenTipSuperTip(Of CheckBoxBuilder).WithLabel
             _builder.WithLabel(label, callback, copyToScreenTip)
-            _builder.ShowLabel()
             Return Me
         End Function
 
@@ -144,6 +166,21 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithId(id As String) As CheckBoxBuilder Implements IID(Of CheckBoxBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As CheckBoxBuilder Implements IID(Of CheckBoxBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As CheckBoxBuilder Implements IID(Of CheckBoxBuilder).WithIdMso
+            _builder.WithId(mso)
+            Return Me
+        End Function
+
     End Class
-    
+
 End NameSpace

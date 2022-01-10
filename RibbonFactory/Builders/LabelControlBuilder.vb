@@ -5,6 +5,8 @@ Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
     Public Class LabelControlBuilder
+        Implements IBuilder(Of LabelControl)
+        Implements IID(Of LabelControlBuilder)
         Implements IEnabled(Of LabelControlBuilder)
         Implements IInsert(Of LabelControlBuilder)
         Implements IVisible(Of LabelControlBuilder)
@@ -17,11 +19,48 @@ Namespace Builders
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of LabelControl)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As LabelControl
+        Public Sub New(template As LabelControl)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of LabelControl)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim labelControlAttributes As AttributeSet = New DefaultProvider(Of LabelControl)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) labelControlAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of LabelControl)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(LabelControl)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As LabelControl Implements IBuilder(Of LabelControl).Build
             Return New LabelControl(_builder.Build(), tag)
+        End Function
+
+        Public Function WithId(id As String) As LabelControlBuilder Implements IID(Of LabelControlBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As LabelControlBuilder Implements IID(Of LabelControlBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As LabelControlBuilder Implements IID(Of LabelControlBuilder).WithIdMso
+            _builder.WithId(mso)
+            Return Me
         End Function
 
         Public Function Enabled() As LabelControlBuilder Implements IEnabled(Of LabelControlBuilder).Enabled

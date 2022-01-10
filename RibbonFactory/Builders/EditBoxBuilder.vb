@@ -10,6 +10,8 @@ Imports stdole
 Namespace Builders
 
     Public NotInheritable Class EditBoxBuilder
+        Implements IBuilder(Of EditBox)
+        Implements IID(Of EditBoxBuilder)
         Implements IEnabled(Of EditBoxBuilder)
         Implements IVisible(Of EditBoxBuilder)
         Implements IInsert(Of EditBoxBuilder)
@@ -29,12 +31,34 @@ Namespace Builders
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of EditBox)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
 
             _validationRules = New List(Of IValidate(Of String))
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As EditBox
+        Public Sub New(template As EditBox)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim editBoxAttributes As AttributeSet = New DefaultProvider(Of EditBox)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) editBoxAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(EditBox)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As EditBox Implements IBuilder(Of EditBox).Build
             Return New EditBox(_builder.Build(), _validationRules.ToArray(), tag:=tag)
         End Function
 
@@ -203,6 +227,22 @@ Namespace Builders
             _builder.WithSize(sizeString)
             Return Me
         End Function
+
+        Public Function WithId(id As String) As EditBoxBuilder Implements IID(Of EditBoxBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As EditBoxBuilder Implements IID(Of EditBoxBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As EditBoxBuilder Implements IID(Of EditBoxBuilder).WithIdMso
+            _builder.WithId(mso)
+            Return Me
+        End Function
+
     End Class
 
 End Namespace

@@ -10,6 +10,8 @@ Imports stdole
 Namespace Builders
 
     Public NotInheritable Class DropDownBuilder
+        Implements IBuilder(Of DropDown)
+        Implements IID(Of DropDownBuilder)
         Implements IAddButton(Of DropDownBuilder)
         Implements IEnabled(Of DropDownBuilder)
         Implements IInsert(Of DropDownBuilder)
@@ -39,15 +41,52 @@ Namespace Builders
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of DropDown)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As DropDown
+        Public Sub New(template As DropDown)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of DropDown)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim dropDownAttributes As AttributeSet = New DefaultProvider(Of DropDown)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) dropDownAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of DropDown)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(DropDown)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As DropDown Implements IBuilder(Of DropDown).Build
             Return New DropDown(_builder.Build(), _buttons.ToArray(), tag:=tag)
         End Function
 
         Public Function Add(button As Button) As DropDownBuilder Implements IAddButton(Of DropDownBuilder).Add
             _buttons.Add(button)
+            Return Me
+        End Function
+
+        Public Function WithId(id As String) As DropDownBuilder Implements IID(Of DropDownBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As DropDownBuilder Implements IID(Of DropDownBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As DropDownBuilder Implements IID(Of DropDownBuilder).WithIdMso
+            _builder.WithId(mso)
             Return Me
         End Function
 
@@ -219,12 +258,12 @@ Namespace Builders
         End Function
 
         Public Function GetItemScreenTipFrom(callback As FromControlAndIndex(Of String)) As DropDownBuilder Implements IGetItemScreentip(Of DropDownBuilder).GetItemScreenTipFrom
-            _builder.GetItemScreenTipFrom(callback)
+            _builder.GetItemScreentipFrom(callback)
             Return Me
         End Function
 
         Public Function GetItemSuperTipFrom(callback As FromControlAndIndex(Of String)) As DropDownBuilder Implements IGetItemSupertip(Of DropDownBuilder).GetItemSuperTipFrom
-            _builder.GetItemSuperTipFrom(callback)
+            _builder.GetItemSupertipFrom(callback)
             Return Me
         End Function
 
@@ -244,7 +283,7 @@ Namespace Builders
         End Function
 
         Public Function GetSelectedItemIdFrom(callback As FromControl(Of String)) As DropDownBuilder Implements IGetSelectedItemId(Of DropDownBuilder).GetSelectedItemIdFrom
-            _builder.GetSelectedItemIdFrom(callback)
+            _builder.GetSelectedItemIDFrom(callback)
             Return Me
         End Function
 

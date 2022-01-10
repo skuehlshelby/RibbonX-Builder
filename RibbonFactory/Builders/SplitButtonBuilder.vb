@@ -7,6 +7,8 @@ Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
     Public NotInheritable Class SplitButtonBuilder
+        Implements IBuilder(Of SplitButton)
+        Implements IID(Of SplitButtonBuilder)
         Implements IInsert(Of SplitButtonBuilder)
         Implements IVisible(Of SplitButtonBuilder)
         Implements IEnabled(Of SplitButtonBuilder)
@@ -22,11 +24,33 @@ Namespace Builders
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
+            _builder = New ControlBuilder(attributeGroupBuilder)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As SplitButton
-            Utilities.Require (Of InvalidOperationException)(
+        Public Sub New(template As SplitButton)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of SplitButton)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
+
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim splitButtonAttributes As AttributeSet = New DefaultProvider(Of SplitButton)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) splitButtonAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of SplitButton)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(SplitButton)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As SplitButton Implements IBuilder(Of SplitButton).Build
+            Utilities.Require(Of InvalidOperationException)(
                 If(_builder.IsBuiltInControl(),
                    _button Is Nothing AndAlso _menu Is Nothing,
                    _button IsNot Nothing AndAlso _menu IsNot Nothing),
@@ -51,6 +75,21 @@ Namespace Builders
 
         Public Function WithMenu(menu As Menu) As SplitButtonBuilder
             _menu = menu
+            Return Me
+        End Function
+
+        Public Function WithId(id As String) As SplitButtonBuilder Implements IID(Of SplitButtonBuilder).WithId
+            _builder.WithId(id)
+            Return Me
+        End Function
+
+        Public Function WithIdQ([namespace] As String, id As String) As SplitButtonBuilder Implements IID(Of SplitButtonBuilder).WithIdQ
+            _builder.WithId([namespace], id)
+            Return Me
+        End Function
+
+        Public Function WithIdMso(mso As MSO) As SplitButtonBuilder Implements IID(Of SplitButtonBuilder).WithIdMso
+            _builder.WithId(mso)
             Return Me
         End Function
 
