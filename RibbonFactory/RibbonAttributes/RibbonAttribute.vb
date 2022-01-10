@@ -6,6 +6,8 @@
         Protected ReadOnly Name As AttributeName
         Protected ReadOnly Category As AttributeCategory
 
+        Public Event ValueChanged()
+
         Protected Sub New(name As AttributeName, category As AttributeCategory)
             Me.Name = name
             Me.Category = category
@@ -13,6 +15,10 @@
             If Not Me.Category.Contains(name) Then
                 Throw New ArgumentException($"Attribute {name} is not a member of {category}.")
             End If
+        End Sub
+
+        Protected Sub RaiseValueChanged()
+            RaiseEvent ValueChanged()
         End Sub
 
         Public Function IsNamed(otherName As AttributeName) As Boolean

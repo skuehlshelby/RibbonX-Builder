@@ -8,21 +8,30 @@
             RaiseEvent AttributeChanged
         End Sub
 
-        Private ReadOnly _attributes As ISet(Of RibbonAttribute) = New HashSet(Of RibbonAttribute)(RibbonAttribute.CompareByCategory())
+        Private ReadOnly _attributes As ISet(Of RibbonAttribute)
+
+        Public Sub New()
+            _attributes = New HashSet(Of RibbonAttribute)(RibbonAttribute.CompareByCategory())
+        End Sub
+
+        Public Sub New(attributes As IEnumerable(Of RibbonAttribute))
+            _attributes = New HashSet(Of RibbonAttribute)(RibbonAttribute.CompareByCategory())
+
+            For Each attribute As RibbonAttribute In attributes
+                Add(attribute)
+            Next
+        End Sub
 
         Public Function Add(item As RibbonAttribute) As Boolean Implements ISet(Of RibbonAttribute).Add
-            If Not _attributes.Add(item) Then
-                _attributes.Remove(item)
-                _attributes.Add(item)
+            If Contains(item) Then
+                Remove(item)
             End If
 
-            Return True
-        End Function
+            _attributes.Add(item)
 
-        Public Function Add(Of T)(item As RibbonAttributeReadWrite(Of T)) As Boolean
             AddHandler item.ValueChanged, AddressOf OnValueChange
 
-            Return Add(CType(item, RibbonAttribute))
+            Return True
         End Function
 
         Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadOnly(Of T)
@@ -78,7 +87,9 @@
         End Sub
 
         Public Sub Clear() Implements ICollection(Of RibbonAttribute).Clear
-            _attributes.Clear()
+            For Each attribute As RibbonAttribute In _attributes
+                Remove(attribute)
+            Next
         End Sub
 
         Public Sub CopyTo(array() As RibbonAttribute, arrayIndex As Integer) Implements ICollection(Of RibbonAttribute).CopyTo
@@ -118,7 +129,12 @@
         End Function
 
         Public Function Remove(item As RibbonAttribute) As Boolean Implements ICollection(Of RibbonAttribute).Remove
-            Return _attributes.Remove(item)
+            If _attributes.Remove(item) Then
+                RemoveHandler item.ValueChanged, AddressOf OnValueChange
+                Return True
+            Else
+                Return False
+            End If
         End Function
 
         Public Function GetEnumerator() As IEnumerator(Of RibbonAttribute) Implements IEnumerable(Of RibbonAttribute).GetEnumerator

@@ -4,8 +4,6 @@ Namespace RibbonAttributes
     Friend NotInheritable Class RibbonAttributeReadWrite(Of T)
         Inherits RibbonAttributeReadOnly(Of T)
 
-        Public Event ValueChanged
-
         Private ReadOnly _callback As String
 
         Public Sub New(value As T, callback As String, name As AttributeName , category As AttributeCategory)
@@ -16,7 +14,7 @@ Namespace RibbonAttributes
         Sub SetValue(newValue As T)
             If Not Value.Equals(newValue) Then
                 Value = newValue
-                RaiseEvent ValueChanged
+                RaiseValueChanged()
             End If
         End Sub
 
