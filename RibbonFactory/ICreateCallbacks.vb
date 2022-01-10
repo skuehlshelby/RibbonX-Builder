@@ -17,6 +17,7 @@ Public Interface ICreateCallbacks
     Function GetDescription(control As IRibbonControl) As String
     Function GetScreenTip(control As IRibbonControl) As String
     Function GetSuperTip(control As IRibbonControl) As String
+    Function GetKeyTip(control As IRibbonControl) As KeyTip
     Function GetSize(control As IRibbonControl) As ControlSize
     Function GetImage(control As IRibbonControl) As IPictureDisp
     Function GetShowImage(control As IRibbonControl) As Boolean
