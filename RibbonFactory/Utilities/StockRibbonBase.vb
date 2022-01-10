@@ -105,6 +105,10 @@ Namespace Utilities
             Return Ribbon.GetElement(Of ISuperTip)(control.Id).SuperTip
         End Function
 
+        Public Function GetKeyTip(control As IRibbonControl) As KeyTip Implements ICreateCallbacks.GetKeyTip
+            Return Ribbon.GetElement(Of IKeyTip)(control.Id).KeyTip
+        End Function
+
         Public Function GetSize(control As IRibbonControl) As ControlSize Implements ICreateCallbacks.GetSize
             Return Ribbon.GetElement(Of ISize)(control.Id).Size
         End Function
@@ -178,7 +182,7 @@ Namespace Utilities
             Ribbon.GetElement(Of IOnAction)(control.Id).Execute() 'TODO API for this is a bit awkward.
         End Sub
 
-        Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle 
+        Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
             Ribbon.GetElement(Of IPressed)(control.Id).Pressed = pressed
             Ribbon.GetElement(Of IOnAction)(control.Id).Execute()
         End Sub
