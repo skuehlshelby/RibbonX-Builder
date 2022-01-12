@@ -32,14 +32,14 @@ Public Class KeyTipTests
 	End Sub
 
 	<TestMethod()>
-	Public Sub StringConversionIsInvalid()
+	Public Sub ThrowsInvalidFormatExceptionWhenAnyCharacterOtherThanTheLastCharacterIsANumber()
 		Dim tip As KeyTip
 
 		Assert.ThrowsException(Of FormatException)(Sub() tip = "12")
 	End Sub
 
 	<TestMethod()>
-	Public Sub ZGetNextAvailableWorks()
+	Public Sub GetNextAvailableWorks()
 		Debug.WriteLine($"The next available KeyTip is: '{KeyTip.NextAvailable()}'")
 	End Sub
 
