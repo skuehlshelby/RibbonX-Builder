@@ -19,6 +19,7 @@ Namespace Controls
         Implements IText
         Implements IMaxLength
         Implements IDefaultProvider
+        Implements IOnAction
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
@@ -169,6 +170,10 @@ Namespace Controls
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Return _attributes
         End Function
+
+        Public Sub Execute() Implements IOnAction.Execute
+            _attributes.ReadOnlyLookup(Of Action(Of EditBox))(AttributeCategory.OnAction).GetValue().Invoke(Me)
+        End Sub
 
         Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
             Get
