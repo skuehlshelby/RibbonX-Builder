@@ -21,7 +21,7 @@ Namespace Builders
         Implements IShowLabel(Of EditBoxBuilder)
         Implements IMaxLength(Of EditBoxBuilder)
         Implements ISizeString(Of EditBoxBuilder)
-        Implements IOnChange(Of EditBoxBuilder)
+        Implements IOnChange(Of EditBox, EditBoxBuilder)
         Implements IValidateText(Of EditBoxBuilder)
 
         Private ReadOnly _builder As ControlBuilder
@@ -189,7 +189,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(action As Action, callback As TextChanged) As EditBoxBuilder Implements IOnChange(Of EditBoxBuilder).ThatDoes
+        Public Function ThatDoes(action As Action(Of EditBox), callback As TextChanged) As EditBoxBuilder Implements IOnChange(Of EditBox, EditBoxBuilder).ThatDoes
             _builder.ThatDoes(action, callback)
             Return Me
         End Function

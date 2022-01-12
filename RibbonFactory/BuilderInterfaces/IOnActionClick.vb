@@ -1,8 +1,8 @@
 ﻿Namespace BuilderInterfaces
 
-    Public Interface IOnActionClick(Of T)
+    Public Interface IOnActionClick(Of TRibbonElement As RibbonElement, Out TBuilder)
 
-        Function ThatDoes(action As Action, callback As OnAction) As T
+        Function ThatDoes(action As Action(Of TRibbonElement), callback As OnAction) As TBuilder
 
     End Interface
 

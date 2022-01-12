@@ -16,7 +16,7 @@ Namespace Builders
         Implements ILabelScreenTipSuperTip(Of ButtonBuilder)
         Implements IShowLabel(Of ButtonBuilder)
         Implements IShowImage(Of ButtonBuilder)
-        Implements IOnActionClick(Of ButtonBuilder)
+        Implements IOnActionClick(Of Button, ButtonBuilder)
         Implements ISize(Of ButtonBuilder)
         Implements IImage(Of ButtonBuilder)
         Implements IDescription(Of ButtonBuilder)
@@ -165,7 +165,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(action As Action, callback As OnAction) As ButtonBuilder Implements IOnActionClick(Of ButtonBuilder).ThatDoes
+        Public Function ThatDoes(action As Action(Of Button), callback As OnAction) As ButtonBuilder Implements IOnActionClick(Of Button, ButtonBuilder).ThatDoes
             _builder.ThatDoes(action, callback)
             Return Me
         End Function
