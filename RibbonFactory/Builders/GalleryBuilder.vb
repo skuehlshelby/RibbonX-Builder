@@ -149,196 +149,245 @@ Namespace Builders
 		End Function
 
 		Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As GalleryBuilder Implements ILabelScreenTipSuperTip(Of GalleryBuilder).WithLabel
-			Throw New NotImplementedException()
+			_builder.WithLabel(label, copyToScreenTip)
+			_builder.ShowLabel()
+			Return Me
 		End Function
 
 		Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As GalleryBuilder Implements ILabelScreenTipSuperTip(Of GalleryBuilder).WithLabel
-			Throw New NotImplementedException()
+			_builder.WithLabel(label, callback, copyToScreenTip)
+			_builder.ShowLabel()
+			Return Me
 		End Function
 
 		Public Function WithScreenTip(screenTip As String) As GalleryBuilder Implements ILabelScreenTipSuperTip(Of GalleryBuilder).WithScreenTip
-			Throw New NotImplementedException()
+			_builder.WithScreentip(screenTip)
+			Return Me
 		End Function
 
 		Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As GalleryBuilder Implements ILabelScreenTipSuperTip(Of GalleryBuilder).WithScreenTip
-			Throw New NotImplementedException()
+			_builder.WithScreentip(screenTip, callback)
+			Return Me
 		End Function
 
 		Public Function WithSuperTip(superTip As String) As GalleryBuilder Implements ILabelScreenTipSuperTip(Of GalleryBuilder).WithSuperTip
-			Throw New NotImplementedException()
+			_builder.WithSupertip(superTip)
+			Return Me
 		End Function
 
 		Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As GalleryBuilder Implements ILabelScreenTipSuperTip(Of GalleryBuilder).WithSuperTip
-			Throw New NotImplementedException()
+			_builder.WithSupertip(superTip, callback)
+			Return Me
 		End Function
 
 		Public Function ShowLabel() As GalleryBuilder Implements IShowLabel(Of GalleryBuilder).ShowLabel
-			Throw New NotImplementedException()
+			_builder.ShowLabel()
+			Return Me
 		End Function
 
 		Public Function ShowLabel(callback As FromControl(Of Boolean)) As GalleryBuilder Implements IShowLabel(Of GalleryBuilder).ShowLabel
-			Throw New NotImplementedException()
+			_builder.ShowLabel(callback)
+			Return Me
 		End Function
 
 		Public Function HideLabel() As GalleryBuilder Implements IShowLabel(Of GalleryBuilder).HideLabel
-			Throw New NotImplementedException()
+			_builder.HideLabel()
+			Return Me
 		End Function
 
 		Public Function HideLabel(callback As FromControl(Of Boolean)) As GalleryBuilder Implements IShowLabel(Of GalleryBuilder).HideLabel
-			Throw New NotImplementedException()
+			_builder.HideLabel(callback)
+			Return Me
 		End Function
 
 		Public Function InvalidateContentOnDrop() As GalleryBuilder Implements IInvalidateContentOnDrop(Of GalleryBuilder).InvalidateContentOnDrop
-			Throw New NotImplementedException()
+			_builder.InvalidateContentOnDrop()
+			Return Me
 		End Function
 
 		Public Function WithImage(imagePath As String) As GalleryBuilder Implements IImage(Of GalleryBuilder).WithImage
-			Throw New NotImplementedException()
+			_builder.WithImage(imagePath)
+			Return Me
 		End Function
 
 		Public Function WithImage(image As ImageMSO) As GalleryBuilder Implements IImage(Of GalleryBuilder).WithImage
-			Throw New NotImplementedException()
+			_builder.WithImage(image)
+			Return Me
 		End Function
 
 		Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As GalleryBuilder Implements IImage(Of GalleryBuilder).WithImage
-			Throw New NotImplementedException()
+			_builder.WithImage(image, callback)
+			Return Me
 		End Function
 
 		Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As GalleryBuilder Implements IImage(Of GalleryBuilder).WithImage
-			Throw New NotImplementedException()
+			_builder.WithImage(image, callback)
+			Return Me
 		End Function
 
 		Public Function WithKeyTip(keyTip As KeyTip) As GalleryBuilder Implements IKeyTip(Of GalleryBuilder).WithKeyTip
-			Throw New NotImplementedException()
+			_builder.WithKeyTip(keyTip)
+			Return Me
 		End Function
 
 		Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As GalleryBuilder Implements IKeyTip(Of GalleryBuilder).WithKeyTip
-			Throw New NotImplementedException()
+			_builder.WithKeyTip(keyTip, callback)
+			Return Me
 		End Function
 
 		Public Function WithDescription(description As String) As GalleryBuilder Implements IDescription(Of GalleryBuilder).WithDescription
-			Throw New NotImplementedException()
+			_builder.WithDescription(description)
+			Return Me
 		End Function
 
 		Public Function WithDescription(description As String, callback As FromControl(Of String)) As GalleryBuilder Implements IDescription(Of GalleryBuilder).WithDescription
-			Throw New NotImplementedException()
+			_builder.WithDescription(description, callback)
+			Return Me
 		End Function
 
 		Public Function GetItemIdFrom(callback As FromControlAndIndex(Of String)) As GalleryBuilder Implements IGetItemId(Of GalleryBuilder).GetItemIdFrom
-			Throw New NotImplementedException()
+			_builder.GetItemIDFrom(callback)
+			Return Me
 		End Function
 
 		Public Function GetItemCountFrom(callback As FromControl(Of Integer)) As GalleryBuilder Implements IGetItemCount(Of GalleryBuilder).GetItemCountFrom
-			Throw New NotImplementedException()
+			_builder.GetItemCountFrom(callback)
+			Return Me
 		End Function
 
 		Public Function GetItemLabelFrom(callback As FromControlAndIndex(Of String)) As GalleryBuilder Implements IGetItemLabel(Of GalleryBuilder).GetItemLabelFrom
-			Throw New NotImplementedException()
+			_builder.GetItemLabelFrom(callback)
+			Return Me
 		End Function
 
 		Public Function ShowLabelsOnChildItems() As GalleryBuilder Implements IShowItemLabel(Of GalleryBuilder).ShowLabelsOnChildItems
-			Throw New NotImplementedException()
+			_builder.ShowItemLabel()
+			Return Me
 		End Function
 
 		Public Function HideLabelsOnChildItems() As GalleryBuilder Implements IShowItemLabel(Of GalleryBuilder).HideLabelsOnChildItems
-			Throw New NotImplementedException()
+			_builder.HideItemLabel()
+			Return Me
 		End Function
 
 		Public Function GetItemScreenTipFrom(callback As FromControlAndIndex(Of String)) As GalleryBuilder Implements IGetItemScreentip(Of GalleryBuilder).GetItemScreenTipFrom
-			Throw New NotImplementedException()
+			_builder.GetItemScreentipFrom(callback)
+			Return Me
 		End Function
 
 		Public Function GetItemSuperTipFrom(callback As FromControlAndIndex(Of String)) As GalleryBuilder Implements IGetItemSupertip(Of GalleryBuilder).GetItemSuperTipFrom
-			Throw New NotImplementedException()
+			_builder.GetItemSupertipFrom(callback)
+			Return Me
 		End Function
 
 		Public Function GetItemImageFrom(callback As FromControlAndIndex(Of IPictureDisp)) As GalleryBuilder Implements IGetItemImage(Of GalleryBuilder).GetItemImageFrom
-			Throw New NotImplementedException()
+			_builder.GetItemImageFrom(callback)
+			Return Me
 		End Function
 
 		Public Function ShowItemImages() As GalleryBuilder Implements IShowItemImage(Of GalleryBuilder).ShowItemImages
-			Throw New NotImplementedException()
+			_builder.ShowItemImages()
+			Return Me
 		End Function
 
 		Public Function HideItemImages() As GalleryBuilder Implements IShowItemImage(Of GalleryBuilder).HideItemImages
-			Throw New NotImplementedException()
+			_builder.HideItemImages()
+			Return Me
 		End Function
 
 		Public Function GetSelectedItemIdFrom(callback As FromControl(Of String)) As GalleryBuilder Implements IGetSelectedItemId(Of GalleryBuilder).GetSelectedItemIdFrom
-			Throw New NotImplementedException()
+			_builder.GetSelectedItemIDFrom(callback)
+			Return Me
 		End Function
 
 		Public Function GetSelectedItemIndexFrom(callback As FromControl(Of Integer)) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder).GetSelectedItemIndexFrom
-			Throw New NotImplementedException()
+			_builder.GetSelectedItemIndexFrom(callback)
+			Return Me
 		End Function
 
 		Public Function ShowImage() As GalleryBuilder Implements IShowImage(Of GalleryBuilder).ShowImage
-			Throw New NotImplementedException()
+			_builder.ShowImage()
+			Return Me
 		End Function
 
 		Public Function ShowImage(getShowImage As FromControl(Of Boolean)) As GalleryBuilder Implements IShowImage(Of GalleryBuilder).ShowImage
-			Throw New NotImplementedException()
+			_builder.ShowImage(getShowImage)
+			Return Me
 		End Function
 
 		Public Function HideImage() As GalleryBuilder Implements IShowImage(Of GalleryBuilder).HideImage
-			Throw New NotImplementedException()
+			_builder.HideImage()
+			Return Me
 		End Function
 
 		Public Function HideImage(getShowImage As FromControl(Of Boolean)) As GalleryBuilder Implements IShowImage(Of GalleryBuilder).HideImage
-			Throw New NotImplementedException()
+			_builder.HideImage(getShowImage)
+			Return Me
 		End Function
 
 		Public Function ThatDoes(action As Action, callback As SelectionChanged) As GalleryBuilder Implements IOnActionSelectionChanged(Of GalleryBuilder).ThatDoes
-			Throw New NotImplementedException()
+			_builder.ThatDoes(action, callback)
+			Return Me
 		End Function
 
 		Public Function Large() As GalleryBuilder Implements ISize(Of GalleryBuilder).Large
-			Throw New NotImplementedException()
+			_builder.Large()
+			Return Me
 		End Function
 
 		Public Function Large(callback As FromControl(Of Enums.ControlSize)) As GalleryBuilder Implements ISize(Of GalleryBuilder).Large
-			Throw New NotImplementedException()
+			_builder.Large(callback)
+			Return Me
 		End Function
 
 		Public Function Normal() As GalleryBuilder Implements ISize(Of GalleryBuilder).Normal
-			Throw New NotImplementedException()
+			_builder.Normal()
+			Return Me
 		End Function
 
 		Public Function Normal(callback As FromControl(Of Enums.ControlSize)) As GalleryBuilder Implements ISize(Of GalleryBuilder).Normal
-			Throw New NotImplementedException()
+			_builder.Normal(callback)
+			Return Me
 		End Function
 
 		Public Function WithRowCount(rowCount As Integer) As GalleryBuilder Implements IRowsAndColumns(Of GalleryBuilder).WithRowCount
-			Throw New NotImplementedException()
+			_builder.WithRows(rowCount)
+			Return Me
 		End Function
 
 		Public Function WithColumnCount(columnCount As Integer) As GalleryBuilder Implements IRowsAndColumns(Of GalleryBuilder).WithColumnCount
-			Throw New NotImplementedException()
+			_builder.WithColumns(columnCount)
+			Return Me
 		End Function
 
 		Public Function ShowInRibbon() As GalleryBuilder Implements IShowInRibbon(Of GalleryBuilder).ShowInRibbon
-			Throw New NotImplementedException()
+			_builder.ShowInRibbon()
+			Return Me
 		End Function
 
 		Public Function DoNotShowInRibbon() As GalleryBuilder Implements IShowInRibbon(Of GalleryBuilder).DoNotShowInRibbon
-			Throw New NotImplementedException()
+			_builder.DoNotShowInRibbon()
+			Return Me
 		End Function
 
 		Public Function WithItemDimensions(dimensions As Size) As GalleryBuilder Implements IItemDimensions(Of GalleryBuilder).WithItemDimensions
-			Throw New NotImplementedException()
+			Return WithItemDimensions(dimensions.Height, dimensions.Width)
 		End Function
 
 		Public Function WithItemDimensions(height As Integer, width As Integer) As GalleryBuilder Implements IItemDimensions(Of GalleryBuilder).WithItemDimensions
-			Throw New NotImplementedException()
+			_builder.WithItemDimensions(height, width)
+			Return Me
 		End Function
 
 		Public Function WithItemDimensions(dimensions As Size, heightCallback As FromControl(Of Integer), widthCallback As FromControl(Of Integer)) As GalleryBuilder Implements IItemDimensions(Of GalleryBuilder).WithItemDimensions
-			Throw New NotImplementedException()
+			Return WithItemDimensions(dimensions.Height, dimensions.Width, heightCallback, widthCallback)
 		End Function
 
 		Public Function WithItemDimensions(height As Integer, width As Integer, heightCallback As FromControl(Of Integer), widthCallback As FromControl(Of Integer)) As GalleryBuilder Implements IItemDimensions(Of GalleryBuilder).WithItemDimensions
-			Throw New NotImplementedException()
+			_builder.WithItemDimensions(height, width, heightCallback, widthCallback)
+			Return Me
 		End Function
+
 	End Class
 
 End Namespace

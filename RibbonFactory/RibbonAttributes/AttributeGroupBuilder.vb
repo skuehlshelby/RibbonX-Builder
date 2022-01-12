@@ -153,8 +153,8 @@ Namespace RibbonAttributes
 			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(showImage, callback.Method.Name, AttributeName.GetShowImage, AttributeCategory.ImageVisibility))
 		End Sub
 
-		Public Sub AddOnAction(action As Action, callback As OnAction)
-			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+		Public Sub AddOnAction(Of T As RibbonElement)(action As Action(Of T), callback As OnAction)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
 		End Sub
 
 		Public Sub AddOnAction(action As Action, callback As ButtonPressed)
@@ -165,8 +165,8 @@ Namespace RibbonAttributes
 			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
 		End Sub
 
-		Public Sub AddOnChange(action As Action, callback As TextChanged)
-			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, callback.Method.Name, AttributeName.OnChange, AttributeCategory.OnChange))
+		Public Sub AddOnChange(Of T As RibbonElement)(action As Action(Of T), callback As TextChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, callback.Method.Name, AttributeName.OnChange, AttributeCategory.OnChange))
 		End Sub
 
 		Public Sub AddGetText(text As String, callback As FromControl(Of String))
@@ -289,6 +289,10 @@ Namespace RibbonAttributes
 			_attributes.Add(New RibbonAttributeReadWrite(Of String)(title, callback.Method.Name, AttributeName.GetTitle, AttributeCategory.Title))
 		End Sub
 
+		Public Sub AddShowInRibbon(showInRibbon As Boolean)
+			_attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(showInRibbon, AttributeName.ShowInRibbon, AttributeCategory.ShowInRibbon))
+		End Sub
+
 		Public Function GetEnumerator() As IEnumerator(Of RibbonAttribute) Implements IEnumerable(Of RibbonAttribute).GetEnumerator
 			Return _attributes.GetEnumerator()
 		End Function
@@ -296,6 +300,7 @@ Namespace RibbonAttributes
 		Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
 			Return _attributes.GetEnumerator()
 		End Function
+
 	End Class
 
 End Namespace

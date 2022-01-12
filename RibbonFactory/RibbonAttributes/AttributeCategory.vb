@@ -151,6 +151,8 @@ Namespace RibbonAttributes
 
         Public Shared ReadOnly Property Title As AttributeCategory = New AttributeCategory(39, NameOf(Title), AttributeName.Title, AttributeName.GetTitle)
 
+        Public Shared ReadOnly Property ShowInRibbon As AttributeCategory = New AttributeCategory(40, NameOf(ShowInRibbon), AttributeName.ShowInRibbon)
+
 #End Region
 
 #Region "Overrides and Equality Comparison"

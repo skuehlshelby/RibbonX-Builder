@@ -228,7 +228,7 @@ Namespace RibbonAttributes
 
         Public Shared Property ItemSize As AttributeName _
             = New AttributeName(value := 60, name := NameOf(ItemSize).CamelCase())
-
+        Public Shared Property ShowInRibbon As AttributeName = New AttributeName(value:=61, name:=NameOf(ShowInRibbon).CamelCase())
     End Class
 
 End NameSpace

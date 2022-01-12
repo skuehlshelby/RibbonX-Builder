@@ -1,5 +1,6 @@
 ﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
+Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 Imports RibbonFactory.Utilities
 Imports stdole
@@ -19,6 +20,7 @@ Namespace Containers
         Implements ISuperTip
         Implements ISelect
         Implements IOnAction
+        Implements ISize
         Implements IDefaultProvider
 
         Private _selected As Item
@@ -222,6 +224,15 @@ Namespace Containers
             Set
                 _selected = Items(Value)
                 _selectedItemIndex = Value
+            End Set
+        End Property
+
+        Public Property Size As ControlSize Implements ISize.Size
+            Get
+                Return _attributes.ReadOnlyLookup(Of ControlSize)(AttributeCategory.Size).GetValue()
+            End Get
+            Set
+                _attributes.ReadWriteLookup(Of ControlSize)(AttributeCategory.Size).SetValue(Value)
             End Set
         End Property
 
