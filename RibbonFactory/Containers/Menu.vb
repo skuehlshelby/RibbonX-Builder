@@ -20,6 +20,7 @@ Namespace Containers
 		Implements IShowImage
 		Implements ISize
 		Implements IItemSize
+		Implements IDefaultProvider
 
 		Private ReadOnly _attributes As AttributeSet
 
@@ -148,6 +149,10 @@ Namespace Containers
 				_attributes.ReadWriteLookup(Of ControlSize)(AttributeName.GetSize).SetValue(Value)
 			End Set
 		End Property
+
+		Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+			Return _attributes
+		End Function
 
 	End Class
 
