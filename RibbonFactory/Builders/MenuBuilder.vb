@@ -11,6 +11,7 @@ Imports stdole
 
 Namespace Builders
     Public NotInheritable Class MenuBuilder
+        Implements IBuilder(Of Menu)
         Implements IInsert(Of MenuBuilder)
         Implements IEnabled(Of MenuBuilder)
         Implements IVisible(Of MenuBuilder)
@@ -33,8 +34,29 @@ Namespace Builders
             _controls = New List(Of RibbonElement)
         End Sub
 
+        Public Sub New(template As Menu)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of Menu)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+        End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As Menu
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim menuAttributes As AttributeSet = New DefaultProvider(Of Menu)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) menuAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of Menu)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(Menu)}'")
+            End If
+        End Sub
+
+        Public Function Build(Optional tag As Object = Nothing) As Menu Implements IBuilder(Of Menu).Build
             Return New Menu(_controls, _builder.Build(), tag)
         End Function
 
