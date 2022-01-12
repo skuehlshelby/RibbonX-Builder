@@ -95,6 +95,8 @@
   <ItemGroup>
     <Compile Include="CheckboxTests.vb" />
     <Compile Include="ComboBoxTests.vb" />
+    <Compile Include="GalleryTests.vb" />
+    <Compile Include="LabelControlTests.vb" />
     <Compile Include="RandomExtensions.vb" />
     <Compile Include="ImageConversion.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -120,6 +122,8 @@
     <Compile Include="DynamicUpdating.vb" />
     <Compile Include="KeyTipTests.vb" />
     <Compile Include="EditBoxTests.vb" />
+    <Compile Include="SplitButtonWithTests.vb" />
+    <Compile Include="ToggleButtonTests.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
