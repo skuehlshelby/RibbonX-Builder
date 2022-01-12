@@ -39,8 +39,22 @@ Public NotInheritable Class RandomControlGenerator
 		Return MakeControl(Function() New ToggleButtonBuilder())
 	End Function
 
-	Public Function MakeSplitButton() As SplitButton
-		Return MakeControl(Function() New SplitButtonBuilder())
+	Public Function MakeSplitButtonWithRegularButtonAndMenu() As SplitButton
+		Dim builder As SplitButtonBuilder = New SplitButtonBuilder()
+
+		ConfigureControl(builder)
+
+		builder.WithButton(MakeButton())
+
+		Dim menuBuilder As MenuBuilder = New MenuBuilder()
+
+		ConfigureControl(menuBuilder)
+
+		menuBuilder.WithControl(MakeButton())
+
+		builder.WithMenu(menuBuilder.Build())
+
+		Return builder.Build()
 	End Function
 
 	Public Function MakeDropDown() As DropDown
@@ -51,9 +65,19 @@ Public NotInheritable Class RandomControlGenerator
 		Return MakeControl(Function() New GalleryBuilder())
 	End Function
 
+	Public Function MakeMenu() As Menu
+		Return MakeControl(Function() New MenuBuilder())
+	End Function
+
 	Private Function MakeControl(Of T As RibbonElement)(builderInitializer As Func(Of IBuilder(Of T))) As T
 		Dim builder As IBuilder(Of T) = builderInitializer.Invoke()
 
+		ConfigureControl(builder)
+
+		Return builder.Build()
+	End Function
+
+	Private Sub ConfigureControl(Of T As RibbonElement)(builder As IBuilder(Of T))
 		Dim type As Type = builder.GetType()
 
 		Dim method As MethodInfo = Nothing
@@ -256,7 +280,6 @@ Public NotInheritable Class RandomControlGenerator
 			End If
 		End If
 
-		Return builder.Build()
-	End Function
+	End Sub
 
 End Class
