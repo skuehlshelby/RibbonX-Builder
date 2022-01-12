@@ -19,6 +19,7 @@ Namespace Controls
         Implements ISize
         Implements IPressed
         Implements IVisible
+        Implements IKeyTip
         Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
@@ -139,6 +140,15 @@ Namespace Controls
             End Get
             Set
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetDescription).SetValue(Value)
+            End Set
+        End Property
+
+        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
+            Get
+                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeCategory.KeyTip).GetValue()
+            End Get
+            Set
+                _attributes.ReadWriteLookup(Of KeyTip)(AttributeCategory.KeyTip).SetValue(Value)
             End Set
         End Property
 
