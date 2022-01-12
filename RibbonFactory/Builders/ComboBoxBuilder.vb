@@ -4,6 +4,7 @@ Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Builders
@@ -20,13 +21,16 @@ Namespace Builders
 		Implements IShowImage(Of ComboBoxBuilder)
 		Implements IMaxLength(Of ComboBoxBuilder)
 		Implements IInsert(Of ComboBoxBuilder)
+		Implements IValidateText(Of ComboBoxBuilder)
 
 		Private ReadOnly _builder As ControlBuilder
+		Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
 
 		Public Sub New()
 			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of ComboBox)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(defaultProvider.GetDefaults())
 			_builder = New ControlBuilder(attributeGroupBuilder)
+			_validationRules = New List(Of IValidate(Of String))
 		End Sub
 
 		Public Sub New(template As ComboBox)
@@ -52,7 +56,7 @@ Namespace Builders
 		End Sub
 
 		Public Function Build(Optional tag As Object = Nothing) As ComboBox Implements IBuilder(Of ComboBox).Build
-			Throw New NotImplementedException()
+			Return New ComboBox(_builder.Build(), _validationRules, tag)
 		End Function
 
 		Public Function Enabled() As ComboBoxBuilder Implements IEnabled(Of ComboBoxBuilder).Enabled
@@ -237,6 +241,15 @@ Namespace Builders
 
 		Public Function WithIdMso(mso As MSO) As ComboBoxBuilder Implements IID(Of ComboBoxBuilder).WithIdMso
 			_builder.WithId(mso)
+			Return Me
+		End Function
+
+		Public Function WithTextValidationRule(rule As Predicate(Of String)) As ComboBoxBuilder Implements IValidateText(Of ComboBoxBuilder).WithTextValidationRule
+			Return WithTextValidationRule(rule, String.Empty)
+		End Function
+
+		Public Function WithTextValidationRule(rule As Predicate(Of String), failureMessage As String) As ComboBoxBuilder Implements IValidateText(Of ComboBoxBuilder).WithTextValidationRule
+			_validationRules.Add(New TextValidator(rule, failureMessage))
 			Return Me
 		End Function
 
