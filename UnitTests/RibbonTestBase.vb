@@ -98,7 +98,7 @@ Public MustInherit Class RibbonTestBase
 
 		builder.
 			InsertBeforeMSO(Excel.Calculator).
-			WithControl(ControlGenerator.MakeButton())
+			WithControls(ControlGenerator.MakeButton())
 
 		Return builder.Build()
 	End Function

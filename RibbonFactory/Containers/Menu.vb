@@ -40,7 +40,7 @@ Namespace Containers
 			Get
 				Dim regex As Regex = New Regex("(?:size|getSize)=""\w+""")
 
-				Return regex.Replace(String.Join(Environment.NewLine, $"<menu { _attributes }>", String.Join(Environment.NewLine, Items), "</menu>"), String.Empty)
+				Return String.Join(Environment.NewLine, $"<menu { _attributes }>", regex.Replace(String.Join(Environment.NewLine, Items), String.Empty), "</menu>")
 			End Get
 		End Property
 
