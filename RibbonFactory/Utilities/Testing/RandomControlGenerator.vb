@@ -50,7 +50,7 @@ Public NotInheritable Class RandomControlGenerator
 
 		ConfigureControl(menuBuilder)
 
-		menuBuilder.WithControl(MakeButton())
+		menuBuilder.WithControls(MakeButton())
 
 		builder.WithMenu(menuBuilder.Build())
 

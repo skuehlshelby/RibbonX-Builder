@@ -137,6 +137,7 @@
     <Compile Include="Builders\LabelControlBuilder.vb" />
     <Compile Include="Builders\MenuBuilder.vb" />
     <Compile Include="Builders\RibbonBuilder.vb" />
+    <Compile Include="Builders\SeparatorBuilder.vb" />
     <Compile Include="Builders\SplitButtonBuilder.vb" />
     <Compile Include="Builders\TabBuilder.vb" />
     <Compile Include="Builders\ToggleButtonBuilder.vb" />

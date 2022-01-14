@@ -175,6 +175,7 @@ Namespace Utilities
 
         Public Sub OnChange(control As IRibbonControl, text As String) Implements ICreateCallbacks.OnChange
             Ribbon.GetElement(Of IText)(control.Id).Text = text
+            Ribbon.GetElement(Of IOnAction)(control.Id).Execute() 'TODO API for this is a bit awkward. Putting this in the Setter won't work. Maybe move this to a separate callback?
         End Sub
 
         Public Sub OnSelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.OnSelectionChange
@@ -184,7 +185,7 @@ Namespace Utilities
 
         Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
             Ribbon.GetElement(Of IPressed)(control.Id).Pressed = pressed
-            Ribbon.GetElement(Of IOnAction)(control.Id).Execute()
+            Ribbon.GetElement(Of IOnAction)(control.Id).Execute() 'TODO API for this is a bit awkward.
         End Sub
 
 #End Region
