@@ -21,12 +21,21 @@ Public Class DesktopFilesGroup
             AddHandler .Deleted, AddressOf OnFileChanged
         End With
 
-        _dropDown = New DropdownBuilder().
+        _openButton = New ButtonBuilder().
+            Large().
+            WithLabel("Open File").
+            WithSuperTip("Open or launch the selected file/program.").
+            WithImage(Enums.ImageMSO.Common.FileOpen).
+            ThatDoes(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName), AddressOf ribbon.OnAction).
+            Build()
+
+        _dropDown = New DropDownBuilder().
+            Add(New ButtonBuilder(_openButton).Build()).
             WithScreenTip("Desktop Files").
             WithSuperTip("The files on your desktop.").
             AsWideAs("A DropDown This Big").
             GetItemCountFrom(AddressOf ribbon.GetItemCount).
-            GetItemIdFrom(AddressOf ribbon.GetItemId).
+            GetItemIdFrom(AddressOf ribbon.GetItemID).
             GetItemImageFrom(AddressOf ribbon.GetItemImage).
             GetItemLabelFrom(AddressOf ribbon.GetItemLabel).
             GetItemSuperTipFrom(AddressOf ribbon.GetItemSuperTip).
@@ -38,14 +47,6 @@ Public Class DesktopFilesGroup
         For Each file As FileInfo In GetFilesOnDesktop()
             _dropDown.Add(ConvertFileToDropDownItem(file))
         Next
-
-        _openButton = New ButtonBuilder().
-            Normal().
-            WithLabel("Open File").
-            WithSuperTip("Open or launch the selected file/program.").
-            WithImage(Enums.ImageMSO.Common.FileOpen).
-            ThatDoes(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName), AddressOf ribbon.OnAction).
-            Build()
     End Sub
 
     Private Sub OnFileChanged(sender As Object, e As FileSystemEventArgs)
@@ -76,8 +77,16 @@ Public Class DesktopFilesGroup
     End Sub
 
     Public Function AsGroup() As Group
+        Dim label As LabelControl = New LabelControlBuilder().
+            WithLabel("        Desktop Files:").
+            Build()
+
+        Dim separator As Separator = New SeparatorBuilder().
+            Invisible().
+            Build()
+
         Return New GroupBuilder().
-                WithControl(BoxBuilder.Horizontal(_openButton,  _dropDown)).
+                WithControls(_openButton, separator, BoxBuilder.Vertical(label, _dropDown)).
                 WithLabel("Desktop Files").
                 Build()
     End Function

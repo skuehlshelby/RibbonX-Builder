@@ -51,6 +51,10 @@
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="netstandard" />
     <Reference Include="OFFICE, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Bundle.Microsoft.Office.Interop.15.0.4569\lib\OFFICE.DLL</HintPath>
@@ -75,7 +79,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ButtonsGroup.vb" />
     <Compile Include="DesktopFilesGroup.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -94,6 +97,7 @@
     </Compile>
     <Compile Include="Ribbon.vb" />
     <Compile Include="Troubleshooter.vb" />
+    <Compile Include="Utilities.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -131,6 +135,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\RibbonFactoryExample.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\bandcamp.png" />
+    <EmbeddedResource Include="Images\github.png" />
+    <EmbeddedResource Include="Images\linkedin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\playing-cards-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
