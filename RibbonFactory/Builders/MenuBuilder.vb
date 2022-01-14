@@ -60,45 +60,45 @@ Namespace Builders
             Return New Menu(_controls, _builder.Build(), tag)
         End Function
 
-        Public Function WithControl(button As Button) As MenuBuilder
-            Require(Of ArgumentNullException)(button IsNot Nothing, $"Parameter '{NameOf(button)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(button)
+        Public Function WithControls(ParamArray buttons() As Button) As MenuBuilder
+            Require(Of ArgumentNullException)(buttons.All(Function(b) b IsNot Nothing), $"Parameter '{NameOf(buttons)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(buttons, Sub(b) _controls.Add(b))
             Return Me
         End Function
 
-        Public Function WithControl(checkBox As CheckBox) As MenuBuilder
-            Require(Of ArgumentNullException)(checkBox IsNot Nothing, $"Parameter '{NameOf(checkBox)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(checkBox)
+        Public Function WithControls(ParamArray checkBoxes() As CheckBox) As MenuBuilder
+            Require(Of ArgumentNullException)(checkBoxes.All(Function(c) c IsNot Nothing), $"Parameter '{NameOf(checkBoxes)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(checkBoxes, Sub(c) _controls.Add(c))
             Return Me
         End Function
 
-        Public Function WithControl(gallery As Gallery) As MenuBuilder
-            Require(Of ArgumentNullException)(gallery IsNot Nothing, $"Parameter '{NameOf(gallery)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(gallery)
+        Public Function WithControls(ParamArray galleries() As Gallery) As MenuBuilder
+            Require(Of ArgumentNullException)(galleries.All(Function(g) g IsNot Nothing), $"Parameter '{NameOf(galleries)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(galleries, Sub(g) _controls.Add(g))
             Return Me
         End Function
 
-        Public Function WithControl(menu As Menu) As MenuBuilder
-            Require(Of ArgumentNullException)(menu IsNot Nothing, $"Parameter '{NameOf(menu)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(menu)
+        Public Function WithControls(ParamArray menus() As Menu) As MenuBuilder
+            Require(Of ArgumentNullException)(menus.All(Function(m) m IsNot Nothing), $"Parameter '{NameOf(menus)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(menus, Sub(m) _controls.Add(m))
             Return Me
         End Function
 
-        Public Function WithControl(menuSeparator As MenuSeparator) As MenuBuilder
-            Require(Of ArgumentNullException)(menuSeparator IsNot Nothing, $"Parameter '{NameOf(menuSeparator)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(menuSeparator)
+        Public Function WithControls(ParamArray menuSeparators() As MenuSeparator) As MenuBuilder
+            Require(Of ArgumentNullException)(menuSeparators.All(Function(g) g IsNot Nothing), $"Parameter '{NameOf(menuSeparators)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(menuSeparators, Sub(g) _controls.Add(g))
             Return Me
         End Function
 
-        Public Function WithControl(splitButton As SplitButton) As MenuBuilder
-            Require(Of ArgumentNullException)(splitButton IsNot Nothing, $"Parameter '{NameOf(splitButton)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(splitButton)
+        Public Function WithControls(ParamArray splitButtons() As SplitButton) As MenuBuilder
+            Require(Of ArgumentNullException)(splitButtons.All(Function(s) s IsNot Nothing), $"Parameter '{NameOf(splitButtons)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(splitButtons, Sub(s) _controls.Add(s))
             Return Me
         End Function
 
-        Public Function WithControl(toggleButton As ToggleButton) As MenuBuilder
-            Require(Of ArgumentNullException)(toggleButton IsNot Nothing, $"Parameter '{NameOf(toggleButton)}', given to {NameOf(MenuBuilder)}, cannot be null.")
-            _controls.Add(toggleButton)
+        Public Function WithControls(ParamArray toggleButtons() As ToggleButton) As MenuBuilder
+            Require(Of ArgumentNullException)(toggleButtons.All(Function(t) t IsNot Nothing), $"Parameter '{NameOf(toggleButtons)}', given to {NameOf(MenuBuilder)}, cannot be null or contain null values.")
+            Array.ForEach(toggleButtons, Sub(t) _controls.Add(t))
             Return Me
         End Function
 
