@@ -41,6 +41,7 @@ Namespace Builders
             attributeGroupBuilder.SetDefaults(template)
             attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())
             _builder = New ControlBuilder(attributeGroupBuilder)
+            _validationRules = New List(Of IValidate(Of String))
         End Sub
 
         Public Sub New(template As RibbonElement)
@@ -53,6 +54,7 @@ Namespace Builders
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())
                 _builder = New ControlBuilder(attributeGroupBuilder)
+                _validationRules = New List(Of IValidate(Of String))
             Else
                 Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(EditBox)}'")
             End If
@@ -191,6 +193,21 @@ Namespace Builders
 
         Public Function ThatDoes(action As Action(Of EditBox), callback As TextChanged) As EditBoxBuilder Implements IOnChange(Of EditBox, EditBoxBuilder).ThatDoes
             _builder.ThatDoes(action, callback)
+            Return Me
+        End Function
+
+        Public Function WithText(text As String, outgoing As FromControl(Of String)) As EditBoxBuilder
+            _builder.GetTextFrom(text, outgoing)
+            Return Me
+        End Function
+
+        Public Function WithText(incoming As TextChanged, outgoing As FromControl(Of String)) As EditBoxBuilder
+            _builder.GetTextFrom(String.Empty, outgoing)
+            Return Me
+        End Function
+
+        Public Function WithText(text As String, incoming As TextChanged, outgoing As FromControl(Of String)) As EditBoxBuilder
+            _builder.GetTextFrom(text, outgoing)
             Return Me
         End Function
 

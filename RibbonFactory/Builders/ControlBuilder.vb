@@ -251,8 +251,8 @@ Namespace Builders
             _attributeGroupBuilder.AddGetPressed(pressed:=False, callback:=callback)
         End Sub
 
-        Public Sub GetTextFrom(callback As FromControl(Of String))
-            _attributeGroupBuilder.AddGetText(text:=String.Empty, callback:=callback)
+        Public Sub GetTextFrom(text As String, callback As FromControl(Of String))
+            _attributeGroupBuilder.AddGetText(text:=text, callback:=callback)
         End Sub
 
 #End Region
