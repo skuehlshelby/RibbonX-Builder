@@ -7,15 +7,16 @@ Namespace Controls
     Public NotInheritable Class Separator
         Inherits RibbonElement
         Implements IVisible
-        
+        Implements IDefaultProvider
+
         Private ReadOnly _attributes As AttributeSet
-        
+
         Friend Sub New(buttonAttributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = buttonAttributes
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
-        
+
         Public Overrides ReadOnly Property ID As String
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
@@ -36,6 +37,11 @@ Namespace Controls
                 _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
             End Set
         End Property
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
+
     End Class
-    
+
 End NameSpace
