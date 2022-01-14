@@ -128,12 +128,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Images\hello.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Images\pi.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Images\RibbonFactoryExample.PNG" />
   </ItemGroup>
   <ItemGroup>
