@@ -26,6 +26,30 @@ Namespace Builders
             _controls = New List(Of RibbonElement)
         End Sub
 
+        Public Sub New(template As Group)
+            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
+            attributeGroupBuilder.SetDefaults(template)
+            attributeGroupBuilder.AddID(IdManager.GetID(Of Group)())
+            _builder = New ControlBuilder(attributeGroupBuilder)
+            _controls = New List(Of RibbonElement)
+        End Sub
+
+        Public Sub New(template As RibbonElement)
+            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
+
+            If defaultProvider IsNot Nothing Then
+                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
+                Dim groupAttributes As AttributeSet = New DefaultProvider(Of Group)().GetDefaults()
+                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) groupAttributes.Contains(a)))
+                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
+                attributeGroupBuilder.AddID(IdManager.GetID(Of Group)())
+                _builder = New ControlBuilder(attributeGroupBuilder)
+                _controls = New List(Of RibbonElement)
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(Group)}'")
+            End If
+        End Sub
+
         Public Function Build(Optional tag As Object = Nothing) As Group
             Return New Group(_controls, _builder.Build(), tag)
         End Function
