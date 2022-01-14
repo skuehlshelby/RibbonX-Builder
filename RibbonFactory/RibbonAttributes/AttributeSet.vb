@@ -87,9 +87,9 @@
         End Sub
 
         Public Sub Clear() Implements ICollection(Of RibbonAttribute).Clear
-            For Each attribute As RibbonAttribute In _attributes
-                Remove(attribute)
-            Next
+            While _attributes.Count > 0
+                Remove(_attributes(0))
+            End While
         End Sub
 
         Public Sub CopyTo(array() As RibbonAttribute, arrayIndex As Integer) Implements ICollection(Of RibbonAttribute).CopyTo
