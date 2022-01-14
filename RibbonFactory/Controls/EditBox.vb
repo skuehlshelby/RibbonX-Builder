@@ -24,7 +24,7 @@ Namespace Controls
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
 
-        Public Event TextChanged As EventHandler(Of String)
+        Public Event TextChanged As EventHandler(Of TextChangedEventArgs)
 
         Friend Sub New(attributes As AttributeSet, validationRules As ICollection(Of IValidate(Of String)), Optional tag As Object = Nothing)
             MyBase.New(tag)
@@ -131,48 +131,32 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
             End Get
             Set
-                Dim validationFailed As Boolean
-
                 Try
                     SuspendAutomaticRefreshing()
 
                     For Each rule As IValidate(Of String) In _validationRules
                         Dim validationResult As IValidationResult = rule.Validate(Value)
 
-                        validationFailed = Not validationResult.Success
-
-                        If validationFailed Then
-                            DisplayErrorMessage(validationResult.FailureMessage)
-                            Exit For
-                        Else
-                            HideErrorMessage(validationResult.FailureMessage)
+                        If Not validationResult.Success Then
+                            RaiseEvent TextChanged(Me, TextChangedEventArgs.Failure(validationResult.FailureMessage))
+                            Exit Property
                         End If
                     Next
-                Finally
-                    ResumeAutomaticRefreshing(triggerRefreshNow:=False)
-                End Try
 
-                If Not validationFailed Then
                     _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(Value)
-                    RaiseEvent TextChanged(Me, Value)
-                End If
+                    RaiseEvent TextChanged(Me, TextChangedEventArgs.Success(Value))
+                Finally
+                    ResumeAutomaticRefreshing()
+                End Try
             End Set
         End Property
-
-        Private Sub DisplayErrorMessage(message As String)
-            SuperTip = String.Join(Environment.NewLine & Environment.NewLine, SuperTip, message)
-        End Sub
-
-        Private Sub HideErrorMessage(message As String)
-            SuperTip = SuperTip.Replace(message, String.Empty).TrimEnd(Environment.NewLine.ToCharArray())
-        End Sub
 
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Return _attributes
         End Function
 
         Public Sub Execute() Implements IOnAction.Execute
-            _attributes.ReadOnlyLookup(Of Action(Of EditBox))(AttributeCategory.OnAction).GetValue().Invoke(Me)
+            _attributes.ReadOnlyLookup(Of Action(Of EditBox))(AttributeCategory.OnChange).GetValue().Invoke(Me)
         End Sub
 
         Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
@@ -180,6 +164,40 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.MaxLength).GetValue()
             End Get
         End Property
+
+        Public Class TextChangedEventArgs
+            Inherits EventArgs
+
+            Private Sub New(text As String, errorMessage As String)
+                Me.ErrorMessage = errorMessage
+                Me.Text = text
+            End Sub
+
+            Public ReadOnly Property IsSuccess As Boolean
+                Get
+                    Return ErrorMessage.Equals(String.Empty)
+                End Get
+            End Property
+
+            Public ReadOnly Property IsFailure As Boolean
+                Get
+                    Return Not IsSuccess
+                End Get
+            End Property
+
+            Public ReadOnly Property ErrorMessage As String
+
+            Public ReadOnly Property Text As String
+
+            Public Shared Function Success(text As String) As TextChangedEventArgs
+                Return New TextChangedEventArgs(text, String.Empty)
+            End Function
+
+            Public Shared Function Failure(errorMessage As String) As TextChangedEventArgs
+                Return New TextChangedEventArgs(String.Empty, errorMessage)
+            End Function
+
+        End Class
 
     End Class
 
