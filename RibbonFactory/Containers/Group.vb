@@ -14,6 +14,7 @@ Namespace Containers
         Implements IScreenTip
         Implements ISuperTip
         Implements IEnumerable(Of RibbonElement)
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
 
@@ -84,7 +85,7 @@ Namespace Containers
             End Set
         End Property
 
-        Public Property SuperTip As String Implements ISupertip.Supertip
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
             End Get
@@ -92,6 +93,10 @@ Namespace Containers
                 _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
             End Set
         End Property
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
 
     End Class
 

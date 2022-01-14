@@ -42,9 +42,9 @@ Namespace Containers
 
 				If Items.Any() Then
 					Return _
-						regex.Replace(String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
-									String.Join(Environment.NewLine, Items),
-									"</splitButton>"), String.Empty)
+						String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
+									regex.Replace(String.Join(Environment.NewLine, Items), String.Empty),
+									"</splitButton>")
 
 				Else
 					Return $"<splitButton { _attributes } />"

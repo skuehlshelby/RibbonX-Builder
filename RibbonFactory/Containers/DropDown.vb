@@ -1,4 +1,5 @@
 ﻿
+Imports System.Text.RegularExpressions
 Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.RibbonAttributes
@@ -7,215 +8,217 @@ Imports stdole
 
 Namespace Containers
 
-    Public NotInheritable Class DropDown
-        Inherits Container(Of Item)
-        Implements ISelect
-        Implements IEnabled
-        Implements IVisible
-        Implements IKeyTip
-        Implements ILabel
-        Implements IScreenTip
-        Implements ISuperTip
-        Implements IShowLabel
-        Implements IImage
-        Implements IShowImage
-        Implements IOnAction
-        Implements IDefaultProvider
+	Public NotInheritable Class DropDown
+		Inherits Container(Of Item)
+		Implements ISelect
+		Implements IEnabled
+		Implements IVisible
+		Implements IKeyTip
+		Implements ILabel
+		Implements IScreenTip
+		Implements ISuperTip
+		Implements IShowLabel
+		Implements IImage
+		Implements IShowImage
+		Implements IOnAction
+		Implements IDefaultProvider
 
-        Private _selected As Item
-        Private _selectedItemIndex As Integer
-        Private ReadOnly _attributes As AttributeSet
+		Private _selected As Item
+		Private _selectedItemIndex As Integer
+		Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(attributes As AttributeSet, buttons As ICollection(Of Button), Optional tag As Object = Nothing)
-            MyBase.New(New List(Of Item), tag)
-            _attributes = attributes
-            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
-            Me.Buttons = buttons
-        End Sub
+		Friend Sub New(attributes As AttributeSet, buttons As ICollection(Of Button), Optional tag As Object = Nothing)
+			MyBase.New(New List(Of Item), tag)
+			_attributes = attributes
+			AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
+			Me.Buttons = buttons
+		End Sub
 
-        Public Overrides ReadOnly Property ID As String
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
-            End Get
-        End Property
+		Public Overrides ReadOnly Property ID As String
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+			End Get
+		End Property
 
-        Public Overrides ReadOnly Property XML As String
-            Get
-                If Buttons IsNot Nothing AndAlso Buttons.Any() Then
-                    Return String.Join(Environment.NewLine, $"<dropDown { _attributes }>", String.Join(Environment.NewLine, Buttons), "</dropDown>")
-                Else
-                    Return $"<dropDown { _attributes }/>"
-                End If
-            End Get
-        End Property
+		Public Overrides ReadOnly Property XML As String
+			Get
+				Dim regex As Regex = New Regex("(?:size|getSize)=""\w+""")
 
-        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
-            results.Add(Me)
+				If Buttons IsNot Nothing AndAlso Buttons.Any() Then
+					Return String.Join(Environment.NewLine, $"<dropDown { _attributes }>", regex.Replace(String.Join(Environment.NewLine, Buttons), String.Empty), "</dropDown>")
+				Else
+					Return $"<dropDown { _attributes }/>"
+				End If
+			End Get
+		End Property
 
-            For Each button As Button In Buttons
-                results.Add(button)
-            Next
-        End Sub
+		Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
+			results.Add(Me)
 
-        Public Overrides Sub Add(item As Item)
-            If Count = 0 Then
-                _selected = item
-                _selectedItemIndex = 0
-            End If
+			For Each button As Button In Buttons
+				results.Add(button)
+			Next
+		End Sub
 
-            AddHandler item.ValueChanged, AddressOf OnChildItemChange
+		Public Overrides Sub Add(item As Item)
+			If Count = 0 Then
+				_selected = item
+				_selectedItemIndex = 0
+			End If
 
-            MyBase.Add(item)
-        End Sub
+			AddHandler item.ValueChanged, AddressOf OnChildItemChange
 
-        Public Overrides Function Remove(item As Item) As Boolean
-            If Items.Remove(item) Then
-                RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+			MyBase.Add(item)
+		End Sub
 
-                If _selected.Equals(item) Then
-                    _selected = Items.FirstOrDefault()
-                    _selectedItemIndex = 0
-                End If
+		Public Overrides Function Remove(item As Item) As Boolean
+			If Items.Remove(item) Then
+				RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
 
-                RefreshNeeded()
+				If _selected.Equals(item) Then
+					_selected = Items.FirstOrDefault()
+					_selectedItemIndex = 0
+				End If
 
-                Return True
-            Else
-                Return False
-            End If
-        End Function
+				RefreshNeeded()
 
-        Public Overrides Sub Clear()
-            If Items.Any() Then
-                _selected = Nothing
-                _selectedItemIndex = 0
+				Return True
+			Else
+				Return False
+			End If
+		End Function
 
-                For Each dropdownItem As Item In Me
-                    RemoveHandler dropdownItem.ValueChanged, AddressOf OnChildItemChange
-                Next
+		Public Overrides Sub Clear()
+			If Items.Any() Then
+				_selected = Nothing
+				_selectedItemIndex = 0
 
-                Items.Clear()
-                RefreshNeeded()
-            End If
-        End Sub
+				For Each dropdownItem As Item In Me
+					RemoveHandler dropdownItem.ValueChanged, AddressOf OnChildItemChange
+				Next
 
-        Private Sub OnChildItemChange(sender As Object, e As ValueChangedEventArgs)
-            RefreshNeeded()
-        End Sub
+				Items.Clear()
+				RefreshNeeded()
+			End If
+		End Sub
 
-        Public ReadOnly Property Buttons As ICollection(Of Button)
+		Private Sub OnChildItemChange(sender As Object, e As ValueChangedEventArgs)
+			RefreshNeeded()
+		End Sub
 
-        Public Property Enabled As Boolean Implements IEnabled.Enabled
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
-            End Set
-        End Property
+		Public ReadOnly Property Buttons As ICollection(Of Button)
 
-        Public Property Visible As Boolean Implements IVisible.Visible
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-            End Set
-        End Property
+		Public Property Enabled As Boolean Implements IEnabled.Enabled
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property Label As String Implements ILabel.Label
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
-            End Set
-        End Property
+		Public Property Visible As Boolean Implements IVisible.Visible
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property ScreenTip As String Implements IScreenTip.ScreenTip
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
-            End Set
-        End Property
+		Public Property Label As String Implements ILabel.Label
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property SuperTip As String Implements ISuperTip.SuperTip
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
-            End Set
-        End Property
+		Public Property ScreenTip As String Implements IScreenTip.ScreenTip
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
-            End Set
-        End Property
+		Public Property SuperTip As String Implements ISuperTip.SuperTip
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property Image As IPictureDisp Implements IImage.Image
-            Get
-                Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
-            End Set
-        End Property
+		Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property ShowImage As Boolean Implements IShowImage.ShowImage
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowImage).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowImage).SetValue(Value)
-            End Set
-        End Property
+		Public Property Image As IPictureDisp Implements IImage.Image
+			Get
+				Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property Selected As Item Implements ISelect.Selected
-            Get
-                Return _selected
-            End Get
-            Set
-                If Value IsNot Nothing AndAlso Not _selected.Equals(Value) Then
-                    _selected = Value
-                    _selectedItemIndex = Items.IndexOf(Value)
-                End If
-            End Set
-        End Property
+		Public Property ShowImage As Boolean Implements IShowImage.ShowImage
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowImage).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowImage).SetValue(Value)
+			End Set
+		End Property
 
-        Public Property SelectedItemIndex As Integer Implements ISelect.SelectedItemIndex
-            Get
-                Return _selectedItemIndex
-            End Get
-            Set
-                _selected = Items(Value)
-                _selectedItemIndex = Value
-            End Set
-        End Property
+		Public Property Selected As Item Implements ISelect.Selected
+			Get
+				Return _selected
+			End Get
+			Set
+				If Value IsNot Nothing AndAlso Not _selected.Equals(Value) Then
+					_selected = Value
+					_selectedItemIndex = Items.IndexOf(Value)
+				End If
+			End Set
+		End Property
 
-        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
-            Get
-                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeCategory.KeyTip).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of KeyTip)(AttributeCategory.KeyTip).SetValue(Value)
-            End Set
-        End Property
+		Public Property SelectedItemIndex As Integer Implements ISelect.SelectedItemIndex
+			Get
+				Return _selectedItemIndex
+			End Get
+			Set
+				_selected = Items(Value)
+				_selectedItemIndex = Value
+			End Set
+		End Property
 
-        Public Sub Execute() Implements IOnAction.Execute
-            _attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
-        End Sub
+		Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
+			Get
+				Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeCategory.KeyTip).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of KeyTip)(AttributeCategory.KeyTip).SetValue(Value)
+			End Set
+		End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
-            Return _attributes
-        End Function
+		Public Sub Execute() Implements IOnAction.Execute
+			_attributes.ReadOnlyLookup(Of Action)(AttributeName.OnAction).GetValue().Invoke()
+		End Sub
 
-    End Class
+		Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+			Return _attributes
+		End Function
+
+	End Class
 
 End Namespace
