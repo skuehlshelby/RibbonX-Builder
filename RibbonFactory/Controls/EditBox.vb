@@ -1,6 +1,5 @@
 ﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Controls
@@ -19,19 +18,16 @@ Namespace Controls
         Implements IText
         Implements IMaxLength
         Implements IDefaultProvider
-        Implements IOnAction
 
         Private ReadOnly _attributes As AttributeSet
-        Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
-        Private ReadOnly _onTextChange As ICollection(Of Action(Of String))
-        Private ReadOnly _onValidationError As ICollection(Of Action(Of String))
+
+        Public Event BeforeTextChange As EventHandler(Of BeforeTextChangeEventArgs)
 
         Public Event TextChanged As EventHandler(Of TextChangedEventArgs)
 
-        Friend Sub New(attributes As AttributeSet, validationRules As ICollection(Of IValidate(Of String)), Optional tag As Object = Nothing)
+        Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
             _attributes = attributes
-            _validationRules = validationRules
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
@@ -133,33 +129,31 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
             End Get
             Set
-                Try
-                    SuspendAutomaticRefreshing()
+                Dim oldValue As String = Text
 
-                    For Each rule As IValidate(Of String) In _validationRules
-                        Dim validationResult As IValidationResult = rule.Validate(Value)
+                If Not oldValue.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
+                    Try
+                        SuspendAutomaticRefreshing()
 
-                        If Not validationResult.Success Then
-                            RaiseEvent TextChanged(Me, TextChangedEventArgs.Failure(validationResult.FailureMessage))
-                            Exit Property
+                        Dim e As BeforeTextChangeEventArgs = New BeforeTextChangeEventArgs(Value)
+
+                        RaiseEvent BeforeTextChange(Me, e)
+
+                        If Not e.Cancel Then
+                            _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(Value)
+
+                            RaiseEvent TextChanged(Me, New TextChangedEventArgs(Value, oldValue))
                         End If
-                    Next
-
-                    _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(Value)
-                    RaiseEvent TextChanged(Me, TextChangedEventArgs.Success(Value))
-                Finally
-                    ResumeAutomaticRefreshing()
-                End Try
+                    Finally
+                        ResumeAutomaticRefreshing()
+                    End Try
+                End If
             End Set
         End Property
 
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Return _attributes
         End Function
-
-        Public Sub Execute() Implements IOnAction.Execute
-            _attributes.ReadOnlyLookup(Of Action(Of EditBox))(AttributeCategory.OnChange).GetValue().Invoke(Me)
-        End Sub
 
         Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
             Get
@@ -170,37 +164,30 @@ Namespace Controls
         Public Class TextChangedEventArgs
             Inherits EventArgs
 
-            Private Sub New(text As String, errorMessage As String)
-                Me.ErrorMessage = errorMessage
-                Me.Text = text
+            Public Sub New(newText As String, oldText As String)
+                Me.NewText = newText
+                Me.OldText = oldText
             End Sub
 
-            Public ReadOnly Property IsSuccess As Boolean
-                Get
-                    Return ErrorMessage.Equals(String.Empty)
-                End Get
-            End Property
+            Public ReadOnly Property NewText As String
 
-            Public ReadOnly Property IsFailure As Boolean
-                Get
-                    Return Not IsSuccess
-                End Get
-            End Property
-
-            Public ReadOnly Property ErrorMessage As String
-
-            Public ReadOnly Property Text As String
-
-            Public Shared Function Success(text As String) As TextChangedEventArgs
-                Return New TextChangedEventArgs(text, String.Empty)
-            End Function
-
-            Public Shared Function Failure(errorMessage As String) As TextChangedEventArgs
-                Return New TextChangedEventArgs(String.Empty, errorMessage)
-            End Function
+            Public ReadOnly Property OldText As String
 
         End Class
 
+        Public NotInheritable Class BeforeTextChangeEventArgs
+            Inherits EventArgs
+
+            Public Sub New(newText As String)
+                Me.NewText = newText
+                Cancel = False
+            End Sub
+
+            Public ReadOnly Property NewText As String
+
+            Public Property Cancel As Boolean
+
+        End Class
     End Class
 
 End Namespace
