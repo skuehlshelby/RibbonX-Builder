@@ -140,7 +140,7 @@ Namespace Controls
                         RaiseEvent BeforeTextChange(Me, e)
 
                         If Not e.Cancel Then
-                            _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(Value)
+                            _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(e.NewText)
 
                             RaiseEvent TextChanged(Me, New TextChangedEventArgs(Value, oldValue))
                         End If
@@ -169,7 +169,7 @@ Namespace Controls
                 Me.OldText = oldText
             End Sub
 
-            Public ReadOnly Property NewText As String
+            Public Property NewText As String
 
             Public ReadOnly Property OldText As String
 
@@ -188,6 +188,7 @@ Namespace Controls
             Public Property Cancel As Boolean
 
         End Class
+
     End Class
 
 End Namespace

@@ -141,6 +141,11 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function Checked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As CheckBoxBuilder
+            _builder.GetPressedFrom(getChecked)
+            _builder.ThatDoes()
+        End Function
+
         Public Function ThatDoes(action As Action, callback As ButtonPressed) As CheckBoxBuilder Implements IOnActionToggle(Of CheckBoxBuilder).ThatDoes
             _builder.ThatDoes(action, callback)
             Return Me

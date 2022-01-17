@@ -1,7 +1,5 @@
-﻿
-Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
-
 
 Namespace Controls
     
@@ -19,6 +17,10 @@ Namespace Controls
         Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
+
+        Public Event BeforeCheckStateChange As EventHandler(Of BeforeCheckStateChangeEventArgs)
+
+        Public Event CheckStateChanged As EventHandler(Of CheckStateChangeEventArgs)
 
         Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
             MyBase.New(tag)
@@ -111,7 +113,25 @@ Namespace Controls
                 Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.GetPressed).GetValue()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetPressed).SetValue(Value)
+                Dim oldValue As Boolean = Pressed
+
+                If oldValue <> Value Then
+                    Try
+                        SuspendAutomaticRefreshing()
+
+                        Dim e As BeforeCheckStateChangeEventArgs = New BeforeCheckStateChangeEventArgs(Value, oldValue)
+
+                        RaiseEvent BeforeCheckStateChange(Me, e)
+
+                        If Not e.Cancel Then
+                            _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetPressed).SetValue(Value)
+
+                            RaiseEvent CheckStateChanged(Me, New CheckStateChangeEventArgs(oldValue, Value))
+                        End If
+                    Finally
+                        ResumeAutomaticRefreshing()
+                    End Try
+                End If
             End Set
         End Property
 
@@ -122,6 +142,36 @@ Namespace Controls
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Return _attributes
         End Function
+
+        Public Class BeforeCheckStateChangeEventArgs
+            Inherits EventArgs
+
+            Public Sub New(newValue As Boolean, oldValue As Boolean)
+                Me.NewValue = newValue
+                Me.OldValue = oldValue
+            End Sub
+
+            Public ReadOnly Property NewValue As Boolean
+
+            Public ReadOnly Property OldValue As Boolean
+
+            Public Property Cancel As Boolean
+
+        End Class
+
+        Public Class CheckStateChangeEventArgs
+            Inherits EventArgs
+
+            Public Sub New(newValue As Boolean, oldValue As Boolean)
+                Me.NewValue = newValue
+                Me.OldValue = oldValue
+            End Sub
+
+            Public ReadOnly Property NewValue As Boolean
+
+            Public ReadOnly Property OldValue As Boolean
+
+        End Class
 
     End Class
 

@@ -12,6 +12,8 @@
             <button />
           </gallery>
 
+			<checkBox get/>
+			
           <button id="Button1"
                   enabled="true"
                   visible="true"
