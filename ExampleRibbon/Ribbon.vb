@@ -118,10 +118,12 @@ Public Class Ribbon
 			WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
 			AsWideAs("Some Text This Big").
 			WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
-			WithTextValidationRule(Function(text) Not text.Contains("  "), "Double-Spaces Aren't Allowed!").
 			Build()
 
-		AddHandler textBox.TextChanged, AddressOf TextChangeEventHandler
+		With textBox
+			AddHandler .BeforeTextChange, AddressOf TextBoxValidation
+			AddHandler .TextChanged, AddressOf TextChangeEventHandler
+		End With
 
 		Dim textBoxGroup As Group = New GroupBuilder().WithLabel("Editable Text").WithControl(textBox).Build()
 
@@ -257,8 +259,15 @@ Public Class Ribbon
 		End Try
 	End Sub
 
+	Private Sub TextBoxValidation(sender As Object, e As EditBox.BeforeTextChangeEventArgs)
+		If e.NewText.Contains("  ") Then
+			DisplayStatusBarMessage("Double-spaces are not allowed!")
+			e.Cancel = True
+		End If
+	End Sub
+
 	Private Sub TextChangeEventHandler(sender As Object, e As EditBox.TextChangedEventArgs)
-		DisplayStatusBarMessage(If(e.IsSuccess, $"Text was changed to '{e.Text}'.", e.ErrorMessage))
+		DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")
 	End Sub
 
 	Private _source As CancellationTokenSource

@@ -4,7 +4,6 @@ Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Builders
@@ -21,19 +20,14 @@ Namespace Builders
         Implements IShowLabel(Of EditBoxBuilder)
         Implements IMaxLength(Of EditBoxBuilder)
         Implements ISizeString(Of EditBoxBuilder)
-        Implements IOnChange(Of EditBox, EditBoxBuilder)
-        Implements IValidateText(Of EditBoxBuilder)
 
         Private ReadOnly _builder As ControlBuilder
-        Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
 
         Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of EditBox)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = New ControlBuilder(attributeGroupBuilder)
-
-            _validationRules = New List(Of IValidate(Of String))
         End Sub
 
         Public Sub New(template As EditBox)
@@ -41,7 +35,6 @@ Namespace Builders
             attributeGroupBuilder.SetDefaults(template)
             attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())
             _builder = New ControlBuilder(attributeGroupBuilder)
-            _validationRules = New List(Of IValidate(Of String))
         End Sub
 
         Public Sub New(template As RibbonElement)
@@ -54,14 +47,13 @@ Namespace Builders
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())
                 _builder = New ControlBuilder(attributeGroupBuilder)
-                _validationRules = New List(Of IValidate(Of String))
             Else
                 Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(EditBox)}'")
             End If
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As EditBox Implements IBuilder(Of EditBox).Build
-            Return New EditBox(_builder.Build(), _validationRules.ToArray(), tag:=tag)
+            Return New EditBox(_builder.Build(), tag:=tag)
         End Function
 
         Public Function Enabled() As EditBoxBuilder Implements IEnabled(Of EditBoxBuilder).Enabled
@@ -191,11 +183,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(action As Action(Of EditBox), callback As TextChanged) As EditBoxBuilder Implements IOnChange(Of EditBox, EditBoxBuilder).ThatDoes
-            _builder.ThatDoes(action, callback)
-            Return Me
-        End Function
-
         Public Function WithText(text As String, getText As FromControl(Of String), setText As TextChanged) As EditBoxBuilder
             _builder.GetTextFrom(text, getText)
             _builder.ThatDoes(Of EditBox)(Sub(eb) Return, setText)
@@ -219,15 +206,6 @@ Namespace Builders
 
         Public Function InsertAfterQ(qualifiedControl As RibbonElement) As EditBoxBuilder Implements IInsert(Of EditBoxBuilder).InsertAfter
             _builder.InsertAfter(qualifiedControl)
-            Return Me
-        End Function
-
-        Public Function WithTextValidationRule(rule As Predicate(Of String)) As EditBoxBuilder Implements IValidateText(Of EditBoxBuilder).WithTextValidationRule
-            Return WithTextValidationRule(rule, String.Empty)
-        End Function
-
-        Public Function WithTextValidationRule(rule As Predicate(Of String), failureMessage As String) As EditBoxBuilder Implements IValidateText(Of EditBoxBuilder).WithTextValidationRule
-            _validationRules.Add(New TextValidator(rule, failureMessage))
             Return Me
         End Function
 
