@@ -117,8 +117,7 @@ Public Class Ribbon
 			WithScreenTip("Editable Text").
 			WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
 			AsWideAs("Some Text This Big").
-			WithText("Edit Me!", AddressOf GetText).
-			ThatDoes(Sub(t) Return, AddressOf OnChange).
+			WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
 			WithTextValidationRule(Function(text) Not text.Contains("  "), "Double-Spaces Aren't Allowed!").
 			Build()
 

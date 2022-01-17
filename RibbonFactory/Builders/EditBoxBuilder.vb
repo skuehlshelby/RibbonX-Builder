@@ -196,18 +196,9 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithText(text As String, outgoing As FromControl(Of String)) As EditBoxBuilder
-            _builder.GetTextFrom(text, outgoing)
-            Return Me
-        End Function
-
-        Public Function WithText(incoming As TextChanged, outgoing As FromControl(Of String)) As EditBoxBuilder
-            _builder.GetTextFrom(String.Empty, outgoing)
-            Return Me
-        End Function
-
-        Public Function WithText(text As String, incoming As TextChanged, outgoing As FromControl(Of String)) As EditBoxBuilder
-            _builder.GetTextFrom(text, outgoing)
+        Public Function WithText(text As String, getText As FromControl(Of String), setText As TextChanged) As EditBoxBuilder
+            _builder.GetTextFrom(text, getText)
+            _builder.ThatDoes(Of EditBox)(Sub(eb) Return, setText)
             Return Me
         End Function
 

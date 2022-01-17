@@ -23,6 +23,8 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
+        Private ReadOnly _onTextChange As ICollection(Of Action(Of String))
+        Private ReadOnly _onValidationError As ICollection(Of Action(Of String))
 
         Public Event TextChanged As EventHandler(Of TextChangedEventArgs)
 
