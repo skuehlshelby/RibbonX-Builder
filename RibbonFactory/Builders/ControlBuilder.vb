@@ -199,14 +199,6 @@ Namespace Builders
             _attributeGroupBuilder.AddGetImage(image:=New AdapterForIPicture(image), callback:=callback)
         End Sub
 
-        Public Sub WithItemImage(image As Bitmap)
-            _attributeGroupBuilder.AddItemImage(image:=New AdapterForIPicture(image))
-        End Sub
-
-        Public Sub WithItemImage(image As Icon)
-            _attributeGroupBuilder.AddItemImage(image:=New AdapterForIPicture(image))
-        End Sub
-
         Public Sub ShowImage()
             _attributeGroupBuilder.AddShowImage(showImage:=True)
         End Sub
@@ -231,7 +223,11 @@ Namespace Builders
             _attributeGroupBuilder.AddOnAction(action:=action, callback:=callback)
         End Sub
 
-        Public Sub ThatDoes(action As Action, callback As ButtonPressed)
+        Public Sub ThatDoes(Of T As RibbonElement)(action As Action(Of T), callback As ButtonPressed)
+            _attributeGroupBuilder.AddOnAction(action:=action, callback:=callback)
+        End Sub
+
+        Public Sub ThatDoes(Of T As RibbonElement)(action As Action(Of T), callback As SelectionChanged)
             _attributeGroupBuilder.AddOnAction(action:=action, callback:=callback)
         End Sub
 
@@ -239,20 +235,41 @@ Namespace Builders
             _attributeGroupBuilder.AddOnChange(action:=action, callback:=callback)
         End Sub
 
-        Public Sub ThatDoes(action As Action, callback As SelectionChanged)
-            _attributeGroupBuilder.AddOnAction(action:=action, callback:=callback)
-        End Sub
-
 #End Region
 
-#Region "Content Fetching"
+#Region "Updatable From UI"
 
-        Public Sub GetPressedFrom(callback As FromControl(Of Boolean))
-            _attributeGroupBuilder.AddGetPressed(pressed:=False, callback:=callback)
+        Public Sub GetSelectedItemIDFrom(getSelected As FromControl(Of String), setSelected As SelectionChanged)
+            _attributeGroupBuilder.AddGetSelectedItemID(getSelected)
+            _attributeGroupBuilder.AddOnAction(setSelected)
         End Sub
 
-        Public Sub GetTextFrom(text As String, callback As FromControl(Of String))
-            _attributeGroupBuilder.AddGetText(text:=text, callback:=callback)
+        Public Sub GetSelectedItemIDFrom(Of T As RibbonElement)(getSelected As FromControl(Of String), setSelected As SelectionChanged, onSelectionChange As Action(Of T))
+            _attributeGroupBuilder.AddGetSelectedItemID(getSelected)
+            _attributeGroupBuilder.AddOnAction(onSelectionChange, setSelected)
+        End Sub
+
+        Public Sub GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged)
+            _attributeGroupBuilder.AddGetSelectedItemIndex(getSelected)
+            _attributeGroupBuilder.AddOnAction(Sub() Return, setSelected)
+        End Sub
+
+        Public Sub GetSelectedItemIndexFrom(Of T As RibbonElement)(getSelected As FromControl(Of Integer), setSelected As SelectionChanged, onSelectionChange As Action(Of T))
+            _attributeGroupBuilder.AddGetSelectedItemIndex(getSelected)
+            _attributeGroupBuilder.AddOnAction(onSelectionChange, setSelected)
+        End Sub
+
+        Public Sub GetPressedFrom(pressed As Boolean, getPressed As FromControl(Of Boolean), setPressed As ButtonPressed)
+            _attributeGroupBuilder.AddGetPressed(pressed:=pressed, getPressed:=getPressed, setPressed:=setPressed)
+        End Sub
+
+        Public Sub GetPressedFrom(Of T As RibbonElement)(pressed As Boolean, getPressed As FromControl(Of Boolean), setPressed As ButtonPressed, action As Action(Of T))
+            _attributeGroupBuilder.AddGetPressed(pressed:=pressed, getPressed:=getPressed)
+            _attributeGroupBuilder.AddOnAction(action:=action, callback:=setPressed)
+        End Sub
+
+        Public Sub GetTextFrom(text As String, getText As FromControl(Of String), setText As TextChanged)
+            _attributeGroupBuilder.AddGetText(text:=text, getText:=getText, setText:=setText)
         End Sub
 
 #End Region
@@ -353,14 +370,6 @@ Namespace Builders
 
         Public Sub GetItemSupertipFrom(callback As FromControlAndIndex(Of String))
             _attributeGroupBuilder.AddGetItemSupertip(callback:=callback)
-        End Sub
-
-        Public Sub GetSelectedItemIDFrom(callback As FromControl(Of String))
-            _attributeGroupBuilder.AddGetSelectedItemID(callback:=callback)
-        End Sub
-
-        Public Sub GetSelectedItemIndexFrom(callback As FromControl(Of Integer))
-            _attributeGroupBuilder.AddGetSelectedItemIndex(callback:=callback)
         End Sub
 
         Public Sub WithRows(rowCount As Integer)

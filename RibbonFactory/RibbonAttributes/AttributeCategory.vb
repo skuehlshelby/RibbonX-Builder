@@ -97,9 +97,7 @@ Namespace RibbonAttributes
 
         Public Shared ReadOnly Property ImageVisibility As AttributeCategory = New AttributeCategory(11, NameOf(ImageVisibility), AttributeName.ShowImage, AttributeName.GetShowImage)
 
-        Public Shared ReadOnly Property OnAction As AttributeCategory = New AttributeCategory(12, NameOf(OnAction), AttributeName.OnAction)
-
-        Public Shared ReadOnly Property OnChange As AttributeCategory = New AttributeCategory(13, NameOf(OnChange), AttributeName.OnChange)
+        Public Shared ReadOnly Property Action As AttributeCategory = New AttributeCategory(12, NameOf(Action), AttributeName.OnAction, AttributeName.OnChange)
 
         Public Shared ReadOnly Property Text As AttributeCategory = New AttributeCategory(14, NameOf(Text), AttributeName.GetText)
 

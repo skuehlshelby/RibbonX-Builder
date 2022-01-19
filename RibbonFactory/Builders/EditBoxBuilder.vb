@@ -184,8 +184,7 @@ Namespace Builders
         End Function
 
         Public Function WithText(text As String, getText As FromControl(Of String), setText As TextChanged) As EditBoxBuilder
-            _builder.GetTextFrom(text, getText)
-            _builder.ThatDoes(Of EditBox)(Sub(eb) Return, setText)
+            _builder.GetTextFrom(text, getText, setText)
             Return Me
         End Function
 

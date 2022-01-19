@@ -1,8 +1,10 @@
 ﻿Namespace BuilderInterfaces
 
-    Public Interface IGetSelectedItemIndex(Of T)
+    Public Interface IGetSelectedItemIndex(Of TBuilder, TRibbonElement As RibbonElement)
 
-        Function GetSelectedItemIndexFrom(callback As FromControl(Of Integer)) As T
+        Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged) As TBuilder
+
+        Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged, onSelectionChange As Action(Of TRibbonElement)) As TBuilder
 
     End Interface
 

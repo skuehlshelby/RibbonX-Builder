@@ -193,7 +193,13 @@
     <Compile Include="Enums\MSO\Excel.vb" />
     <Compile Include="Enums\MSO\MSO.vb" />
     <Compile Include="Enums\MSO\Word.vb" />
+    <Compile Include="RibbonAttributes\IRibbonAttribute.vb" />
+    <Compile Include="RibbonAttributes\IRibbonAttributeReadOnly.vb" />
+    <Compile Include="RibbonAttributes\IRibbonAttributeReadWrite.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeComposite.vb" />
     <Compile Include="RibbonAttributes\RibbonAttributeDefault.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeReadOnly.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeReadWrite.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
@@ -208,9 +214,6 @@
     <Compile Include="RibbonAttributes\DefaultProvider.vb" />
     <Compile Include="RibbonAttributes\IDefaultProvider.vb" />
     <Compile Include="RibbonAttributes\IdManager.vb" />
-    <Compile Include="RibbonAttributes\RibbonAttribute.vb" />
-    <Compile Include="RibbonAttributes\RibbonAttributeReadOnly.vb" />
-    <Compile Include="RibbonAttributes\RibbonAttributeReadWrite.vb" />
     <Compile Include="RibbonElement.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

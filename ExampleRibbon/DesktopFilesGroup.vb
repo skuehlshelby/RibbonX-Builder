@@ -40,8 +40,7 @@ Public Class DesktopFilesGroup
             GetItemLabelFrom(AddressOf ribbon.GetItemLabel).
             GetItemSuperTipFrom(AddressOf ribbon.GetItemSuperTip).
             GetItemScreenTipFrom(AddressOf ribbon.GetItemScreenTip).
-            GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex).
-            ThatDoes(Sub() Return, AddressOf ribbon.OnSelectionChange).
+            GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex, AddressOf ribbon.OnSelectionChange).
             Build()
 
         For Each file As FileInfo In GetFilesOnDesktop()

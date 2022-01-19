@@ -23,7 +23,6 @@ Namespace Builders
         Implements IShowImage(Of ToggleButtonBuilder)
         Implements IDescription(Of ToggleButtonBuilder)
         Implements ISize(Of ToggleButtonBuilder)
-        Implements IOnActionToggle(Of ToggleButtonBuilder)
 
         Private ReadOnly _builder As ControlBuilder
 
@@ -224,11 +223,6 @@ Namespace Builders
 
         Public Function Normal(callback As FromControl(Of ControlSize)) As ToggleButtonBuilder Implements ISize(Of ToggleButtonBuilder).Normal
             _builder.Normal(callback)
-            Return Me
-        End Function
-
-        Public Function ThatDoes(action As Action, callback As ButtonPressed) As ToggleButtonBuilder Implements IOnActionToggle(Of ToggleButtonBuilder).ThatDoes
-            _builder.ThatDoes(action, callback)
             Return Me
         End Function
 

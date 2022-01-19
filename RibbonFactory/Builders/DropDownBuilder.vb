@@ -22,7 +22,6 @@ Namespace Builders
         Implements IImage(Of DropDownBuilder)
         Implements IShowImage(Of DropDownBuilder)
         Implements ISizeString(Of DropDownBuilder)
-        Implements IOnActionSelectionChanged(Of DropDownBuilder)
         Implements IGetItemId(Of DropDownBuilder)
         Implements IGetItemCount(Of DropDownBuilder)
         Implements IGetItemLabel(Of DropDownBuilder)
@@ -32,7 +31,7 @@ Namespace Builders
         Implements IGetItemImage(Of DropDownBuilder)
         Implements IShowItemImage(Of DropDownBuilder)
         Implements IGetSelectedItemId(Of DropDownBuilder)
-        Implements IGetSelectedItemIndex(Of DropDownBuilder)
+        Implements IGetSelectedItemIndex(Of DropDownBuilder, DropDown)
 
         Private ReadOnly _builder As ControlBuilder
         Private ReadOnly _buttons As ICollection(Of Button) = New List(Of Button)
@@ -237,11 +236,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(action As Action, callback As SelectionChanged) As DropDownBuilder Implements IOnActionSelectionChanged(Of DropDownBuilder).ThatDoes
-            _builder.ThatDoes(action, callback)
-            Return Me
-        End Function
-
         Public Function GetItemIdFrom(callback As FromControlAndIndex(Of String)) As DropDownBuilder Implements IGetItemId(Of DropDownBuilder).GetItemIdFrom
             _builder.GetItemIDFrom(callback)
             Return Me
@@ -282,13 +276,18 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function GetSelectedItemIdFrom(callback As FromControl(Of String)) As DropDownBuilder Implements IGetSelectedItemId(Of DropDownBuilder).GetSelectedItemIdFrom
-            _builder.GetSelectedItemIDFrom(callback)
+        Public Function GetSelectedItemIdFrom(getSelected As FromControl(Of String), setSelected As SelectionChanged) As DropDownBuilder Implements IGetSelectedItemId(Of DropDownBuilder).GetSelectedItemIdFrom
+            _builder.GetSelectedItemIDFrom(getSelected, setSelected)
             Return Me
         End Function
 
-        Public Function GetSelectedItemIndexFrom(callback As FromControl(Of Integer)) As DropDownBuilder Implements IGetSelectedItemIndex(Of DropDownBuilder).GetSelectedItemIndexFrom
-            _builder.GetSelectedItemIndexFrom(callback)
+        Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged) As DropDownBuilder Implements IGetSelectedItemIndex(Of DropDownBuilder, DropDown).GetSelectedItemIndexFrom
+            _builder.GetSelectedItemIndexFrom(getSelected, setSelected)
+            Return Me
+        End Function
+
+        Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged, onSelectionChange As Action(Of DropDown)) As DropDownBuilder Implements IGetSelectedItemIndex(Of DropDownBuilder, DropDown).GetSelectedItemIndexFrom
+            _builder.GetSelectedItemIndexFrom(getSelected, setSelected, onSelectionChange)
             Return Me
         End Function
 

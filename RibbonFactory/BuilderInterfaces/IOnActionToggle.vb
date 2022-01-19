@@ -1,9 +1,9 @@
 ﻿Namespace BuilderInterfaces
 
-    Public Interface IOnActionToggle(Of T)
-        
-        Function ThatDoes(action As Action, callback As ButtonPressed) As T
-    
+    Public Interface IOnActionToggle(Of TBuilder, TRibbonElement As RibbonElement)
+
+        Function ThatDoes(action As Action(Of TRibbonElement), callback As ButtonPressed) As TBuilder
+
     End Interface
 
 End NameSpace

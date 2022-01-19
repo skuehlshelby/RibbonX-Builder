@@ -4,7 +4,7 @@ Imports RibbonFactory.RibbonAttributes
 
 
 Namespace Controls
-    
+
     Public Class CheckBox
         Inherits RibbonElement
         Implements IEnabled
