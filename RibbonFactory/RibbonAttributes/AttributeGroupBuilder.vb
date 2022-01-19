@@ -1,5 +1,4 @@
-﻿Imports RibbonFactory.Controls
-Imports RibbonFactory.Enums
+﻿Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports stdole
