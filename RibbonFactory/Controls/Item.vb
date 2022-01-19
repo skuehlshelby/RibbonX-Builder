@@ -91,6 +91,10 @@ Namespace Controls
             End Set
         End Property
 
+        Public Shared Function Dummy() As Item
+            Return New Item(String.Empty, String.Empty, String.Empty, String.Empty, Nothing, False, Nothing)
+        End Function
+
     End Class
 
 End NameSpace

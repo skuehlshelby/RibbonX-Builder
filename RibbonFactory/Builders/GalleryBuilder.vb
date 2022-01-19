@@ -22,7 +22,6 @@ Namespace Builders
 		Implements IImage(Of GalleryBuilder)
 		Implements IShowImage(Of GalleryBuilder)
 		Implements IKeyTip(Of GalleryBuilder)
-		Implements IOnActionSelectionChanged(Of GalleryBuilder)
 		Implements ISize(Of GalleryBuilder)
 		Implements IItemDimensions(Of GalleryBuilder)
 		Implements IRowsAndColumns(Of GalleryBuilder)
@@ -35,7 +34,7 @@ Namespace Builders
 		Implements IGetItemImage(Of GalleryBuilder)
 		Implements IShowItemImage(Of GalleryBuilder)
 		Implements IGetSelectedItemId(Of GalleryBuilder)
-		Implements IGetSelectedItemIndex(Of GalleryBuilder)
+		Implements IGetSelectedItemIndex(Of GalleryBuilder, Gallery)
 
 		Private ReadOnly _builder As ControlBuilder
 		Private ReadOnly _buttons As ICollection(Of Button) = New List(Of Button)
@@ -295,13 +294,18 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function GetSelectedItemIdFrom(callback As FromControl(Of String)) As GalleryBuilder Implements IGetSelectedItemId(Of GalleryBuilder).GetSelectedItemIdFrom
-			_builder.GetSelectedItemIDFrom(callback)
+		Public Function GetSelectedItemIdFrom(callback As FromControl(Of String), setSelected As SelectionChanged) As GalleryBuilder Implements IGetSelectedItemId(Of GalleryBuilder).GetSelectedItemIdFrom
+			_builder.GetSelectedItemIDFrom(callback, setSelected)
 			Return Me
 		End Function
 
-		Public Function GetSelectedItemIndexFrom(callback As FromControl(Of Integer)) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder).GetSelectedItemIndexFrom
-			_builder.GetSelectedItemIndexFrom(callback)
+		Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder, Gallery).GetSelectedItemIndexFrom
+			_builder.GetSelectedItemIndexFrom(getSelected, setSelected)
+			Return Me
+		End Function
+
+		Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged, onSelectionChange As Action(Of Gallery)) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder, Gallery).GetSelectedItemIndexFrom
+			_builder.GetSelectedItemIndexFrom(getSelected, setSelected, onSelectionChange)
 			Return Me
 		End Function
 
@@ -322,11 +326,6 @@ Namespace Builders
 
 		Public Function HideImage(getShowImage As FromControl(Of Boolean)) As GalleryBuilder Implements IShowImage(Of GalleryBuilder).HideImage
 			_builder.HideImage(getShowImage)
-			Return Me
-		End Function
-
-		Public Function ThatDoes(action As Action, callback As SelectionChanged) As GalleryBuilder Implements IOnActionSelectionChanged(Of GalleryBuilder).ThatDoes
-			_builder.ThatDoes(action, callback)
 			Return Me
 		End Function
 

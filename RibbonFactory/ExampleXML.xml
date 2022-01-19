@@ -12,6 +12,8 @@
             <button />
           </gallery>
 
+			<checkBox />
+			
           <button id="Button1"
                   enabled="true"
                   visible="true"
@@ -26,9 +28,9 @@
             <item/>
           </comboBox>
 
-          <dropDown id="dropDown1" sizeString="aaaaaaaaaaa" Si>
+          <dropDown id="dropDown1" sizeString="aaaaaaaaaaa">
           </dropDown>
-
+			<editBox />
           <dialogBoxLauncher>
             <button />
           </dialogBoxLauncher>

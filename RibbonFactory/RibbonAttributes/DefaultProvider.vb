@@ -40,7 +40,7 @@ Namespace RibbonAttributes
                     Case GetType(ITitle)
                         defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Title, AttributeCategory.Title))
                     Case GetType(IOnAction)
-                        defaults.Add(New RibbonAttributeDefault(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.OnAction))
+                        defaults.Add(New RibbonAttributeDefault(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.Action))
                 End Select
             Next interfaceType
 

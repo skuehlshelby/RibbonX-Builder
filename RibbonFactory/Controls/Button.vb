@@ -142,7 +142,7 @@ Namespace Controls
         End Property
 
         Public Sub Execute() Implements IOnAction.Execute
-            _attributes.ReadOnlyLookup(Of Action(Of Button))(AttributeCategory.OnAction).GetValue().Invoke(Me)
+            _attributes.ReadOnlyLookup(Of Action(Of Button))(AttributeCategory.Action).GetValue().Invoke(Me)
         End Sub
 
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults

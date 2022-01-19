@@ -1,148 +1,212 @@
-﻿Namespace RibbonAttributes
-    Friend Class AttributeSet
-        Implements ISet(Of RibbonAttribute)
-        
-        Public Event AttributeChanged
+﻿Imports System.Runtime.InteropServices
 
-        Private Sub OnValueChange()
-            RaiseEvent AttributeChanged
-        End Sub
+Namespace RibbonAttributes
+	Friend Class AttributeSet
+		Implements ISet(Of IRibbonAttribute)
 
-        Private ReadOnly _attributes As ISet(Of RibbonAttribute)
+		Public Event AttributeChanged()
 
-        Public Sub New()
-            _attributes = New HashSet(Of RibbonAttribute)(RibbonAttribute.CompareByCategory())
-        End Sub
+		Private Sub OnValueChange()
+			RaiseEvent AttributeChanged()
+		End Sub
 
-        Public Sub New(attributes As IEnumerable(Of RibbonAttribute))
-            _attributes = New HashSet(Of RibbonAttribute)(RibbonAttribute.CompareByCategory())
+		Private ReadOnly _attributes As ISet(Of IRibbonAttribute)
 
-            For Each attribute As RibbonAttribute In attributes
-                Add(attribute)
-            Next
-        End Sub
+		Public Sub New()
+			_attributes = New HashSet(Of IRibbonAttribute)()
+		End Sub
 
-        Public Function Add(item As RibbonAttribute) As Boolean Implements ISet(Of RibbonAttribute).Add
-            If Contains(item) Then
-                Remove(item)
-            End If
+		Public Sub New(attributes As IEnumerable(Of IRibbonAttribute))
+			_attributes = New HashSet(Of IRibbonAttribute)()
 
-            _attributes.Add(item)
+			For Each attribute As IRibbonAttribute In attributes
+				Add(attribute)
+			Next
+		End Sub
 
-            AddHandler item.ValueChanged, AddressOf OnValueChange
+		Public Function Add(item As IRibbonAttribute) As Boolean Implements ISet(Of IRibbonAttribute).Add
+			While Contains(item)
+				Remove(item)
+			End While
 
-            Return True
-        End Function
+			_attributes.Add(item)
 
-        Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadOnly(Of T)
-            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), RibbonAttributeReadOnly(Of T))
-        End Function
+			AddHandler item.ValueChanged, AddressOf OnValueChange
 
-        Public Function ReadOnlyLookup(Of T)(category As AttributeCategory) As RibbonAttributeReadOnly(Of T)
-            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(category)), RibbonAttributeReadOnly(Of T))
-        End Function
+			Return True
+		End Function
 
-        Public Function ReadWriteLookup(Of T)(sampleMember As AttributeName) As RibbonAttributeReadWrite(Of T)
-            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), RibbonAttributeReadWrite(Of T))
-        End Function
+		Public Function TryLookup(sampleMember As AttributeCategory, <Out> ByRef attribute As IRibbonAttribute) As Boolean
+			attribute = _attributes.FirstOrDefault(Function(a) a.IsExclusiveWith(sampleMember))
 
-        Public Function ReadWriteLookup(Of T)(category As AttributeCategory) As RibbonAttributeReadWrite(Of T)
-            Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(category)), RibbonAttributeReadWrite(Of T))
-        End Function
+			Return attribute IsNot Nothing
+		End Function
 
-        Public Function HasAttribute(sampleMember As AttributeName) As Boolean
-            Return _attributes.Any(Function(attribute) attribute.IsExclusiveWith(sampleMember))
-        End Function
+		Public Function TryLookup(Of T)(sampleMember As AttributeCategory, <Out> ByRef attribute As IRibbonAttributeReadOnly(Of T)) As Boolean
+			Dim value As IRibbonAttribute = Nothing
 
-        Public Overrides Function ToString() As String
-            Return String.Join(" ", _attributes)
-        End Function
+			If TryLookup(sampleMember, value) Then
+				attribute = TryCast(value, IRibbonAttributeReadOnly(Of T))
+				Return attribute IsNot Nothing
+			Else
+				attribute = Nothing
+				Return False
+			End If
+		End Function
 
-        Public ReadOnly Property Count As Integer Implements ICollection(Of RibbonAttribute).Count
-            Get
-                Return _attributes.Count
-            End Get
-        End Property
+		Public Function TryLookup(Of T)(sampleMember As AttributeCategory, <Out> ByRef attribute As IRibbonAttributeReadWrite(Of T)) As Boolean
+			Dim value As IRibbonAttribute = Nothing
 
-        Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of RibbonAttribute).IsReadOnly
-            Get
-                Return _attributes.IsReadOnly
-            End Get
-        End Property
+			If TryLookup(sampleMember, value) Then
+				attribute = TryCast(value, IRibbonAttributeReadWrite(Of T))
+				Return attribute IsNot Nothing
+			Else
+				attribute = Nothing
+				Return False
+			End If
+		End Function
 
-        Public Sub UnionWith(other As IEnumerable(Of RibbonAttribute)) Implements ISet(Of RibbonAttribute).UnionWith
-            _attributes.UnionWith(other)
-        End Sub
+		Public Function Lookup(sampleMember As AttributeCategory) As IRibbonAttribute
+			Dim value As IRibbonAttribute = Nothing
 
-        Public Sub IntersectWith(other As IEnumerable(Of RibbonAttribute)) Implements ISet(Of RibbonAttribute).IntersectWith
-            _attributes.IntersectWith(other)
-        End Sub
+			If TryLookup(sampleMember, value) Then
+				Return value
+			Else
+				Throw New InvalidOperationException($"Couldn't find an attribute with the category '{sampleMember}'.")
+			End If
+		End Function
 
-        Public Sub ExceptWith(other As IEnumerable(Of RibbonAttribute)) Implements ISet(Of RibbonAttribute).ExceptWith
-            _attributes.ExceptWith(other)
-        End Sub
+		Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadOnly(Of T)
+			Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), IRibbonAttributeReadOnly(Of T))
+		End Function
 
-        Public Sub SymmetricExceptWith(other As IEnumerable(Of RibbonAttribute)) Implements ISet(Of RibbonAttribute).SymmetricExceptWith
-            _attributes.SymmetricExceptWith(other)
-        End Sub
+		Public Function ReadOnlyLookup(Of T)(category As AttributeCategory) As IRibbonAttributeReadOnly(Of T)
+			Return DirectCast(Lookup(category), IRibbonAttributeReadOnly(Of T))
+		End Function
 
-        Public Sub Clear() Implements ICollection(Of RibbonAttribute).Clear
-            While _attributes.Count > 0
-                Remove(_attributes(0))
-            End While
-        End Sub
+		Public Function ReadWriteLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadWrite(Of T)
+			Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), IRibbonAttributeReadWrite(Of T))
+		End Function
 
-        Public Sub CopyTo(array() As RibbonAttribute, arrayIndex As Integer) Implements ICollection(Of RibbonAttribute).CopyTo
-            _attributes.CopyTo(array, arrayIndex)
-        End Sub
+		Public Function ReadWriteLookup(Of T)(category As AttributeCategory) As IRibbonAttributeReadWrite(Of T)
+			Dim value As IRibbonAttributeReadWrite(Of T) = TryCast(Lookup(category), IRibbonAttributeReadWrite(Of T))
 
-        Private Sub ICollection_Add(item As RibbonAttribute) Implements ICollection(Of RibbonAttribute).Add
-            Add(item)
-        End Sub
+			If value Is Nothing Then
+				Throw New InvalidOperationException($"Cannot write to '{category}', as it is read-only.")
+			Else
+				Return value
+			End If
+		End Function
 
-        Public Function IsSubsetOf(other As IEnumerable(Of RibbonAttribute)) As Boolean Implements ISet(Of RibbonAttribute).IsSubsetOf
-            Return _attributes.IsSubsetOf(other)
-        End Function
+		Public Function HasAttribute(sampleMember As AttributeName) As Boolean
+			Return _attributes.Any(Function(attribute) attribute.IsExclusiveWith(sampleMember))
+		End Function
 
-        Public Function IsSupersetOf(other As IEnumerable(Of RibbonAttribute)) As Boolean Implements ISet(Of RibbonAttribute).IsSupersetOf
-            Return _attributes.IsSupersetOf(other)
-        End Function
+		Public Function HasAttribute(sampleMember As AttributeCategory) As Boolean
+			Return _attributes.Any(Function(attribute) attribute.IsExclusiveWith(sampleMember))
+		End Function
 
-        Public Function IsProperSupersetOf(other As IEnumerable(Of RibbonAttribute)) As Boolean Implements ISet(Of RibbonAttribute).IsProperSupersetOf
-            Return _attributes.IsProperSupersetOf(other)
-        End Function
+		Public Overrides Function ToString() As String
+			Return String.Join(" ", _attributes)
+		End Function
 
-        Public Function IsProperSubsetOf(other As IEnumerable(Of RibbonAttribute)) As Boolean Implements ISet(Of RibbonAttribute).IsProperSubsetOf
-            Return _attributes.IsProperSubsetOf(other)
-        End Function
+		Public ReadOnly Property Count As Integer Implements ICollection(Of IRibbonAttribute).Count
+			Get
+				Return _attributes.Count
+			End Get
+		End Property
 
-        Public Function Overlaps(other As IEnumerable(Of RibbonAttribute)) As Boolean Implements ISet(Of RibbonAttribute).Overlaps
-            Return _attributes.Overlaps(other)
-        End Function
+		Public ReadOnly Property IsReadOnly As Boolean Implements ICollection(Of IRibbonAttribute).IsReadOnly
+			Get
+				Return _attributes.IsReadOnly
+			End Get
+		End Property
 
-        Public Function SetEquals(other As IEnumerable(Of RibbonAttribute)) As Boolean Implements ISet(Of RibbonAttribute).SetEquals
-            Return _attributes.SetEquals(other)
-        End Function
+		Public Sub UnionWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).UnionWith
+			_attributes.UnionWith(other)
+		End Sub
 
-        Public Function Contains(item As RibbonAttribute) As Boolean Implements ICollection(Of RibbonAttribute).Contains
-            Return _attributes.Contains(item)
-        End Function
+		Public Sub IntersectWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).IntersectWith
+			_attributes.IntersectWith(other)
+		End Sub
 
-        Public Function Remove(item As RibbonAttribute) As Boolean Implements ICollection(Of RibbonAttribute).Remove
-            If _attributes.Remove(item) Then
-                RemoveHandler item.ValueChanged, AddressOf OnValueChange
-                Return True
-            Else
-                Return False
-            End If
-        End Function
+		Public Sub ExceptWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).ExceptWith
+			_attributes.ExceptWith(other)
+		End Sub
 
-        Public Function GetEnumerator() As IEnumerator(Of RibbonAttribute) Implements IEnumerable(Of RibbonAttribute).GetEnumerator
-            Return _attributes.GetEnumerator()
-        End Function
+		Public Sub SymmetricExceptWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).SymmetricExceptWith
+			_attributes.SymmetricExceptWith(other)
+		End Sub
 
-        Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-            Return DirectCast(_attributes, IEnumerable).GetEnumerator()
-        End Function
-    End Class
+		Public Sub Clear() Implements ICollection(Of IRibbonAttribute).Clear
+			While _attributes.Count > 0
+				Remove(_attributes(0))
+			End While
+		End Sub
+
+		Public Sub CopyTo(array() As IRibbonAttribute, arrayIndex As Integer) Implements ICollection(Of IRibbonAttribute).CopyTo
+			_attributes.CopyTo(array, arrayIndex)
+		End Sub
+
+		Private Sub ICollection_Add(item As IRibbonAttribute) Implements ICollection(Of IRibbonAttribute).Add
+			Add(item)
+		End Sub
+
+		Public Function IsSubsetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsSubsetOf
+			Return _attributes.IsSubsetOf(other)
+		End Function
+
+		Public Function IsSupersetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsSupersetOf
+			Return _attributes.IsSupersetOf(other)
+		End Function
+
+		Public Function IsProperSupersetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsProperSupersetOf
+			Return _attributes.IsProperSupersetOf(other)
+		End Function
+
+		Public Function IsProperSubsetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsProperSubsetOf
+			Return _attributes.IsProperSubsetOf(other)
+		End Function
+
+		Public Function Overlaps(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).Overlaps
+			Return _attributes.Overlaps(other)
+		End Function
+
+		Public Function SetEquals(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).SetEquals
+			Return _attributes.SetEquals(other)
+		End Function
+
+		Public Function Contains(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Contains
+			Return _attributes.Contains(item)
+		End Function
+
+		Public Function Remove(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Remove
+			If _attributes.Remove(item) Then
+				RemoveHandler item.ValueChanged, AddressOf OnValueChange
+				Return True
+			Else
+				Return False
+			End If
+		End Function
+
+		Public Function Remove(category As AttributeCategory) As Boolean
+			Dim value As IRibbonAttribute = Nothing
+
+			If TryLookup(category, value) Then
+				Return Remove(value)
+			Else
+				Return False
+			End If
+		End Function
+
+		Public Function GetEnumerator() As IEnumerator(Of IRibbonAttribute) Implements IEnumerable(Of IRibbonAttribute).GetEnumerator
+			Return _attributes.GetEnumerator()
+		End Function
+
+		Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+			Return DirectCast(_attributes, IEnumerable).GetEnumerator()
+		End Function
+
+	End Class
+
 End Namespace

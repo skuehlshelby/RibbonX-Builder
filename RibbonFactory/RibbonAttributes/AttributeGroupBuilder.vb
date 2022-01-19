@@ -5,8 +5,12 @@ Imports stdole
 
 Namespace RibbonAttributes
 
+	''' <summary>
+	''' The purpose of this class is to provide a central place where attributes are configured. It does not attempt
+	''' to compose attributes in meaningful ways, only to configure individual attributes.
+	''' </summary>
 	Friend Class AttributeGroupBuilder
-		Implements IEnumerable(Of RibbonAttribute)
+		Implements IEnumerable(Of IRibbonAttribute)
 
 		Private ReadOnly _attributes As AttributeSet = New AttributeSet()
 
@@ -14,7 +18,7 @@ Namespace RibbonAttributes
 			_attributes = New AttributeSet()
 		End Sub
 
-		Public Sub New(attributes As IEnumerable(Of RibbonAttribute))
+		Public Sub New(attributes As IEnumerable(Of IRibbonAttribute))
 			_attributes = New AttributeSet(attributes)
 		End Sub
 
@@ -23,7 +27,7 @@ Namespace RibbonAttributes
 				Throw New InvalidOperationException("Attempted to set defaults when one or more attributes were already set.")
 			End If
 
-			For Each attribute As RibbonAttribute In defaultProvider.GetDefaults()
+			For Each attribute As IRibbonAttribute In defaultProvider.GetDefaults()
 				_attributes.Add(attribute)
 			Next
 		End Sub
@@ -32,13 +36,19 @@ Namespace RibbonAttributes
 			Return _attributes
 		End Function
 
+#Region "Enabled and GetEnabled"
+
 		Public Sub AddEnabled(enabled As Boolean)
 			_attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(enabled, AttributeName.Enabled, AttributeCategory.Enabled))
 		End Sub
 
 		Public Sub AddGetEnabled(enabled As Boolean, callback As FromControl(Of Boolean))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(enabled, callback.Method.Name, AttributeName.GetEnabled, AttributeCategory.Enabled))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(enabled, AttributeName.GetEnabled, AttributeCategory.Enabled, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "ID, IDMSO, and IDQ"
 
 		Public Sub AddID(id As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(id, AttributeName.Id, AttributeCategory.IdType))
@@ -52,6 +62,10 @@ Namespace RibbonAttributes
 		Public Sub AddIdQ([namespace] As String, id As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)($"{[namespace]}:{id}", AttributeName.IdQ, AttributeCategory.IdType))
 		End Sub
+
+#End Region
+
+#Region "InsetAfterMSO, InsertBeforeMSO, InsertAfterQ, and InsertBeforeQ"
 
 		Public Sub AddInsertAfterMso(mso As MSO)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(mso.ToString(), AttributeName.InsertAfterMso, AttributeCategory.Insertion))
@@ -69,63 +83,93 @@ Namespace RibbonAttributes
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(control.ID, AttributeName.InsertBeforeQ, AttributeCategory.Insertion))
 		End Sub
 
+#End Region
+
+#Region "Visible and GetVisible"
+
 		Public Sub AddVisible(visible As Boolean)
 			_attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(visible, AttributeName.Visible, AttributeCategory.Visibility))
 		End Sub
 
 		Public Sub AddGetVisible(visible As Boolean, callback As FromControl(Of Boolean))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(visible, callback.Method.Name, AttributeName.GetVisible, AttributeCategory.Visibility))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(visible, AttributeName.GetVisible, AttributeCategory.Visibility, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "Label and GetLabel"
 
 		Public Sub AddLabel(label As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(label, AttributeName.Label, AttributeCategory.Label))
 		End Sub
 
 		Public Sub AddGetLabel(label As String, callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadWrite(Of String)(label, callback.Method.Name, AttributeName.GetLabel, AttributeCategory.Label))
+			_attributes.Add(New RibbonAttributeReadWrite(Of String)(label, AttributeName.GetLabel, AttributeCategory.Label, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "ShowLabel and GetShowLabel"
 
 		Public Sub AddShowLabel(showLabel As Boolean)
 			_attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(showLabel, AttributeName.ShowLabel, AttributeCategory.LabelVisibility))
 		End Sub
 
 		Public Sub AddGetShowLabel(showLabel As Boolean, callback As FromControl(Of Boolean))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(showLabel, callback.Method.Name, AttributeName.GetShowLabel, AttributeCategory.LabelVisibility))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(showLabel, AttributeName.GetShowLabel, AttributeCategory.LabelVisibility, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "Screentip and GetScreentip"
 
 		Public Sub AddScreentip(screentip As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(screentip, AttributeName.Screentip, AttributeCategory.ScreenTip))
 		End Sub
 
 		Public Sub AddGetScreentip(screentip As String, callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadWrite(Of String)(screentip, callback.Method.Name, AttributeName.GetScreentip, AttributeCategory.ScreenTip))
+			_attributes.Add(New RibbonAttributeReadWrite(Of String)(screentip, AttributeName.GetScreentip, AttributeCategory.ScreenTip, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "Supertip and GetSupertip"
 
 		Public Sub AddSupertip(supertip As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(supertip, AttributeName.Supertip, AttributeCategory.SuperTip))
 		End Sub
 
 		Public Sub AddGetSupertip(supertip As String, callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadWrite(Of String)(supertip, callback.Method.Name, AttributeName.GetSupertip, AttributeCategory.SuperTip))
+			_attributes.Add(New RibbonAttributeReadWrite(Of String)(supertip, AttributeName.GetSupertip, AttributeCategory.SuperTip, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "Description and GetDescription"
 
 		Public Sub AddDescription(description As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(description, AttributeName.Description, AttributeCategory.Description))
 		End Sub
 
 		Public Sub AddGetDescription(description As String, callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadWrite(Of String)(description, callback.Method.Name, AttributeName.GetDescription, AttributeCategory.Description))
+			_attributes.Add(New RibbonAttributeReadWrite(Of String)(description, AttributeName.GetDescription, AttributeCategory.Description, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "Keytip and GetKeytip"
 
 		Public Sub AddKeytip(keyTip As KeyTip)
 			_attributes.Add(New RibbonAttributeReadOnly(Of KeyTip)(keyTip, AttributeName.Keytip, AttributeCategory.KeyTip))
 		End Sub
 
 		Public Sub AddGetKeytip(keyTip As KeyTip, callback As FromControl(Of KeyTip))
-			_attributes.Add(New RibbonAttributeReadWrite(Of KeyTip)(keyTip, callback.Method.Name, AttributeName.GetKeytip, AttributeCategory.KeyTip))
+			_attributes.Add(New RibbonAttributeReadWrite(Of KeyTip)(keyTip, AttributeName.GetKeytip, AttributeCategory.KeyTip, callback.Method.Name))
 		End Sub
 
-#Region "Images"
+#End Region
+
+#Region "Image, ImageMSO, and GetImage"
 
 		Public Sub AddImage(path As String)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(path, AttributeName.Image, AttributeCategory.Image))
@@ -136,54 +180,194 @@ Namespace RibbonAttributes
 		End Sub
 
 		Public Sub AddGetImage(image As IPictureDisp, callback As FromControl(Of IPictureDisp))
-			_attributes.Add(New RibbonAttributeReadWrite(Of IPictureDisp)(image, callback.Method.Name, AttributeName.GetImage, AttributeCategory.Image))
-		End Sub
-
-		Public Sub AddItemImage(image As IPictureDisp)
-			_attributes.Add(New RibbonAttributeReadWrite(Of IPictureDisp)(image, String.Empty, AttributeName.GetImage, AttributeCategory.Image))
+			_attributes.Add(New RibbonAttributeReadWrite(Of IPictureDisp)(image, AttributeName.GetImage, AttributeCategory.Image, callback.Method.Name))
 		End Sub
 
 #End Region
+
+#Region "OnAction and OnChange"
+
+		Public Sub AddOnAction(callback As OnAction)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(callback As SelectionChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(callback As ButtonPressed)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnChange(callback As TextChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(Sub() Return, AttributeName.OnChange, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(action As Action, callback As OnAction)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(action As Action, callback As SelectionChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(action As Action, callback As ButtonPressed)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnChange(action As Action, callback As TextChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, AttributeName.OnChange, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(Of T As RibbonElement)(action As Action(Of T), callback As OnAction)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(Of T As RibbonElement)(action As Action(Of T), callback As SelectionChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnAction(Of T As RibbonElement)(action As Action(Of T), callback As ButtonPressed)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, AttributeName.OnAction, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+		Public Sub AddOnChange(Of T As RibbonElement)(action As Action(Of T), callback As TextChanged)
+			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, AttributeName.OnChange, AttributeCategory.Action, callback.Method.Name))
+		End Sub
+
+#End Region
+
+#Region "ShowImage and GetShowImage"
 
 		Public Sub AddShowImage(showImage As Boolean)
 			_attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(showImage, AttributeName.ShowImage, AttributeCategory.ImageVisibility))
 		End Sub
 
 		Public Sub AddGetShowImage(showImage As Boolean, callback As FromControl(Of Boolean))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(showImage, callback.Method.Name, AttributeName.GetShowImage, AttributeCategory.ImageVisibility))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(showImage, AttributeName.GetShowImage, AttributeCategory.ImageVisibility, callback.Method.Name))
 		End Sub
 
-		Public Sub AddOnAction(Of T As RibbonElement)(action As Action(Of T), callback As OnAction)
-			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+#End Region
+
+#Region "GetText"
+
+		Public Sub AddGetText(text As String, getText As FromControl(Of String))
+			_attributes.Add(New RibbonAttributeReadWrite(Of String)(text, AttributeName.GetText, AttributeCategory.Text, getText.Method.Name))
 		End Sub
 
-		Public Sub AddOnAction(action As Action, callback As ButtonPressed)
-			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+		Public Sub AddGetText(text As String, getText As FromControl(Of String), setText As TextChanged)
+			_attributes.Add(New RibbonAttributeComposite(Of String)(text, AttributeName.GetText, AttributeCategory.Text, getText.Method.Name, AttributeName.OnChange, AttributeCategory.Action, setText.Method.Name))
 		End Sub
 
-		Public Sub AddOnAction(action As Action, callback As SelectionChanged)
-			_attributes.Add(New RibbonAttributeReadWrite(Of Action)(action, callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+#End Region
+
+#Region "GetPressed"
+
+		Public Sub AddGetPressed(pressed As Boolean, getPressed As FromControl(Of Boolean))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(pressed, AttributeName.GetPressed, AttributeCategory.Pressed, getPressed.Method.Name))
 		End Sub
 
-		Public Sub AddOnChange(Of T As RibbonElement)(action As Action(Of T), callback As TextChanged)
-			_attributes.Add(New RibbonAttributeReadWrite(Of Action(Of T))(action, callback.Method.Name, AttributeName.OnChange, AttributeCategory.OnChange))
+		Public Sub AddGetPressed(pressed As Boolean, getPressed As FromControl(Of Boolean), setPressed As ButtonPressed)
+			_attributes.Add(New RibbonAttributeComposite(Of Boolean)(pressed, AttributeName.GetPressed, AttributeCategory.Pressed, getPressed.Method.Name, AttributeName.OnAction, AttributeCategory.Action, setPressed.Method.Name))
 		End Sub
 
-		Public Sub AddGetText(text As String, callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadWrite(Of String)(text, callback.Method.Name, AttributeName.GetText, AttributeCategory.Text))
-		End Sub
+#End Region
 
-		Public Sub AddGetPressed(pressed As Boolean, callback As FromControl(Of Boolean))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Boolean)(pressed, callback.Method.Name, AttributeName.GetPressed, AttributeCategory.Pressed))
-		End Sub
+#Region "Size and GetSize"
 
 		Public Sub AddSize(size As ControlSize)
 			_attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(size, AttributeName.Size, AttributeCategory.Size))
 		End Sub
 
 		Public Sub AddGetSize(size As ControlSize, callback As FromControl(Of ControlSize))
-			_attributes.Add(New RibbonAttributeReadWrite(Of ControlSize)(size, callback.Method.Name, AttributeName.GetSize, AttributeCategory.Size))
+			_attributes.Add(New RibbonAttributeReadWrite(Of ControlSize)(size, AttributeName.GetSize, AttributeCategory.Size, callback.Method.Name))
 		End Sub
+
+#End Region
+
+#Region "GetItemId, GetItemLabel, GetItemScreentip, GetItemSupertip, and GetItemImage"
+
+		Public Sub AddGetItemID(callback As FromControlAndIndex(Of String))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemID, AttributeCategory.ItemId))
+		End Sub
+
+		Public Sub AddGetItemLabel(callback As FromControlAndIndex(Of String))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemLabel, AttributeCategory.ItemLabel))
+		End Sub
+
+		Public Sub AddGetItemScreentip(callback As FromControlAndIndex(Of String))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemScreentip, AttributeCategory.ItemScreentip))
+		End Sub
+
+		Public Sub AddGetItemSupertip(callback As FromControlAndIndex(Of String))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemSupertip, AttributeCategory.ItemSupertip))
+		End Sub
+
+		Public Sub AddGetItemImage(callback As FromControlAndIndex(Of IPictureDisp))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemImage, AttributeCategory.ItemImage))
+		End Sub
+
+#End Region
+
+#Region "SelectedItemID and SelectedItemIndex"
+
+		Public Sub AddGetSelectedItemID(callback As FromControl(Of String))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition))
+		End Sub
+
+		Public Sub AddGetSelectedItemIndex(callback As FromControl(Of Integer))
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
+		End Sub
+
+#End Region
+
+#Region "Rows and Columns"
+
+		Public Sub AddRows(numberOfRows As Integer)
+			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(numberOfRows, AttributeName.Rows, AttributeCategory.Rows))
+		End Sub
+
+		Public Sub AddColumns(numberOfColumns As Integer)
+			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(numberOfColumns, AttributeName.Columns, AttributeCategory.Columns))
+		End Sub
+
+#End Region
+
+#Region "ItemHeight and GetItemHeight"
+
+		Public Sub AddItemHeight(itemHeight As Integer)
+			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(itemHeight, AttributeName.ItemHeight, AttributeCategory.ItemHeight))
+		End Sub
+
+		Public Sub AddGetItemHeight(itemHeight As Integer, callback As FromControl(Of Integer))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Integer)(itemHeight, AttributeName.GetItemHeight, AttributeCategory.ItemHeight, callback.Method.Name))
+		End Sub
+
+#End Region
+
+#Region "ItemWidth and GetItemWidth"
+
+		Public Sub AddItemWidth(itemWidth As Integer)
+			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(itemWidth, AttributeName.ItemWidth, AttributeCategory.ItemWidth))
+		End Sub
+
+		Public Sub AddGetItemWidth(itemWidth As Integer, callback As FromControl(Of Integer))
+			_attributes.Add(New RibbonAttributeReadWrite(Of Integer)(itemWidth, AttributeName.GetItemWidth, AttributeCategory.ItemWidth, callback.Method.Name))
+		End Sub
+
+#End Region
+
+#Region "Title and GetTitle"
+
+		Public Sub AddTitle(title As String)
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(title, AttributeName.Title, AttributeCategory.Title))
+		End Sub
+
+		Public Sub AddGetTitle(title As String, callback As FromControl(Of String))
+			_attributes.Add(New RibbonAttributeReadWrite(Of String)(title, AttributeName.GetTitle, AttributeCategory.Title, callback.Method.Name))
+		End Sub
+
+#End Region
 
 		Public Sub AddMaxLength(maxLength As Byte)
 			_attributes.Add(New RibbonAttributeReadOnly(Of Byte)(maxLength, AttributeName.MaxLength, AttributeCategory.MaxLength))
@@ -209,58 +393,6 @@ Namespace RibbonAttributes
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemCount, AttributeCategory.ItemCount))
 		End Sub
 
-		Public Sub AddGetItemID(callback As FromControlAndIndex(Of String))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemID, AttributeCategory.ItemId))
-		End Sub
-
-		Public Sub AddGetItemImage(callback As FromControlAndIndex(Of IPictureDisp))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemImage, AttributeCategory.ItemImage))
-		End Sub
-
-		Public Sub AddGetItemLabel(callback As FromControlAndIndex(Of String))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemLabel, AttributeCategory.ItemLabel))
-		End Sub
-
-		Public Sub AddGetItemScreentip(callback As FromControlAndIndex(Of String))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemScreentip, AttributeCategory.ItemScreentip))
-		End Sub
-
-		Public Sub AddGetItemSupertip(callback As FromControlAndIndex(Of String))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemSupertip, AttributeCategory.ItemSupertip))
-		End Sub
-
-		Public Sub AddGetSelectedItemID(callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition))
-		End Sub
-
-		Public Sub AddGetSelectedItemIndex(callback As FromControl(Of Integer))
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
-		End Sub
-
-		Public Sub AddColumns(numberOfColumns As Integer)
-			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(numberOfColumns, AttributeName.Columns, AttributeCategory.Columns))
-		End Sub
-
-		Public Sub AddRows(numberOfRows As Integer)
-			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(numberOfRows, AttributeName.Rows, AttributeCategory.Rows))
-		End Sub
-
-		Public Sub AddItemHeight(itemHeight As Integer)
-			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(itemHeight, AttributeName.ItemHeight, AttributeCategory.ItemHeight))
-		End Sub
-
-		Public Sub AddGetItemHeight(itemHeight As Integer, callback As FromControl(Of Integer))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Integer)(itemHeight, callback.Method.Name, AttributeName.GetItemHeight, AttributeCategory.ItemHeight))
-		End Sub
-
-		Public Sub AddItemWidth(itemWidth As Integer)
-			_attributes.Add(New RibbonAttributeReadOnly(Of Integer)(itemWidth, AttributeName.ItemWidth, AttributeCategory.ItemWidth))
-		End Sub
-
-		Public Sub AddGetItemWidth(itemWidth As Integer, callback As FromControl(Of Integer))
-			_attributes.Add(New RibbonAttributeReadWrite(Of Integer)(itemWidth, callback.Method.Name, AttributeName.GetItemWidth, AttributeCategory.ItemWidth))
-		End Sub
-
 		Public Sub AddItemSize(size As ControlSize)
 			_attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(size, AttributeName.ItemSize, AttributeCategory.ItemSize))
 		End Sub
@@ -281,19 +413,11 @@ Namespace RibbonAttributes
 			_attributes.Add(New RibbonAttributeReadOnly(Of BoxStyle)(style, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
 		End Sub
 
-		Public Sub AddTitle(title As String)
-			_attributes.Add(New RibbonAttributeReadOnly(Of String)(title, AttributeName.Title, AttributeCategory.Title))
-		End Sub
-
-		Public Sub AddGetTitle(title As String, callback As FromControl(Of String))
-			_attributes.Add(New RibbonAttributeReadWrite(Of String)(title, callback.Method.Name, AttributeName.GetTitle, AttributeCategory.Title))
-		End Sub
-
 		Public Sub AddShowInRibbon(showInRibbon As Boolean)
 			_attributes.Add(New RibbonAttributeReadOnly(Of Boolean)(showInRibbon, AttributeName.ShowInRibbon, AttributeCategory.ShowInRibbon))
 		End Sub
 
-		Public Function GetEnumerator() As IEnumerator(Of RibbonAttribute) Implements IEnumerable(Of RibbonAttribute).GetEnumerator
+		Public Function GetEnumerator() As IEnumerator(Of IRibbonAttribute) Implements IEnumerable(Of IRibbonAttribute).GetEnumerator
 			Return _attributes.GetEnumerator()
 		End Function
 

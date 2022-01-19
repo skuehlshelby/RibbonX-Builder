@@ -14,7 +14,6 @@ Namespace Builders
         Implements IInsert(Of CheckBoxBuilder)
         Implements IKeyTip(Of CheckBoxBuilder)
         Implements IDescription(Of CheckBoxBuilder)
-        Implements IOnActionToggle(Of CheckBoxBuilder)
 
         Private ReadOnly _builder As ControlBuilder
 
@@ -141,8 +140,13 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(action As Action, callback As ButtonPressed) As CheckBoxBuilder Implements IOnActionToggle(Of CheckBoxBuilder).ThatDoes
-            _builder.ThatDoes(action, callback)
+        Public Function Checked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As CheckBoxBuilder
+            _builder.GetPressedFrom(True, getChecked, setChecked)
+            Return Me
+        End Function
+
+        Public Function Checked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed, action As Action(Of CheckBox)) As CheckBoxBuilder
+            _builder.GetPressedFrom(True, getChecked, setChecked, action)
             Return Me
         End Function
 
