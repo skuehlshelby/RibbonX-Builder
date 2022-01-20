@@ -122,7 +122,6 @@
     <Compile Include="BuilderInterfaces\IOnActionToggle.vb" />
     <Compile Include="BuilderInterfaces\ISizeString.vb" />
     <Compile Include="BuilderInterfaces\IStartFromScratch.vb" />
-    <Compile Include="BuilderInterfaces\IValidateText.vb" />
     <Compile Include="BuilderInterfaces\IVisible.vb" />
     <Compile Include="Builders\BoxBuilder.vb" />
     <Compile Include="Builders\ButtonGroupBuilder.vb" />
@@ -233,11 +232,8 @@
     <Compile Include="Utilities\ImageConversion\AdapterForIPicture.vb" />
     <Compile Include="Utilities\Testing\OfficeHostAppilcation.vb" />
     <Compile Include="Utilities\Testing\RandomControlGenerator.vb" />
-    <Compile Include="Utilities\Validation\IValidate.vb" />
-    <Compile Include="Utilities\Validation\IValidationResult.vb" />
     <Compile Include="Utilities\Testing\RibbonErrorLog.vb" />
     <Compile Include="Utilities\StockRibbonBase.vb" />
-    <Compile Include="Utilities\Validation\TextValidator.vb" />
     <Compile Include="ValueChangedEventArgs.vb" />
   </ItemGroup>
   <ItemGroup>
