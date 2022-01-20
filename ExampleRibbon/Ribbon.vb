@@ -20,7 +20,7 @@ Public Class Ribbon
 	Implements IRibbonExtensibility
 
 	Public Sub New()
-		MyBase.New()
+		MyBase.New(New Troubleshooter())
 	End Sub
 
 	Private ReadOnly Property Excel As Excel.Application
@@ -118,12 +118,9 @@ Public Class Ribbon
 			WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
 			AsWideAs("Some Text This Big").
 			WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
+			BeforeTextChange(Sub(e) e.Cancel = e.NewText.Contains("  "), Sub(e) If e.Cancel Then DisplayStatusBarMessage("Double spaces are not allowed!")).
+			AfterTextChange(Sub(e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")).
 			Build()
-
-		With textBox
-			AddHandler .BeforeTextChange, AddressOf TextBoxValidation
-			AddHandler .TextChanged, AddressOf TextChangeEventHandler
-		End With
 
 		Dim textBoxGroup As Group = New GroupBuilder().WithLabel("Editable Text").WithControl(textBox).Build()
 
@@ -257,17 +254,6 @@ Public Class Ribbon
 		Catch ex As Exception
 
 		End Try
-	End Sub
-
-	Private Sub TextBoxValidation(sender As Object, e As EditBox.BeforeTextChangeEventArgs)
-		If e.NewText.Contains("  ") Then
-			DisplayStatusBarMessage("Double-spaces are not allowed!")
-			e.Cancel = True
-		End If
-	End Sub
-
-	Private Sub TextChangeEventHandler(sender As Object, e As EditBox.TextChangedEventArgs)
-		DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")
 	End Sub
 
 	Private _source As CancellationTokenSource

@@ -179,12 +179,10 @@ Namespace Utilities
 
         Public Sub OnSelectionChange(control As IRibbonControl, selectedId As String, selectedIndex As Integer) Implements ICreateCallbacks.OnSelectionChange
             Ribbon.GetElement(Of ISelect)(control.Id).SelectedItemIndex = selectedIndex
-            Ribbon.GetElement(Of IOnAction)(control.Id).Execute() 'TODO API for this is a bit awkward.
         End Sub
 
         Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
             Ribbon.GetElement(Of IPressed)(control.Id).Pressed = pressed
-            Ribbon.GetElement(Of IOnAction)(control.Id).Execute() 'TODO API for this is a bit awkward.
         End Sub
 
 #End Region
