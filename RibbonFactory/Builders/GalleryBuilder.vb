@@ -34,10 +34,12 @@ Namespace Builders
 		Implements IGetItemImage(Of GalleryBuilder)
 		Implements IShowItemImage(Of GalleryBuilder)
 		Implements IGetSelectedItemId(Of GalleryBuilder)
-		Implements IGetSelectedItemIndex(Of GalleryBuilder, Gallery)
+		Implements IGetSelectedItemIndex(Of GalleryBuilder)
 
 		Private ReadOnly _builder As ControlBuilder
 		Private ReadOnly _buttons As ICollection(Of Button) = New List(Of Button)
+		Private ReadOnly _beforeSelectionChangeHandlers As ICollection(Of EventHandler(Of Gallery.BeforeSelectionChangeEventArgs)) = New List(Of EventHandler(Of Gallery.BeforeSelectionChangeEventArgs))
+		Private ReadOnly _selectionChangedHandlers As ICollection(Of EventHandler(Of Gallery.SelectionChangedEventArgs)) = New List(Of EventHandler(Of Gallery.SelectionChangedEventArgs))
 
 		Sub New()
 			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Gallery)
@@ -51,6 +53,9 @@ Namespace Builders
 			attributeGroupBuilder.SetDefaults(template)
 			attributeGroupBuilder.AddID(IdManager.GetID(Of Gallery)())
 			_builder = New ControlBuilder(attributeGroupBuilder)
+
+			Array.ForEach(template.GetBeforeSelectionChangeInvocationList(), Sub(handler) _beforeSelectionChangeHandlers.Add(handler))
+			Array.ForEach(template.GetSelectionChangedInvocationList(), Sub(handler) _selectionChangedHandlers.Add(handler))
 		End Sub
 
 		Public Sub New(template As RibbonElement)
@@ -294,18 +299,13 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function GetSelectedItemIdFrom(callback As FromControl(Of String), setSelected As SelectionChanged) As GalleryBuilder Implements IGetSelectedItemId(Of GalleryBuilder).GetSelectedItemIdFrom
-			_builder.GetSelectedItemIDFrom(callback, setSelected)
+		Public Function GetSelectedItemIdFrom(getSelected As FromControl(Of String), setSelected As SelectionChanged) As GalleryBuilder Implements IGetSelectedItemId(Of GalleryBuilder).GetSelectedItemIdFrom
+			_builder.GetSelectedItemIDFrom(getSelected, setSelected)
 			Return Me
 		End Function
 
-		Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder, Gallery).GetSelectedItemIndexFrom
+		Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder).GetSelectedItemIndexFrom
 			_builder.GetSelectedItemIndexFrom(getSelected, setSelected)
-			Return Me
-		End Function
-
-		Public Function GetSelectedItemIndexFrom(getSelected As FromControl(Of Integer), setSelected As SelectionChanged, onSelectionChange As Action(Of Gallery)) As GalleryBuilder Implements IGetSelectedItemIndex(Of GalleryBuilder, Gallery).GetSelectedItemIndexFrom
-			_builder.GetSelectedItemIndexFrom(getSelected, setSelected, onSelectionChange)
 			Return Me
 		End Function
 
@@ -386,6 +386,54 @@ Namespace Builders
 			_builder.WithItemDimensions(height, width, heightCallback, widthCallback)
 			Return Me
 		End Function
+
+				Public Function BeforeSelectionChange(ParamArray actions() As Action(Of Gallery.BeforeSelectionChangeEventArgs)) As GalleryBuilder
+			For Each action As Action(Of Gallery.BeforeSelectionChangeEventArgs) In actions
+				With New BeforeSelectionChangeEventHandlerHelper(action)
+					_beforeSelectionChangeHandlers.Add(AddressOf .Handle)
+				End With
+			Next
+
+			Return Me
+		End Function
+
+		Public Function AfterSelectionChanged(Paramarray actions() As Action(Of Gallery.SelectionChangedEventArgs)) As GalleryBuilder
+			For Each action As Action(Of Gallery.SelectionChangedEventArgs) In actions
+				With New SelectionChangeEventHandlerHelper(action)
+					_selectionChangedHandlers.Add(AddressOf .Handle)
+				End With
+			Next
+
+			Return Me
+		End Function
+
+		Private NotInheritable Class BeforeSelectionChangeEventHandlerHelper
+
+			Private ReadOnly _action As Action(Of Gallery.BeforeSelectionChangeEventArgs)
+
+			Public Sub New(action As Action(Of Gallery.BeforeSelectionChangeEventArgs))
+				_action = action
+			End Sub
+
+			Public Sub Handle(sender As Object, e As Gallery.BeforeSelectionChangeEventArgs)
+				_action.Invoke(e)
+			End Sub
+
+		End Class
+
+		Private NotInheritable Class SelectionChangeEventHandlerHelper
+
+			Private ReadOnly _action As Action(Of Gallery.SelectionChangedEventArgs)
+
+			Public Sub New(action As Action(Of Gallery.SelectionChangedEventArgs))
+				_action = action
+			End Sub
+
+			Public Sub Handle(sender As Object, e As Gallery.SelectionChangedEventArgs)
+				_action.Invoke(e)
+			End Sub
+
+		End Class
 
 	End Class
 

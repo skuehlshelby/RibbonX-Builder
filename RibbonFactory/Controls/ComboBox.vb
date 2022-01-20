@@ -1,219 +1,302 @@
 ﻿Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Controls
 
-    Public NotInheritable Class ComboBox
-        Inherits Container(Of Item)
-        Implements IEnabled
-        Implements IVisible
-        Implements ILabel
-        Implements IScreenTip
-        Implements ISuperTip
-        Implements IShowLabel
-        Implements IKeyTip
-        Implements IImage
-        Implements IShowImage
-        Implements IMaxLength
-        Implements IText
-        Implements IDefaultProvider
+	Public NotInheritable Class ComboBox
+		Inherits Container(Of Item)
+		Implements IEnabled
+		Implements IVisible
+		Implements ILabel
+		Implements IScreenTip
+		Implements ISuperTip
+		Implements IShowLabel
+		Implements IKeyTip
+		Implements IImage
+		Implements IShowImage
+		Implements IMaxLength
+		Implements IText
+		Implements IDefaultProvider
 
-        Private ReadOnly _attributes As AttributeSet
-        Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
+		Private ReadOnly _attributes As AttributeSet
 
-        Public Event TextChanged As EventHandler(Of String)
+		Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
+			MyBase.New(New List(Of Item), tag)
+			_attributes = attributes
+			AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
+		End Sub
 
-        Friend Sub New(attributes As AttributeSet, validationRules As ICollection(Of IValidate(Of String)), Optional tag As Object = Nothing)
-            MyBase.New(New List(Of Item), tag)
-            _attributes = attributes
-            _validationRules = validationRules
-            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
-        End Sub
+#Region "Events"
 
-        Public Overrides ReadOnly Property ID As String
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
-            End Get
-        End Property
+		Public Event BeforeTextChange As EventHandler(Of BeforeTextChangeEventArgs)
 
-        Public Overrides ReadOnly Property XML As String
-            Get
-                Return $"<comboBox { _attributes }/>"
-            End Get
-        End Property
+		Public Event TextChanged As EventHandler(Of TextChangedEventArgs)
 
-        Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
-            results.Add(Me)
-        End Sub
+#End Region
 
-        Public Overrides Sub Add(item As Item)
-            AddHandler item.ValueChanged, AddressOf OnChildItemChange
+#Region "RibbonElement Overrides"
 
-            MyBase.Add(item)
-        End Sub
+		Public Overrides ReadOnly Property ID As String
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+			End Get
+		End Property
 
-        Public Overrides Function Remove(item As Item) As Boolean
-            If Items.Remove(item) Then
-                RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+		Public Overrides ReadOnly Property XML As String
+			Get
+				Return $"<comboBox { _attributes }/>"
+			End Get
+		End Property
 
-                RefreshNeeded()
+#End Region
 
-                Return True
-            Else
-                Return False
-            End If
-        End Function
+#Region "Container Overrides"
 
-        Public Overrides Sub Clear()
-            If Items.Any() Then
+		Public Overrides Sub Add(item As Item)
+			AddHandler item.ValueChanged, AddressOf OnChildItemChange
 
-                For Each item As Item In Me
-                    RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
-                Next
+			MyBase.Add(item)
+		End Sub
 
-                Items.Clear()
-                RefreshNeeded()
-            End If
-        End Sub
+		Public Overrides Sub Clear()
+			If Items.Any() Then
 
-        Private Sub OnChildItemChange(sender As Object, e As ValueChangedEventArgs)
-            RefreshNeeded()
-        End Sub
+				For Each item As Item In Me
+					RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+				Next
 
-        Public Property Enabled As Boolean Implements IEnabled.Enabled
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
-            End Set
-        End Property
+				Items.Clear()
+				RefreshNeeded()
+			End If
+		End Sub
 
-        Public Property Visible As Boolean Implements IVisible.Visible
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
-            End Set
-        End Property
+		Public Overrides Function Remove(item As Item) As Boolean
+			If Items.Remove(item) Then
+				RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
 
-        Public Property Label As String Implements ILabel.Label
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
-            End Set
-        End Property
+				RefreshNeeded()
 
-        Public Property ScreenTip As String Implements IScreenTip.ScreenTip
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
-            End Set
-        End Property
+				Return True
+			Else
+				Return False
+			End If
+		End Function
 
-        Public Property SuperTip As String Implements ISuperTip.SuperTip
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
-            End Set
-        End Property
+		Friend Overrides Sub Flatten(results As ICollection(Of RibbonElement))
+			results.Add(Me)
+		End Sub
 
-        Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
-            End Set
-        End Property
+#End Region
 
-        Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
-            Get
-                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeName.Keytip).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
-            End Set
-        End Property
+#Region "Container Helpers"
 
-        Public Property Image As IPictureDisp Implements IImage.Image
-            Get
-                Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
-            End Set
-        End Property
+		Private Sub OnChildItemChange(sender As Object, e As ValueChangedEventArgs)
+			RefreshNeeded()
+		End Sub
 
-        Public Property ShowImage As Boolean Implements IShowImage.ShowImage
-            Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowImage).GetValue()
-            End Get
-            Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowImage).SetValue(Value)
-            End Set
-        End Property
+#End Region
 
-        Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
-            Get
-                Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.MaxLength).GetValue()
-            End Get
-        End Property
+#Region "Enabled and Visible"
 
-        Public Property Text As String Implements IText.Text
-            Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
-            End Get
-            Set
-                Dim validationFailed As Boolean
+		Public Property Enabled As Boolean Implements IEnabled.Enabled
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
+			End Set
+		End Property
 
-                Try
-                    SuspendAutomaticRefreshing()
+		Public Property Visible As Boolean Implements IVisible.Visible
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+			End Set
+		End Property
 
-                    For Each rule As IValidate(Of String) In _validationRules
-                        Dim validationResult As IValidationResult = rule.Validate(Value)
+#End Region
 
-                        validationFailed = Not validationResult.Success
+#Region "DisplayText"
 
-                        If validationFailed Then
-                            DisplayErrorMessage(validationResult.FailureMessage)
-                            Exit For
-                        Else
-                            HideErrorMessage(validationResult.FailureMessage)
-                        End If
-                    Next
-                Finally
-                    ResumeAutomaticRefreshing(triggerRefreshNow:=False)
-                End Try
+		Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
+			Get
+				Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeName.Keytip).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
+			End Set
+		End Property
 
-                If Not validationFailed Then
-                    _attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(Value)
-                    RaiseEvent TextChanged(Me, Value)
-                End If
-            End Set
-        End Property
+		Public Property Label As String Implements ILabel.Label
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
+			End Set
+		End Property
 
-        Private Sub DisplayErrorMessage(message As String)
-            SuperTip = String.Join(Environment.NewLine & Environment.NewLine, SuperTip, message)
-        End Sub
+		Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
+			End Set
+		End Property
 
-        Private Sub HideErrorMessage(message As String)
-            SuperTip = SuperTip.Replace(message, String.Empty).TrimEnd(Environment.NewLine.ToCharArray())
-        End Sub
+		Public Property ScreenTip As String Implements IScreenTip.ScreenTip
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
+			End Set
+		End Property
+		Public Property SuperTip As String Implements ISuperTip.SuperTip
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
+			End Set
+		End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
-            Return _attributes
-        End Function
+#End Region
 
-    End Class
+#Region "Image and ShowImage"
+
+		Public Property Image As IPictureDisp Implements IImage.Image
+			Get
+				Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
+			End Set
+		End Property
+
+		Public Property ShowImage As Boolean Implements IShowImage.ShowImage
+			Get
+				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowImage).GetValue()
+			End Get
+			Set
+				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowImage).SetValue(Value)
+			End Set
+		End Property
+
+#End Region
+
+#Region "MaxLength"
+
+		Public ReadOnly Property MaxLength As Integer Implements IMaxLength.MaxLength
+			Get
+				Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.MaxLength).GetValue()
+			End Get
+		End Property
+
+#End Region
+
+#Region "Action"
+
+		Public Property Text As String Implements IText.Text
+			Get
+				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
+			End Get
+			Set
+				Dim initialValue As String = Text
+
+				If Not initialValue.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
+					Try
+						SuspendAutomaticRefreshing()
+
+						Dim e As BeforeTextChangeEventArgs = New BeforeTextChangeEventArgs(Value, Items.ToArray())
+
+						RaiseEvent BeforeTextChange(Me, e)
+
+						If Not e.Cancel Then
+							Dim updatedValue As String = e.NewText
+
+							_attributes.ReadWriteLookup(Of String)(AttributeCategory.Text).SetValue(updatedValue)
+
+							RaiseEvent TextChanged(Me, New TextChangedEventArgs(updatedValue, initialValue))
+						End If
+					Finally
+						ResumeAutomaticRefreshing()
+					End Try
+				End If
+			End Set
+		End Property
+
+#End Region
+
+#Region "Helpers For Control Cloning"
+
+		Friend Function GetBeforeTextChangeInvocationList() As EventHandler(Of BeforeTextChangeEventArgs)()
+			Dim e As EventHandler(Of BeforeTextChangeEventArgs) = BeforeTextChangeEvent
+
+			If e Is Nothing Then
+				Return New EventHandler(Of BeforeTextChangeEventArgs)() {}
+			Else
+				Return e.
+					GetInvocationList().
+					OfType(Of EventHandler(Of BeforeTextChangeEventArgs)).
+					ToArray()
+			End If
+		End Function
+
+		Friend Function GetTextChangedInvocationList() As EventHandler(Of TextChangedEventArgs)()
+			Dim e As EventHandler(Of TextChangedEventArgs) = TextChangedEvent
+
+			If e Is Nothing Then
+				Return New EventHandler(Of TextChangedEventArgs)() {}
+			Else
+				Return e.
+					GetInvocationList().
+					OfType(Of EventHandler(Of TextChangedEventArgs)).
+					ToArray()
+			End If
+		End Function
+
+		Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+			Return _attributes
+		End Function
+
+#End Region
+
+		Public NotInheritable Class BeforeTextChangeEventArgs
+			Inherits EventArgs
+
+			Public Sub New(newText As String, items As ICollection(Of Item))
+				Me.NewText = newText
+				Me.Items = items
+				Cancel = False
+			End Sub
+
+			Public Property Cancel As Boolean
+
+			Public ReadOnly Property Items As ICollection(Of Item)
+
+			Public Property NewText As String
+
+		End Class
+
+		Public Class TextChangedEventArgs
+			Inherits EventArgs
+
+			Public Sub New(newText As String, oldText As String)
+				Me.NewText = newText
+				Me.OldText = oldText
+			End Sub
+
+			Public ReadOnly Property NewText As String
+
+			Public ReadOnly Property OldText As String
+
+		End Class
+
+	End Class
 
 End Namespace

@@ -24,6 +24,8 @@ Namespace Builders
         Implements IInsert(Of ButtonBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _beforeClickHandlers As ICollection(Of EventHandler(Of Button.BeforeClickEventArgs)) = New List(Of EventHandler(Of Button.BeforeClickEventArgs))
+		Private ReadOnly _clickHandlers As ICollection(Of EventHandler) = New List(Of EventHandler)
 
         Public Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Button)
@@ -37,6 +39,9 @@ Namespace Builders
             attributeGroupBuilder.SetDefaults(template)
             attributeGroupBuilder.AddID(IdManager.GetID(Of Button)())
             _builder = New ControlBuilder(attributeGroupBuilder)
+
+            Array.ForEach(template.GetBeforeClickInvocationList(), Sub(handler) _beforeClickHandlers.Add(handler))
+			Array.ForEach(template.GetClickInvocationList(), Sub(handler) _clickHandlers.Add(handler))
         End Sub
 
         Public Sub New(template As RibbonElement)
@@ -55,7 +60,18 @@ Namespace Builders
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As Button Implements IBuilder(Of Button).Build
-            Return New Button(_builder.Build(), tag)
+
+            Dim button As Button = New Button(_builder.Build(), tag)
+
+            For Each handler As EventHandler(Of Button.BeforeClickEventArgs) In _beforeClickHandlers
+				AddHandler button.BeforeClick, handler
+			Next
+
+			For Each handler As EventHandler In _clickHandlers
+				AddHandler button.OnClick, handler
+			Next
+
+            Return button
         End Function
 
         Public Function WithId(id As String) As ButtonBuilder Implements IID(Of ButtonBuilder).WithId
@@ -166,7 +182,12 @@ Namespace Builders
         End Function
 
         Public Function ThatDoes(action As Action(Of Button), callback As OnAction) As ButtonBuilder Implements IOnActionClick(Of Button, ButtonBuilder).ThatDoes
-            _builder.ThatDoes(action, callback)
+            _builder.ThatDoes(callback)
+            
+            With New OnClickHelper(action)
+                _clickHandlers.Add(AddressOf .Handle)
+            End With
+
             Return Me
         End Function
 
@@ -272,6 +293,56 @@ Namespace Builders
             _builder.HideImage(getShowImage)
             Return Me
         End Function
+
+        Public Function BeforeClick(callback As OnAction, Paramarray actions() As Action(Of Button, Button.BeforeClickEventArgs)) As ButtonBuilder
+            For Each action As Action(Of Button, Button.BeforeClickEventArgs) In actions
+                With New BeforeClickHelper(action)
+                    _beforeClickHandlers.Add(AddressOf .Handle)
+                End With
+            Next
+
+            _builder.ThatDoes(callback)
+
+            Return Me
+        End Function
+
+        Public Function OnClick(callback As OnAction, Paramarray actions() As Action(Of Button)) As ButtonBuilder
+            For Each action As Action(Of Button) In actions
+                With New OnClickHelper(action)
+                    _clickHandlers.Add(AddressOf .Handle)
+                End With
+            Next
+
+            _builder.ThatDoes(callback)
+
+            Return Me
+        End Function
+
+        Private NotInheritable Class BeforeClickHelper
+            Private Readonly action As Action(Of Button, Button.BeforeClickEventArgs)
+
+			Public Sub New(action As Action(Of Button, Button.BeforeClickEventArgs))
+				Me.action = action
+			End Sub
+
+            Public Sub Handle(sender As Object, e As Button.BeforeClickEventArgs)
+                action.Invoke(DirectCast(sender, Button), e)
+            End Sub
+
+		End Class
+
+        Private NotInheritable Class OnClickHelper
+            Private Readonly action As Action(Of Button)
+
+			Public Sub New(action As Action(Of Button))
+				Me.action = action
+			End Sub
+
+            Public Sub Handle(sender As Object, e As EventArgs)
+                action.Invoke(DirectCast(sender, Button))
+            End Sub
+
+		End Class
 
     End Class
 

@@ -4,7 +4,6 @@ Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
 Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities.Validation
 Imports stdole
 
 Namespace Builders
@@ -21,16 +20,15 @@ Namespace Builders
 		Implements IShowImage(Of ComboBoxBuilder)
 		Implements IMaxLength(Of ComboBoxBuilder)
 		Implements IInsert(Of ComboBoxBuilder)
-		Implements IValidateText(Of ComboBoxBuilder)
 
 		Private ReadOnly _builder As ControlBuilder
-		Private ReadOnly _validationRules As ICollection(Of IValidate(Of String))
+		Private ReadOnly _beforeTextChangeHandlers As ICollection(Of EventHandler(Of ComboBox.BeforeTextChangeEventArgs)) = New List(Of EventHandler(Of ComboBox.BeforeTextChangeEventArgs))
+		Private ReadOnly _textChangedHandlers As ICollection(Of EventHandler(Of ComboBox.TextChangedEventArgs)) = New List(Of EventHandler(Of ComboBox.TextChangedEventArgs))
 
 		Public Sub New()
 			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of ComboBox)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(defaultProvider.GetDefaults())
 			_builder = New ControlBuilder(attributeGroupBuilder)
-			_validationRules = New List(Of IValidate(Of String))
 		End Sub
 
 		Public Sub New(template As ComboBox)
@@ -38,6 +36,9 @@ Namespace Builders
 			attributeGroupBuilder.SetDefaults(template)
 			attributeGroupBuilder.AddID(IdManager.GetID(Of ComboBox)())
 			_builder = New ControlBuilder(attributeGroupBuilder)
+
+			Array.ForEach(template.GetBeforeTextChangeInvocationList(), Sub(handler) _beforeTextChangeHandlers.Add(handler))
+			Array.ForEach(template.GetTextChangedInvocationList(), Sub(handler) _textChangedHandlers.Add(handler))
 		End Sub
 
 		Public Sub New(template As Object)
@@ -56,7 +57,7 @@ Namespace Builders
 		End Sub
 
 		Public Function Build(Optional tag As Object = Nothing) As ComboBox Implements IBuilder(Of ComboBox).Build
-			Return New ComboBox(_builder.Build(), _validationRules, tag)
+			Return New ComboBox(_builder.Build(), tag)
 		End Function
 
 		Public Function Enabled() As ComboBoxBuilder Implements IEnabled(Of ComboBoxBuilder).Enabled
@@ -244,14 +245,53 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function WithTextValidationRule(rule As Predicate(Of String)) As ComboBoxBuilder Implements IValidateText(Of ComboBoxBuilder).WithTextValidationRule
-			Return WithTextValidationRule(rule, String.Empty)
-		End Function
+		Public Function BeforeTextChange(ParamArray actions() As Action(Of ComboBox.BeforeTextChangeEventArgs)) As ComboBoxBuilder
+			For Each action As Action(Of ComboBox.BeforeTextChangeEventArgs) In actions
+				With New BeforeTextChangeEventHandlerHelper(action)
+					_beforeTextChangeHandlers.Add(AddressOf .Handle)
+				End With
+			Next
 
-		Public Function WithTextValidationRule(rule As Predicate(Of String), failureMessage As String) As ComboBoxBuilder Implements IValidateText(Of ComboBoxBuilder).WithTextValidationRule
-			_validationRules.Add(New TextValidator(rule, failureMessage))
 			Return Me
 		End Function
+
+		Public Function AfterTextChange(Paramarray actions() As Action(Of ComboBox.TextChangedEventArgs)) As ComboBoxBuilder
+			For Each action As Action(Of ComboBox.TextChangedEventArgs) In actions
+				With New TextChangedEventHandlerHelper(action)
+					_textChangedHandlers.Add(AddressOf .Handle)
+				End With
+			Next
+
+			Return Me
+		End Function
+
+		Private NotInheritable Class BeforeTextChangeEventHandlerHelper
+
+			Private ReadOnly _action As Action(Of ComboBox.BeforeTextChangeEventArgs)
+
+			Public Sub New(action As Action(Of ComboBox.BeforeTextChangeEventArgs))
+				_action = action
+			End Sub
+
+			Public Sub Handle(sender As Object, e As ComboBox.BeforeTextChangeEventArgs)
+				_action.Invoke(e)
+			End Sub
+
+		End Class
+
+		Private NotInheritable Class TextChangedEventHandlerHelper
+
+			Private ReadOnly _action As Action(Of ComboBox.TextChangedEventArgs)
+
+			Public Sub New(action As Action(Of ComboBox.TextChangedEventArgs))
+				_action = action
+			End Sub
+
+			Public Sub Handle(sender As Object, e As ComboBox.TextChangedEventArgs)
+				_action.Invoke(e)
+			End Sub
+
+		End Class
 
 	End Class
 

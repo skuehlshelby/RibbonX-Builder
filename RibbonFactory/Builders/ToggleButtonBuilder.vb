@@ -25,6 +25,8 @@ Namespace Builders
         Implements ISize(Of ToggleButtonBuilder)
 
         Private ReadOnly _builder As ControlBuilder
+        Private ReadOnly _beforeStateChangeHandlers As ICollection(Of EventHandler(Of ToggleButton.BeforeStateChangeEventArgs)) = New List(Of EventHandler(Of ToggleButton.BeforeStateChangeEventArgs))
+		Private ReadOnly _stateChangedHandlers As ICollection(Of EventHandler(Of ToggleButton.StateChangedEventArgs)) = New List(Of EventHandler(Of ToggleButton.StateChangedEventArgs))
 
         Friend Sub New()
             Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
@@ -38,6 +40,9 @@ Namespace Builders
             attributeGroupBuilder.SetDefaults(template)
             attributeGroupBuilder.AddID(IdManager.GetID(Of ToggleButton)())
             _builder = New ControlBuilder(attributeGroupBuilder)
+
+            Array.ForEach(template.GetBeforeStateChangeInvocationList(), Sub(handler) _beforeStateChangeHandlers.Add(handler))
+			Array.ForEach(template.GetStateChangedInvocationList(), Sub(handler) _stateChangedHandlers.Add(handler))
         End Sub
 
         Public Sub New(template As RibbonElement)
@@ -56,7 +61,17 @@ Namespace Builders
         End Sub
 
         Public Function Build(Optional tag As Object = Nothing) As ToggleButton Implements IBuilder(Of ToggleButton).Build
-            Return New ToggleButton(_builder.Build(), tag:=tag)
+            Dim toggleButton As ToggleButton = New ToggleButton(_builder.Build(), tag:=tag)
+
+            For Each handler As EventHandler(Of ToggleButton.BeforeStateChangeEventArgs) In _beforeStateChangeHandlers
+                AddHandler toggleButton.BeforeStateChange, handler
+            Next
+
+            For Each handler As EventHandler(Of ToggleButton.StateChangedEventArgs) In _stateChangedHandlers
+                AddHandler toggleButton.StateChanged, handler
+            Next
+
+            Return toggleButton
         End Function
 
         Public Function WithId(id As String) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithId
@@ -265,6 +280,64 @@ Namespace Builders
             _builder.HideImage(getShowImage)
             Return Me
         End Function
+
+        Public Function Checked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As ToggleButtonBuilder
+			_builder.GetPressedFrom(True, getChecked, setChecked)
+			Return Me
+		End Function
+
+		Public Function Unchecked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As ToggleButtonBuilder
+			_builder.GetPressedFrom(False, getChecked, setChecked)
+			Return Me
+		End Function
+
+        Public Function BeforeStateChange(ParamArray actions() As Action(Of ToggleButton.BeforeStateChangeEventArgs)) As ToggleButtonBuilder
+			For Each action As Action(Of ToggleButton.BeforeStateChangeEventArgs) In actions
+				With New BeforeStateChangeEventHandlerHelper(action)
+                    _beforeStateChangeHandlers.Add(AddressOf .Handle)
+				End With
+			Next
+
+			Return Me
+		End Function
+
+		Public Function AfterStateChange(Paramarray actions() As Action(Of ToggleButton.StateChangedEventArgs)) As ToggleButtonBuilder
+			For Each action As Action(Of ToggleButton.StateChangedEventArgs) In actions
+				With New StateChangedEventHandlerHelper(action)
+                    _stateChangedHandlers.Add(AddressOf .Handle)
+				End With
+			Next
+
+			Return Me
+		End Function
+
+        Private NotInheritable Class BeforeStateChangeEventHandlerHelper
+
+			Private ReadOnly _action As Action(Of ToggleButton.BeforeStateChangeEventArgs)
+
+			Public Sub New(action As Action(Of ToggleButton.BeforeStateChangeEventArgs))
+				_action = action
+			End Sub
+
+			Public Sub Handle(sender As Object, e As ToggleButton.BeforeStateChangeEventArgs)
+				_action.Invoke(e)
+			End Sub
+
+		End Class
+
+		Private NotInheritable Class StateChangedEventHandlerHelper
+
+			Private ReadOnly _action As Action(Of ToggleButton.StateChangedEventArgs)
+
+			Public Sub New(action As Action(Of ToggleButton.StateChangedEventArgs))
+				_action = action
+			End Sub
+
+			Public Sub Handle(sender As Object, e As ToggleButton.StateChangedEventArgs)
+				_action.Invoke(e)
+			End Sub
+
+		End Class
 
     End Class
 
