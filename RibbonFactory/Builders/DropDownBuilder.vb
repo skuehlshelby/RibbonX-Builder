@@ -75,24 +75,8 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function AfterSelectionChanges(action As Action(Of DropDown.SelectionChangedEventArgs)) As DropDownBuilder
-			Dim handler As SelectionChangeEventHandlerHelper = New SelectionChangeEventHandlerHelper(action)
-
-			_selectionChangedHandlers.Add(AddressOf handler.Handle)
-
-			Return Me
-		End Function
-
 		Public Function AsWideAs(sizeString As String) As DropDownBuilder Implements ISizeString(Of DropDownBuilder).AsWideAs
 			_builder.WithSize(sizeString)
-			Return Me
-		End Function
-
-		Public Function BeforeSelectionChanges(action As Action(Of DropDown.BeforeSelectionChangeEventArgs)) As DropDownBuilder
-			Dim handler As BeforeSelectionChangeEventHandlerHelper = New BeforeSelectionChangeEventHandlerHelper(action)
-
-			_beforeSelectionChangeHandlers.Add(AddressOf handler.Handle)
-
 			Return Me
 		End Function
 

@@ -1,4 +1,3 @@
-Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Reflection
 Imports System.Runtime.InteropServices
@@ -19,8 +18,21 @@ Public Class Ribbon
 	Implements IDTExtensibility2
 	Implements IRibbonExtensibility
 
+	Private Readonly registrationService As RegistrationService
+
 	Public Sub New()
 		MyBase.New(New Troubleshooter())
+		registrationService = New RegistrationService(Me)
+	End Sub
+
+	<ComRegisterFunction>
+	Public Sub CreateRegistryEntries()
+		registrationService.RegisterManagedComAddIn()
+	End Sub
+
+	<ComUnregisterFunction>
+	Public Sub RemoveRegistryEntries()
+		registrationService.UnRegisterManagedComAddIn()
 	End Sub
 
 	Private ReadOnly Property Excel As Excel.Application
@@ -35,7 +47,8 @@ Public Class Ribbon
 			WithLabel("Happy Button").
 			WithSuperTip("Oh, to be so happy again!").
 			WithImage(Enums.ImageMSO.Common.HappyFace).
-			ThatDoes(Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"), AddressOf OnAction).
+			OnClick(Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
+			WithClickCallback(AddressOf OnAction).
 			Build()
 
 		Dim buttonWithStockIconTwo As Button = New ButtonBuilder(buttonWithStockIconOne).
@@ -76,7 +89,8 @@ Public Class Ribbon
 			WithLabel("GitHub").
 			WithSuperTip("Open GitHub's website in the default browser.").
 			WithImage(LoadBitmap("ExampleRibbon.github.png"), AddressOf GetImage).
-			ThatDoes(Sub(b) OpenWebsiteInDefaultBrowser(b.Tag.ToString()), AddressOf OnAction).
+			OnClick(Sub(b) OpenWebsiteInDefaultBrowser(b.Tag.ToString()), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
+			WithClickCallback(AddressOf OnAction).
 			Build(tag:="https://github.com/")
 
 		Dim buttonWithCustomIconTwo As Button = New ButtonBuilder(buttonWithCustomIconOne).
@@ -122,51 +136,80 @@ Public Class Ribbon
 			AfterTextChange(Sub(e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")).
 			Build()
 
-		Dim textBoxGroup As Group = New GroupBuilder().WithLabel("Editable Text").WithControl(textBox).Build()
+		Dim comboBox As ComboBox = New ComboBoxBuilder(textBox).
+			WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
+			BeforeTextChange(
+							 Sub(e) e.Cancel = Not e.Items.Any(Function(item) item.Label.Equals(e.NewText, StringComparison.OrdinalIgnoreCase)), 
+							 Sub(e) If e.Cancel Then DisplayStatusBarMessage($"'{e.NewText}' is not one of the available options.")).
+			AfterTextChange(Sub(e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")).
+			GetItemCountFrom(AddressOf GetItemCount).
+            GetItemIdFrom(AddressOf GetItemID).
+            GetItemLabelFrom(AddressOf GetItemLabel).
+            GetItemSuperTipFrom(AddressOf GetItemSuperTip).
+            GetItemScreenTipFrom(AddressOf GetItemScreenTip).
+			Build()
+
+		With comboBox
+			.Add("Option One", "The first option.")
+			.Add("Option Two", "The second option.")
+			.Add("Option Three", "The third option.")
+		End With
+
+		Dim textBoxGroup As Group = New GroupBuilder().WithLabel("Editable Text").WithControls(BoxBuilder.Vertical(textBox, comboBox)).Build()
 
 		Dim one As Button = New ButtonBuilder().
-			WithScreenTip("One").
+			WithLabel("One").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.One).
-			ThatDoes(Sub(b) SetContentsOfSelectedCell(b.Tag), AddressOf OnAction).
+			OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
+			WithClickCallback(AddressOf OnAction).
 			Build(1)
 
 		Dim two As Button = New ButtonBuilder(one).
-			WithScreenTip("Two").
+			WithLabel("Two").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Two).
 			Build(2)
 
 		Dim three As Button = New ButtonBuilder(one).
-			WithScreenTip("Three").
+			WithLabel("Three").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Three).
 			Build(3)
 
 		Dim four As Button = New ButtonBuilder(one).
-			WithScreenTip("Four").
+			WithLabel("Four").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Four).
 			Build(4)
 
 		Dim five As Button = New ButtonBuilder(one).
-			WithScreenTip("Five").
+			WithLabel("Five").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Five).
 			Build(5)
 
 		Dim six As Button = New ButtonBuilder(one).
-			WithScreenTip("Six").
+			WithLabel("Six").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Six).
 			Build(6)
 
 		Dim seven As Button = New ButtonBuilder(one).
-			WithScreenTip("Seven").
+			WithLabel("Seven").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Seven).
 			Build(7)
 
 		Dim eight As Button = New ButtonBuilder(one).
-			WithScreenTip("Eight").
+			WithLabel("Eight").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Eight).
 			Build(8)
 
 		Dim nine As Button = New ButtonBuilder(one).
-			WithScreenTip("Nine").
+			WithLabel("Nine").
+			HideLabel().
 			WithImage(Enums.ImageMSO.Number.Nine).
 			Build(9)
 
@@ -230,8 +273,30 @@ Public Class Ribbon
 
 		Dim desktopFilesDropdownGroup As Group = New DesktopFilesGroup(Me).AsGroup()
 
+		'TODO Finish this
+		Dim gallery As Gallery = New GalleryBuilder().
+			Large().
+			WithImage(Enums.ImageMSO.Common.Refresh).
+			WithLabel("My Custom Gallery").
+			WithColumnCount(5).
+			WithRowCount(1).
+			WithItemDimensions(New Size(32, 32)).
+			GetItemCountFrom(AddressOf GetItemCount).
+			GetItemImageFrom(AddressOf GetItemImage).
+			GetSelectedItemIndexFrom(AddressOf GetSelectedItemIndex, AddressOf OnSelectionChange).
+			Build()
+
+		For i As Integer = 1 To 5
+			gallery.Add(New ItemBuilder().WithImage(LoadBitmap("ExampleRibbon.bandcamp.png")).Build())
+		Next
+
+		Dim galleryGroup As Group = New GroupBuilder().
+			WithLabel("Gallery").
+			WithControl(gallery).
+			Build()
+
 		Dim tab As Tab = New TabBuilder().
-				WithGroups(buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup).
+				WithGroups(buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup).
 				WithLabel("My Custom Tab").
 				InsertAfterMSO(Enums.MSO.Excel.TabHome).
 				Build()

@@ -22,6 +22,15 @@ Namespace Builders
             _synchronizeLabelAndScreenTip = False
         End Sub
 
+        Public Sub New(template As Item)
+            _id = IdManager.GetID(Of Item)
+            _label = template.Label
+            _screenTip = template.ScreenTip
+            _superTip = template.SuperTip
+            _image = template.Image
+            _synchronizeLabelAndScreenTip = True
+        End Sub
+
         Public Function Build(Optional tag As Object = Nothing) As Item
             Return New Item(_id, _label, _screenTip, _superTip, _image, _synchronizeLabelAndScreenTip, tag)
         End Function

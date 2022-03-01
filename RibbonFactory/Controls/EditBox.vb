@@ -161,11 +161,12 @@ Namespace Controls
 				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
 			End Get
 			Set
-				Dim initialValue As String = Text
+				Try
+					SuspendAutomaticRefreshing()
 
-				If Not initialValue.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
-					Try
-						SuspendAutomaticRefreshing()
+					Dim initialValue As String = Text
+
+					If Not initialValue.Equals(Value, StringComparison.OrdinalIgnoreCase) AndAlso Value.Length <= MaxLength Then
 
 						Dim e As BeforeTextChangeEventArgs = New BeforeTextChangeEventArgs(Value)
 
@@ -178,10 +179,10 @@ Namespace Controls
 
 							RaiseEvent TextChanged(Me, New TextChangedEventArgs(updatedValue, initialValue))
 						End If
-					Finally
-						ResumeAutomaticRefreshing()
-					End Try
-				End If
+					End If
+				Finally
+					ResumeAutomaticRefreshing()
+				End Try
 			End Set
 		End Property
 

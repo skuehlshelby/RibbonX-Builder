@@ -1,4 +1,5 @@
-﻿Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.Builders
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
@@ -57,6 +58,10 @@ Namespace Controls
 			AddHandler item.ValueChanged, AddressOf OnChildItemChange
 
 			MyBase.Add(item)
+		End Sub
+
+		Public Overloads Sub Add(label As String, supertip As String)
+			Add(New ItemBuilder().WithLabel(label).WithSuperTip(supertip).Build())
 		End Sub
 
 		Public Overrides Sub Clear()
@@ -206,11 +211,12 @@ Namespace Controls
 				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.GetText).GetValue()
 			End Get
 			Set
-				Dim initialValue As String = Text
+				Try
+					SuspendAutomaticRefreshing()
 
-				If Not initialValue.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
-					Try
-						SuspendAutomaticRefreshing()
+					Dim initialValue As String = Text
+
+					If Not initialValue.Equals(Value, StringComparison.OrdinalIgnoreCase) AndAlso Value.Length <= MaxLength Then
 
 						Dim e As BeforeTextChangeEventArgs = New BeforeTextChangeEventArgs(Value, Items.ToArray())
 
@@ -223,10 +229,10 @@ Namespace Controls
 
 							RaiseEvent TextChanged(Me, New TextChangedEventArgs(updatedValue, initialValue))
 						End If
-					Finally
-						ResumeAutomaticRefreshing()
-					End Try
-				End If
+					End If
+				Finally
+					ResumeAutomaticRefreshing()
+				End Try
 			End Set
 		End Property
 

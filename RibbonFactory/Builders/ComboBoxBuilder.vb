@@ -19,7 +19,15 @@ Namespace Builders
 		Implements IImage(Of ComboBoxBuilder)
 		Implements IShowImage(Of ComboBoxBuilder)
 		Implements IMaxLength(Of ComboBoxBuilder)
+		Implements ISizeString(Of ComboBoxBuilder)
 		Implements IInsert(Of ComboBoxBuilder)
+		Implements IGetItemId(Of ComboBoxBuilder)
+		Implements IGetItemCount(Of ComboBoxBuilder)
+		Implements IGetItemLabel(Of ComboBoxBuilder)
+		Implements IGetItemScreentip(Of ComboBoxBuilder)
+		Implements IGetItemSupertip(Of ComboBoxBuilder)
+		Implements IGetItemImage(Of ComboBoxBuilder)
+		Implements IShowItemImage(Of ComboBoxBuilder)
 
 		Private ReadOnly _builder As ControlBuilder
 		Private ReadOnly _beforeTextChangeHandlers As ICollection(Of EventHandler(Of ComboBox.BeforeTextChangeEventArgs)) = New List(Of EventHandler(Of ComboBox.BeforeTextChangeEventArgs))
@@ -57,8 +65,20 @@ Namespace Builders
 		End Sub
 
 		Public Function Build(Optional tag As Object = Nothing) As ComboBox Implements IBuilder(Of ComboBox).Build
-			Return New ComboBox(_builder.Build(), tag)
+			Dim comboBox As ComboBox = New ComboBox(_builder.Build(), tag)
+
+			For Each handler As EventHandler(Of ComboBox.BeforeTextChangeEventArgs) In _beforeTextChangeHandlers
+				AddHandler comboBox.BeforeTextChange, handler
+			Next
+
+			For Each handler As EventHandler(Of ComboBox.TextChangedEventArgs) In _textChangedHandlers
+				AddHandler comboBox.TextChanged, handler
+			Next
+
+			Return comboBox
 		End Function
+
+#Region "Enabled and Visible"
 
 		Public Function Enabled() As ComboBoxBuilder Implements IEnabled(Of ComboBoxBuilder).Enabled
 			_builder.Enabled()
@@ -100,6 +120,10 @@ Namespace Builders
 			Return Me
 		End Function
 
+#End Region
+
+#Region "Display Text"
+
 		Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithLabel
 			_builder.WithLabel(label, copyToScreenTip)
 			_builder.ShowLabel()
@@ -109,26 +133,6 @@ Namespace Builders
 		Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithLabel
 			_builder.WithLabel(label, callback, copyToScreenTip)
 			_builder.ShowLabel()
-			Return Me
-		End Function
-
-		Public Function WithScreenTip(screenTip As String) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithScreenTip
-			_builder.WithScreentip(screenTip)
-			Return Me
-		End Function
-
-		Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithScreenTip
-			_builder.WithScreentip(screenTip, callback)
-			Return Me
-		End Function
-
-		Public Function WithSuperTip(superTip As String) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithSuperTip
-			_builder.WithSupertip(superTip)
-			Return Me
-		End Function
-
-		Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithSuperTip
-			_builder.WithSupertip(superTip, callback)
 			Return Me
 		End Function
 
@@ -152,6 +156,26 @@ Namespace Builders
 			Return Me
 		End Function
 
+		Public Function WithScreenTip(screenTip As String) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithScreenTip
+			_builder.WithScreentip(screenTip)
+			Return Me
+		End Function
+
+		Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithScreenTip
+			_builder.WithScreentip(screenTip, callback)
+			Return Me
+		End Function
+
+		Public Function WithSuperTip(superTip As String) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithSuperTip
+			_builder.WithSupertip(superTip)
+			Return Me
+		End Function
+
+		Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As ComboBoxBuilder Implements ILabelScreenTipSuperTip(Of ComboBoxBuilder).WithSuperTip
+			_builder.WithSupertip(superTip, callback)
+			Return Me
+		End Function
+
 		Public Function WithKeyTip(keyTip As KeyTip) As ComboBoxBuilder Implements IKeyTip(Of ComboBoxBuilder).WithKeyTip
 			_builder.WithKeyTip(keyTip)
 			Return Me
@@ -161,6 +185,10 @@ Namespace Builders
 			_builder.WithKeyTip(keyTip, callback)
 			Return Me
 		End Function
+
+#End Region
+
+#Region "Image, ShowImage, and ShowItemImages"
 
 		Public Function WithImage(image As ImageMSO) As ComboBoxBuilder Implements IImage(Of ComboBoxBuilder).WithImage
 			_builder.WithImage(image)
@@ -205,10 +233,19 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function WithMaximumInputLength(maxLength As Byte) As ComboBoxBuilder Implements IMaxLength(Of ComboBoxBuilder).WithMaximumInputLength
-			_builder.WithMaxLength(maxLength)
+		Public Function ShowItemImages() As ComboBoxBuilder Implements IShowItemImage(Of ComboBoxBuilder).ShowItemImages
+			_builder.ShowItemImages()
 			Return Me
 		End Function
+
+		Public Function HideItemImages() As ComboBoxBuilder Implements IShowItemImage(Of ComboBoxBuilder).HideItemImages
+			_builder.HideItemImages()
+			Return Me
+		End Function
+
+#End Region
+
+#Region "Insert Before/After"
 
 		Public Function InsertBeforeMSO(builtInControl As MSO) As ComboBoxBuilder Implements IInsert(Of ComboBoxBuilder).InsertBefore
 			_builder.InsertBefore(builtInControl)
@@ -230,6 +267,10 @@ Namespace Builders
 			Return Me
 		End Function
 
+#End Region
+
+#Region "Custom Ids"
+
 		Public Function WithId(id As String) As ComboBoxBuilder Implements IID(Of ComboBoxBuilder).WithId
 			_builder.WithId(id)
 			Return Me
@@ -245,6 +286,29 @@ Namespace Builders
 			Return Me
 		End Function
 
+#End Region
+
+#Region "Size"
+
+		Public Function AsWideAs(sizeString As String) As ComboBoxBuilder Implements ISizeString(Of ComboBoxBuilder).AsWideAs
+			_builder.WithSize(sizeString)
+			Return Me
+		End Function
+
+		Public Function WithMaximumInputLength(maxLength As Byte) As ComboBoxBuilder Implements IMaxLength(Of ComboBoxBuilder).WithMaximumInputLength
+			_builder.WithMaxLength(maxLength)
+			Return Me
+		End Function
+
+#End Region
+
+#Region "Actions"
+
+		Public Function WithText(text As String, getText As FromControl(Of String), setText As TextChanged) As ComboBoxBuilder
+			_builder.GetTextFrom(text, getText, setText)
+			Return Me
+		End Function
+
 		Public Function BeforeTextChange(ParamArray actions() As Action(Of ComboBox.BeforeTextChangeEventArgs)) As ComboBoxBuilder
 			For Each action As Action(Of ComboBox.BeforeTextChangeEventArgs) In actions
 				With New BeforeTextChangeEventHandlerHelper(action)
@@ -255,7 +319,7 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function AfterTextChange(Paramarray actions() As Action(Of ComboBox.TextChangedEventArgs)) As ComboBoxBuilder
+		Public Function AfterTextChange(ParamArray actions() As Action(Of ComboBox.TextChangedEventArgs)) As ComboBoxBuilder
 			For Each action As Action(Of ComboBox.TextChangedEventArgs) In actions
 				With New TextChangedEventHandlerHelper(action)
 					_textChangedHandlers.Add(AddressOf .Handle)
@@ -264,6 +328,42 @@ Namespace Builders
 
 			Return Me
 		End Function
+
+#End Region
+
+#Region "Child-Item Callbacks"
+
+		Public Function GetItemIdFrom(callback As FromControlAndIndex(Of String)) As ComboBoxBuilder Implements IGetItemId(Of ComboBoxBuilder).GetItemIdFrom
+			_builder.GetItemIDFrom(callback)
+			Return Me
+		End Function
+
+		Public Function GetItemCountFrom(callback As FromControl(Of Integer)) As ComboBoxBuilder Implements IGetItemCount(Of ComboBoxBuilder).GetItemCountFrom
+			_builder.GetItemCountFrom(callback)
+			Return Me
+		End Function
+
+		Public Function GetItemLabelFrom(callback As FromControlAndIndex(Of String)) As ComboBoxBuilder Implements IGetItemLabel(Of ComboBoxBuilder).GetItemLabelFrom
+			_builder.GetItemLabelFrom(callback)
+			Return Me
+		End Function
+
+		Public Function GetItemScreenTipFrom(callback As FromControlAndIndex(Of String)) As ComboBoxBuilder Implements IGetItemScreentip(Of ComboBoxBuilder).GetItemScreenTipFrom
+			_builder.GetItemScreenTipFrom(callback)
+			Return Me
+		End Function
+
+		Public Function GetItemSuperTipFrom(callback As FromControlAndIndex(Of String)) As ComboBoxBuilder Implements IGetItemSupertip(Of ComboBoxBuilder).GetItemSuperTipFrom
+			_builder.GetItemSuperTipFrom(callback)
+			Return Me
+		End Function
+
+		Public Function GetItemImageFrom(callback As FromControlAndIndex(Of IPictureDisp)) As ComboBoxBuilder Implements IGetItemImage(Of ComboBoxBuilder).GetItemImageFrom
+			_builder.GetItemImageFrom(callback)
+			Return Me
+		End Function
+
+#End Region
 
 		Private NotInheritable Class BeforeTextChangeEventHandlerHelper
 

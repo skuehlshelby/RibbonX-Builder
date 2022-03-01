@@ -277,11 +277,11 @@ Namespace RibbonAttributes
 #Region "SelectedItemID, SelectedItemIndex, and OnAction"
 
 		Public Sub AddGetSelected(getSelected As FromControl(Of String), setSelected As SelectionChanged)
-			_attributes.Add(New RibbonAttributeComposite(Of Item)(Item.Dummy(), AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition, getSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setSelected.Method.Name))
+			_attributes.Add(New RibbonAttributeComposite(Of Item)(Item.Blank(), AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition, getSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setSelected.Method.Name))
 		End Sub
 
 		Public Sub AddGetSelected(getSelected As FromControl(Of Integer), setSelected As SelectionChanged)
-			_attributes.Add(New RibbonAttributeComposite(Of Item)(Item.Dummy(), AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition, getSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setSelected.Method.Name))
+			_attributes.Add(New RibbonAttributeComposite(Of Item)(Item.Blank(), AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition, getSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setSelected.Method.Name))
 		End Sub
 
 #End Region

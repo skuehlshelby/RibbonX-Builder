@@ -42,6 +42,8 @@ Namespace Containers
 
 		Public Event SelectionChanged As EventHandler(Of SelectionChangedEventArgs)
 
+		'TODO: Should Raise Click Events
+
 #End Region
 
 #Region "RibbonElement Overrides"

@@ -40,7 +40,10 @@ Namespace RibbonAttributes
                     Case GetType(ITitle)
                         defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Title, AttributeCategory.Title))
                     Case GetType(IOnAction)
-                        defaults.Add(New RibbonAttributeDefault(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.Action))
+                        defaults.Add(New RibbonAttributeDefault(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.OnAction))
+                    Case GetType(IText)
+                        defaults.Add(New RibbonAttributeDefault(Of String)("WWWW", AttributeName.SizeString, AttributeCategory.SizeString))
+                        defaults.Add(New RibbonAttributeDefault(Of Integer)(Integer.MaxValue, AttributeName.MaxLength, AttributeCategory.MaxLength))
                 End Select
             Next interfaceType
 

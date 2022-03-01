@@ -359,11 +359,6 @@ Namespace Builders
 			Return Me
 		End Function
 
-		Public Function ShowInRibbon() As GalleryBuilder Implements IShowInRibbon(Of GalleryBuilder).ShowInRibbon
-			_builder.ShowInRibbon()
-			Return Me
-		End Function
-
 		Public Function DoNotShowInRibbon() As GalleryBuilder Implements IShowInRibbon(Of GalleryBuilder).DoNotShowInRibbon
 			_builder.DoNotShowInRibbon()
 			Return Me

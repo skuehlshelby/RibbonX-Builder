@@ -16,7 +16,6 @@ Namespace Builders
         Implements ILabelScreenTipSuperTip(Of ButtonBuilder)
         Implements IShowLabel(Of ButtonBuilder)
         Implements IShowImage(Of ButtonBuilder)
-        Implements IOnActionClick(Of Button, ButtonBuilder)
         Implements ISize(Of ButtonBuilder)
         Implements IImage(Of ButtonBuilder)
         Implements IDescription(Of ButtonBuilder)
@@ -181,16 +180,6 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function ThatDoes(action As Action(Of Button), callback As OnAction) As ButtonBuilder Implements IOnActionClick(Of Button, ButtonBuilder).ThatDoes
-            _builder.ThatDoes(callback)
-            
-            With New OnClickHelper(action)
-                _clickHandlers.Add(AddressOf .Handle)
-            End With
-
-            Return Me
-        End Function
-
         Public Function Large() As ButtonBuilder Implements ISize(Of ButtonBuilder).Large
             _builder.Large()
             Return Me
@@ -294,26 +283,27 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function BeforeClick(callback As OnAction, Paramarray actions() As Action(Of Button, Button.BeforeClickEventArgs)) As ButtonBuilder
+        Public Function WithClickCallback(callback As OnAction) As ButtonBuilder
+            _builder.ThatDoes(callback)
+            Return Me
+        End Function
+
+        Public Function BeforeClick(Paramarray actions() As Action(Of Button, Button.BeforeClickEventArgs)) As ButtonBuilder
             For Each action As Action(Of Button, Button.BeforeClickEventArgs) In actions
                 With New BeforeClickHelper(action)
                     _beforeClickHandlers.Add(AddressOf .Handle)
                 End With
             Next
 
-            _builder.ThatDoes(callback)
-
             Return Me
         End Function
 
-        Public Function OnClick(callback As OnAction, Paramarray actions() As Action(Of Button)) As ButtonBuilder
+        Public Function OnClick(Paramarray actions() As Action(Of Button)) As ButtonBuilder
             For Each action As Action(Of Button) In actions
                 With New OnClickHelper(action)
                     _clickHandlers.Add(AddressOf .Handle)
                 End With
             Next
-
-            _builder.ThatDoes(callback)
 
             Return Me
         End Function

@@ -9,7 +9,7 @@ Public Class ButtonTests
     Protected Overrides Function CreateRibbon() As Containers.Ribbon
         Dim button As Button = New ButtonBuilder(ControlGenerator.MakeButton()) _
                 .WithLabel("Before Click", AddressOf GetLabel) _
-                .ThatDoes(Sub(b) b.Label = "After Click", AddressOf OnAction) _
+                .OnClick(Sub(b) b.Label = "After Click") _
                 .Build()
 
         Return MakeRibbonWithOneTabAndOneGroup(button)

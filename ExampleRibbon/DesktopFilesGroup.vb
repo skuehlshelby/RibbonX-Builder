@@ -26,7 +26,8 @@ Public Class DesktopFilesGroup
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
             WithImage(Enums.ImageMSO.Common.FileOpen).
-            ThatDoes(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName), AddressOf ribbon.OnAction).
+            OnClick(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName)).
+            WithClickCallback(AddressOf ribbon.OnAction).
             Build()
 
         _dropDown = New DropDownBuilder().

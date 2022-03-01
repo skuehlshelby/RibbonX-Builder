@@ -23,6 +23,7 @@
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,6 +35,7 @@
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -95,6 +97,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RegistrationService.vb" />
     <Compile Include="Ribbon.vb" />
     <Compile Include="Troubleshooter.vb" />
     <Compile Include="Utilities.vb" />
@@ -139,4 +142,7 @@
     <EmbeddedResource Include="Images\playing-cards-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>C:\Windows\Microsoft.NET\Framework64\v4.0.30319\regasm.exe C:\Users\georg\source\repos\RibbonFactory\ExampleRibbon\bin\Debug\ExampleRibbon.dll</PostBuildEvent>
+  </PropertyGroup>
 </Project>
