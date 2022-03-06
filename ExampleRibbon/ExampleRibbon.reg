@@ -1,34 +1,63 @@
 REGEDIT4
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\ExampleRibbon.Ribbon]
+[HKEY_CURRENT_USER\Software\Classes\ExampleRibbon.Ribbon]
 @="ExampleRibbon.Ribbon"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\ExampleRibbon.Ribbon\CLSID]
+[HKEY_CURRENT_USER\Software\Classes\ExampleRibbon.Ribbon\CLSID]
 @="{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}]
+[HKEY_CURRENT_USER\Software\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}]
 @="ExampleRibbon.Ribbon"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\InprocServer32]
+[HKEY_CURRENT_USER\Software\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\InprocServer32]
 @="mscoree.dll"
 "ThreadingModel"="Both"
 "Class"="ExampleRibbon.Ribbon"
-"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f49eb60735472b20"
 "RuntimeVersion"="v4.0.30319"
-"CodeBase"="file:///{PATH_TO_DLL}/ExampleRibbon.dll"
+"CodeBase"="file:///C:/Users/georg/source/repos/RibbonFactory/ExampleRibbon/bin/Debug/ExampleRibbon.dll"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\InprocServer32\1.0.0.0]
+[HKEY_CURRENT_USER\Software\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\InprocServer32\1.0.0.0]
 "Class"="ExampleRibbon.Ribbon"
-"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f49eb60735472b20"
 "RuntimeVersion"="v4.0.30319"
-"CodeBase"="file:///{PATH_TO_DLL}/ExampleRibbon.dll"
+"CodeBase"="file:///C:/Users/georg/source/repos/RibbonFactory/ExampleRibbon/bin/Debug/ExampleRibbon.dll"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\ProgId]
+[HKEY_CURRENT_USER\Software\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\ProgId]
 @="ExampleRibbon.Ribbon"
 
-[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}]
+[HKEY_CURRENT_USER\Software\Classes\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}]
 
-[HKEY_CURRENT_USER\SOFTWARE\Microsoft\Office\Excel\Addins\ExampleRibbon.Ribbon]
-"FriendlyName"="Example Ribbon"
-"Description"="A simple example for testing purposes."
-"LoadBehavior"=dword:00000003
+[HKEY_CURRENT_USER\Software\Classes\Record\{289E9AF1-4973-11D1-AE81-00A0C90F26F4}\1.0.0.0]
+"Class"="Extensibility.ext_ConnectMode"
+"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f49eb60735472b20"
+"RuntimeVersion"="v4.0.30319"
+"CodeBase"="file:///C:/Users/georg/source/repos/RibbonFactory/ExampleRibbon/bin/Debug/ExampleRibbon.dll"
+
+[HKEY_CURRENT_USER\Software\Classes\Record\{289E9AF2-4973-11D1-AE81-00A0C90F26F4}\1.0.0.0]
+"Class"="Extensibility.ext_DisconnectMode"
+"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f49eb60735472b20"
+"RuntimeVersion"="v4.0.30319"
+"CodeBase"="file:///C:/Users/georg/source/repos/RibbonFactory/ExampleRibbon/bin/Debug/ExampleRibbon.dll"
+
+[HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}]
+@="ExampleRibbon.Ribbon"
+
+[HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\InprocServer32]
+@="mscoree.dll"
+"ThreadingModel"="Both"
+"Class"="ExampleRibbon.Ribbon"
+"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f49eb60735472b20"
+"RuntimeVersion"="v4.0.30319"
+"CodeBase"="file:///C:/Users/georg/source/repos/RibbonFactory/ExampleRibbon/bin/Debug/ExampleRibbon.dll"
+
+[HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\InprocServer32\1.0.0.0]
+"Class"="ExampleRibbon.Ribbon"
+"Assembly"="ExampleRibbon, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f49eb60735472b20"
+"RuntimeVersion"="v4.0.30319"
+"CodeBase"="file:///C:/Users/georg/source/repos/RibbonFactory/ExampleRibbon/bin/Debug/ExampleRibbon.dll"
+
+[HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\ProgId]
+@="ExampleRibbon.Ribbon"
+
+[HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID\{C2C29BAF-8F1B-46EF-A071-8A286423F4C4}\Implemented Categories\{62C8FE65-4EBB-45E7-B440-6E39B2CDBF29}]

@@ -18,21 +18,22 @@ Public Class Ribbon
 	Implements IDTExtensibility2
 	Implements IRibbonExtensibility
 
-	Private Readonly registrationService As RegistrationService
-
 	Public Sub New()
 		MyBase.New(New Troubleshooter())
-		registrationService = New RegistrationService(Me)
 	End Sub
 
 	<ComRegisterFunction>
-	Public Sub CreateRegistryEntries()
-		registrationService.RegisterManagedComAddIn()
+	Public Shared Sub CreateRegistryEntries()
+		With New RegistrationService(New Ribbon(), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
+			.RegisterManagedComAddIn()
+		End With
 	End Sub
 
 	<ComUnregisterFunction>
-	Public Sub RemoveRegistryEntries()
-		registrationService.UnRegisterManagedComAddIn()
+	Public Shared Sub RemoveRegistryEntries()
+		With New RegistrationService(New Ribbon(), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
+			.RegisterManagedComAddIn()
+		End With
 	End Sub
 
 	Private ReadOnly Property Excel As Excel.Application

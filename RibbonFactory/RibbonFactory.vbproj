@@ -53,6 +53,12 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ScottKuehShelby.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -261,6 +267,7 @@
     <EmbeddedResource Include="Utilities\RibbonX.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="ScottKuehShelby.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExampleXML.xml" />
