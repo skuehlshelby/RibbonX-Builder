@@ -32,7 +32,7 @@ Public Class Ribbon
 	<ComUnregisterFunction>
 	Public Shared Sub RemoveRegistryEntries()
 		With New RegistrationService(GetType(Ribbon), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
-			.RegisterManagedComAddIn()
+			.UnRegisterManagedComAddIn()
 		End With
 	End Sub
 

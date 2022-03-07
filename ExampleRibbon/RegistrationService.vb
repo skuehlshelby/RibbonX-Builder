@@ -135,14 +135,23 @@ Public Class RegistrationService
 	End Sub
 
 	Public Sub UnRegisterManagedComAddIn()
-		Throw New NotImplementedException()
-
 		Using currentUser As RegistryKey = Registry.CurrentUser
 			With currentUser
-				.DeleteSubKeyTree($"SOFTWARE\Classes\{info.ProgId}")
-				.DeleteSubKeyTree($"SOFTWARE\Classes\CLSID\{info.Guid}")
-				.DeleteSubKeyTree($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}")
-				.DeleteSubKeyTree($"SOFTWARE\Microsoft\Office\{info.TargetApplication}\Addins\{info.ProgId}")
+				If .OpenSubKey($"SOFTWARE\Classes\{info.ProgId}") IsNot Nothing Then
+					.DeleteSubKeyTree($"SOFTWARE\Classes\{info.ProgId}")
+				End If
+				
+				If .OpenSubKey($"SOFTWARE\Classes\CLSID\{info.Guid}") IsNot Nothing Then
+					.DeleteSubKeyTree($"SOFTWARE\Classes\CLSID\{info.Guid}")
+				End If
+
+				If .OpenSubKey($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}") IsNot Nothing Then
+					.DeleteSubKeyTree($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}")
+				End If
+				
+				If .OpenSubKey($"SOFTWARE\Microsoft\Office\{info.TargetApplication}\Addins\{info.ProgId}") IsNot Nothing Then
+					.DeleteSubKeyTree($"SOFTWARE\Microsoft\Office\{info.TargetApplication}\Addins\{info.ProgId}")
+				End If
 			End With
 		End Using
 	End Sub
