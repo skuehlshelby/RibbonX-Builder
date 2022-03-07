@@ -1,11 +1,9 @@
 ﻿Module Module1
 
 	Sub Main()
-		Dim ribbon As ExampleRibbon.Ribbon = New ExampleRibbon.Ribbon()
+		ExampleRibbon.Ribbon.RemoveRegistryEntries()
 
-		ribbon.RemoveRegistryEntries()
-
-		ribbon.CreateRegistryEntries()
+		ExampleRibbon.Ribbon.CreateRegistryEntries()
 	End Sub
 
 End Module

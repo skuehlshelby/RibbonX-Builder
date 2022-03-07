@@ -5,13 +5,13 @@ Imports System.Runtime.InteropServices
 Public Class RegistrationService
 	Private ReadOnly info As ManagedOfficeComAddInRegistrationInfo
 
-	Public Sub New(objectToBeRegistered As Object, friendlyName As String, description As String, targetApplication As String, loadBehavior As Byte)
-		info = New ManagedOfficeComAddInRegistrationInfo(objectToBeRegistered, friendlyName, description, loadBehavior, targetApplication)
+	Public Sub New(type As Type, friendlyName As String, description As String, targetApplication As String, loadBehavior As Byte)
+		info = New ManagedOfficeComAddInRegistrationInfo(type, friendlyName, description, loadBehavior, targetApplication)
 	End Sub
 
 	Private NotInheritable Class ManagedOfficeComAddInRegistrationInfo
-		Public Sub New(connectionClass As Object, friendlyName As String, description As String, loadBehavior As Byte, targetApplication As String)
-			With connectionClass.GetType()
+		Public Sub New(type As Type, friendlyName As String, description As String, loadBehavior As Byte, targetApplication As String)
+			With type
 				ProgId = .GetCustomAttribute(Of ProgIdAttribute).Value
 				Guid = "{" & .GetCustomAttribute(Of GuidAttribute).Value & "}"
 
@@ -48,7 +48,6 @@ Public Class RegistrationService
 	End Class
 
 	Public Sub RegisterManagedComAddIn()
-		Throw New NotImplementedException()
 
 		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\{info.ProgId}", String.Empty, info.ProgId, RegistryValueKind.String)
 
@@ -58,36 +57,7 @@ Public Class RegistrationService
 
 		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{info.Guid}\ProgId", String.Empty, info.ProgId, RegistryValueKind.String)
 
-		Using inProcessServerEntries As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\CLSID\{info.Guid}\inProcServer32")
-			With inProcessServerEntries
-				.SetValue(String.Empty, "mscoree.dll")
-				.SetValue("ThreadingModel", "Both")
-				.SetValue("Class", info.ProgId)
-				.SetValue("Assembly", info.AssemblyName)
-				.SetValue("RuntimeVersion", "v4.0.30319")
-				.SetValue("CodeBase", $"file:///{info.DllLocation}")
-			End With
-		End Using
-
-		Using inProcessServerEntries As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\inProcServer32\1.0.0.0")
-			With inProcessServerEntries
-				.SetValue("Class", info.ProgId)
-				.SetValue("Assembly", info.AssemblyName)
-				.SetValue("RuntimeVersion", "v4.0.30319")
-				.SetValue("CodeBase", $"file:///{info.DllLocation}")
-			End With
-		End Using
-
-		Using implementedCategoryEntry As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\Implemented Categories\{info.DotNetCategoryId}")
-
-		End Using
-''Start New
-
-		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\{info.ProgId}", String.Empty, info.ProgId, RegistryValueKind.String)
-
-		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\{info.ProgId}\CLSID", String.Empty, info.Guid)
-
-		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{info.Guid}", String.Empty, info.ProgId, RegistryValueKind.String)
+		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\ProgId", String.Empty, info.ProgId, RegistryValueKind.String)
 
 		Using inProcessServerEntries As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\CLSID\{info.Guid}\inProcServer32")
 			With inProcessServerEntries
@@ -109,9 +79,11 @@ Public Class RegistrationService
 			End With
 		End Using
 
-		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{info.Guid}\ProgId", String.Empty, info.ProgId, RegistryValueKind.String)
-
 		Using implementedCategoryEntry As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\CLSID\{info.Guid}\Implemented Categories\{info.DotNetCategoryId}")
+
+		End Using
+
+		Using implementedCategoryEntry As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\Implemented Categories\{info.DotNetCategoryId}")
 
 		End Using
 
@@ -133,8 +105,6 @@ Public Class RegistrationService
 			End With
 		End Using
 
-		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\CLSID\{info.Guid}", String.Empty, info.ProgId, RegistryValueKind.String)
-
 		Using inProcessServerEntries As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\inProcServer32")
 			With inProcessServerEntries
 				.SetValue(String.Empty, "mscoree.dll")
@@ -155,12 +125,6 @@ Public Class RegistrationService
 			End With
 		End Using
 
-		Registry.SetValue($"HKEY_CURRENT_USER\SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\ProgId", String.Empty, info.ProgId, RegistryValueKind.String)
-
-		Using implementedCategoryEntry As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}\Implemented Categories\{info.DotNetCategoryId}")
-
-		End Using
-
 		Using applicationSpecific As RegistryKey = Registry.CurrentUser.CreateSubKey($"SOFTWARE\Microsoft\Office\{info.TargetApplication}\Addins\{info.ProgId}")
 			With applicationSpecific
 				.SetValue("FriendlyName", info.FriendlyName, RegistryValueKind.String)
@@ -176,6 +140,7 @@ Public Class RegistrationService
 		Using currentUser As RegistryKey = Registry.CurrentUser
 			With currentUser
 				.DeleteSubKeyTree($"SOFTWARE\Classes\{info.ProgId}")
+				.DeleteSubKeyTree($"SOFTWARE\Classes\CLSID\{info.Guid}")
 				.DeleteSubKeyTree($"SOFTWARE\Classes\Wow6432Node\CLSID\{info.Guid}")
 				.DeleteSubKeyTree($"SOFTWARE\Microsoft\Office\{info.TargetApplication}\Addins\{info.ProgId}")
 			End With

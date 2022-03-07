@@ -24,14 +24,14 @@ Public Class Ribbon
 
 	<ComRegisterFunction>
 	Public Shared Sub CreateRegistryEntries()
-		With New RegistrationService(New Ribbon(), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
+		With New RegistrationService(GetType(Ribbon), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
 			.RegisterManagedComAddIn()
 		End With
 	End Sub
 
 	<ComUnregisterFunction>
 	Public Shared Sub RemoveRegistryEntries()
-		With New RegistrationService(New Ribbon(), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
+		With New RegistrationService(GetType(Ribbon), "RibbonX Builder Example", "A simple example ribbon which showcases RibbonX Builder's features", "Excel", 3)
 			.RegisterManagedComAddIn()
 		End With
 	End Sub
