@@ -34,7 +34,7 @@ Namespace Builders
 		Private ReadOnly _textChangedHandlers As ICollection(Of EventHandler(Of ComboBox.TextChangedEventArgs)) = New List(Of EventHandler(Of ComboBox.TextChangedEventArgs))
 
 		Public Sub New()
-			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of ComboBox)
+			Dim defaultProvider As IDefaultProvider = New Defaults(Of ComboBox)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(defaultProvider.GetDefaults())
 			_builder = New ControlBuilder(attributeGroupBuilder)
 		End Sub
@@ -54,7 +54,7 @@ Namespace Builders
 
 			If defaultProvider IsNot Nothing Then
 				Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-				Dim comboBoxAttributes As AttributeSet = New DefaultProvider(Of ComboBox)().GetDefaults()
+				Dim comboBoxAttributes As AttributeSet = New Defaults(Of ComboBox)().GetDefaults()
 				Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) comboBoxAttributes.Contains(a)))
 				Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
 				attributeGroupBuilder.AddID(IdManager.GetID(Of ComboBox)())

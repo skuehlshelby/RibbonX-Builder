@@ -1,8 +1,11 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports RibbonFactory.ControlInterfaces
+Imports RibbonFactory.Enums
+Imports RibbonFactory.Utilities
 
 Namespace RibbonAttributes
 	Friend Class AttributeSet
-		Implements ISet(Of IRibbonAttribute)
+		Implements ICloneable
+		Implements ICollection(Of IRibbonAttribute)
 
 		Public Event AttributeChanged()
 
@@ -13,81 +16,193 @@ Namespace RibbonAttributes
 		Private ReadOnly _attributes As ISet(Of IRibbonAttribute)
 
 		Public Sub New()
-			_attributes = New HashSet(Of IRibbonAttribute)()
+			_attributes = New HashSet(Of IRibbonAttribute)(New AttributeEqualityComparer())
 		End Sub
 
 		Public Sub New(attributes As IEnumerable(Of IRibbonAttribute))
-			_attributes = New HashSet(Of IRibbonAttribute)()
+			_attributes = New HashSet(Of IRibbonAttribute)(New AttributeEqualityComparer())
 
 			For Each attribute As IRibbonAttribute In attributes
 				Add(attribute)
 			Next
 		End Sub
 
-		Public Function Add(item As IRibbonAttribute) As Boolean Implements ISet(Of IRibbonAttribute).Add
-			While Contains(item)
-				Remove(item)
-			End While
+		Public Function WithDefaults(Of T As RibbonElement) As AttributeSet
+			Clear()
+
+			Dim defs As IEnumerable(Of IRibbonAttribute) = Defaults(Of T).Get()
+
+			Add(defs)
+
+			Return Me
+		End Function
+
+		Public Function OverwriteWithIntersectionOf(attributes As IEnumerable(Of IRibbonAttribute)) As AttributeSet
+			For Each attribute As IRibbonAttribute In attributes
+				If Contains(attribute) Then
+					If attribute.Category <> AttributeCategory.IdType Then
+						Add(attribute)
+					End If
+				End If
+			Next
+
+			Return Me
+		End Function
+
+		Private NotInheritable Class AttributeEqualityComparer
+			Implements IEqualityComparer(Of IRibbonAttribute)
+
+			Public Overloads Function Equals(x As IRibbonAttribute, y As IRibbonAttribute) As Boolean Implements IEqualityComparer(Of IRibbonAttribute).Equals
+				Return x.Category = y.Category
+			End Function
+
+			Public Overloads Function GetHashCode(obj As IRibbonAttribute) As Integer Implements IEqualityComparer(Of IRibbonAttribute).GetHashCode
+				Return obj.Category.GetHashCode()
+			End Function
+		End Class
+
+#Region "Add, Remove, Clear"
+		Public Sub Add(item As IRibbonAttribute) Implements ICollection(Of IRibbonAttribute).Add
+			Require(Of ArgumentNullException)(item IsNot Nothing)
+
+			Remove(item)
 
 			_attributes.Add(item)
 
 			AddHandler item.ValueChanged, AddressOf OnValueChange
+		End Sub
 
-			Return True
-		End Function
+		Public Sub Add(items As IEnumerable(Of IRibbonAttribute))
+			For Each item As IRibbonAttribute In items
+				Add(item)
+			Next
+		End Sub
 
-		Public Function TryLookup(sampleMember As AttributeCategory, <Out> ByRef attribute As IRibbonAttribute) As Boolean
-			attribute = _attributes.FirstOrDefault(Function(a) a.IsExclusiveWith(sampleMember))
+		Public Function Remove(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Remove
+			If _attributes.Contains(item) Then
+				Dim temp As IRibbonAttribute = Lookup(item.Category)
 
-			Return attribute IsNot Nothing
-		End Function
-
-		Public Function TryLookup(Of T)(sampleMember As AttributeCategory, <Out> ByRef attribute As IRibbonAttributeReadOnly(Of T)) As Boolean
-			Dim value As IRibbonAttribute = Nothing
-
-			If TryLookup(sampleMember, value) Then
-				attribute = TryCast(value, IRibbonAttributeReadOnly(Of T))
-				Return attribute IsNot Nothing
-			Else
-				attribute = Nothing
-				Return False
+				RemoveHandler temp.ValueChanged, AddressOf OnValueChange
 			End If
+
+			Return _attributes.Remove(item)
 		End Function
 
-		Public Function TryLookup(Of T)(sampleMember As AttributeCategory, <Out> ByRef attribute As IRibbonAttributeReadWrite(Of T)) As Boolean
-			Dim value As IRibbonAttribute = Nothing
+		Public Sub Clear() Implements ICollection(Of IRibbonAttribute).Clear
+			For Each attribute As IRibbonAttribute In _attributes
+				RemoveHandler attribute.ValueChanged, AddressOf OnValueChange
+			Next
 
-			If TryLookup(sampleMember, value) Then
-				attribute = TryCast(value, IRibbonAttributeReadWrite(Of T))
-				Return attribute IsNot Nothing
-			Else
-				attribute = Nothing
-				Return False
-			End If
-		End Function
+			_attributes.Clear()
+		End Sub
 
-		Public Function Lookup(sampleMember As AttributeCategory) As IRibbonAttribute
-			Dim value As IRibbonAttribute = Nothing
+#End Region
 
-			If TryLookup(sampleMember, value) Then
+#Region "Lookup Functions"
+
+		Public Function Lookup(category As AttributeCategory) As IRibbonAttribute
+			Dim value As IRibbonAttribute = _attributes.FirstOrDefault(Function(a) a.Category = category)
+
+			If value IsNot Nothing Then
 				Return value
 			Else
-				Throw New InvalidOperationException($"Couldn't find an attribute with the category '{sampleMember}'.")
+				Throw New InvalidOperationException($"Couldn't find an attribute with the category '{category}'.")
 			End If
 		End Function
 
-		Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadOnly(Of T)
-			Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), IRibbonAttributeReadOnly(Of T))
+		Public Function Read(Of T) As T
+			Dim results As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T))
+
+			If results.Count() = 1 Then
+				Return results.Single().GetValue()
+			Else
+				Throw SeekError(Of T)()
+			End If
 		End Function
 
+		Public Function Read(Of T)(category As AttributeCategory) As T
+			Dim results As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T)).Where(Function(a) a.Category = category)
+
+			If results.Count() = 1 Then
+				Return results.Single().GetValue()
+			Else
+				Throw SeekError(Of T)(category)
+			End If
+		End Function
+
+		Public Sub Write(Of T)(value As T)
+			Dim results As IEnumerable(Of IRibbonAttributeReadWrite(Of T)) = _attributes.OfType(Of IRibbonAttributeReadWrite(Of T))
+
+			If results.Count() = 1 Then
+				results.Single().SetValue(value)
+			Else
+				Throw SeekError(Of T)()
+			End If
+		End Sub
+
+		Public Sub Write(Of T)(value As T, category As AttributeCategory)
+			Dim results As IEnumerable(Of IRibbonAttributeReadWrite(Of T)) = _attributes.OfType(Of IRibbonAttributeReadWrite(Of T)).Where(Function(a) a.Category = category)
+
+			If results.Count() = 1 Then
+				results.Single().SetValue(value)
+			Else
+				Throw SeekError(Of T)(category)
+			End If
+		End Sub
+
+		Private Function SeekError(Of T)() As Exception
+			Dim results As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T))
+
+			Select Case results.Count()
+				Case 0
+					Return New Exception($"Failed to find any values of type '{GetType(T).Name}'.")
+				Case 1
+					Return New Exception($"Found one value of type '{GetType(T).Name}', but it was read-only.")
+				Case Else
+					Return New Exception($"Found too many values of type '{GetType(T).Name}'. Results are ambiguous.")
+			End Select
+		End Function
+
+		Private Function SeekError(Of T)(category As AttributeCategory) As Exception
+			Dim typeResults As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T))
+			Dim categoryResults As IEnumerable(Of IRibbonAttribute) = _attributes.Where(Function(a) a.Category = category)
+			Dim combinedResults As IEnumerable(Of IRibbonAttribute) = typeResults.OfType(Of IRibbonAttribute)().Union(categoryResults)
+
+			If typeResults.Count() = 0 AndAlso categoryResults.Count() = 0 Then
+				Return New Exception($"Failed to find any values of type '{GetType(T).Name}'. No values belonging to the category '{category}' were found either.")
+			ElseIf typeResults.Count() = 0 AndAlso categoryResults.Count() = 1 Then
+				Return New Exception($"Found one value belonging to category '{category}', but its type was not of type '{GetType(T).Name}'.")
+			ElseIf typeResults.Count() = 1 AndAlso categoryResults.Count() = 0 Then
+				Return New Exception($"Found one value of type '{GetType(T).Name}', but it was not a member of category '{category}'.")
+			Else
+				Dim combined As IEnumerable(Of IRibbonAttribute) = typeResults.Cast(Of IRibbonAttribute)().Intersect(categoryResults)
+
+				If combined.Count() = 0 Then
+					Return New Exception($"Failed to find any values of type '{GetType(T).Name}' that also belong to category '{category}'.")
+				ElseIf combined.Count() = 1
+					Return New Exception($"Found one value of type '{GetType(T).Name}' in category '{category}', but it was read-only.")
+				Else
+					Return New Exception($"More than one value of type '{GetType(T).Name}' belonging to category '{category}' was found. This represents an internal logic error. Please report to project maintainer.")
+				End If
+			End If
+		End Function
+
+		<Obsolete>
+		Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadOnly(Of T)
+			Return _attributes.OfType(Of IRibbonAttributeReadOnly(Of T)).Single(Function(a) a.Category.Contains(sampleMember))
+		End Function
+
+		<Obsolete>
 		Public Function ReadOnlyLookup(Of T)(category As AttributeCategory) As IRibbonAttributeReadOnly(Of T)
 			Return DirectCast(Lookup(category), IRibbonAttributeReadOnly(Of T))
 		End Function
 
+		<Obsolete>
 		Public Function ReadWriteLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadWrite(Of T)
-			Return DirectCast(_attributes.First(Function(attribute) attribute.IsExclusiveWith(sampleMember)), IRibbonAttributeReadWrite(Of T))
+			Return DirectCast(_attributes.First(Function(a) a.Category.Contains(sampleMember)), IRibbonAttributeReadWrite(Of T))
 		End Function
 
+		<Obsolete>
 		Public Function ReadWriteLookup(Of T)(category As AttributeCategory) As IRibbonAttributeReadWrite(Of T)
 			Dim value As IRibbonAttributeReadWrite(Of T) = TryCast(Lookup(category), IRibbonAttributeReadWrite(Of T))
 
@@ -98,16 +213,14 @@ Namespace RibbonAttributes
 			End If
 		End Function
 
-		Public Function HasAttribute(sampleMember As AttributeName) As Boolean
-			Return _attributes.Any(Function(attribute) attribute.IsExclusiveWith(sampleMember))
-		End Function
-
-		Public Function HasAttribute(sampleMember As AttributeCategory) As Boolean
-			Return _attributes.Any(Function(attribute) attribute.IsExclusiveWith(sampleMember))
-		End Function
+#End Region
 
 		Public Overrides Function ToString() As String
 			Return String.Join(" ", _attributes)
+		End Function
+
+		Public Overloads Function ToString(category As AttributeCategory) As String
+			Return Lookup(category).ToString()
 		End Function
 
 		Public ReadOnly Property Count As Integer Implements ICollection(Of IRibbonAttribute).Count
@@ -122,81 +235,18 @@ Namespace RibbonAttributes
 			End Get
 		End Property
 
-		Public Sub UnionWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).UnionWith
-			_attributes.UnionWith(other)
-		End Sub
-
-		Public Sub IntersectWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).IntersectWith
-			_attributes.IntersectWith(other)
-		End Sub
-
-		Public Sub ExceptWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).ExceptWith
-			_attributes.ExceptWith(other)
-		End Sub
-
-		Public Sub SymmetricExceptWith(other As IEnumerable(Of IRibbonAttribute)) Implements ISet(Of IRibbonAttribute).SymmetricExceptWith
-			_attributes.SymmetricExceptWith(other)
-		End Sub
-
-		Public Sub Clear() Implements ICollection(Of IRibbonAttribute).Clear
-			While _attributes.Count > 0
-				Remove(_attributes(0))
-			End While
-		End Sub
-
 		Public Sub CopyTo(array() As IRibbonAttribute, arrayIndex As Integer) Implements ICollection(Of IRibbonAttribute).CopyTo
 			_attributes.CopyTo(array, arrayIndex)
 		End Sub
 
-		Private Sub ICollection_Add(item As IRibbonAttribute) Implements ICollection(Of IRibbonAttribute).Add
-			Add(item)
-		End Sub
 
-		Public Function IsSubsetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsSubsetOf
-			Return _attributes.IsSubsetOf(other)
-		End Function
-
-		Public Function IsSupersetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsSupersetOf
-			Return _attributes.IsSupersetOf(other)
-		End Function
-
-		Public Function IsProperSupersetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsProperSupersetOf
-			Return _attributes.IsProperSupersetOf(other)
-		End Function
-
-		Public Function IsProperSubsetOf(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).IsProperSubsetOf
-			Return _attributes.IsProperSubsetOf(other)
-		End Function
-
-		Public Function Overlaps(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).Overlaps
-			Return _attributes.Overlaps(other)
-		End Function
-
-		Public Function SetEquals(other As IEnumerable(Of IRibbonAttribute)) As Boolean Implements ISet(Of IRibbonAttribute).SetEquals
-			Return _attributes.SetEquals(other)
-		End Function
 
 		Public Function Contains(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Contains
 			Return _attributes.Contains(item)
 		End Function
 
-		Public Function Remove(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Remove
-			If _attributes.Remove(item) Then
-				RemoveHandler item.ValueChanged, AddressOf OnValueChange
-				Return True
-			Else
-				Return False
-			End If
-		End Function
-
-		Public Function Remove(category As AttributeCategory) As Boolean
-			Dim value As IRibbonAttribute = Nothing
-
-			If TryLookup(category, value) Then
-				Return Remove(value)
-			Else
-				Return False
-			End If
+		Public Function Contains(category As AttributeCategory) As Boolean
+			Return _attributes.Any(Function(a) a.Category = category)
 		End Function
 
 		Public Function GetEnumerator() As IEnumerator(Of IRibbonAttribute) Implements IEnumerable(Of IRibbonAttribute).GetEnumerator
@@ -205,6 +255,10 @@ Namespace RibbonAttributes
 
 		Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
 			Return DirectCast(_attributes, IEnumerable).GetEnumerator()
+		End Function
+
+		Public Function Clone() As Object Implements ICloneable.Clone
+			Throw New NotImplementedException()
 		End Function
 
 	End Class

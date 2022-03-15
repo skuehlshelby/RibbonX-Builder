@@ -181,6 +181,10 @@ Namespace RibbonAttributes
 
 		Public Shared Property ShowInRibbon As AttributeName            = New AttributeName(value:=61, name:=NameOf(ShowInRibbon).CamelCase())
 
+		Public Shared Property FrameworkBeforeEvent As AttributeName    = New AttributeName(value:=62, name:=NameOf(FrameworkBeforeEvent))
+
+		Public Shared Property FrameworkOnEvent As AttributeName		= New AttributeName(value:=62, name:=NameOf(FrameworkOnEvent))
+
 	End Class
 
 End Namespace

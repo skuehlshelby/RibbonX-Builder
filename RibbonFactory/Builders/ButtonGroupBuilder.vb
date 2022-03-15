@@ -14,7 +14,7 @@ Namespace Builders
 		Private ReadOnly _controls As ISet(Of RibbonElement)
 
 		Public Sub New()
-			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of ButtonGroup)
+			Dim defaultProvider As IDefaultProvider = New Defaults(Of ButtonGroup)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
 			attributeGroupBuilder.SetDefaults(defaultProvider)
 			_builder = New ControlBuilder(attributeGroupBuilder)

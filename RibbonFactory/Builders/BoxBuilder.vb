@@ -13,7 +13,7 @@ Namespace Builders
         Private ReadOnly _items As ICollection(Of RibbonElement)
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Box)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of Box)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)

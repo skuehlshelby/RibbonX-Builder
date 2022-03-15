@@ -19,7 +19,7 @@ Namespace Builders
         Private ReadOnly _controls As ICollection(Of RibbonElement)
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Group)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of Group)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)
@@ -39,7 +39,7 @@ Namespace Builders
 
             If defaultProvider IsNot Nothing Then
                 Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim groupAttributes As AttributeSet = New DefaultProvider(Of Group)().GetDefaults()
+                Dim groupAttributes As AttributeSet = New Defaults(Of Group)().GetDefaults()
                 Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) groupAttributes.Contains(a)))
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of Group)())

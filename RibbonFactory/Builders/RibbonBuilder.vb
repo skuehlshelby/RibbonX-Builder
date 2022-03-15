@@ -29,8 +29,8 @@ Namespace Builders
             Dim ribbonX As String = 
                     $"<?xml version=""1.0"" encoding=""utf-8"" ?>
                     
-                    <customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"" {If(attributes.HasAttribute(AttributeName.OnLoad), attributes.ReadOnlyLookup(Of String)(AttributeName.OnLoad), Nothing)} {If(attributes.HasAttribute(AttributeName.LoadImage), attributes.ReadOnlyLookup(Of String)(AttributeName.LoadImage), Nothing)}>
-                        <ribbon {If(attributes.HasAttribute(AttributeName.StartFromScratch), attributes.ReadOnlyLookup(Of Boolean)(AttributeName.StartFromScratch), Nothing)}>
+                    <customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"" {attributes.ToString(AttributeCategory.OnLoad)} {attributes.ToString(AttributeCategory.LoadImage)}>
+                        <ribbon {attributes.ToString(AttributeCategory.StartFromScratch)}>
                             <tabs>
                                 {String.Join(Environment.NewLine, _tabs.Select(Function(tab) tab.XML))}
                             </tabs>

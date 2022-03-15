@@ -50,7 +50,7 @@ Namespace Containers
 
 		Public Overrides ReadOnly Property ID As String
 			Get
-				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+				Return _attributes.Read(Of String)(AttributeCategory.IdType)
 			End Get
 		End Property
 
@@ -131,19 +131,19 @@ Namespace Containers
 
 		Public Property Enabled As Boolean Implements IEnabled.Enabled
 			Get
-				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
+				Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
+				_attributes.Write(Value, AttributeCategory.Enabled)
 			End Set
 		End Property
 
 		Public Property Visible As Boolean Implements IVisible.Visible
 			Get
-				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
+				Return _attributes.Read(Of Boolean)(AttributeCategory.Visible).GetValue()
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+				_attributes.Write(Of Boolean)(AttributeCategory.GetVisible).SetValue(Value)
 			End Set
 		End Property
 
@@ -153,55 +153,55 @@ Namespace Containers
 
 		Public Property Description As String Implements IDescription.Description
 			Get
-				Return _attributes.ReadOnlyLookup(Of String)(AttributeCategory.Description).GetValue()
+				Return _attributes.Read(Of String)(AttributeCategory.Description)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of String)(AttributeCategory.Description).SetValue(Value)
+				_attributes.Write(Of String)(AttributeCategory.Description).SetValue(Value)
 			End Set
 		End Property
 
 		Public Property Label As String Implements ILabel.Label
 			Get
-				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
+				Return _attributes.Read(Of String)(AttributeCategory.Label)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
+				_attributes.Write(Of String)(AttributeCategory.Label).SetValue(Value)
 			End Set
 		End Property
 
 		Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
 			Get
-				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowLabel).GetValue()
+				Return _attributes.Read(Of Boolean)(AttributeCategory.LabelVisibility)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowLabel).SetValue(Value)
+				_attributes.Write(Value, AttributeCategory.LabelVisibility)
 			End Set
 		End Property
 
 		Public Property ScreenTip As String Implements IScreenTip.ScreenTip
 			Get
-				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
+				Return _attributes.Read(Of String)(AttributeCategory.Screentip)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
+				_attributes.Write(Of String)(AttributeCategory.GetScreentip).SetValue(Value)
 			End Set
 		End Property
 
 		Public Property SuperTip As String Implements ISuperTip.SuperTip
 			Get
-				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
+				Return _attributes.Read(Of String)(AttributeCategory.Supertip)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
+				_attributes.Write(Of String)(AttributeCategory.GetSupertip).SetValue(Value)
 			End Set
 		End Property
 
 		Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
 			Get
-				Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeCategory.KeyTip).GetValue()
+				Return _attributes.Read(Of KeyTip)(AttributeCategory.KeyTip)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of KeyTip)(AttributeCategory.KeyTip).SetValue(Value)
+				_attributes.Write(Of KeyTip)(AttributeCategory.KeyTip).SetValue(Value)
 			End Set
 		End Property
 
@@ -211,19 +211,19 @@ Namespace Containers
 
 		Public Property ItemHeight As Integer Implements IItemDimensions.ItemHeight
 			Get
-				Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.ItemHeight).GetValue()
+				Return _attributes.Read(Of Integer)(AttributeCategory.ItemHeight).GetValue()
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Integer)(AttributeName.ItemHeight).SetValue(Value)
+				_attributes.Write(Of Integer)(AttributeCategory.ItemHeight).SetValue(Value)
 			End Set
 		End Property
 
 		Public Property ItemWidth As Integer Implements IItemDimensions.ItemWidth
 			Get
-				Return _attributes.ReadOnlyLookup(Of Integer)(AttributeName.ItemWidth).GetValue()
+				Return _attributes.Read(Of Integer)(AttributeCategory.ItemWidth).GetValue()
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Integer)(AttributeName.ItemWidth).SetValue(Value)
+				_attributes.Write(Of Integer)(AttributeCategory.ItemWidth).SetValue(Value)
 			End Set
 		End Property
 
@@ -233,19 +233,19 @@ Namespace Containers
 
 		Public Property Image As IPictureDisp Implements IImage.Image
 			Get
-				Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
+				Return _attributes.Read(Of IPictureDisp)(AttributeCategory.GetImage).GetValue()
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
+				_attributes.Write(Of IPictureDisp)(AttributeCategory.GetImage).SetValue(Value)
 			End Set
 		End Property
 
 		Public Property ShowImage As Boolean Implements IShowImage.ShowImage
 			Get
-				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.ShowImage).GetValue()
+				Return _attributes.Read(Of Boolean)(AttributeCategory.ShowImage).GetValue()
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetShowImage).SetValue(Value)
+				_attributes.Write(Of Boolean)(AttributeCategory.GetShowImage).SetValue(Value)
 			End Set
 		End Property
 
@@ -255,7 +255,7 @@ Namespace Containers
 
 		Public Property Selected As Item Implements ISelect.Selected
 			Get
-				Return _attributes.ReadOnlyLookup(Of Item)(AttributeCategory.SelectedItemPosition).GetValue()
+				Return _attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition)
 			End Get
 			Set
 				Try
@@ -266,7 +266,7 @@ Namespace Containers
 					RaiseEvent BeforeSelectionChange(Me, e)
 
 					If Not e.Cancel Then
-						_attributes.ReadWriteLookup(Of Item)(AttributeCategory.SelectedItemPosition).SetValue(e.NewSelection)
+						_attributes.Write(e.NewSelection, AttributeCategory.SelectedItemPosition)
 
 						RaiseEvent SelectionChanged(Me, New SelectionChangedEventArgs(e.NewSelection))
 					End If
@@ -291,10 +291,10 @@ Namespace Containers
 
 		Public Property Size As ControlSize Implements ISize.Size
 			Get
-				Return _attributes.ReadOnlyLookup(Of ControlSize)(AttributeCategory.Size).GetValue()
+				Return _attributes.Read(Of ControlSize)(AttributeCategory.Size).GetValue()
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of ControlSize)(AttributeCategory.Size).SetValue(Value)
+				_attributes.Write(Of ControlSize)(AttributeCategory.Size).SetValue(Value)
 			End Set
 		End Property
 

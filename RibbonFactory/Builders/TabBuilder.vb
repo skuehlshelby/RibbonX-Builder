@@ -15,7 +15,7 @@ Namespace Builders
         Private ReadOnly _groups As ICollection(Of Group)
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Tab)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of Tab)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = new ControlBuilder(attributeGroupBuilder)

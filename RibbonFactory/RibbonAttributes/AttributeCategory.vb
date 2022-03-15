@@ -153,6 +153,12 @@ Namespace RibbonAttributes
 		Public Shared ReadOnly Property Title As AttributeCategory                = New AttributeCategory(39, NameOf(Title), AttributeName.Title, AttributeName.GetTitle)
 
 		Public Shared ReadOnly Property ShowInRibbon As AttributeCategory         = New AttributeCategory(40, NameOf(ShowInRibbon), AttributeName.ShowInRibbon)
+		
+		Public Shared ReadOnly Property Tag As AttributeCategory				  = New AttributeCategory(41, NameOf(Tag))
+
+		Public Shared ReadOnly Property FrameworkBeforeEvent As AttributeCategory	  = New AttributeCategory(42, NameOf(FrameworkBeforeEvent))
+
+		Public Shared ReadOnly Property FrameworkOnEvent As AttributeCategory	  = New AttributeCategory(43, NameOf(FrameworkOnEvent))
 
 #End Region
 

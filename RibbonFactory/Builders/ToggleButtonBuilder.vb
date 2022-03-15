@@ -29,7 +29,7 @@ Namespace Builders
 		Private ReadOnly _stateChangedHandlers As ICollection(Of EventHandler(Of ToggleButton.StateChangedEventArgs)) = New List(Of EventHandler(Of ToggleButton.StateChangedEventArgs))
 
         Friend Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of SplitButton)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = New ControlBuilder(attributeGroupBuilder)
@@ -50,7 +50,7 @@ Namespace Builders
 
             If defaultProvider IsNot Nothing Then
                 Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim toggleButtonAttributes As AttributeSet = New DefaultProvider(Of ToggleButton)().GetDefaults()
+                Dim toggleButtonAttributes As AttributeSet = New Defaults(Of ToggleButton)().GetDefaults()
                 Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) toggleButtonAttributes.Contains(a)))
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of ToggleButton)())

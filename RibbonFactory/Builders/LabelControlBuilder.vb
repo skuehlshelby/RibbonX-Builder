@@ -16,7 +16,7 @@ Namespace Builders
         Private ReadOnly _builder As ControlBuilder
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of LabelControl)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of LabelControl)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = New ControlBuilder(attributeGroupBuilder)
@@ -34,7 +34,7 @@ Namespace Builders
 
             If defaultProvider IsNot Nothing Then
                 Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim labelControlAttributes As AttributeSet = New DefaultProvider(Of LabelControl)().GetDefaults()
+                Dim labelControlAttributes As AttributeSet = New Defaults(Of LabelControl)().GetDefaults()
                 Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) labelControlAttributes.Contains(a)))
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of LabelControl)())

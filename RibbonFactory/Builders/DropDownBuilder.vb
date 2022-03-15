@@ -39,7 +39,7 @@ Namespace Builders
 		Private ReadOnly _selectionChangedHandlers As ICollection(Of EventHandler(Of DropDown.SelectionChangedEventArgs)) = New List(Of EventHandler(Of DropDown.SelectionChangedEventArgs))
 
 		Public Sub New()
-			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of DropDown)
+			Dim defaultProvider As IDefaultProvider = New Defaults(Of DropDown)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
 			attributeGroupBuilder.SetDefaults(defaultProvider)
 			_builder = New ControlBuilder(attributeGroupBuilder)
@@ -60,7 +60,7 @@ Namespace Builders
 
 			If defaultProvider IsNot Nothing Then
 				Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-				Dim dropDownAttributes As AttributeSet = New DefaultProvider(Of DropDown)().GetDefaults()
+				Dim dropDownAttributes As AttributeSet = New Defaults(Of DropDown)().GetDefaults()
 				Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) dropDownAttributes.Contains(a)))
 				Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
 				attributeGroupBuilder.AddID(IdManager.GetID(Of DropDown)())

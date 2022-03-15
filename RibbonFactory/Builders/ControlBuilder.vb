@@ -1,4 +1,6 @@
 ﻿Imports System.Drawing
+Imports RibbonFactory.BuilderInterfaces
+Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
@@ -14,19 +16,31 @@ Namespace Builders
 	''' This class, in combination with AttributeGroupBuilder, is designed to remove as much boilerplate
 	''' code as possible from the specialized control builder classes.
 	''' </summary>
-	Friend NotInheritable Class ControlBuilder
+	Friend Class ControlBuilder
 		Private ReadOnly _attributeGroupBuilder As AttributeGroupBuilder
 
 		Public Sub New(attributeGroupBuilder As AttributeGroupBuilder)
 			_attributeGroupBuilder = attributeGroupBuilder
 		End Sub
 
+		Public Shared Function Init(Of T As RibbonElement)() As ControlBuilder
+			Return New ControlBuilder(New AttributeGroupBuilder(New AttributeSet().WithDefaults(Of T)))
+		End Function
+
+		Public Shared Function Init(Of T As RibbonElement)(template As RibbonElement) As ControlBuilder
+			If TypeOf template Is IDefaultProvider Then
+                Return New ControlBuilder(New AttributeGroupBuilder(New AttributeSet().WithDefaults(Of T).OverwriteWithIntersectionOf(DirectCast(template, IDefaultProvider).GetDefaults())))
+            Else
+                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(Button)}'")
+            End If
+		End Function
+
 		Public Function Build() As AttributeSet
 			If IsBuiltInControl() Then
 				Require(Of InvalidOperationException)(
 					_attributeGroupBuilder.
 					Except(_attributeGroupBuilder.
-						Where(Function(a) a.IsNamed(AttributeName.IdMso))).
+						Where(Function(a) a.Name = AttributeName.IdMso)).
 					All(Function(a) a.
 						GetType().
 						IsDerivedFromGenericType(GetType(RibbonAttributeDefault(Of )))),
@@ -61,7 +75,7 @@ Namespace Builders
 		End Sub
 
 		Public Function IsBuiltInControl() As Boolean
-			Return _attributeGroupBuilder.Any(Function(a) a.IsNamed(AttributeName.IdMso))
+			Return _attributeGroupBuilder.Any(Function(a) a.Name = AttributeName.IdMso)
 		End Function
 
 		Public Sub Visible()
@@ -222,9 +236,45 @@ Namespace Builders
 
 #Region "Actions"
 
-		Public Sub ThatDoes(callback As OnAction)
-			_attributeGroupBuilder.AddOnAction(callback:=callback)
+		Public Sub ThatDoes(callback As OnAction, handlers As IEnumerable(Of EventHandler), Optional beforeEvent As Boolean = False)
+			_attributeGroupBuilder.AddOnAction(callback:=callback, handlers:=handlers, beforeEvent:=beforeEvent)
 		End Sub
+
+		Public Sub ThatDoes(Of T)(callback As OnAction, handlers As IEnumerable(Of EventHandler(Of T)), Optional beforeEvent As Boolean = False)
+			_attributeGroupBuilder.AddOnAction(callback:=callback, handlers:=handlers, beforeEvent:=beforeEvent)
+		End Sub
+
+		Public Function AsEventHandler(Of TElement As RibbonElement)(action As Action(Of TElement)) As EventHandler
+            Return AddressOf New ActionToEventHandlerAdapter(Of TElement)(action).AsEventHandler
+        End Function
+
+		Public Function AsEventHandler(Of TElement As RibbonElement, TArgs As EventArgs)(action As Action(Of TElement, TArgs)) As EventHandler(Of TArgs)
+            Return AddressOf New ActionToEventHandlerAdapter(Of TElement, TArgs)(action).AsEventHandler
+        End Function
+
+		Private NotInheritable Class ActionToEventHandlerAdapter(Of TElement As RibbonElement)
+			Private ReadOnly value As Action(Of TElement)
+
+			Public Sub New(value As Action(Of TElement))
+				Me.value = value
+			End Sub
+
+			Public Sub AsEventHandler(sender As Object, e As EventArgs)
+				value.Invoke(DirectCast(sender, TElement))
+			End Sub
+		End Class
+
+		Private NotInheritable Class ActionToEventHandlerAdapter(Of TElement As RibbonElement, TArgs As EventArgs)
+			Private ReadOnly value As Action(Of TElement, TArgs)
+
+			Public Sub New(value As Action(Of TElement, TArgs))
+				Me.value = value
+			End Sub
+
+			Public Sub AsEventHandler(sender As Object, e As TArgs)
+				value.Invoke(DirectCast(sender, TElement), e)
+			End Sub
+		End Class
 
 #End Region
 

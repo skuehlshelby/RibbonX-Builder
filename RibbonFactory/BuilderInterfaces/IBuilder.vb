@@ -1,9 +1,9 @@
 ﻿Namespace BuilderInterfaces
 
-    Public Interface IBuilder(Of Out TRibbonElement As RibbonElement)
-        
-        Function Build(Optional tag As Object = Nothing) As TRibbonElement
+	Public Interface IBuilder(Of Out TRibbonElement As RibbonElement)
 
-    End Interface
+		Function Build(Optional tag As Object = Nothing) As TRibbonElement
 
-End NameSpace
+	End Interface
+
+End Namespace

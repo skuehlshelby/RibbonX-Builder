@@ -1,4 +1,5 @@
-﻿Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.Builders
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Enums
 Imports RibbonFactory.RibbonAttributes
 Imports stdole
@@ -23,17 +24,69 @@ Namespace Controls
 
 		Private ReadOnly _attributes As AttributeSet
 
-		Friend Sub New(attributes As AttributeSet, Optional tag As Object = Nothing)
+		Public Sub New(steps As Action(Of IButtonBuilder), Optional tag As Object = Nothing)
 			MyBase.New(tag)
-			_attributes = attributes
-			AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
+
+			Dim builder As ButtonBuilder = New ButtonBuilder()
+
+			steps.Invoke(builder)
+
+			_attributes = builder.Build()
+		End Sub
+
+		Public Sub New(template As RibbonElement, steps As Action(Of IButtonBuilder), Optional tag As Object = Nothing)
+			MyBase.New(tag)
+
+			Dim builder As ButtonBuilder = New ButtonBuilder(template)
+
+			steps.Invoke(builder)
+
+			_attributes = builder.Build()
 		End Sub
 
 #Region "Events"
 
-		Public Event BeforeClick As EventHandler(Of BeforeClickEventArgs)
+		Public Custom Event BeforeClick As EventHandler(Of BeforeClickEventArgs)
+		    AddHandler(value As EventHandler(Of BeforeClickEventArgs))
+				_attributes.Read(Of ICollection(Of EventHandler(Of BeforeClickEventArgs)))().Add(value)
+		    End AddHandler
 
-		Public Event OnClick As EventHandler
+		    RemoveHandler(value As EventHandler(Of BeforeClickEventArgs))
+				_attributes.Read(Of ICollection(Of EventHandler(Of BeforeClickEventArgs)))().Remove(value)
+		    End RemoveHandler
+
+		    RaiseEvent(sender As Object, e As BeforeClickEventArgs)
+				For Each target As EventHandler(Of BeforeClickEventArgs) In _attributes.Read(Of ICollection(Of EventHandler(Of BeforeClickEventArgs)))()
+					Try
+						target.Invoke(sender, e)
+					Catch ex As Exception
+						Debug.WriteLine($"Encountered an exception while invoking '{target.Method.Name}' inside '{NameOf(BeforeClick)}':")
+						Debug.WriteLine(ex.Message)
+					End Try
+				Next
+		    End RaiseEvent
+		End Event
+
+		Public Custom Event OnClick As EventHandler
+		    AddHandler(value As EventHandler)
+				_attributes.Read(Of ICollection(Of EventHandler))().Add(value)
+		    End AddHandler
+
+		    RemoveHandler(value As EventHandler)
+				_attributes.Read(Of ICollection(Of EventHandler))().Remove(value)
+		    End RemoveHandler
+
+		    RaiseEvent(sender As Object, e As EventArgs)
+				For Each target As EventHandler In _attributes.Read(Of ICollection(Of EventHandler))()
+					Try
+						target.Invoke(sender, e)
+					Catch ex As Exception
+						Debug.WriteLine($"Encountered an exception while invoking '{target.Method.Name}' inside '{NameOf(BeforeClick)}':")
+						Debug.WriteLine(ex.Message)
+					End Try
+				Next
+		    End RaiseEvent
+		End Event
 
 #End Region
 
@@ -57,19 +110,19 @@ Namespace Controls
 
 		Public Property Enabled As Boolean Implements IEnabled.Enabled
 			Get
-				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Enabled).GetValue()
+				Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetEnabled).SetValue(Value)
+				_attributes.Write(value, AttributeCategory.Enabled)
 			End Set
 		End Property
 
 		Public Property Visible As Boolean Implements IVisible.Visible
 			Get
-				Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
+				Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+				_attributes.Write(value, AttributeCategory.Visibility)
 			End Set
 		End Property
 
@@ -79,10 +132,10 @@ Namespace Controls
 
 		Public Property Description As String Implements IDescription.Description
 			Get
-				Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Description).GetValue()
+				Return _attributes.Read(Of String)(AttributeCategory.Description)
 			End Get
 			Set
-				_attributes.ReadWriteLookup(Of String)(AttributeName.GetDescription).SetValue(Value)
+				_attributes.Write(value, AttributeCategory.Description)
 			End Set
 		End Property
 		Public Property Label As String Implements ILabel.Label
@@ -180,39 +233,9 @@ Namespace Controls
 
 #End Region
 
-#Region "Helpers For Control Cloning"
-
-		Friend Function GetBeforeClickInvocationList() As EventHandler(Of BeforeClickEventArgs)()
-			Dim e As EventHandler(Of BeforeClickEventArgs) = BeforeClickEvent
-
-			If e Is Nothing Then
-				Return New EventHandler(Of BeforeClickEventArgs)() {}
-			Else
-				Return e.
-					GetInvocationList().
-					OfType(Of EventHandler(Of BeforeClickEventArgs)).
-					ToArray()
-			End If
-		End Function
-
-		Friend Function GetClickInvocationList() As EventHandler()
-			Dim e As EventHandler = OnClickEvent
-
-			If e Is Nothing Then
-				Return New EventHandler() {}
-			Else
-				Return e.
-					GetInvocationList().
-					OfType(Of EventHandler).
-					ToArray()
-			End If
-		End Function
-
 		Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
 			Return _attributes
 		End Function
-
-#End Region
 
 		Public NotInheritable Class BeforeClickEventArgs
 			Inherits EventArgs

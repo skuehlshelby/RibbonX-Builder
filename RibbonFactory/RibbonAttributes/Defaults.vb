@@ -4,7 +4,7 @@ Imports RibbonFactory.Enums
 
 Namespace RibbonAttributes
 
-    Friend NotInheritable Class DefaultProvider(Of T As RibbonElement)
+    Friend NotInheritable Class Defaults(Of T As RibbonElement)
         Implements IDefaultProvider
 
         Public Function GetDefaults() as AttributeSet Implements IDefaultProvider.GetDefaults
@@ -50,6 +50,9 @@ Namespace RibbonAttributes
             Return defaults
         End Function
 
+        Public Shared Function [Get] As IEnumerable(Of IRibbonAttribute)
+            Return New Defaults(Of T)().GetDefaults()
+        End Function
     End Class
 
 End NameSpace

@@ -26,7 +26,7 @@ Namespace Builders
 		Private ReadOnly _textChangedHandlers As ICollection(Of EventHandler(Of EditBox.TextChangedEventArgs)) = New List(Of EventHandler(Of EditBox.TextChangedEventArgs))
 
 		Public Sub New()
-			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of EditBox)
+			Dim defaultProvider As IDefaultProvider = New Defaults(Of EditBox)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
 			attributeGroupBuilder.SetDefaults(defaultProvider)
 			_builder = New ControlBuilder(attributeGroupBuilder)
@@ -47,7 +47,7 @@ Namespace Builders
 
 			If defaultProvider IsNot Nothing Then
 				Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-				Dim editBoxAttributes As AttributeSet = New DefaultProvider(Of EditBox)().GetDefaults()
+				Dim editBoxAttributes As AttributeSet = New Defaults(Of EditBox)().GetDefaults()
 				Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) editBoxAttributes.Contains(a)))
 				Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
 				attributeGroupBuilder.AddID(IdManager.GetID(Of EditBox)())

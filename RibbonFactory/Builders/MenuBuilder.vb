@@ -27,7 +27,7 @@ Namespace Builders
         Private ReadOnly _controls As IList(Of RibbonElement)
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Menu)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of Menu)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = New ControlBuilder(attributeGroupBuilder)
@@ -46,7 +46,7 @@ Namespace Builders
 
             If defaultProvider IsNot Nothing Then
                 Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim menuAttributes As AttributeSet = New DefaultProvider(Of Menu)().GetDefaults()
+                Dim menuAttributes As AttributeSet = New Defaults(Of Menu)().GetDefaults()
                 Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) menuAttributes.Contains(a)))
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of Menu)())

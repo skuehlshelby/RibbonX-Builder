@@ -14,7 +14,7 @@ Namespace Builders
 		Private ReadOnly _builder As ControlBuilder
 
 		Public Sub New()
-			Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of Separator)
+			Dim defaultProvider As IDefaultProvider = New Defaults(Of Separator)
 			Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
 			attributeGroupBuilder.SetDefaults(defaultProvider)
 			_builder = New ControlBuilder(attributeGroupBuilder)
@@ -32,7 +32,7 @@ Namespace Builders
 
 			If defaultProvider IsNot Nothing Then
 				Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-				Dim separatorAttributes As AttributeSet = New DefaultProvider(Of Separator)().GetDefaults()
+				Dim separatorAttributes As AttributeSet = New Defaults(Of Separator)().GetDefaults()
 				Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) separatorAttributes.Contains(a)))
 				Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
 				attributeGroupBuilder.AddID(IdManager.GetID(Of Separator)())

@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="BuilderInterfaces\IAddButton.vb" />
     <Compile Include="BuilderInterfaces\IBuilder.vb" />
+    <Compile Include="BuilderInterfaces\IButtonBuilder.vb" />
     <Compile Include="BuilderInterfaces\IGetPressed.vb" />
     <Compile Include="BuilderInterfaces\IGetText.vb" />
     <Compile Include="BuilderInterfaces\IID.vb" />
@@ -201,10 +202,12 @@
     <Compile Include="RibbonAttributes\IRibbonAttribute.vb" />
     <Compile Include="RibbonAttributes\IRibbonAttributeReadOnly.vb" />
     <Compile Include="RibbonAttributes\IRibbonAttributeReadWrite.vb" />
-    <Compile Include="RibbonAttributes\RibbonAttributeComposite.vb" />
     <Compile Include="RibbonAttributes\RibbonAttributeDefault.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeInvocationList.vb" />
     <Compile Include="RibbonAttributes\RibbonAttributeReadOnly.vb" />
     <Compile Include="RibbonAttributes\RibbonAttributeReadWrite.vb" />
+    <Compile Include="RibbonAttributes\RibbonAttributeWrappedValue.vb" />
+    <Compile Include="RibbonAttributes\ValueWrapper.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
     <Compile Include="InternalsVisibleTo.vb" />
@@ -216,7 +219,7 @@
     <Compile Include="RibbonAttributes\AttributeGroupBuilder.vb" />
     <Compile Include="RibbonAttributes\AttributeName.vb" />
     <Compile Include="RibbonAttributes\DefaultProviderRibbon.vb" />
-    <Compile Include="RibbonAttributes\DefaultProvider.vb" />
+    <Compile Include="RibbonAttributes\Defaults.vb" />
     <Compile Include="RibbonAttributes\IDefaultProvider.vb" />
     <Compile Include="RibbonAttributes\IdManager.vb" />
     <Compile Include="RibbonElement.vb" />

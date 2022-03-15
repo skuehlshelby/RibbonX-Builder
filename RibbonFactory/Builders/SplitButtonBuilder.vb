@@ -21,7 +21,7 @@ Namespace Builders
         Private _menu As Menu
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New DefaultProvider(Of SplitButton)
+            Dim defaultProvider As IDefaultProvider = New Defaults(Of SplitButton)
             Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
             attributeGroupBuilder.SetDefaults(defaultProvider)
             _builder = New ControlBuilder(attributeGroupBuilder)
@@ -39,7 +39,7 @@ Namespace Builders
 
             If defaultProvider IsNot Nothing Then
                 Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim splitButtonAttributes As AttributeSet = New DefaultProvider(Of SplitButton)().GetDefaults()
+                Dim splitButtonAttributes As AttributeSet = New Defaults(Of SplitButton)().GetDefaults()
                 Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) splitButtonAttributes.Contains(a)))
                 Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
                 attributeGroupBuilder.AddID(IdManager.GetID(Of SplitButton)())

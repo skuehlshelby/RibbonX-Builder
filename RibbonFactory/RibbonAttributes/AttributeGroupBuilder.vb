@@ -224,20 +224,54 @@ Namespace RibbonAttributes
 
 #Region "OnAction"
 
-		Public Sub AddOnAction(callback As OnAction)
+		Public Sub AddOnAction(callback As OnAction, handlers As IEnumerable(Of EventHandler), Optional beforeEvent As Boolean = False)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+
+			_attributes.Add(New RibbonAttributeInvocationList(
+				New List(Of EventHandler)(handlers),
+				If(beforeEvent, AttributeName.FrameworkBeforeEvent, AttributeName.FrameworkOnEvent),
+				If(beforeEvent, AttributeCategory.FrameworkBeforeEvent, AttributeCategory.FrameworkOnEvent)))
 		End Sub
 
-		Public Sub AddOnAction(callback As ButtonPressed)
+		Public Sub AddOnAction(Of T)(callback As OnAction, handlers As IEnumerable(Of EventHandler(Of T)), Optional beforeEvent As Boolean = False)
 			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+
+			_attributes.Add(New RibbonAttributeInvocationList(Of T)(
+				New List(Of EventHandler(Of T))(handlers),
+				If(beforeEvent, AttributeName.FrameworkBeforeEvent, AttributeName.FrameworkOnEvent),
+				If(beforeEvent, AttributeCategory.FrameworkBeforeEvent, AttributeCategory.FrameworkOnEvent)))
 		End Sub
 
 #End Region
 
 #Region "GetText And OnChange"
 
+		Public Sub AddOnChange(text As String, getText As FromControl(Of String), setText As TextChanged, handlers As IEnumerable(Of EventHandler), Optional beforeEvent As Boolean = False)
+			Dim wrapped As ValueWrapper(Of String) = New ValueWrapper(Of String)(text)
+			_attributes.Add(New RibbonAttributeWrappedValue(Of String)(wrapped, getText.Method.Name, AttributeName.GetText, AttributeCategory.Text))
+			_attributes.Add(New RibbonAttributeWrappedValue(Of String)(wrapped, setText.Method.Name, AttributeName.OnChange, AttributeCategory.OnChange))
+
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+
+			_attributes.Add(New RibbonAttributeInvocationList(
+				New List(Of EventHandler)(handlers),
+				If(beforeEvent, AttributeName.FrameworkBeforeEvent, AttributeName.FrameworkOnEvent),
+				If(beforeEvent, AttributeCategory.FrameworkBeforeEvent, AttributeCategory.FrameworkOnEvent)))
+		End Sub
+
+		Public Sub AddOnChange(Of T)(callback As OnAction, handlers As IEnumerable(Of EventHandler(Of T)), Optional beforeEvent As Boolean = False)
+			_attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
+
+			_attributes.Add(New RibbonAttributeInvocationList(Of T)(
+				New List(Of EventHandler(Of T))(handlers),
+				If(beforeEvent, AttributeName.FrameworkBeforeEvent, AttributeName.FrameworkOnEvent),
+				If(beforeEvent, AttributeCategory.FrameworkBeforeEvent, AttributeCategory.FrameworkOnEvent)))
+		End Sub
+
 		Public Sub AddGetText(text As String, getText As FromControl(Of String), setText As TextChanged)
-			_attributes.Add(New RibbonAttributeComposite(Of String)(text, AttributeName.GetText, AttributeCategory.Text, getText.Method.Name, AttributeName.OnChange, AttributeCategory.OnAction, setText.Method.Name))
+			Dim wrapped As ValueWrapper(Of String) = New ValueWrapper(Of String)(text)
+			_attributes.Add(New RibbonAttributeWrappedValue(Of String)(wrapped, getText.Method.Name, AttributeName.GetText, AttributeCategory.Text))
+			_attributes.Add(New RibbonAttributeWrappedValue(Of String)(wrapped, setText.Method.Name, AttributeName.OnChange, AttributeCategory.OnChange))
 		End Sub
 
 #End Region
@@ -245,7 +279,9 @@ Namespace RibbonAttributes
 #Region "GetPressed And OnAction"
 
 		Public Sub AddGetPressed(pressed As Boolean, getPressed As FromControl(Of Boolean), setPressed As ButtonPressed)
-			_attributes.Add(New RibbonAttributeComposite(Of Boolean)(pressed, AttributeName.GetPressed, AttributeCategory.Pressed, getPressed.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setPressed.Method.Name))
+			Dim wrapped As ValueWrapper(Of Boolean) = New ValueWrapper(Of Boolean)(pressed)
+			_attributes.Add(New RibbonAttributeWrappedValue(Of Boolean)(wrapped, getPressed.Method.Name, AttributeName.GetPressed, AttributeCategory.Pressed))
+			_attributes.Add(New RibbonAttributeWrappedValue(Of Boolean)(wrapped, setPressed.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
 		End Sub
 
 #End Region
@@ -277,11 +313,15 @@ Namespace RibbonAttributes
 #Region "SelectedItemID, SelectedItemIndex, and OnAction"
 
 		Public Sub AddGetSelected(getSelected As FromControl(Of String), setSelected As SelectionChanged)
-			_attributes.Add(New RibbonAttributeComposite(Of Item)(Item.Blank(), AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition, getSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setSelected.Method.Name))
+			Dim wrapped As ValueWrapper(Of Item) = New ValueWrapper(Of Item)(Item.Blank())
+			_attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, getSelected.Method.Name, AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition))
+			_attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, setSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
 		End Sub
 
 		Public Sub AddGetSelected(getSelected As FromControl(Of Integer), setSelected As SelectionChanged)
-			_attributes.Add(New RibbonAttributeComposite(Of Item)(Item.Blank(), AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition, getSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction, setSelected.Method.Name))
+			Dim wrapped As ValueWrapper(Of Item) = New ValueWrapper(Of Item)(Item.Blank())
+			_attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, getSelected.Method.Name, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
+			_attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, setSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
 		End Sub
 
 #End Region

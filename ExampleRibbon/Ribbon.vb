@@ -43,42 +43,38 @@ Public Class Ribbon
 	End Property
 
 	Protected Overrides Function BuildRibbon() As Containers.Ribbon
-		Dim buttonWithStockIconOne As Button = New ButtonBuilder().
+		Dim buttonWithStockIconOne As Button = New Button(
+			Sub(bb) bb.
 			Large().
 			WithLabel("Happy Button").
 			WithSuperTip("Oh, to be so happy again!").
 			WithImage(Enums.ImageMSO.Common.HappyFace).
-			OnClick(Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
-			WithClickCallback(AddressOf OnAction).
-			Build()
+			OnClick(AddressOf OnAction, Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")))
 
-		Dim buttonWithStockIconTwo As Button = New ButtonBuilder(buttonWithStockIconOne).
+		Dim buttonWithStockIconTwo As Button = New Button(buttonWithStockIconOne, 
+			Sub(bb) bb.
 			WithLabel("Sad Button").
 			WithSuperTip("#Sad").
-			WithImage(Enums.ImageMSO.Common.SadFace).
-			Build()
+			WithImage(Enums.ImageMSO.Common.SadFace))
 
-		Dim buttonWithStockIconThree As Button = New ButtonBuilder(buttonWithStockIconOne).
+		Dim buttonWithStockIconThree As Button = New Button(buttonWithStockIconOne, 
+			Sub(bb) bb.
 			WithLabel("Money Button").
 			WithSuperTip("Make that money!").
-			WithImage(Enums.ImageMSO.Common.DollarSign).
-			Build()
+			WithImage(Enums.ImageMSO.Common.DollarSign))
 
 		Dim buttonWithStockIconsSeparator As Separator = New SeparatorBuilder().
 			Visible().
 			Build()
 
-		Dim buttonWithStockIconOneSmall As Button = New ButtonBuilder(buttonWithStockIconOne).
-			Normal().
-			Build()
+		Dim buttonWithStockIconOneSmall As Button = New Button(buttonWithStockIconOne, 
+			Sub(bb) bb.Normal())
 
-		Dim buttonWithStockIconTwoSmall As Button = New ButtonBuilder(buttonWithStockIconTwo).
-			Normal().
-			Build()
+		Dim buttonWithStockIconTwoSmall As Button = New Button(buttonWithStockIconTwo, 
+			Sub(bb) bb.Normal())
 
-		Dim buttonWithStockIconThreeSmall As Button = New ButtonBuilder(buttonWithStockIconThree).
-			Normal().
-			Build()
+		Dim buttonWithStockIconThreeSmall As Button = New Button(buttonWithStockIconThree,
+			Sub(bb) bb.Normal())
 
 		Dim buttonsWithStockIcons As Group = New GroupBuilder().
 			WithControls(buttonWithStockIconOne, buttonWithStockIconTwo, buttonWithStockIconThree, buttonWithStockIconsSeparator, buttonWithStockIconOneSmall, buttonWithStockIconTwoSmall, buttonWithStockIconThreeSmall).

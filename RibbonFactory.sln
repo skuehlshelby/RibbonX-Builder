@@ -16,6 +16,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ExampleRibbon", "ExampleRib
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "TestRegistrationUtility", "TestRegistrationUtility\TestRegistrationUtility.vbproj", "{059DCFD9-ABD6-4DBC-A03F-17E5C7458696}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ManagedOfficeComAddInRegistrationUtility", "ManagedOfficeComAddInRegistrationUtility\ManagedOfficeComAddInRegistrationUtility.vbproj", "{D0A8060F-8B67-43D8-BC06-101E37F0F4A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{059DCFD9-ABD6-4DBC-A03F-17E5C7458696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{059DCFD9-ABD6-4DBC-A03F-17E5C7458696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{059DCFD9-ABD6-4DBC-A03F-17E5C7458696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A8060F-8B67-43D8-BC06-101E37F0F4A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A8060F-8B67-43D8-BC06-101E37F0F4A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A8060F-8B67-43D8-BC06-101E37F0F4A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A8060F-8B67-43D8-BC06-101E37F0F4A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
