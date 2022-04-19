@@ -1,7 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports Microsoft.Office.Core
-Imports RibbonFactory.ControlInterfaces
 
 Namespace Utilities.Testing
 
@@ -32,10 +31,6 @@ Namespace Utilities.Testing
 		Public Sub Click(element As RibbonElement)
 			_controls(element.ID).Click()
 		End Sub
-
-		Public Function IsDataSynchronized(element As RibbonElement) As Boolean
-			Return _controls(element.ID).CallbackReturnValuesMatchRibbonElementPropertyValues(element)
-		End Function
 
 #Region "IRibbonUI Members"
 
@@ -116,60 +111,6 @@ Namespace Utilities.Testing
 				InvokeMethod(action.Value, text)
 			End Sub
 
-			Public Function CallbackReturnValuesMatchRibbonElementPropertyValues(control As RibbonElement) As Boolean
-				For Each attribute As XAttribute In element.Attributes()
-					Dim name As String = Nothing
-					Dim callback As String = Nothing
-
-					'TODO Make sure everything is represented here
-					If IsCallback(attribute, name, callback) Then
-						Select Case name
-							Case "getLabel"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, ILabel).Label) Then
-									Return False
-								End If
-							Case "getShowLabel"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IShowLabel).ShowLabel) Then
-									Return False
-								End If
-							Case "getScreentip"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IScreenTip).ScreenTip) Then
-									Return False
-								End If
-							Case "getSupertip"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, ISuperTip).SuperTip) Then
-									Return False
-								End If
-							Case "getDescription"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IDescription).Description) Then
-									Return False
-								End If
-							Case "getKeytip"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IKeyTip).KeyTip) Then
-									Return False
-								End If
-							Case "getEnabled"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IEnabled).Enabled) Then
-									Return False
-								End If
-							Case "getVisible"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IVisible).Visible) Then
-									Return False
-								End If
-							Case "getImage"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, IImage).Image) Then
-									Return False
-								End If
-							Case "getSize"
-								If Not InvokeMethod(callback).Equals(DirectCast(control, ISize).Size) Then
-									Return False
-								End If
-						End Select
-					End If
-				Next
-
-				Return True
-			End Function
 
 			Private Function IsCallback(attribute As XAttribute, <Out> ByRef attributeName As String, <Out> ByRef callback As String) As Boolean
 				If attribute.Name.LocalName.StartsWith("get", StringComparison.OrdinalIgnoreCase) Then
