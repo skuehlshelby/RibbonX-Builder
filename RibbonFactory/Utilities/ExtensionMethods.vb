@@ -1,36 +1,11 @@
-﻿Imports System.IO
-Imports System.Reflection
-Imports System.Runtime.CompilerServices
-Imports System.Xml
-Imports System.Xml.Schema
-Imports RibbonFactory.Containers
-Imports RibbonFactory.Utilities.Testing
+﻿Imports System.Runtime.CompilerServices
 
 Namespace Utilities
 
     Friend Module ExtensionMethods
 
-        <Extension>
-        Public Function GetErrors(ribbon As Ribbon) As RibbonErrorLog
-            Return GetErrors(ribbon.RibbonX)
-        End Function
-
-        Public Function GetErrors(ribbonX As String) As RibbonErrorLog
-            Return New RibbonErrorLog(ribbonX, GetCustomUIVersion2009())
-        End Function
-
-        Public Function GetCustomUIVersion2009() As XmlSchema
-            Using reader As StreamReader = New StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("RibbonFactory.RibbonX.xsd"))
-                Return XmlSchema.Read(XmlReader.Create(reader), AddressOf ValidationEventHandler)
-            End Using
-        End Function
-
-        Private Sub ValidationEventHandler(sender As Object, e As ValidationEventArgs)
-            Console.WriteLine($"{e.Severity.ToString().ToUpper}: {e.Message}")
-        End Sub
-    
         <Extension()>
-        Public Function CamelCase(input As Object) As String 
+        Public Function CamelCase(input As Object) As String
             Return input.ToString().Substring(0, 1).ToLower() & input.ToString().Substring(1)
         End Function
 
@@ -65,20 +40,33 @@ Namespace Utilities
         End Function
 
         <Extension()>
-        Public Function ImplementsGenericInterface(type As Type, generic As Type) As Boolean
-            While type IsNot Nothing AndAlso type IsNot GetType(Object)
-                For Each iFace As Type In type.GetInterfaces()
-                    Dim check As Type = If(iFace.IsGenericType, iFace.GetGenericTypeDefinition(), iFace)
+        Public Function NoDoubleSpace(input As String) As String
+            If String.IsNullOrWhiteSpace(input) Then
+                Return String.Empty
+            Else
+                Dim output(input.Length) As Char
+                Dim skipped As Boolean = False
+                Dim current As Integer = 0
 
-                    If check Is generic Then
-                        Return True
+                For Each letter As Char In input.ToCharArray()
+                    If Char.IsWhiteSpace(letter) Then
+                        If Not skipped Then
+                            If 0 < current Then
+                                output(current) = " "c
+                                current += 1
+                            End If
+
+                            skipped = True
+                        End If
+                    Else
+                        skipped = False
+                        output(current) = letter
+                        current += 1
                     End If
                 Next
 
-                type = type.BaseType
-            End While
-
-            Return False
+                Return New String(output, 0, current)
+            End If
         End Function
 
         <Extension()>
