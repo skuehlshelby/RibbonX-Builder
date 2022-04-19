@@ -8,6 +8,7 @@ Namespace RibbonAttributes
 	''' </summary>
 	Friend NotInheritable Class AttributeName
 		Implements IEquatable(Of AttributeName)
+		Implements ICloneable
 
 		Private Sub New(value As Byte, name As String)
 			Me.Name = name
@@ -57,7 +58,15 @@ Namespace RibbonAttributes
 				Cast(Of AttributeName)()
 		End Function
 
-		Public Shared Property Enabled As AttributeName                 = New AttributeName(value:=0, name:=NameOf(Enabled).CamelCase())
+		Public Function Clone() As AttributeName
+			Return New AttributeName(Value, String.Copy(Name))
+		End Function
+
+		Private Function CloneII() As Object Implements ICloneable.Clone
+			Return Clone()
+		End Function
+
+		Public Shared Property Enabled As AttributeName = New AttributeName(value:=0, name:=NameOf(Enabled).CamelCase())
 
 		Public Shared Property GetEnabled As AttributeName              = New AttributeName(value:=1, name:=NameOf(GetEnabled).CamelCase())
 
@@ -181,9 +190,26 @@ Namespace RibbonAttributes
 
 		Public Shared Property ShowInRibbon As AttributeName            = New AttributeName(value:=61, name:=NameOf(ShowInRibbon).CamelCase())
 
+		<Obsolete>
 		Public Shared Property FrameworkBeforeEvent As AttributeName    = New AttributeName(value:=62, name:=NameOf(FrameworkBeforeEvent))
+		<Obsolete>
+		Public Shared Property FrameworkOnEvent As AttributeName = New AttributeName(value:=63, name:=NameOf(FrameworkOnEvent))
 
-		Public Shared Property FrameworkOnEvent As AttributeName		= New AttributeName(value:=62, name:=NameOf(FrameworkOnEvent))
+		Public Shared ReadOnly Property BeforeClick As AttributeName = New AttributeName(64, NameOf(BeforeClick))
+
+		Public Shared ReadOnly Property OnClick As AttributeName = New AttributeName(65, NameOf(OnClick))
+
+		Public Shared ReadOnly Property BeforeSelectionChange As AttributeName = New AttributeName(66, NameOf(BeforeSelectionChange))
+
+		Public Shared ReadOnly Property OnSelectionChange As AttributeName = New AttributeName(97, NameOf(OnSelectionChange))
+
+		Public Shared ReadOnly Property BeforeTextChange As AttributeName = New AttributeName(68, NameOf(BeforeTextChange))
+
+		Public Shared ReadOnly Property OnTextChange As AttributeName = New AttributeName(69, NameOf(OnTextChange))
+
+		Public Shared ReadOnly Property BeforeToggle As AttributeName = New AttributeName(70, NameOf(BeforeToggle))
+
+		Public Shared ReadOnly Property OnToggle As AttributeName = New AttributeName(71, NameOf(OnToggle))
 
 	End Class
 

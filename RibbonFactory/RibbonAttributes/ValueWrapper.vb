@@ -9,8 +9,14 @@
 
 		Public Property Value As T
 
-		Public Function Clone() As Object Implements ICloneable.Clone
-			Return New ValueWrapper(Of T)(Value)
+		Public Function Clone() As ValueWrapper(Of T)
+			Dim valueCopy As T = If(TypeOf Value Is ICloneable, DirectCast(DirectCast(Value, ICloneable).Clone(), T), Value)
+
+			Return New ValueWrapper(Of T)(valueCopy)
+		End Function
+
+		Private Function CloneII() As Object Implements ICloneable.Clone
+			Return Clone()
 		End Function
 	End Class
 

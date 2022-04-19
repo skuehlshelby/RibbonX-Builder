@@ -10,6 +10,7 @@ Namespace RibbonAttributes
 	Friend NotInheritable Class AttributeCategory
 		Implements IEquatable(Of AttributeCategory)
 		Implements ICollection(Of AttributeName)
+		Implements ICloneable
 
 		Private ReadOnly _id As Byte
 		Private ReadOnly _name As String
@@ -20,6 +21,12 @@ Namespace RibbonAttributes
 			_name = name
 			_members = members
 		End Sub
+
+		Public ReadOnly Property Name As String
+			Get
+				Return _name
+			End Get
+		End Property
 
 #Region "ICollection Members"
 
@@ -74,91 +81,109 @@ Namespace RibbonAttributes
 						Function(info) info.GetValue(Nothing)).Cast(Of AttributeCategory)()
 		End Function
 
-		Public Shared ReadOnly Property Enabled As AttributeCategory              = New AttributeCategory(0, NameOf(Enabled), AttributeName.Enabled, AttributeName.GetEnabled)
+		Public Shared ReadOnly Property Enabled As AttributeCategory = New AttributeCategory(0, NameOf(Enabled), AttributeName.Enabled, AttributeName.GetEnabled)
 
-		Public Shared ReadOnly Property IdType As AttributeCategory               = New AttributeCategory(1, NameOf(IdType), AttributeName.Id, AttributeName.IdMso, AttributeName.IdQ)
+		Public Shared ReadOnly Property IdType As AttributeCategory = New AttributeCategory(1, NameOf(IdType), AttributeName.Id, AttributeName.IdMso, AttributeName.IdQ)
 
-		Public Shared ReadOnly Property Insertion As AttributeCategory            = New AttributeCategory(2, NameOf(Insertion), AttributeName.InsertAfterMso, AttributeName.InsertAfterQ, AttributeName.InsertBeforeQ, AttributeName.InsertBeforeMso)
+		Public Shared ReadOnly Property Insertion As AttributeCategory = New AttributeCategory(2, NameOf(Insertion), AttributeName.InsertAfterMso, AttributeName.InsertAfterQ, AttributeName.InsertBeforeQ, AttributeName.InsertBeforeMso)
 
-		Public Shared ReadOnly Property Visibility As AttributeCategory           = New AttributeCategory(3, NameOf(Visibility), AttributeName.Visible, AttributeName.GetVisible)
+		Public Shared ReadOnly Property Visibility As AttributeCategory = New AttributeCategory(3, NameOf(Visibility), AttributeName.Visible, AttributeName.GetVisible)
 
-		Public Shared ReadOnly Property Label As AttributeCategory                = New AttributeCategory(4, NameOf(Label), AttributeName.Label, AttributeName.GetLabel)
+		Public Shared ReadOnly Property Label As AttributeCategory = New AttributeCategory(4, NameOf(Label), AttributeName.Label, AttributeName.GetLabel)
 
-		Public Shared ReadOnly Property LabelVisibility As AttributeCategory      = New AttributeCategory(5, NameOf(LabelVisibility), AttributeName.ShowLabel, AttributeName.GetShowLabel)
+		Public Shared ReadOnly Property LabelVisibility As AttributeCategory = New AttributeCategory(5, NameOf(LabelVisibility), AttributeName.ShowLabel, AttributeName.GetShowLabel)
 
-		Public Shared ReadOnly Property ScreenTip As AttributeCategory            = New AttributeCategory(6, NameOf(ScreenTip), AttributeName.Screentip, AttributeName.GetScreentip)
+		Public Shared ReadOnly Property ScreenTip As AttributeCategory = New AttributeCategory(6, NameOf(ScreenTip), AttributeName.Screentip, AttributeName.GetScreentip)
 
-		Public Shared ReadOnly Property SuperTip As AttributeCategory             = New AttributeCategory(7, NameOf(SuperTip), AttributeName.Supertip, AttributeName.GetSupertip)
+		Public Shared ReadOnly Property SuperTip As AttributeCategory = New AttributeCategory(7, NameOf(SuperTip), AttributeName.Supertip, AttributeName.GetSupertip)
 
-		Public Shared ReadOnly Property Description As AttributeCategory          = New AttributeCategory(8, NameOf(Description), AttributeName.Description, AttributeName.GetDescription)
+		Public Shared ReadOnly Property Description As AttributeCategory = New AttributeCategory(8, NameOf(Description), AttributeName.Description, AttributeName.GetDescription)
 
-		Public Shared ReadOnly Property KeyTip As AttributeCategory               = New AttributeCategory(9, NameOf(KeyTip), AttributeName.Keytip, AttributeName.GetKeytip)
+		Public Shared ReadOnly Property KeyTip As AttributeCategory = New AttributeCategory(9, NameOf(KeyTip), AttributeName.Keytip, AttributeName.GetKeytip)
 
-		Public Shared ReadOnly Property Image As AttributeCategory                = New AttributeCategory(10, NameOf(Image), AttributeName.Image, AttributeName.ImageMso, AttributeName.GetImage)
+		Public Shared ReadOnly Property Image As AttributeCategory = New AttributeCategory(10, NameOf(Image), AttributeName.Image, AttributeName.ImageMso, AttributeName.GetImage)
 
-		Public Shared ReadOnly Property ImageVisibility As AttributeCategory      = New AttributeCategory(11, NameOf(ImageVisibility), AttributeName.ShowImage, AttributeName.GetShowImage)
+		Public Shared ReadOnly Property ImageVisibility As AttributeCategory = New AttributeCategory(11, NameOf(ImageVisibility), AttributeName.ShowImage, AttributeName.GetShowImage)
 
-		Public Shared ReadOnly Property OnAction As AttributeCategory             = New AttributeCategory(12, NameOf(OnAction), AttributeName.OnAction)
+		Public Shared ReadOnly Property OnAction As AttributeCategory = New AttributeCategory(12, NameOf(OnAction), AttributeName.OnAction)
 
-		Public Shared ReadOnly Property OnChange As AttributeCategory             = New AttributeCategory(13, NameOf(OnChange), AttributeName.OnChange)
+		Public Shared ReadOnly Property OnChange As AttributeCategory = New AttributeCategory(13, NameOf(OnChange), AttributeName.OnChange)
 
-		Public Shared ReadOnly Property Text As AttributeCategory                 = New AttributeCategory(14, NameOf(Text), AttributeName.GetText)
+		Public Shared ReadOnly Property Text As AttributeCategory = New AttributeCategory(14, NameOf(Text), AttributeName.GetText)
 
-		Public Shared ReadOnly Property Pressed As AttributeCategory              = New AttributeCategory(15, NameOf(Pressed), AttributeName.GetPressed)
+		Public Shared ReadOnly Property Pressed As AttributeCategory = New AttributeCategory(15, NameOf(Pressed), AttributeName.GetPressed)
 
-		Public Shared ReadOnly Property Size As AttributeCategory                 = New AttributeCategory(16, NameOf(Size), AttributeName.Size, AttributeName.GetSize)
+		Public Shared ReadOnly Property Size As AttributeCategory = New AttributeCategory(16, NameOf(Size), AttributeName.Size, AttributeName.GetSize)
 
-		Public Shared ReadOnly Property MaxLength As AttributeCategory            = New AttributeCategory(17, NameOf(MaxLength), AttributeName.MaxLength)
+		Public Shared ReadOnly Property MaxLength As AttributeCategory = New AttributeCategory(17, NameOf(MaxLength), AttributeName.MaxLength)
 
-		Public Shared ReadOnly Property SizeString As AttributeCategory           = New AttributeCategory(18, NameOf(SizeString), AttributeName.SizeString)
+		Public Shared ReadOnly Property SizeString As AttributeCategory = New AttributeCategory(18, NameOf(SizeString), AttributeName.SizeString)
 
-		Public Shared ReadOnly Property ContentInvalidation As AttributeCategory  = New AttributeCategory(19, NameOf(ContentInvalidation), AttributeName.InvalidateContentOnDrop)
+		Public Shared ReadOnly Property ContentInvalidation As AttributeCategory = New AttributeCategory(19, NameOf(ContentInvalidation), AttributeName.InvalidateContentOnDrop)
 
-		Public Shared ReadOnly Property ItemImageVisibility As AttributeCategory  = New AttributeCategory(20, NameOf(ItemImageVisibility), AttributeName.ShowItemImage)
+		Public Shared ReadOnly Property ItemImageVisibility As AttributeCategory = New AttributeCategory(20, NameOf(ItemImageVisibility), AttributeName.ShowItemImage)
 
-		Public Shared ReadOnly Property ItemLabelVisibility As AttributeCategory  = New AttributeCategory(21, NameOf(ItemLabelVisibility), AttributeName.ShowItemLabel)
+		Public Shared ReadOnly Property ItemLabelVisibility As AttributeCategory = New AttributeCategory(21, NameOf(ItemLabelVisibility), AttributeName.ShowItemLabel)
 
-		Public Shared ReadOnly Property ItemCount As AttributeCategory            = New AttributeCategory(22, NameOf(ItemCount), AttributeName.GetItemCount)
+		Public Shared ReadOnly Property ItemCount As AttributeCategory = New AttributeCategory(22, NameOf(ItemCount), AttributeName.GetItemCount)
 
-		Public Shared ReadOnly Property ItemId As AttributeCategory               = New AttributeCategory(23, NameOf(ItemId), AttributeName.GetItemID)
+		Public Shared ReadOnly Property ItemId As AttributeCategory = New AttributeCategory(23, NameOf(ItemId), AttributeName.GetItemID)
 
-		Public Shared ReadOnly Property ItemImage As AttributeCategory            = New AttributeCategory(24, NameOf(ItemImage), AttributeName.GetItemImage)
+		Public Shared ReadOnly Property ItemImage As AttributeCategory = New AttributeCategory(24, NameOf(ItemImage), AttributeName.GetItemImage)
 
-		Public Shared ReadOnly Property ItemLabel As AttributeCategory            = New AttributeCategory(25, NameOf(ItemLabel), AttributeName.GetItemLabel)
+		Public Shared ReadOnly Property ItemLabel As AttributeCategory = New AttributeCategory(25, NameOf(ItemLabel), AttributeName.GetItemLabel)
 
-		Public Shared ReadOnly Property ItemScreentip As AttributeCategory        = New AttributeCategory(26, NameOf(ItemScreentip), AttributeName.GetItemScreentip)
+		Public Shared ReadOnly Property ItemScreentip As AttributeCategory = New AttributeCategory(26, NameOf(ItemScreentip), AttributeName.GetItemScreentip)
 
-		Public Shared ReadOnly Property ItemSupertip As AttributeCategory         = New AttributeCategory(27, NameOf(ItemSupertip), AttributeName.GetItemSupertip)
+		Public Shared ReadOnly Property ItemSupertip As AttributeCategory = New AttributeCategory(27, NameOf(ItemSupertip), AttributeName.GetItemSupertip)
 
 		Public Shared ReadOnly Property SelectedItemPosition As AttributeCategory = New AttributeCategory(28, NameOf(SelectedItemPosition), AttributeName.GetSelectedItemIndex, AttributeName.GetSelectedItemID)
 
-		Public Shared ReadOnly Property Columns As AttributeCategory              = New AttributeCategory(30, NameOf(Columns), AttributeName.Columns)
+		Public Shared ReadOnly Property Columns As AttributeCategory = New AttributeCategory(30, NameOf(Columns), AttributeName.Columns)
 
-		Public Shared ReadOnly Property Rows As AttributeCategory                 = New AttributeCategory(31, NameOf(Rows), AttributeName.Rows)
+		Public Shared ReadOnly Property Rows As AttributeCategory = New AttributeCategory(31, NameOf(Rows), AttributeName.Rows)
 
-		Public Shared ReadOnly Property ItemHeight As AttributeCategory           = New AttributeCategory(32, NameOf(ItemHeight), AttributeName.ItemHeight, AttributeName.GetItemHeight)
+		Public Shared ReadOnly Property ItemHeight As AttributeCategory = New AttributeCategory(32, NameOf(ItemHeight), AttributeName.ItemHeight, AttributeName.GetItemHeight)
 
-		Public Shared ReadOnly Property ItemWidth As AttributeCategory            = New AttributeCategory(33, NameOf(ItemWidth), AttributeName.ItemWidth, AttributeName.GetItemWidth)
+		Public Shared ReadOnly Property ItemWidth As AttributeCategory = New AttributeCategory(33, NameOf(ItemWidth), AttributeName.ItemWidth, AttributeName.GetItemWidth)
 
-		Public Shared ReadOnly Property ItemSize As AttributeCategory             = New AttributeCategory(34, NameOf(ItemSize), AttributeName.ItemSize)
+		Public Shared ReadOnly Property ItemSize As AttributeCategory = New AttributeCategory(34, NameOf(ItemSize), AttributeName.ItemSize)
 
-		Public Shared ReadOnly Property StartFromScratch As AttributeCategory     = New AttributeCategory(35, NameOf(StartFromScratch), AttributeName.StartFromScratch)
+		Public Shared ReadOnly Property StartFromScratch As AttributeCategory = New AttributeCategory(35, NameOf(StartFromScratch), AttributeName.StartFromScratch)
 
-		Public Shared ReadOnly Property OnLoad As AttributeCategory               = New AttributeCategory(36, NameOf(OnLoad), AttributeName.OnLoad)
+		Public Shared ReadOnly Property OnLoad As AttributeCategory = New AttributeCategory(36, NameOf(OnLoad), AttributeName.OnLoad)
 
-		Public Shared ReadOnly Property LoadImage As AttributeCategory            = New AttributeCategory(37, NameOf(LoadImage), AttributeName.LoadImage)
+		Public Shared ReadOnly Property LoadImage As AttributeCategory = New AttributeCategory(37, NameOf(LoadImage), AttributeName.LoadImage)
 
-		Public Shared ReadOnly Property BoxStyle As AttributeCategory             = New AttributeCategory(38, NameOf(BoxStyle), AttributeName.BoxStyle)
+		Public Shared ReadOnly Property BoxStyle As AttributeCategory = New AttributeCategory(38, NameOf(BoxStyle), AttributeName.BoxStyle)
 
-		Public Shared ReadOnly Property Title As AttributeCategory                = New AttributeCategory(39, NameOf(Title), AttributeName.Title, AttributeName.GetTitle)
+		Public Shared ReadOnly Property Title As AttributeCategory = New AttributeCategory(39, NameOf(Title), AttributeName.Title, AttributeName.GetTitle)
 
-		Public Shared ReadOnly Property ShowInRibbon As AttributeCategory         = New AttributeCategory(40, NameOf(ShowInRibbon), AttributeName.ShowInRibbon)
-		
-		Public Shared ReadOnly Property Tag As AttributeCategory				  = New AttributeCategory(41, NameOf(Tag))
+		Public Shared ReadOnly Property ShowInRibbon As AttributeCategory = New AttributeCategory(40, NameOf(ShowInRibbon), AttributeName.ShowInRibbon)
 
-		Public Shared ReadOnly Property FrameworkBeforeEvent As AttributeCategory	  = New AttributeCategory(42, NameOf(FrameworkBeforeEvent))
+		Public Shared ReadOnly Property Tag As AttributeCategory = New AttributeCategory(41, NameOf(Tag))
 
-		Public Shared ReadOnly Property FrameworkOnEvent As AttributeCategory	  = New AttributeCategory(43, NameOf(FrameworkOnEvent))
+		<Obsolete>
+		Public Shared ReadOnly Property FrameworkBeforeEvent As AttributeCategory = New AttributeCategory(42, NameOf(FrameworkBeforeEvent))
+
+		<Obsolete>
+		Public Shared ReadOnly Property FrameworkOnEvent As AttributeCategory = New AttributeCategory(43, NameOf(FrameworkOnEvent))
+
+		Public Shared ReadOnly Property BeforeClick As AttributeCategory = New AttributeCategory(44, NameOf(BeforeClick))
+
+		Public Shared ReadOnly Property OnClick As AttributeCategory = New AttributeCategory(45, NameOf(OnClick))
+
+		Public Shared ReadOnly Property BeforeSelectionChange As AttributeCategory = New AttributeCategory(46, NameOf(BeforeSelectionChange))
+
+		Public Shared ReadOnly Property OnSelectionChange As AttributeCategory = New AttributeCategory(47, NameOf(OnSelectionChange))
+
+		Public Shared ReadOnly Property BeforeTextChange As AttributeCategory = New AttributeCategory(48, NameOf(BeforeTextChange))
+
+		Public Shared ReadOnly Property OnTextChange As AttributeCategory = New AttributeCategory(49, NameOf(OnTextChange))
+
+		Public Shared ReadOnly Property BeforeToggle As AttributeCategory = New AttributeCategory(50, NameOf(BeforeToggle))
+
+		Public Shared ReadOnly Property OnToggle As AttributeCategory = New AttributeCategory(51, NameOf(OnToggle))
 
 #End Region
 
@@ -189,6 +214,14 @@ Namespace RibbonAttributes
 		End Operator
 
 #End Region
+
+		Public Function Clone() As AttributeCategory
+			Return New AttributeCategory(_id, String.Copy(_name), _members.Select(Function(m) m.Clone()).OfType(Of AttributeName)().ToArray())
+		End Function
+
+		Private Function CloneII() As Object Implements ICloneable.Clone
+			Return Clone()
+		End Function
 
 	End Class
 

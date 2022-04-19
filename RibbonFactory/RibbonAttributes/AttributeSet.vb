@@ -1,6 +1,4 @@
-﻿Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Utilities
+﻿Imports RibbonFactory.Utilities
 
 Namespace RibbonAttributes
 	Friend Class AttributeSet
@@ -26,16 +24,6 @@ Namespace RibbonAttributes
 				Add(attribute)
 			Next
 		End Sub
-
-		Public Function WithDefaults(Of T As RibbonElement) As AttributeSet
-			Clear()
-
-			Dim defs As IEnumerable(Of IRibbonAttribute) = Defaults(Of T).Get()
-
-			Add(defs)
-
-			Return Me
-		End Function
 
 		Public Function OverwriteWithIntersectionOf(attributes As IEnumerable(Of IRibbonAttribute)) As AttributeSet
 			For Each attribute As IRibbonAttribute In attributes
@@ -72,12 +60,6 @@ Namespace RibbonAttributes
 			AddHandler item.ValueChanged, AddressOf OnValueChange
 		End Sub
 
-		Public Sub Add(items As IEnumerable(Of IRibbonAttribute))
-			For Each item As IRibbonAttribute In items
-				Add(item)
-			Next
-		End Sub
-
 		Public Function Remove(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Remove
 			If _attributes.Contains(item) Then
 				Dim temp As IRibbonAttribute = Lookup(item.Category)
@@ -106,7 +88,7 @@ Namespace RibbonAttributes
 			If value IsNot Nothing Then
 				Return value
 			Else
-				Throw New InvalidOperationException($"Couldn't find an attribute with the category '{category}'.")
+				Throw New InvalidOperationException($"Couldn't find an attribute with the category '{category.Name}'.")
 			End If
 		End Function
 
@@ -166,57 +148,38 @@ Namespace RibbonAttributes
 		Private Function SeekError(Of T)(category As AttributeCategory) As Exception
 			Dim typeResults As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T))
 			Dim categoryResults As IEnumerable(Of IRibbonAttribute) = _attributes.Where(Function(a) a.Category = category)
-			Dim combinedResults As IEnumerable(Of IRibbonAttribute) = typeResults.OfType(Of IRibbonAttribute)().Union(categoryResults)
 
 			If typeResults.Count() = 0 AndAlso categoryResults.Count() = 0 Then
-				Return New Exception($"Failed to find any values of type '{GetType(T).Name}'. No values belonging to the category '{category}' were found either.")
+				Return New Exception($"Failed to find any values of type '{GetType(T).Name}'. No values belonging to the category '{category.Name}' were found either.")
 			ElseIf typeResults.Count() = 0 AndAlso categoryResults.Count() = 1 Then
-				Return New Exception($"Found one value belonging to category '{category}', but its type was not of type '{GetType(T).Name}'.")
+				Return New Exception($"Found one value belonging to category '{category.Name}', but its type was not of type '{GetType(T).Name}'.")
 			ElseIf typeResults.Count() = 1 AndAlso categoryResults.Count() = 0 Then
-				Return New Exception($"Found one value of type '{GetType(T).Name}', but it was not a member of category '{category}'.")
+				Return New Exception($"Found one value of type '{GetType(T).Name}', but it was not a member of category '{category.Name}'.")
 			Else
 				Dim combined As IEnumerable(Of IRibbonAttribute) = typeResults.Cast(Of IRibbonAttribute)().Intersect(categoryResults)
 
 				If combined.Count() = 0 Then
-					Return New Exception($"Failed to find any values of type '{GetType(T).Name}' that also belong to category '{category}'.")
-				ElseIf combined.Count() = 1
-					Return New Exception($"Found one value of type '{GetType(T).Name}' in category '{category}', but it was read-only.")
+					Return New Exception($"Failed to find any values of type '{GetType(T).Name}' that also belong to category '{category.Name}'.")
+				ElseIf combined.Count() = 1 Then
+					Dim result As IRibbonAttribute = combined.Single()
+
+					If result.Category.Equals(AttributeCategory.LabelVisibility) Then
+						Return New Exception($"Found one value of type '{GetType(T).Name}' in category '{category.Name}', but it was read-only. If this was unexpected, move Show/HideLabel() after WithLabel().")
+					ElseIf result.Category.Equals(AttributeCategory.ImageVisibility) Then
+						Return New Exception($"Found one value of type '{GetType(T).Name}' in category '{category.Name}', but it was read-only. If this was unexpected, move Show/HideImage() after WithImage().")
+					Else
+						Return New Exception($"Found one value of type '{GetType(T).Name}' in category '{category.Name}', but it was read-only.")
+					End If
 				Else
-					Return New Exception($"More than one value of type '{GetType(T).Name}' belonging to category '{category}' was found. This represents an internal logic error. Please report to project maintainer.")
+					Return New Exception($"More than one value of type '{GetType(T).Name}' belonging to category '{category.Name}' was found. This represents an internal logic error. Please report to project maintainer.")
 				End If
-			End If
-		End Function
-
-		<Obsolete>
-		Public Function ReadOnlyLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadOnly(Of T)
-			Return _attributes.OfType(Of IRibbonAttributeReadOnly(Of T)).Single(Function(a) a.Category.Contains(sampleMember))
-		End Function
-
-		<Obsolete>
-		Public Function ReadOnlyLookup(Of T)(category As AttributeCategory) As IRibbonAttributeReadOnly(Of T)
-			Return DirectCast(Lookup(category), IRibbonAttributeReadOnly(Of T))
-		End Function
-
-		<Obsolete>
-		Public Function ReadWriteLookup(Of T)(sampleMember As AttributeName) As IRibbonAttributeReadWrite(Of T)
-			Return DirectCast(_attributes.First(Function(a) a.Category.Contains(sampleMember)), IRibbonAttributeReadWrite(Of T))
-		End Function
-
-		<Obsolete>
-		Public Function ReadWriteLookup(Of T)(category As AttributeCategory) As IRibbonAttributeReadWrite(Of T)
-			Dim value As IRibbonAttributeReadWrite(Of T) = TryCast(Lookup(category), IRibbonAttributeReadWrite(Of T))
-
-			If value Is Nothing Then
-				Throw New InvalidOperationException($"Cannot write to '{category}', as it is read-only.")
-			Else
-				Return value
 			End If
 		End Function
 
 #End Region
 
 		Public Overrides Function ToString() As String
-			Return String.Join(" ", _attributes)
+			Return String.Join(" ", _attributes).NoDoubleSpace()
 		End Function
 
 		Public Overloads Function ToString(category As AttributeCategory) As String
@@ -239,8 +202,6 @@ Namespace RibbonAttributes
 			_attributes.CopyTo(array, arrayIndex)
 		End Sub
 
-
-
 		Public Function Contains(item As IRibbonAttribute) As Boolean Implements ICollection(Of IRibbonAttribute).Contains
 			Return _attributes.Contains(item)
 		End Function
@@ -257,8 +218,12 @@ Namespace RibbonAttributes
 			Return DirectCast(_attributes, IEnumerable).GetEnumerator()
 		End Function
 
-		Public Function Clone() As Object Implements ICloneable.Clone
-			Throw New NotImplementedException()
+		Public Function Clone() As AttributeSet
+			Return New AttributeSet(_attributes.OfType(Of ICloneable)().Select(Function(a) a.Clone()).OfType(Of IRibbonAttribute)())
+		End Function
+
+		Private Function CloneII() As Object Implements ICloneable.Clone
+			Return Clone()
 		End Function
 
 	End Class

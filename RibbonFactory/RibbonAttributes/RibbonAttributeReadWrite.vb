@@ -3,6 +3,7 @@
 Namespace RibbonAttributes
 	Friend Class RibbonAttributeReadWrite(Of T)
 		Implements IRibbonAttributeReadWrite(Of T)
+		Implements ICloneable
 
 		Public Event ValueChanged() Implements IRibbonAttribute.ValueChanged
 
@@ -40,6 +41,12 @@ Namespace RibbonAttributes
 
 		Public Overrides Function ToString() As String
 			Return String.Format(XmlTemplate, _name.CamelCase(), _callback)
+		End Function
+
+		Private Function Clone() As Object Implements ICloneable.Clone
+			Dim valueCopy As T = If(TypeOf _value Is ICloneable, DirectCast(DirectCast(_value, ICloneable).Clone(), T), _value)
+
+			Return New RibbonAttributeReadWrite(Of T)(valueCopy, Name.Clone(), Category.Clone(), String.Copy(_callback))
 		End Function
 
 	End Class
