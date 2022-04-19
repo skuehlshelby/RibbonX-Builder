@@ -1,10 +1,8 @@
-﻿Imports stdole
-
-Namespace ControlInterfaces
+﻿Namespace ControlInterfaces
 
     Public Interface IImage
 
-        Property Image As IPictureDisp
+        Property Image As RibbonImage
 
     End Interface
 
