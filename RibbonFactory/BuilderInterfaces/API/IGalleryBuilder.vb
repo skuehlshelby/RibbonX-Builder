@@ -1,5 +1,4 @@
-﻿Imports RibbonFactory.Containers
-Imports RibbonFactory.Controls.Events
+﻿Imports RibbonFactory.Controls.Events
 
 Namespace BuilderInterfaces.API
 
