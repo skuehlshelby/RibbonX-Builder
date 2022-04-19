@@ -1,9 +1,8 @@
 ﻿Imports System.Runtime.InteropServices
 Imports Extensibility
 Imports Microsoft.Office.Core
-Imports RibbonFactory.Containers
-Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Enums
 Imports stdole
 
@@ -114,7 +113,7 @@ Namespace Utilities
         End Function
 
         Public Function GetImage(control As IRibbonControl) As IPictureDisp Implements ICreateCallbacks.GetImage
-            Return Ribbon.GetElement(Of IImage)(control.Id).Image
+            Return Ribbon.GetElement(Of IImage)(control.Id).Image.AsIPictureDisp()
         End Function
 
         Public Function GetShowImage(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetShowImage
@@ -122,7 +121,7 @@ Namespace Utilities
         End Function
 
         Public Function GetPressed(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetPressed
-            Return Ribbon.GetElement(Of IPressed)(control.Id).Pressed
+            Return Ribbon.GetElement(Of IPressed)(control.Id).Checked
         End Function
 
         Public Function GetText(control As IRibbonControl) As String Implements ICreateCallbacks.GetText
@@ -138,7 +137,7 @@ Namespace Utilities
         End Function
 
         Public Function GetItemImage(control As IRibbonControl, index As Integer) As IPictureDisp Implements ICreateCallbacks.GetItemImage
-            Return Ribbon.GetContainerItem(control.Id, index).Image
+            Return Ribbon.GetContainerItem(control.Id, index).Image.AsIPictureDisp()
         End Function
 
         Public Function GetItemLabel(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemLabel
@@ -170,7 +169,7 @@ Namespace Utilities
         End Function
 
         Public Sub OnAction(control As IRibbonControl) Implements ICreateCallbacks.OnAction
-            Ribbon.GetElement(Of IOnAction)(control.Id).Execute()
+            Ribbon.GetElement(Of IClickable)(control.Id).Click()
         End Sub
 
         Public Sub OnChange(control As IRibbonControl, text As String) Implements ICreateCallbacks.OnChange
@@ -182,7 +181,7 @@ Namespace Utilities
         End Sub
 
         Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
-            Ribbon.GetElement(Of IPressed)(control.Id).Pressed = pressed
+            Ribbon.GetElement(Of IPressed)(control.Id).Checked = pressed
         End Sub
 
 #End Region
