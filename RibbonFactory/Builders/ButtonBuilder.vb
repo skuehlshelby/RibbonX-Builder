@@ -1,249 +1,253 @@
 ﻿Imports System.Drawing
+Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Controls
+Imports RibbonFactory.Controls.Events
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
 Namespace Builders
     Friend NotInheritable Class ButtonBuilder
+        Inherits BuilderBase(Of Button)
         Implements IButtonBuilder
 
-        Private ReadOnly _builder As ControlBuilder
-
         Public Sub New()
-            _builder = ControlBuilder.Init(Of Button)()
+            MyBase.New()
         End Sub
 
         Public Sub New(template As RibbonElement)
-            _builder = ControlBuilder.Init(Of Button)(template)
+            MyBase.New(template)
         End Sub
 
-        Public Function Build() As AttributeSet
-            Return _builder.Build()
-        End Function
-
         Public Function WithId(id As String) As IButtonBuilder Implements IButtonBuilder.WithId
-            _builder.WithId(id)
+            WithIdBase(id)
             Return Me
         End Function
 
         Public Function WithIdQ([namespace] As String, id As String) As IButtonBuilder Implements IButtonBuilder.WithIdQ
-            _builder.WithId([namespace], id)
+            WithIdBase([namespace], id)
             Return Me
         End Function
 
         Public Function WithIdMso(mso As MSO) As IButtonBuilder Implements IButtonBuilder.WithIdMso
-            _builder.WithId(mso)
+            WithIdBase(mso)
             Return Me
         End Function
 
         Public Function Enabled() As IButtonBuilder Implements IButtonBuilder.Enabled
-            _builder.Enabled()
+            EnabledBase()
             Return Me
         End Function
 
         Public Function Enabled(callback As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.Enabled
-            _builder.Enabled(callback)
+            EnabledBase(callback)
             Return Me
         End Function
 
         Public Function Disabled() As IButtonBuilder Implements IButtonBuilder.Disabled
-            _builder.Disabled()
+            DisabledBase()
             Return Me
         End Function
 
         Public Function Disabled(callback As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.Disabled
-            _builder.Disabled(callback)
+            DisabledBase(callback)
             Return Me
         End Function
 
         Public Function Visible() As IButtonBuilder Implements IButtonBuilder.Visible
-            _builder.Visible()
+            VisibleBase()
             Return Me
         End Function
 
         Public Function Visible(callback As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.Visible
-            _builder.Visible(callback)
+            VisibleBase(callback)
             Return Me
         End Function
 
         Public Function Invisible() As IButtonBuilder Implements IButtonBuilder.Invisible
-            _builder.Invisible()
+            InvisibleBase()
             Return Me
         End Function
 
         Public Function Invisible(callback As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.Invisible
-            _builder.Invisible(callback)
+            InvisibleBase(callback)
             Return Me
         End Function
 
         Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As IButtonBuilder Implements IButtonBuilder.WithLabel
-            _builder.WithLabel(label, copyToScreenTip)
-            _builder.ShowLabel()
+            LabelBase(label)
+            ShowLabelBase()
+            If copyToScreenTip Then ScreentipBase(label)
             Return Me
         End Function
 
         Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As IButtonBuilder Implements IButtonBuilder.WithLabel
-            _builder.WithLabel(label, callback, copyToScreenTip)
-            _builder.ShowLabel()
+            LabelBase(label, callback)
+            ShowLabelBase()
+            If copyToScreenTip Then ScreentipBase(label, callback)
             Return Me
         End Function
 
         Public Function WithScreenTip(screenTip As String) As IButtonBuilder Implements IButtonBuilder.WithScreenTip
-            _builder.WithScreentip(screenTip)
+            ScreentipBase(screenTip)
             Return Me
         End Function
 
         Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As IButtonBuilder Implements IButtonBuilder.WithScreenTip
-            _builder.WithScreentip(screenTip, callback)
+            ScreentipBase(screenTip, callback)
             Return Me
         End Function
 
         Public Function WithSuperTip(superTip As String) As IButtonBuilder Implements IButtonBuilder.WithSuperTip
-            _builder.WithSupertip(superTip)
+            SupertipBase(superTip)
             Return Me
         End Function
 
         Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As IButtonBuilder Implements IButtonBuilder.WithSuperTip
-            _builder.WithSupertip(superTip, callback)
+            SupertipBase(superTip, callback)
             Return Me
         End Function
 
         Public Function ShowLabel() As IButtonBuilder Implements IButtonBuilder.ShowLabel
-            _builder.ShowLabel()
+            ShowLabelBase()
             Return Me
         End Function
 
         Public Function ShowLabel(callback As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.ShowLabel
-            _builder.ShowLabel(callback)
+            ShowLabelBase(callback)
             Return Me
         End Function
 
         Public Function HideLabel() As IButtonBuilder Implements IButtonBuilder.HideLabel
-            _builder.HideLabel()
+            HideLabelBase()
             Return Me
         End Function
 
         Public Function HideLabel(callback As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.HideLabel
-            _builder.HideLabel(callback)
+            HideLabelBase(callback)
             Return Me
         End Function
 
         Public Function Large() As IButtonBuilder Implements IButtonBuilder.Large
-            _builder.Large()
+            LargeBase()
             Return Me
         End Function
 
         Public Function Large(callback As FromControl(Of ControlSize)) As IButtonBuilder Implements IButtonBuilder.Large
-            _builder.Large(callback)
+            LargeBase(callback)
             Return Me
         End Function
 
         Public Function Normal() As IButtonBuilder Implements IButtonBuilder.Normal
-            _builder.Normal()
+            NormalBase()
             Return Me
         End Function
 
         Public Function Normal(callback As FromControl(Of ControlSize)) As IButtonBuilder Implements IButtonBuilder.Normal
-            _builder.Normal(callback)
+            NormalBase(callback)
             Return Me
         End Function
 
         Public Function WithImage(image As ImageMSO) As IButtonBuilder Implements IButtonBuilder.WithImage
-            _builder.WithImage(image)
-            _builder.ShowImage()
+            ImageBase(image)
+            ShowImageBase()
             Return Me
         End Function
 
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IButtonBuilder Implements IButtonBuilder.WithImage
-            _builder.WithImage(image, callback)
-            _builder.ShowImage()
+            ImageBase(image, callback)
+            ShowImageBase()
             Return Me
         End Function
 
         Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As IButtonBuilder Implements IButtonBuilder.WithImage
-            _builder.WithImage(image, callback)
+            ImageBase(image, callback)
+            ShowImageBase()
             Return Me
         End Function
 
         Public Function WithImage(imagePath As String) As IButtonBuilder Implements IButtonBuilder.WithImage
-            _builder.WithImage(imagePath)
-            _builder.ShowImage()
+            ImageBase(imagePath)
+            ShowImageBase()
             Return Me
         End Function
 
         Public Function WithDescription(description As String) As IButtonBuilder Implements IButtonBuilder.WithDescription
-            _builder.WithDescription(description)
+            DescriptionBase(description)
             Return Me
         End Function
 
         Public Function WithDescription(description As String, callback As FromControl(Of String)) As IButtonBuilder Implements IButtonBuilder.WithDescription
-            _builder.WithDescription(description, callback)
+            DescriptionBase(description, callback)
             Return Me
         End Function
 
         Public Function WithKeyTip(keyTip As KeyTip) As IButtonBuilder Implements IButtonBuilder.WithKeyTip
-            _builder.WithKeyTip(keyTip)
+            KeyTipBase(keyTip)
             Return Me
         End Function
 
         Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As IButtonBuilder Implements IButtonBuilder.WithKeyTip
-            _builder.WithKeyTip(keyTip, callback)
+            KeyTipBase(keyTip, callback)
             Return Me
         End Function
 
         Public Function InsertBeforeMSO(builtInControl As MSO) As IButtonBuilder Implements IButtonBuilder.InsertBefore
-            _builder.InsertBefore(builtInControl)
+            InsertBeforeMsoBase(builtInControl)
             Return Me
         End Function
 
         Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As IButtonBuilder Implements IButtonBuilder.InsertBefore
-            _builder.InsertBefore(qualifiedControl)
+            InsertBeforeQBase(qualifiedControl)
             Return Me
         End Function
 
         Public Function InsertAfterMSO(builtInControl As MSO) As IButtonBuilder Implements IButtonBuilder.InsertAfter
-            _builder.InsertAfter(builtInControl)
+            InsertAfterMsoBase(builtInControl)
             Return Me
         End Function
 
         Public Function InsertAfterQ(qualifiedControl As RibbonElement) As IButtonBuilder Implements IButtonBuilder.InsertAfter
-            _builder.InsertAfter(qualifiedControl)
+            InsertAfterQBase(qualifiedControl)
             Return Me
         End Function
 
         Public Function ShowImage() As IButtonBuilder Implements IButtonBuilder.ShowImage
-            _builder.ShowImage()
+            ShowImageBase()
             Return Me
         End Function
 
         Public Function ShowImage(getShowImage As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.ShowImage
-            _builder.ShowImage(getShowImage)
+            ShowImageBase(getShowImage)
             Return Me
         End Function
 
         Public Function HideImage() As IButtonBuilder Implements IButtonBuilder.HideImage
-            _builder.HideImage()
+            HideImageBase()
             Return Me
         End Function
 
         Public Function HideImage(getShowImage As FromControl(Of Boolean)) As IButtonBuilder Implements IButtonBuilder.HideImage
-            _builder.HideImage(getShowImage)
+            HideImageBase(getShowImage)
             Return Me
         End Function
 
-		Public Function BeforeClick(callBack As OnAction, ParamArray actions() As Action(Of Button, Button.BeforeClickEventArgs)) As IButtonBuilder Implements IButtonBuilder.BeforeClick
-			_builder.ThatDoes(callBack, actions.Select(Function(a) _builder.AsEventHandler(a)), beforeEvent:= True)
+        Public Function BeforeClick(ParamArray actions() As Action(Of Button, CancelableEventArgs)) As IButtonBuilder Implements IButtonBuilder.BeforeClick
+            AddBeforeClickHandlers(actions)
             Return Me
-		End Function
+        End Function
 
-        Public Function OnClick(callBack As OnAction, ParamArray actions() As Action(Of Button)) As IButtonBuilder Implements IButtonBuilder.OnClick
-			_builder.ThatDoes(callBack, actions.Select(Function(a) _builder.AsEventHandler(a)), beforeEvent:= True)
+        Public Function OnClick(ParamArray actions() As Action(Of Button)) As IButtonBuilder Implements IButtonBuilder.OnClick
+            AddOnClickHandlers(actions)
             Return Me
-		End Function
+        End Function
+
+        Public Function RouteClickTo(callBack As OnAction) As IButtonBuilder Implements IButtonBuilder.RouteClickTo
+            OnActionBase(callBack)
+            Return Me
+        End Function
 
     End Class
 
-End NameSpace
+End Namespace

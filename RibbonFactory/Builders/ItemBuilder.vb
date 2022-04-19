@@ -1,75 +1,56 @@
 ﻿Imports System.Drawing
+Imports Microsoft.Office.Core
+Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Controls
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities
 Imports stdole
 
 Namespace Builders
-    Public NotInheritable Class ItemBuilder
-        Private ReadOnly _id As String
-        Private _label As String
-        Private _screenTip As String
-        Private _superTip As String
-        Private _image As IPictureDisp
-        Private _synchronizeLabelAndScreenTip As Boolean
+    Friend NotInheritable Class ItemBuilder
+        Inherits BuilderBase(Of Item)
+        Implements IItemBuilder
 
         Public Sub New()
-            _id = IdManager.GetID(Of Item)
-            _label = String.Empty
-            _screenTip = String.Empty
-            _superTip = String.Empty
-            _image = Nothing
-            _synchronizeLabelAndScreenTip = False
         End Sub
 
-        Public Sub New(template As Item)
-            _id = IdManager.GetID(Of Item)
-            _label = template.Label
-            _screenTip = template.ScreenTip
-            _superTip = template.SuperTip
-            _image = template.Image
-            _synchronizeLabelAndScreenTip = True
+        Public Sub New(template As RibbonElement)
+            MyBase.New(template)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As Item
-            Return New Item(_id, _label, _screenTip, _superTip, _image, _synchronizeLabelAndScreenTip, tag)
-        End Function
+        Private Function WithLabel(label As String, Optional copyToScreentip As Boolean = True) As IItemBuilder Implements IItemBuilder.WithLabel
+            LabelBase(label, AddressOf FakeCallback)
 
-        Public Function WithLabel(label As String, Optional synchronizeLabelAndScreenTip As Boolean = True) As ItemBuilder
-            _label = label
-
-            _synchronizeLabelAndScreenTip = synchronizeLabelAndScreenTip
-
-            If synchronizeLabelAndScreenTip Then
-                _screenTip = _label
-            End If
-
+            If copyToScreentip Then ScreentipBase(label, AddressOf FakeCallback)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String) As ItemBuilder
-            _screenTip = screenTip
-
-            If _synchronizeLabelAndScreenTip Then
-                _label = _screenTip
-            End If
-
+        Private Function WithScreenTip(screenTip As String) As IItemBuilder Implements IItemBuilder.WithScreenTip
+            ScreentipBase(screenTip, AddressOf FakeCallback)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String) As ItemBuilder
-            _superTip = superTip
+        Private Function WithSuperTip(superTip As String) As IItemBuilder Implements IItemBuilder.WithSuperTip
+            SupertipBase(superTip, AddressOf FakeCallback)
             Return Me
         End Function
 
-        Public Function WithImage(image As Bitmap) As ItemBuilder
-            _image = New AdapterForIPicture(image)
+        Private Function WithImage(image As Bitmap) As IItemBuilder Implements IItemBuilder.WithImage
+            ImageBase(image, AddressOf FakeCallbackII)
             Return Me
         End Function
 
-        Public Function WithImage(image As Icon) As ItemBuilder
-            _image = New AdapterForIPicture(image)
+        Private Function WithImage(image As Icon) As IItemBuilder Implements IItemBuilder.WithImage
+            ImageBase(image, AddressOf FakeCallbackII)
             Return Me
         End Function
+
+        Private Function FakeCallback(control As IRibbonControl) As String
+            Return String.Empty
+        End Function
+
+        Private Function FakeCallbackII(control As IRibbonControl) As IPictureDisp
+            Return Nothing
+        End Function
+
     End Class
-End NameSpace
+
+End Namespace

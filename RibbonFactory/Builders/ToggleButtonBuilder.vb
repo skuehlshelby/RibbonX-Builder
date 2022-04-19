@@ -1,344 +1,255 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.BuilderInterfaces
-Imports RibbonFactory.Containers
+Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Controls
+Imports RibbonFactory.Controls.Events
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
 Namespace Builders
 
-    Public Class ToggleButtonBuilder
-        Implements IBuilder(Of ToggleButton)
-        Implements IID(Of ToggleButtonBuilder)
-        Implements IVisible(Of ToggleButtonBuilder)
-        Implements IEnabled(Of ToggleButtonBuilder)
-        Implements IInsert(Of ToggleButtonBuilder)
-        Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder)
-        Implements IShowLabel(Of ToggleButtonBuilder)
-        Implements IKeyTip(Of ToggleButtonBuilder)
-        Implements IImage(Of ToggleButtonBuilder)
-        Implements IShowImage(Of ToggleButtonBuilder)
-        Implements IDescription(Of ToggleButtonBuilder)
-        Implements ISize(Of ToggleButtonBuilder)
+    Friend Class ToggleButtonBuilder
+        Inherits BuilderBase(Of ToggleButton)
+        Implements IToggleButtonBuilder
 
-        Private ReadOnly _builder As ControlBuilder
-        Private ReadOnly _beforeStateChangeHandlers As ICollection(Of EventHandler(Of ToggleButton.BeforeStateChangeEventArgs)) = New List(Of EventHandler(Of ToggleButton.BeforeStateChangeEventArgs))
-		Private ReadOnly _stateChangedHandlers As ICollection(Of EventHandler(Of ToggleButton.StateChangedEventArgs)) = New List(Of EventHandler(Of ToggleButton.StateChangedEventArgs))
-
-        Friend Sub New()
-            Dim defaultProvider As IDefaultProvider = New Defaults(Of SplitButton)
-            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
-            attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = New ControlBuilder(attributeGroupBuilder)
-        End Sub
-
-        Public Sub New(template As ToggleButton)
-            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
-            attributeGroupBuilder.SetDefaults(template)
-            attributeGroupBuilder.AddID(IdManager.GetID(Of ToggleButton)())
-            _builder = New ControlBuilder(attributeGroupBuilder)
-
-            Array.ForEach(template.GetBeforeStateChangeInvocationList(), Sub(handler) _beforeStateChangeHandlers.Add(handler))
-			Array.ForEach(template.GetStateChangedInvocationList(), Sub(handler) _stateChangedHandlers.Add(handler))
+        Public Sub New()
+            MyBase.New()
         End Sub
 
         Public Sub New(template As RibbonElement)
-            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
-
-            If defaultProvider IsNot Nothing Then
-                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim toggleButtonAttributes As AttributeSet = New Defaults(Of ToggleButton)().GetDefaults()
-                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) toggleButtonAttributes.Contains(a)))
-                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
-                attributeGroupBuilder.AddID(IdManager.GetID(Of ToggleButton)())
-                _builder = New ControlBuilder(attributeGroupBuilder)
-            Else
-                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(ToggleButton)}'")
-            End If
+            MyBase.New(template)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As ToggleButton Implements IBuilder(Of ToggleButton).Build
-            Dim toggleButton As ToggleButton = New ToggleButton(_builder.Build(), tag:=tag)
-
-            For Each handler As EventHandler(Of ToggleButton.BeforeStateChangeEventArgs) In _beforeStateChangeHandlers
-                AddHandler toggleButton.BeforeStateChange, handler
-            Next
-
-            For Each handler As EventHandler(Of ToggleButton.StateChangedEventArgs) In _stateChangedHandlers
-                AddHandler toggleButton.StateChanged, handler
-            Next
-
-            Return toggleButton
-        End Function
-
-        Public Function WithId(id As String) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithId
-            _builder.WithId(id)
+        Private Function WithId(id As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithId
+            WithIdBase(id)
             Return Me
         End Function
 
-        Public Function WithIdQ([namespace] As String, id As String) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithIdQ
-            _builder.WithId([namespace], id)
+        Private Function WithIdQ([namespace] As String, id As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithIdQ
+            WithIdBase([namespace], id)
             Return Me
         End Function
 
-        Public Function WithIdMso(mso As MSO) As ToggleButtonBuilder Implements IID(Of ToggleButtonBuilder).WithIdMso
-            _builder.WithId(mso)
+        Private Function WithIdMso(mso As MSO) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithIdMso
+            WithIdBase(mso)
             Return Me
         End Function
 
-        Public Function Enabled() As ToggleButtonBuilder Implements IEnabled(Of ToggleButtonBuilder).Enabled
-            _builder.Enabled()
+        Private Function Enabled() As IToggleButtonBuilder Implements IToggleButtonBuilder.Enabled
+            EnabledBase()
             Return Me
         End Function
 
-        Public Function Enabled(callback As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IEnabled(Of ToggleButtonBuilder).Enabled
-            _builder.Enabled(callback)
+        Private Function Enabled(callback As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.Enabled
+            EnabledBase(callback)
             Return Me
         End Function
 
-        Public Function Disabled() As ToggleButtonBuilder Implements IEnabled(Of ToggleButtonBuilder).Disabled
-            _builder.Disabled()
+        Private Function Disabled() As IToggleButtonBuilder Implements IToggleButtonBuilder.Disabled
+            DisabledBase()
             Return Me
         End Function
 
-        Public Function Disabled(callback As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IEnabled(Of ToggleButtonBuilder).Disabled
-            _builder.Disabled(callback)
+        Private Function Disabled(callback As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.Disabled
+            DisabledBase(callback)
             Return Me
         End Function
 
-        Public Function Visible() As ToggleButtonBuilder Implements IVisible(Of ToggleButtonBuilder).Visible
-            _builder.Visible()
+        Private Function Visible() As IToggleButtonBuilder Implements IToggleButtonBuilder.Visible
+            VisibleBase()
             Return Me
         End Function
 
-        Public Function Visible(callback As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IVisible(Of ToggleButtonBuilder).Visible
-            _builder.Visible(callback)
+        Private Function Visible(callback As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.Visible
+            VisibleBase(callback)
             Return Me
         End Function
 
-        Public Function Invisible() As ToggleButtonBuilder Implements IVisible(Of ToggleButtonBuilder).Invisible
-            _builder.Invisible()
+        Private Function Invisible() As IToggleButtonBuilder Implements IToggleButtonBuilder.Invisible
+            InvisibleBase()
             Return Me
         End Function
 
-        Public Function Invisible(callback As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IVisible(Of ToggleButtonBuilder).Invisible
-            _builder.Invisible(callback)
+        Private Function Invisible(callback As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.Invisible
+            InvisibleBase(callback)
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As ToggleButtonBuilder Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder).WithLabel
-            _builder.WithLabel(label, copyToScreenTip)
-            _builder.ShowLabel()
+        Private Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithLabel
+            LabelBase(label)
+            ShowLabelBase()
+            If copyToScreenTip Then ScreentipBase(label)
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As ToggleButtonBuilder Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder).WithLabel
-            _builder.WithLabel(label, callback, copyToScreenTip)
-            _builder.ShowLabel()
+        Private Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithLabel
+            LabelBase(label, callback)
+            ShowLabelBase()
+            If copyToScreenTip Then ScreentipBase(label, callback)
             Return Me
         End Function
 
-        Public Function ShowLabel() As ToggleButtonBuilder Implements IShowLabel(Of ToggleButtonBuilder).ShowLabel
-            _builder.ShowLabel()
+        Private Function ShowLabel() As IToggleButtonBuilder Implements IToggleButtonBuilder.ShowLabel
+            ShowLabelBase()
             Return Me
         End Function
 
-        Public Function ShowLabel(callback As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IShowLabel(Of ToggleButtonBuilder).ShowLabel
-            _builder.ShowLabel(callback)
+        Private Function ShowLabel(callback As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.ShowLabel
+            ShowLabelBase(callback)
             Return Me
         End Function
 
-        Public Function HideLabel() As ToggleButtonBuilder Implements IShowLabel(Of ToggleButtonBuilder).HideLabel
-            _builder.HideLabel()
+        Private Function HideLabel() As IToggleButtonBuilder Implements IToggleButtonBuilder.HideLabel
+            HideLabelBase()
             Return Me
         End Function
 
-        Public Function HideLabel(callback As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IShowLabel(Of ToggleButtonBuilder).HideLabel
-            _builder.HideLabel(callback)
+        Private Function HideLabel(callback As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.HideLabel
+            HideLabelBase(callback)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String) As ToggleButtonBuilder Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder).WithScreenTip
-            _builder.WithScreentip(screenTip)
+        Private Function WithScreenTip(screenTip As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithScreenTip
+            ScreentipBase(screenTip)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As ToggleButtonBuilder Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder).WithScreenTip
-            _builder.WithScreentip(screenTip, callback)
+        Private Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithScreenTip
+            ScreentipBase(screenTip, callback)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String) As ToggleButtonBuilder Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder).WithSuperTip
-            _builder.WithSupertip(superTip)
+        Private Function WithSuperTip(superTip As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithSuperTip
+            SupertipBase(superTip)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As ToggleButtonBuilder Implements ILabelScreenTipSuperTip(Of ToggleButtonBuilder).WithSuperTip
-            _builder.WithSupertip(superTip, callback)
+        Private Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithSuperTip
+            SupertipBase(superTip, callback)
             Return Me
         End Function
 
-        Public Function WithKeyTip(keyTip As KeyTip) As ToggleButtonBuilder Implements IKeyTip(Of ToggleButtonBuilder).WithKeyTip
-            _builder.WithKeyTip(keyTip)
+        Private Function WithKeyTip(keyTip As KeyTip) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithKeyTip
+            KeyTipBase(keyTip)
             Return Me
         End Function
 
-        Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As ToggleButtonBuilder Implements IKeyTip(Of ToggleButtonBuilder).WithKeyTip
-            _builder.WithKeyTip(keyTip, callback)
+        Private Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithKeyTip
+            KeyTipBase(keyTip, callback)
             Return Me
         End Function
 
-        Public Function WithImage(image As ImageMSO) As ToggleButtonBuilder Implements IImage(Of ToggleButtonBuilder).WithImage
-            _builder.WithImage(image)
+        Private Function WithImage(image As ImageMSO) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(image)
             Return Me
         End Function
 
-        Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As ToggleButtonBuilder Implements IImage(Of ToggleButtonBuilder).WithImage
-            _builder.WithImage(image, callback)
+        Private Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(image, callback)
             Return Me
         End Function
 
-        Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As ToggleButtonBuilder Implements IImage(Of ToggleButtonBuilder).WithImage
-            _builder.WithImage(image, callback)
+        Private Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(image, callback)
             Return Me
         End Function
 
-        Public Function WithImage(imagePath As String) As ToggleButtonBuilder Implements IImage(Of ToggleButtonBuilder).WithImage
-            _builder.WithImage(imagePath)
+        Private Function WithImage(imagePath As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(imagePath)
             Return Me
         End Function
 
-        Public Function WithDescription(description As String) As ToggleButtonBuilder Implements IDescription(Of ToggleButtonBuilder).WithDescription
-            _builder.WithDescription(description)
+        Private Function WithDescription(description As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithDescription
+            DescriptionBase(description)
             Return Me
         End Function
 
-        Public Function WithDescription(description As String, callback As FromControl(Of String)) As ToggleButtonBuilder Implements IDescription(Of ToggleButtonBuilder).WithDescription
-            _builder.WithDescription(description, callback)
+        Private Function WithDescription(description As String, callback As FromControl(Of String)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithDescription
+            DescriptionBase(description, callback)
             Return Me
         End Function
 
-        Public Function Large() As ToggleButtonBuilder Implements ISize(Of ToggleButtonBuilder).Large
-            _builder.Large()
+        Private Function Large() As IToggleButtonBuilder Implements IToggleButtonBuilder.Large
+            LargeBase()
             Return Me
         End Function
 
-        Public Function Large(callback As FromControl(Of ControlSize)) As ToggleButtonBuilder Implements ISize(Of ToggleButtonBuilder).Large
-            _builder.Large(callback)
+        Private Function Large(callback As FromControl(Of ControlSize)) As IToggleButtonBuilder Implements IToggleButtonBuilder.Large
+            LargeBase(callback)
             Return Me
         End Function
 
-        Public Function Normal() As ToggleButtonBuilder Implements ISize(Of ToggleButtonBuilder).Normal
-            _builder.Normal()
+        Private Function Normal() As IToggleButtonBuilder Implements IToggleButtonBuilder.Normal
+            NormalBase()
             Return Me
         End Function
 
-        Public Function Normal(callback As FromControl(Of ControlSize)) As ToggleButtonBuilder Implements ISize(Of ToggleButtonBuilder).Normal
-            _builder.Normal(callback)
+        Private Function Normal(callback As FromControl(Of ControlSize)) As IToggleButtonBuilder Implements IToggleButtonBuilder.Normal
+            NormalBase(callback)
             Return Me
         End Function
 
-        Public Function InsertBeforeMSO(builtInControl As MSO) As ToggleButtonBuilder Implements IInsert(Of ToggleButtonBuilder).InsertBefore
-            _builder.InsertBefore(builtInControl)
+        Private Function InsertBeforeMSO(builtInControl As MSO) As IToggleButtonBuilder Implements IToggleButtonBuilder.InsertBefore
+            InsertBeforeMsoBase(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As ToggleButtonBuilder Implements IInsert(Of ToggleButtonBuilder).InsertBefore
-            _builder.InsertBefore(qualifiedControl)
+        Private Function InsertBeforeQ(qualifiedControl As RibbonElement) As IToggleButtonBuilder Implements IToggleButtonBuilder.InsertBefore
+            InsertBeforeQBase(qualifiedControl)
             Return Me
         End Function
 
-        Public Function InsertAfterMSO(builtInControl As MSO) As ToggleButtonBuilder Implements IInsert(Of ToggleButtonBuilder).InsertAfter
-            _builder.InsertAfter(builtInControl)
+        Private Function InsertAfterMSO(builtInControl As MSO) As IToggleButtonBuilder Implements IToggleButtonBuilder.InsertAfter
+            InsertAfterMsoBase(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As ToggleButtonBuilder Implements IInsert(Of ToggleButtonBuilder).InsertAfter
-            _builder.InsertAfter(qualifiedControl)
+        Private Function InsertAfterQ(qualifiedControl As RibbonElement) As IToggleButtonBuilder Implements IToggleButtonBuilder.InsertAfter
+            InsertAfterQBase(qualifiedControl)
             Return Me
         End Function
 
-        Public Function ShowImage() As ToggleButtonBuilder Implements IShowImage(Of ToggleButtonBuilder).ShowImage
-            _builder.ShowImage()
+        Private Function ShowImage() As IToggleButtonBuilder Implements IToggleButtonBuilder.ShowImage
+            ShowImageBase()
             Return Me
         End Function
 
-        Public Function ShowImage(getShowImage As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IShowImage(Of ToggleButtonBuilder).ShowImage
-            _builder.ShowImage(getShowImage)
+        Private Function ShowImage(getShowImage As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.ShowImage
+            ShowImageBase(getShowImage)
             Return Me
         End Function
 
-        Public Function HideImage() As ToggleButtonBuilder Implements IShowImage(Of ToggleButtonBuilder).HideImage
-            _builder.HideImage()
+        Private Function HideImage() As IToggleButtonBuilder Implements IToggleButtonBuilder.HideImage
+            HideImageBase()
             Return Me
         End Function
 
-        Public Function HideImage(getShowImage As FromControl(Of Boolean)) As ToggleButtonBuilder Implements IShowImage(Of ToggleButtonBuilder).HideImage
-            _builder.HideImage(getShowImage)
+        Private Function HideImage(getShowImage As FromControl(Of Boolean)) As IToggleButtonBuilder Implements IToggleButtonBuilder.HideImage
+            HideImageBase(getShowImage)
             Return Me
         End Function
 
-        Public Function Checked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As ToggleButtonBuilder
-			_builder.GetPressedFrom(True, getChecked, setChecked)
-			Return Me
-		End Function
+        Private Function Checked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As IToggleButtonBuilder Implements IToggleButtonBuilder.Checked
+            PressedBase(True, getChecked, setChecked)
+            Return Me
+        End Function
 
-		Public Function Unchecked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As ToggleButtonBuilder
-			_builder.GetPressedFrom(False, getChecked, setChecked)
-			Return Me
-		End Function
+        Private Function Unchecked(getChecked As FromControl(Of Boolean), setChecked As ButtonPressed) As IToggleButtonBuilder Implements IToggleButtonBuilder.Unchecked
+            PressedBase(False, getChecked, setChecked)
+            Return Me
+        End Function
 
-        Public Function BeforeStateChange(ParamArray actions() As Action(Of ToggleButton.BeforeStateChangeEventArgs)) As ToggleButtonBuilder
-			For Each action As Action(Of ToggleButton.BeforeStateChangeEventArgs) In actions
-				With New BeforeStateChangeEventHandlerHelper(action)
-                    _beforeStateChangeHandlers.Add(AddressOf .Handle)
-				End With
-			Next
+        Private Function BeforeStateChange(ParamArray actions() As Action(Of BeforeToggleChangeEventArgs)) As IToggleButtonBuilder Implements IToggleButtonBuilder.BeforeStateChange
+            AddBeforeToggleHandlers(actions)
+            Return Me
+        End Function
 
-			Return Me
-		End Function
-
-		Public Function AfterStateChange(Paramarray actions() As Action(Of ToggleButton.StateChangedEventArgs)) As ToggleButtonBuilder
-			For Each action As Action(Of ToggleButton.StateChangedEventArgs) In actions
-				With New StateChangedEventHandlerHelper(action)
-                    _stateChangedHandlers.Add(AddressOf .Handle)
-				End With
-			Next
-
-			Return Me
-		End Function
-
-        Private NotInheritable Class BeforeStateChangeEventHandlerHelper
-
-			Private ReadOnly _action As Action(Of ToggleButton.BeforeStateChangeEventArgs)
-
-			Public Sub New(action As Action(Of ToggleButton.BeforeStateChangeEventArgs))
-				_action = action
-			End Sub
-
-			Public Sub Handle(sender As Object, e As ToggleButton.BeforeStateChangeEventArgs)
-				_action.Invoke(e)
-			End Sub
-
-		End Class
-
-		Private NotInheritable Class StateChangedEventHandlerHelper
-
-			Private ReadOnly _action As Action(Of ToggleButton.StateChangedEventArgs)
-
-			Public Sub New(action As Action(Of ToggleButton.StateChangedEventArgs))
-				_action = action
-			End Sub
-
-			Public Sub Handle(sender As Object, e As ToggleButton.StateChangedEventArgs)
-				_action.Invoke(e)
-			End Sub
-
-		End Class
+        Private Function AfterStateChange(ParamArray actions() As Action(Of ToggleChangeEventArgs)) As IToggleButtonBuilder Implements IToggleButtonBuilder.AfterStateChange
+            AddToggleHandlers(actions)
+            Return Me
+        End Function
 
     End Class
 
-End NameSpace
+End Namespace

@@ -1,205 +1,143 @@
-﻿Imports RibbonFactory.BuilderInterfaces
+﻿Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Containers
-Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
 
 Namespace Builders
-    Public NotInheritable Class SplitButtonBuilder
-        Implements IBuilder(Of SplitButton)
-        Implements IID(Of SplitButtonBuilder)
-        Implements IInsert(Of SplitButtonBuilder)
-        Implements IVisible(Of SplitButtonBuilder)
-        Implements IEnabled(Of SplitButtonBuilder)
-        Implements IKeyTip(Of SplitButtonBuilder)
-        Implements IShowLabel(Of SplitButtonBuilder)
-        Implements ISize(Of SplitButtonBuilder)
-
-        Private ReadOnly _builder As ControlBuilder
-        Private _button As RibbonElement
-        Private _menu As Menu
+    Friend NotInheritable Class SplitButtonBuilder
+        Inherits BuilderBase(Of SplitButton)
+        Implements ISplitButtonBuilder
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New Defaults(Of SplitButton)
-            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
-            attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = New ControlBuilder(attributeGroupBuilder)
-        End Sub
-
-        Public Sub New(template As SplitButton)
-            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
-            attributeGroupBuilder.SetDefaults(template)
-            attributeGroupBuilder.AddID(IdManager.GetID(Of SplitButton)())
-            _builder = New ControlBuilder(attributeGroupBuilder)
+            MyBase.New()
         End Sub
 
         Public Sub New(template As RibbonElement)
-            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
-
-            If defaultProvider IsNot Nothing Then
-                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim splitButtonAttributes As AttributeSet = New Defaults(Of SplitButton)().GetDefaults()
-                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) splitButtonAttributes.Contains(a)))
-                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
-                attributeGroupBuilder.AddID(IdManager.GetID(Of SplitButton)())
-                _builder = New ControlBuilder(attributeGroupBuilder)
-            Else
-                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(SplitButton)}'")
-            End If
+            MyBase.New(template)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As SplitButton Implements IBuilder(Of SplitButton).Build
-            Utilities.Require(Of InvalidOperationException)(
-                If(_builder.IsBuiltInControl(),
-                   _button Is Nothing AndAlso _menu Is Nothing,
-                   _button IsNot Nothing AndAlso _menu IsNot Nothing),
-                "When a control is a copy of a built-in control, no other properties may be specified. Otherwise, both a button and a menu are required.")
-
-            If _builder.IsBuiltInControl() Then
-                Return New SplitButton(_builder.Build())
-            Else
-                Return New SplitButton(button:=_button, menu:=_menu, attributes:=_builder.Build(), tag:=tag)
-            End If
-        End Function
-
-        Public Function WithButton(button As Button) As SplitButtonBuilder
-            _button = button
+        Private Function WithId(id As String) As ISplitButtonBuilder Implements ISplitButtonBuilder.WithId
+            WithIdBase(id)
             Return Me
         End Function
 
-        Public Function WithToggleButton(toggleButton As ToggleButton) As SplitButtonBuilder
-            _button = toggleButton
+        Private Function WithIdQ([namespace] As String, id As String) As ISplitButtonBuilder Implements ISplitButtonBuilder.WithIdQ
+            WithIdBase([namespace], id)
             Return Me
         End Function
 
-        Public Function WithMenu(menu As Menu) As SplitButtonBuilder
-            _menu = menu
+        Private Function WithIdMso(mso As MSO) As ISplitButtonBuilder Implements ISplitButtonBuilder.WithIdMso
+            WithIdBase(mso)
             Return Me
         End Function
 
-        Public Function WithId(id As String) As SplitButtonBuilder Implements IID(Of SplitButtonBuilder).WithId
-            _builder.WithId(id)
+        Private Function Enabled() As ISplitButtonBuilder Implements ISplitButtonBuilder.Enabled
+            EnabledBase()
             Return Me
         End Function
 
-        Public Function WithIdQ([namespace] As String, id As String) As SplitButtonBuilder Implements IID(Of SplitButtonBuilder).WithIdQ
-            _builder.WithId([namespace], id)
+        Private Function Enabled(callback As FromControl(Of Boolean)) As ISplitButtonBuilder Implements ISplitButtonBuilder.Enabled
+            EnabledBase(callback)
             Return Me
         End Function
 
-        Public Function WithIdMso(mso As MSO) As SplitButtonBuilder Implements IID(Of SplitButtonBuilder).WithIdMso
-            _builder.WithId(mso)
+        Private Function Disabled() As ISplitButtonBuilder Implements ISplitButtonBuilder.Disabled
+            DisabledBase()
             Return Me
         End Function
 
-        Public Function Enabled() As SplitButtonBuilder Implements IEnabled(Of SplitButtonBuilder).Enabled
-            _builder.Enabled()
+        Private Function Disabled(callback As FromControl(Of Boolean)) As ISplitButtonBuilder Implements ISplitButtonBuilder.Disabled
+            DisabledBase(callback)
             Return Me
         End Function
 
-        Public Function Enabled(callback As FromControl(Of Boolean)) As SplitButtonBuilder Implements IEnabled(Of SplitButtonBuilder).Enabled
-            _builder.Enabled(callback)
+        Private Function Visible() As ISplitButtonBuilder Implements ISplitButtonBuilder.Visible
+            VisibleBase()
             Return Me
         End Function
 
-        Public Function Disabled() As SplitButtonBuilder Implements IEnabled(Of SplitButtonBuilder).Disabled
-            _builder.Disabled()
+        Private Function Visible(callback As FromControl(Of Boolean)) As ISplitButtonBuilder Implements ISplitButtonBuilder.Visible
+            VisibleBase(callback)
             Return Me
         End Function
 
-        Public Function Disabled(callback As FromControl(Of Boolean)) As SplitButtonBuilder Implements IEnabled(Of SplitButtonBuilder).Disabled
-            _builder.Disabled(callback)
+        Private Function Invisible() As ISplitButtonBuilder Implements ISplitButtonBuilder.Invisible
+            InvisibleBase()
             Return Me
         End Function
 
-        Public Function Visible() As SplitButtonBuilder Implements IVisible(Of SplitButtonBuilder).Visible
-            _builder.Visible()
+        Private Function Invisible(callback As FromControl(Of Boolean)) As ISplitButtonBuilder Implements ISplitButtonBuilder.Invisible
+            InvisibleBase(callback)
             Return Me
         End Function
 
-        Public Function Visible(callback As FromControl(Of Boolean)) As SplitButtonBuilder Implements IVisible(Of SplitButtonBuilder).Visible
-            _builder.Visible(callback)
+        Private Function WithKeyTip(keyTip As KeyTip) As ISplitButtonBuilder Implements ISplitButtonBuilder.WithKeyTip
+            KeyTipBase(keyTip)
             Return Me
         End Function
 
-        Public Function Invisible() As SplitButtonBuilder Implements IVisible(Of SplitButtonBuilder).Invisible
-            _builder.Invisible()
+        Private Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As ISplitButtonBuilder Implements ISplitButtonBuilder.WithKeyTip
+            KeyTipBase(keyTip, callback)
             Return Me
         End Function
 
-        Public Function Invisible(callback As FromControl(Of Boolean)) As SplitButtonBuilder Implements IVisible(Of SplitButtonBuilder).Invisible
-            _builder.Invisible(callback)
+        Private Function ShowLabel() As ISplitButtonBuilder Implements ISplitButtonBuilder.ShowLabel
+            ShowLabelBase()
             Return Me
         End Function
 
-        Public Function WithKeyTip(keyTip As KeyTip) As SplitButtonBuilder Implements IKeyTip(Of SplitButtonBuilder).WithKeyTip
-            _builder.WithKeyTip(keyTip)
+        Private Function ShowLabel(callback As FromControl(Of Boolean)) As ISplitButtonBuilder Implements ISplitButtonBuilder.ShowLabel
+            ShowLabelBase(callback)
             Return Me
         End Function
 
-        Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As SplitButtonBuilder Implements IKeyTip(Of SplitButtonBuilder).WithKeyTip
-            _builder.WithKeyTip(keyTip, callback)
+        Private Function HideLabel() As ISplitButtonBuilder Implements ISplitButtonBuilder.HideLabel
+            HideLabelBase()
             Return Me
         End Function
 
-        Public Function ShowLabel() As SplitButtonBuilder Implements IShowLabel(Of SplitButtonBuilder).ShowLabel
-            _builder.ShowLabel()
+        Private Function HideLabel(callback As FromControl(Of Boolean)) As ISplitButtonBuilder Implements ISplitButtonBuilder.HideLabel
+            HideLabelBase(callback)
             Return Me
         End Function
 
-        Public Function ShowLabel(callback As FromControl(Of Boolean)) As SplitButtonBuilder Implements IShowLabel(Of SplitButtonBuilder).ShowLabel
-            _builder.ShowLabel(callback)
+        Public Function Large() As ISplitButtonBuilder Implements ISplitButtonBuilder.Large
+            LargeBase()
             Return Me
         End Function
 
-        Public Function HideLabel() As SplitButtonBuilder Implements IShowLabel(Of SplitButtonBuilder).HideLabel
-            _builder.HideLabel()
+        Public Function Large(callback As FromControl(Of ControlSize)) As ISplitButtonBuilder Implements ISplitButtonBuilder.Large
+            LargeBase(callback)
             Return Me
         End Function
 
-        Public Function HideLabel(callback As FromControl(Of Boolean)) As SplitButtonBuilder Implements IShowLabel(Of SplitButtonBuilder).HideLabel
-            _builder.HideLabel(callback)
+        Public Function Normal() As ISplitButtonBuilder Implements ISplitButtonBuilder.Normal
+            NormalBase()
             Return Me
         End Function
 
-        Public Function Large() As SplitButtonBuilder Implements ISize(Of SplitButtonBuilder).Large
-            _builder.Large()
+        Public Function Normal(callback As FromControl(Of ControlSize)) As ISplitButtonBuilder Implements ISplitButtonBuilder.Normal
+            NormalBase(callback)
             Return Me
         End Function
 
-        Public Function Large(callback As FromControl(Of ControlSize)) As SplitButtonBuilder Implements ISize(Of SplitButtonBuilder).Large
-            _builder.Large(callback)
+        Private Function InsertBeforeMSO(builtInControl As MSO) As ISplitButtonBuilder Implements ISplitButtonBuilder.InsertBefore
+            InsertBeforeMsoBase(builtInControl)
             Return Me
         End Function
 
-        Public Function Normal() As SplitButtonBuilder Implements ISize(Of SplitButtonBuilder).Normal
-            _builder.Normal()
+        Private Function InsertBeforeQ(qualifiedControl As RibbonElement) As ISplitButtonBuilder Implements ISplitButtonBuilder.InsertBefore
+            InsertBeforeQBase(qualifiedControl)
             Return Me
         End Function
 
-        Public Function Normal(callback As FromControl(Of ControlSize)) As SplitButtonBuilder Implements ISize(Of SplitButtonBuilder).Normal
-            _builder.Normal(callback)
+        Private Function InsertAfterMSO(builtInControl As MSO) As ISplitButtonBuilder Implements ISplitButtonBuilder.InsertAfter
+            InsertAfterMsoBase(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertBeforeMSO(builtInControl As MSO) As SplitButtonBuilder Implements IInsert(Of SplitButtonBuilder).InsertBefore
-            _builder.InsertBefore(builtInControl)
-            Return Me
-        End Function
-
-        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As SplitButtonBuilder Implements IInsert(Of SplitButtonBuilder).InsertBefore
-            _builder.InsertBefore(qualifiedControl)
-            Return Me
-        End Function
-
-        Public Function InsertAfterMSO(builtInControl As MSO) As SplitButtonBuilder Implements IInsert(Of SplitButtonBuilder).InsertAfter
-            _builder.InsertAfter(builtInControl)
-            Return Me
-        End Function
-
-        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As SplitButtonBuilder Implements IInsert(Of SplitButtonBuilder).InsertAfter
-            _builder.InsertAfter(qualifiedControl)
+        Private Function InsertAfterQ(qualifiedControl As RibbonElement) As ISplitButtonBuilder Implements ISplitButtonBuilder.InsertAfter
+            InsertAfterQBase(qualifiedControl)
             Return Me
         End Function
 

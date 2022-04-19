@@ -1,187 +1,144 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.BuilderInterfaces
+Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Containers
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
 Imports stdole
 
 Namespace Builders
-    Public NotInheritable Class GroupBuilder
-        Implements IID(Of GroupBuilder)
-        Implements IInsert(Of GroupBuilder)
-        Implements IVisible(Of GroupBuilder)
-        Implements ILabelScreenTipSuperTip(Of GroupBuilder)
-        Implements IKeyTip(Of GroupBuilder)
-        Implements IImage(Of GroupBuilder)
-
-        Private ReadOnly _builder As ControlBuilder
-        Private ReadOnly _controls As ICollection(Of RibbonElement)
+    Friend NotInheritable Class GroupBuilder
+        Inherits BuilderBase(Of Group)
+        Implements IGroupBuilder
 
         Public Sub New()
-            Dim defaultProvider As IDefaultProvider = New Defaults(Of Group)
-            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
-            attributeGroupBuilder.SetDefaults(defaultProvider)
-            _builder = new ControlBuilder(attributeGroupBuilder)
-            _controls = New List(Of RibbonElement)
-        End Sub
-
-        Public Sub New(template As Group)
-            Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder()
-            attributeGroupBuilder.SetDefaults(template)
-            attributeGroupBuilder.AddID(IdManager.GetID(Of Group)())
-            _builder = New ControlBuilder(attributeGroupBuilder)
-            _controls = New List(Of RibbonElement)
+            MyBase.New()
         End Sub
 
         Public Sub New(template As RibbonElement)
-            Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
-
-            If defaultProvider IsNot Nothing Then
-                Dim templateAttributes As AttributeSet = defaultProvider.GetDefaults()
-                Dim groupAttributes As AttributeSet = New Defaults(Of Group)().GetDefaults()
-                Dim intersection As AttributeSet = New AttributeSet(templateAttributes.Where(Function(a) groupAttributes.Contains(a)))
-                Dim attributeGroupBuilder As AttributeGroupBuilder = New AttributeGroupBuilder(intersection)
-                attributeGroupBuilder.AddID(IdManager.GetID(Of Group)())
-                _builder = New ControlBuilder(attributeGroupBuilder)
-                _controls = New List(Of RibbonElement)
-            Else
-                Throw New ArgumentException($"Could not copy applicable properties of type '{template.GetType().Name}' to type '{GetType(Group)}'")
-            End If
+            MyBase.New(template)
         End Sub
 
-        Public Function Build(Optional tag As Object = Nothing) As Group
-            Return New Group(_controls, _builder.Build(), tag)
-        End Function
-
-        Public Function WithId(id As String) As GroupBuilder Implements IID(Of GroupBuilder).WithId
-            _builder.WithId(id)
+        Public Function WithId(id As String) As IGroupBuilder Implements IGroupBuilder.WithId
+            WithIdBase(id)
             Return Me
         End Function
 
-        Public Function WithIdQ([namespace] As String, id As String) As GroupBuilder Implements IID(Of GroupBuilder).WithIdQ
-            _builder.WithId([namespace], id)
+        Public Function WithIdQ([namespace] As String, id As String) As IGroupBuilder Implements IGroupBuilder.WithIdQ
+            WithIdBase([namespace], id)
             Return Me
         End Function
 
-        Public Function WithIdMso(mso As MSO) As GroupBuilder Implements IID(Of GroupBuilder).WithIdMso
-            _builder.WithId(mso)
+        Public Function WithIdMso(mso As MSO) As IGroupBuilder Implements IGroupBuilder.WithIdMso
+            WithIdBase(mso)
             Return Me
         End Function
 
-        Public Function Visible() As GroupBuilder Implements IVisible(Of GroupBuilder).Visible
-            _builder.Visible()
+        Public Function Visible() As IGroupBuilder Implements IGroupBuilder.Visible
+            VisibleBase()
             Return Me
         End Function
 
-        Public Function Visible(callback As FromControl(Of Boolean)) As GroupBuilder Implements IVisible(Of GroupBuilder).Visible
-            _builder.Visible(callback)
+        Public Function Visible(callback As FromControl(Of Boolean)) As IGroupBuilder Implements IGroupBuilder.Visible
+            VisibleBase(callback)
             Return Me
         End Function
 
-        Public Function Invisible() As GroupBuilder Implements IVisible(Of GroupBuilder).Invisible
-            _builder.Invisible()
+        Public Function Invisible() As IGroupBuilder Implements IGroupBuilder.Invisible
+            InvisibleBase()
             Return Me
         End Function
 
-        Public Function Invisible(callback As FromControl(Of Boolean)) As GroupBuilder Implements IVisible(Of GroupBuilder).Invisible
-            _builder.Invisible(callback)
+        Public Function Invisible(callback As FromControl(Of Boolean)) As IGroupBuilder Implements IGroupBuilder.Invisible
+            InvisibleBase(callback)
             Return Me
         End Function
 
-        Public Function WithKeyTip(keyTip As KeyTip) As GroupBuilder Implements IKeyTip(Of GroupBuilder).WithKeyTip
-            _builder.WithKeyTip(keyTip)
+        Public Function WithKeyTip(keyTip As KeyTip) As IGroupBuilder Implements IGroupBuilder.WithKeyTip
+            KeyTipBase(keyTip)
             Return Me
         End Function
 
-        Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As GroupBuilder Implements IKeyTip(Of GroupBuilder).WithKeyTip
-            _builder.WithKeyTip(keyTip, callback)
+        Public Function WithKeyTip(keyTip As KeyTip, callback As FromControl(Of KeyTip)) As IGroupBuilder Implements IGroupBuilder.WithKeyTip
+            KeyTipBase(keyTip, callback)
             Return Me
         End Function
 
-        Public Function WithImage(image As ImageMSO) As GroupBuilder Implements IImage(Of GroupBuilder).WithImage
-            _builder.WithImage(image)
+        Public Function WithImage(image As ImageMSO) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(image)
             Return Me
         End Function
 
-        Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As GroupBuilder Implements IImage(Of GroupBuilder).WithImage
-            _builder.WithImage(image, callback)
+        Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(image, callback)
             Return Me
         End Function
 
-        Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As GroupBuilder Implements IImage(Of GroupBuilder).WithImage
-            _builder.WithImage(image, callback)
+        Public Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(image, callback)
             Return Me
         End Function
 
-        Public Function WithImage(imagePath As String) As GroupBuilder Implements IImage(Of GroupBuilder).WithImage
-            _builder.WithImage(imagePath)
+        Public Function WithImage(imagePath As String) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(imagePath)
             Return Me
         End Function
 
-        Public Function InsertBeforeMSO(builtInControl As MSO) As GroupBuilder Implements IInsert(Of GroupBuilder).InsertBefore
-            _builder.InsertBefore(builtInControl)
+        Public Function InsertBeforeMSO(builtInControl As MSO) As IGroupBuilder Implements IGroupBuilder.InsertBefore
+            InsertBeforeMsoBase(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As GroupBuilder Implements IInsert(Of GroupBuilder).InsertBefore
-            _builder.InsertBefore(qualifiedControl)
+        Public Function InsertBeforeQ(qualifiedControl As RibbonElement) As IGroupBuilder Implements IGroupBuilder.InsertBefore
+            InsertBeforeQBase(qualifiedControl)
             Return Me
         End Function
 
-        Public Function InsertAfterMSO(builtInControl As MSO) As GroupBuilder Implements IInsert(Of GroupBuilder).InsertAfter
-            _builder.InsertAfter(builtInControl)
+        Public Function InsertAfterMSO(builtInControl As MSO) As IGroupBuilder Implements IGroupBuilder.InsertAfter
+            InsertAfterMsoBase(builtInControl)
             Return Me
         End Function
 
-        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As GroupBuilder Implements IInsert(Of GroupBuilder).InsertAfter
-            _builder.InsertAfter(qualifiedControl)
+        Public Function InsertAfterQ(qualifiedControl As RibbonElement) As IGroupBuilder Implements IGroupBuilder.InsertAfter
+            InsertAfterQBase(qualifiedControl)
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithLabel
-            _builder.WithLabel(label, copyToScreenTip)
+        Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As IGroupBuilder Implements IGroupBuilder.WithLabel
+            LabelBase(label)
+            ShowLabelBase()
+
+            If copyToScreenTip Then ScreentipBase(label)
             Return Me
         End Function
 
-        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithLabel
-            _builder.WithLabel(label, callback, copyToScreenTip)
+        Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As IGroupBuilder Implements IGroupBuilder.WithLabel
+            LabelBase(label, callback)
+            ShowLabelBase()
+
+            If copyToScreenTip Then ScreentipBase(label, callback)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithScreenTip
-            _builder.WithScreentip(screenTip)
+        Public Function WithScreenTip(screenTip As String) As IGroupBuilder Implements IGroupBuilder.WithScreenTip
+            ScreentipBase(screenTip)
             Return Me
         End Function
 
-        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithScreenTip
-            _builder.WithScreentip(screenTip, callback)
+        Public Function WithScreenTip(screenTip As String, callback As FromControl(Of String)) As IGroupBuilder Implements IGroupBuilder.WithScreenTip
+            ScreentipBase(screenTip, callback)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithSuperTip
-            _builder.WithSupertip(superTip)
+        Public Function WithSuperTip(superTip As String) As IGroupBuilder Implements IGroupBuilder.WithSuperTip
+            SupertipBase(superTip)
             Return Me
         End Function
 
-        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As GroupBuilder Implements ILabelScreenTipSuperTip(Of GroupBuilder).WithSuperTip
-            _builder.WithSupertip(superTip, callback)
-            Return Me
-        End Function
-
-        Public Function WithControl(control As RibbonElement) As GroupBuilder
-            _controls.Add(control)
-            Return Me
-        End Function
-
-        Public Function WithControls(ParamArray controls As RibbonElement()) As GroupBuilder
-            For Each control As RibbonElement In controls
-                _controls.Add(control)
-            Next
-            
+        Public Function WithSuperTip(superTip As String, callback As FromControl(Of String)) As IGroupBuilder Implements IGroupBuilder.WithSuperTip
+            SupertipBase(superTip, callback)
             Return Me
         End Function
 
     End Class
 
-End NameSpace
+End Namespace
