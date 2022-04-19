@@ -1,99 +1,98 @@
-﻿Imports RibbonFactory.ControlInterfaces
-Imports stdole
+﻿Imports System.Drawing
+Imports RibbonFactory.BuilderInterfaces.API
+Imports RibbonFactory.Builders
+Imports RibbonFactory.ControlInterfaces
+Imports RibbonFactory.RibbonAttributes
 
 Namespace Controls
 
-	''' <summary>
-	''' Represents an item in a combobox, dropdown, or gallery.
-	''' </summary>
-	Public NotInheritable Class Item
-		Inherits RibbonElement
-		Implements ILabel
-		Implements IScreenTip
-		Implements ISuperTip
-		Implements IImage
+    ''' <summary>
+    ''' Represents an item in a combobox, dropdown, or gallery.
+    ''' </summary>
+    Public NotInheritable Class Item
+        Inherits RibbonElement
+        Implements ILabel
+        Implements IScreenTip
+        Implements ISuperTip
+        Implements IImage
+        Implements IDefaultProvider
 
-		Private _label As String
-		Private _screenTip As String
-		Private _superTip As String
-		Private _image As IPictureDisp
-		Private ReadOnly _synchronizeLabelAndScreenTip As Boolean
+        Private ReadOnly _attributes As AttributeSet
 
-		Friend Sub New(id As String, label As String, screenTip As String, superTip As String, image As IPictureDisp, Optional synchronizeLabelAndScreenTip As Boolean = True, Optional tag As Object = Nothing)
-			MyBase.New(tag)
-			Me.ID = id
-			_label = label
-			_screenTip = screenTip
-			_superTip = superTip
-			_image = image
-			_synchronizeLabelAndScreenTip = synchronizeLabelAndScreenTip
-		End Sub
+        Public Sub New(steps As Action(Of IItemBuilder), Optional tag As Object = Nothing)
+            Me.New(steps, Nothing, tag)
+        End Sub
 
-		Public Overrides ReadOnly Property ID As String
+        Public Sub New(steps As Action(Of IItemBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+            MyBase.New(tag)
 
-		Public Overrides ReadOnly Property XML As String
-			Get
-				Return String.Empty
-			End Get
-		End Property
+            Dim builder As ItemBuilder = If(template Is Nothing, New ItemBuilder(), New ItemBuilder(template))
 
-		Public Property Label As String Implements ILabel.Label
-			Get
-				Return _label
-			End Get
-			Set
-				If Not _label.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
-					_label = Value
+            If steps IsNot Nothing Then
+                steps.Invoke(builder)
+            End If
 
-					If _synchronizeLabelAndScreenTip Then
-						_screenTip = Value
-					End If
+            _attributes = builder.Build()
 
-					RefreshNeeded()
-				End If
-			End Set
-		End Property
+            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
+        End Sub
 
-		Public Property ScreenTip As String Implements IScreenTip.ScreenTip
-			Get
-				Return _screenTip
-			End Get
-			Set
-				If Not _screenTip.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
-					_screenTip = Value
-					RefreshNeeded()
-				End If
-			End Set
-		End Property
+        Public Overrides ReadOnly Property ID As String
+            Get
+                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+            End Get
+        End Property
 
-		Public Property SuperTip As String Implements ISuperTip.SuperTip
-			Get
-				Return _superTip
-			End Get
-			Set
-				If Not _superTip.Equals(Value, StringComparison.OrdinalIgnoreCase) Then
-					_superTip = Value
-					RefreshNeeded()
-				End If
-			End Set
-		End Property
+        Public Overrides ReadOnly Property XML As String
+            Get
+                Return String.Empty
+            End Get
+        End Property
 
-		Public Property Image As IPictureDisp Implements IImage.Image
-			Get
-				Return _image
-			End Get
-			Set
-				If Not ReferenceEquals(_image, Value) Then
-					_image = Value
-					RefreshNeeded()
-				End If
-			End Set
-		End Property
+        Public Property Label As String Implements ILabel.Label
+            Get
+                Return _attributes.Read(Of String)(AttributeCategory.Label)
+            End Get
+            Set
+                _attributes.Write(Value, AttributeCategory.Label)
+            End Set
+        End Property
 
-		Public Shared Function Blank() As Item
-			Return New Item(String.Empty, String.Empty, String.Empty, String.Empty, Nothing, False, Nothing)
-		End Function
+        Public Property ScreenTip As String Implements IScreenTip.ScreenTip
+            Get
+                Return _attributes.Read(Of String)(AttributeCategory.ScreenTip)
+            End Get
+            Set
+                _attributes.Write(Value, AttributeCategory.ScreenTip)
+            End Set
+        End Property
 
-	End Class
+        Public Property SuperTip As String Implements ISuperTip.SuperTip
+            Get
+                Return _attributes.Read(Of String)(AttributeCategory.SuperTip)
+            End Get
+            Set
+                _attributes.Write(Value, AttributeCategory.SuperTip)
+            End Set
+        End Property
+
+        Public Property Image As RibbonImage Implements IImage.Image
+            Get
+                Return _attributes.Read(Of RibbonImage)()
+            End Get
+            Set
+                _attributes.Write(Value)
+            End Set
+        End Property
+
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes
+        End Function
+
+        Public Shared Function Blank() As Item
+            Return New Item(Sub(builder) builder.WithLabel(String.Empty).WithSuperTip(String.Empty).WithImage(New Bitmap(1, 1)))
+        End Function
+
+    End Class
 
 End Namespace

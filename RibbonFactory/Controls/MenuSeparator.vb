@@ -1,4 +1,6 @@
-﻿Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.BuilderInterfaces.API
+Imports RibbonFactory.Builders
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
 
 Namespace Controls
@@ -6,18 +8,29 @@ Namespace Controls
     Public NotInheritable Class MenuSeparator
         Inherits RibbonElement
         Implements ITitle
-        
+        Implements IDefaultProvider
+
         Private ReadOnly _attributes As AttributeSet
-        
-        Friend Sub New(buttonAttributes As AttributeSet, Optional tag As Object = Nothing)
+
+        Public Sub New(configuration As Action(Of IMenuSeparatorBuilder), Optional tag As Object = Nothing)
+            Me.New(Nothing, configuration, tag)
+        End Sub
+
+        Public Sub New(template As RibbonElement, configuration As Action(Of IMenuSeparatorBuilder), Optional tag As Object = Nothing)
             MyBase.New(tag)
-            _attributes = buttonAttributes
+
+            Dim builder As MenuSeparatorBuilder = If(template Is Nothing, New MenuSeparatorBuilder(), New MenuSeparatorBuilder(template))
+
+            configuration.Invoke(builder)
+
+            _attributes = builder.Build()
+
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
-        
+
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -29,13 +42,17 @@ Namespace Controls
 
         Public Property Title As String Implements ITitle.Title
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Title).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.Title)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetTitle).SetValue(value)
+                _attributes.Write(Value, AttributeCategory.Title)
             End Set
         End Property
 
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes.Clone()
+        End Function
+
     End Class
 
-End NameSpace
+End Namespace
