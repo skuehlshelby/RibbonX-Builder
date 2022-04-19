@@ -1,14 +1,13 @@
 ﻿Public MustInherit Class RibbonElement
 	Implements IEquatable(Of RibbonElement)
 
-	Private _refreshAutomatically As Boolean
+	Private _refreshEnabled As Boolean = True
 
 	Protected Sub New(Optional tag As Object = Nothing)
 		Me.Tag = tag
-		_refreshAutomatically = True
 	End Sub
 
-	Public Event ValueChanged(sender As Object, e As ValueChangedEventArgs)
+	Public Event ValueChanged As EventHandler(Of ValueChangedEventArgs)
 
 	Public MustOverride ReadOnly Property ID As String
 
@@ -18,23 +17,38 @@
 
 #Region "Refreshing"
 
-	Public Sub ResumeAutomaticRefreshing(Optional triggerRefreshNow As Boolean = True)
-		_refreshAutomatically = True
-
-		If triggerRefreshNow Then
-			RefreshNeeded()
-		End If
-	End Sub
-
-	Public Sub SuspendAutomaticRefreshing()
-		_refreshAutomatically = False
-	End Sub
-
 	Protected Sub RefreshNeeded()
-		If _refreshAutomatically Then
+		If _refreshEnabled Then
 			RaiseEvent ValueChanged(Me, New ValueChangedEventArgs(ID))
 		End If
 	End Sub
+
+	Public Function RefreshSuspension(Optional refreshOnDispose As Boolean = True) As IDisposable
+		Return New UpdateBlock(Me, refreshOnDispose)
+	End Function
+
+	Private NotInheritable Class UpdateBlock
+		Implements IDisposable
+
+		Private parent As RibbonElement
+		Private refreshOnDispose As Boolean
+
+		Public Sub New(parent As RibbonElement, refreshOnDispose As Boolean)
+			Me.parent = parent
+			Me.refreshOnDispose = refreshOnDispose
+			Me.parent._refreshEnabled = False
+		End Sub
+
+		Private Sub Dispose() Implements IDisposable.Dispose
+			parent._refreshEnabled = True
+
+			If refreshOnDispose Then
+				parent.RefreshNeeded()
+			End If
+
+			parent = Nothing
+		End Sub
+	End Class
 
 #End Region
 
