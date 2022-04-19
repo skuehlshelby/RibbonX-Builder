@@ -11,7 +11,7 @@
     <AssemblyName>UnitTests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -20,6 +20,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -93,8 +94,10 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonTests.vb" />
     <Compile Include="CheckboxTests.vb" />
     <Compile Include="ComboBoxTests.vb" />
+    <Compile Include="Extensions.vb" />
     <Compile Include="GalleryTests.vb" />
     <Compile Include="LabelControlTests.vb" />
     <Compile Include="RandomExtensions.vb" />
@@ -103,6 +106,7 @@
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -114,16 +118,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RibbonAttributeTests.vb" />
     <Compile Include="RibbonTestBase.vb" />
-    <Compile Include="ButtonTests.vb" />
     <Compile Include="DropDownTests.vb" />
     <Compile Include="MenuTests.vb" />
     <Compile Include="DynamicUpdating.vb" />
     <Compile Include="KeyTipTests.vb" />
     <Compile Include="EditBoxTests.vb" />
     <Compile Include="SplitButtonWithTests.vb" />
+    <Compile Include="TestBase.vb" />
     <Compile Include="ToggleButtonTests.vb" />
+    <Compile Include="BoxTests.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
