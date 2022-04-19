@@ -4,10 +4,6 @@
 
 	Private Sub New(value As String)
 		_value = value
-
-		If AddToKeyTipsInUse Then
-			KeyTipsInUse.Add(Me)
-		End If
 	End Sub
 
 	Public Overrides Function ToString() As String
@@ -25,20 +21,6 @@
 	Public Overrides Function GetHashCode() As Integer
 		Return _value.GetHashCode()
 	End Function
-
-	Public Shared Widening Operator CType(value As Integer) As KeyTip
-		Dim baseChars As Char() = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".ToCharArray()
-		Dim radix As Integer = baseChars.Length
-		Dim result As String = String.Empty
-
-		Do
-			value -= 1
-			result = (baseChars(value Mod radix)) & result
-			value \= radix
-		Loop While value > 0
-
-		Return New KeyTip(Validate(result))
-	End Operator
 
 	Public Shared Widening Operator CType(value As String) As KeyTip
 		Return New KeyTip(Validate(value))
@@ -62,26 +44,6 @@
 		End If
 
 		Return value
-	End Function
-
-	Private Shared ReadOnly KeyTipsInUse As ISet(Of KeyTip) = New HashSet(Of KeyTip)()
-
-	Private Shared Seed As Integer = 1
-	Private Shared AddToKeyTipsInUse As Boolean
-
-	Public Shared Function NextAvailable() As KeyTip
-		Try
-			AddToKeyTipsInUse = False
-
-			While KeyTipsInUse.Contains(Seed)
-				Seed += 1
-			End While
-
-		Finally
-			AddToKeyTipsInUse = True
-		End Try
-
-		Return Seed
 	End Function
 
 End Structure
