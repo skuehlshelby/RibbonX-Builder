@@ -15,5 +15,13 @@
             End If
         End Sub
 
+        Public Function NonNull(Of T)(value As T) As T
+            If value Is Nothing Then
+                Throw New ArgumentNullException(NameOf(value), $"Parameter of type '{GetType(T).Name}' is not allowed to be null here.")
+            Else
+                Return value
+            End If
+        End Function
+
     End Module
 End NameSpace
