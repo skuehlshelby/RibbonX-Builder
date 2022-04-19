@@ -4,7 +4,7 @@
 Public Class DropDownTests
     Inherits RibbonTestBase
 
-    Protected Overrides Function CreateRibbon() As Containers.Ribbon
+    Protected Overrides Function CreateRibbon() As Controls.Ribbon
         Return MakeRibbonWithOneTabAndOneGroup(ControlGenerator.MakeDropDown())
     End Function
 

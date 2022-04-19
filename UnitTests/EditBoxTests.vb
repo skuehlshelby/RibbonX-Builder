@@ -2,7 +2,7 @@
 Public Class EditBoxTests
 	Inherits RibbonTestBase
 
-	Protected Overrides Function CreateRibbon() As RibbonFactory.Containers.Ribbon
+	Protected Overrides Function CreateRibbon() As RibbonFactory.Controls.Ribbon
 		Return MakeRibbonWithOneTabAndOneGroup(ControlGenerator.MakeEditBox())
 	End Function
 
