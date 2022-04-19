@@ -1,25 +1,44 @@
-﻿Imports RibbonFactory.ControlInterfaces
+﻿Imports RibbonFactory.BuilderInterfaces.API
+Imports RibbonFactory.Builders
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
 
-Namespace Containers
+Namespace Controls
 
     Public NotInheritable Class Tab
         Inherits Container(Of Group)
         Implements IVisible
         Implements IKeyTip
         Implements ILabel
+        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(groups As ICollection(Of Group), attributes As AttributeSet, Optional tag As Object = Nothing)
+        Public Sub New(ParamArray groups() As Group)
+            Me.New(Nothing, groups)
+        End Sub
+
+        Public Sub New(configuration As Action(Of ITabBuilder), ParamArray groups() As Group)
+            Me.New(configuration, groups, Nothing)
+        End Sub
+
+        Public Sub New(configuration As Action(Of ITabBuilder), groups As ICollection(Of Group), template As RibbonElement, Optional tag As Object = Nothing)
             MyBase.New(groups, tag)
-            _attributes = attributes
+
+            Dim builder As TabBuilder = New TabBuilder(template)
+
+            If configuration IsNot Nothing Then
+                configuration.Invoke(builder)
+            End If
+
+            _attributes = builder.Build()
+
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -43,30 +62,35 @@ Namespace Containers
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
+                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+                _attributes.Write(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeName.Keytip).GetValue()
+                Return _attributes.Read(Of KeyTip)()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
+                _attributes.Write(Value)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
+                _attributes.Write(Value, AttributeCategory.Label)
             End Set
         End Property
 
+        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+            Return _attributes.Clone()
+        End Function
+
     End Class
-End NameSpace
+
+End Namespace

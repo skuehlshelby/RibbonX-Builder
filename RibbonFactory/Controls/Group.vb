@@ -1,9 +1,9 @@
-﻿
+﻿Imports RibbonFactory.BuilderInterfaces.API
+Imports RibbonFactory.Builders
 Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.RibbonAttributes
-Imports stdole
 
-Namespace Containers
+Namespace Controls
 
     Public Class Group
         Inherits Container(Of RibbonElement)
@@ -13,20 +13,35 @@ Namespace Containers
         Implements IImage
         Implements IScreenTip
         Implements ISuperTip
-        Implements IEnumerable(Of RibbonElement)
         Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
 
-        Friend Sub New(controls As ICollection(Of RibbonElement), attributes As AttributeSet, Optional tag As Object = Nothing)
+        Public Sub New(ParamArray controls() As RibbonElement)
+            Me.New(Nothing, controls, Nothing, Nothing)
+        End Sub
+
+        Public Sub New(configuration As Action(Of IGroupBuilder), controls As ICollection(Of RibbonElement), Optional tag As Object = Nothing)
+            Me.New(configuration, controls, Nothing, tag)
+        End Sub
+
+        Public Sub New(configuration As Action(Of IGroupBuilder), controls As ICollection(Of RibbonElement), template As RibbonElement, Optional tag As Object = Nothing)
             MyBase.New(controls, tag)
-            _attributes = attributes
+
+            Dim builder As GroupBuilder = If(template Is Nothing, New GroupBuilder(), New GroupBuilder(template))
+
+            If configuration IsNot Nothing Then
+                configuration.Invoke(builder)
+            End If
+
+            _attributes = builder.Build()
+
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Id).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -42,60 +57,60 @@ Namespace Containers
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Label).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetLabel).SetValue(Value)
+                _attributes.Write(Value, AttributeCategory.Label)
             End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.ReadOnlyLookup(Of Boolean)(AttributeName.Visible).GetValue()
+                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of Boolean)(AttributeName.GetVisible).SetValue(Value)
+                _attributes.Write(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.ReadOnlyLookup(Of KeyTip)(AttributeName.Keytip).GetValue()
+                Return _attributes.Read(Of KeyTip)()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of KeyTip)(AttributeName.GetKeytip).SetValue(Value)
+                _attributes.Write(Value)
             End Set
         End Property
 
-        Public Property Image As IPictureDisp Implements IImage.Image
+        Public Property Image As RibbonImage Implements IImage.Image
             Get
-                Return _attributes.ReadOnlyLookup(Of IPictureDisp)(AttributeName.GetImage).GetValue()
+                Return _attributes.Read(Of RibbonImage)()
             End Get
             Set
-                _attributes.ReadWriteLookup(Of IPictureDisp)(AttributeName.GetImage).SetValue(Value)
+                _attributes.Write(Value)
             End Set
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Screentip).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.ScreenTip)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetScreentip).SetValue(Value)
+                _attributes.Write(Value, AttributeCategory.ScreenTip)
             End Set
         End Property
 
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.ReadOnlyLookup(Of String)(AttributeName.Supertip).GetValue()
+                Return _attributes.Read(Of String)(AttributeCategory.SuperTip)
             End Get
             Set
-                _attributes.ReadWriteLookup(Of String)(AttributeName.GetSupertip).SetValue(Value)
+                _attributes.Write(Value, AttributeCategory.SuperTip)
             End Set
         End Property
 
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
-            Return _attributes
+            Return _attributes.Clone()
         End Function
 
     End Class
