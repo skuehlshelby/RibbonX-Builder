@@ -8,5 +8,7 @@
         ''' </summary>
         ''' <returns>A <c>Boolean</c> value indicating whether or not the control is enabled.</returns>
         Property Enabled As Boolean
+
     End Interface
+
 End NameSpace
