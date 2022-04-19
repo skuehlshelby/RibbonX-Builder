@@ -2,7 +2,7 @@
 
     Public Interface IMaxLength
 
-        ReadOnly Property MaxLength As Integer
+        ReadOnly Property MaxLength As Byte
 
     End Interface
 
