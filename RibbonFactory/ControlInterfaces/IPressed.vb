@@ -1,5 +1,5 @@
 ﻿Namespace ControlInterfaces
     Public Interface IPressed
-        Property Pressed As Boolean
+        Property Checked As Boolean
     End Interface
 End NameSpace
