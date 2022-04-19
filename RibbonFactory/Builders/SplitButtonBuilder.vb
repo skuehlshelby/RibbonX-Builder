@@ -1,5 +1,5 @@
 ﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Containers
+Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.MSO
 

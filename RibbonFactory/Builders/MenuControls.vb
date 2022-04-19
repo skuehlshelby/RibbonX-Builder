@@ -2,37 +2,43 @@
 
 Namespace Builders
 
-    Public Class ButtonGroupControls
+    Public Class MenuControls
+
         Implements IEnumerable(Of RibbonElement)
 
-        Private ReadOnly items As LinkedList(Of RibbonElement)
+        Private ReadOnly items As LinkedList(Of RibbonElement) = New LinkedList(Of RibbonElement)()
 
-        Public Function Add(ParamArray controls() As Button) As ButtonGroupControls
+        Public Function Add(ParamArray controls() As Button) As MenuControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))
             Return Me
         End Function
 
-        Public Function Add(ParamArray controls() As Gallery) As ButtonGroupControls
+        Public Function Add(ParamArray controls() As CheckBox) As MenuControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))
             Return Me
         End Function
 
-        Public Function Add(ParamArray controls() As Menu) As ButtonGroupControls
+        Public Function Add(ParamArray controls() As Gallery) As MenuControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))
             Return Me
         End Function
 
-        Public Function Add(ParamArray controls() As Separator) As ButtonGroupControls
+        Public Function Add(ParamArray controls() As Menu) As MenuControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))
             Return Me
         End Function
 
-        Public Function Add(ParamArray controls() As SplitButton) As ButtonGroupControls
+        Public Function Add(ParamArray controls() As MenuSeparator) As MenuControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))
             Return Me
         End Function
 
-        Public Function Add(ParamArray controls() As ToggleButton) As ButtonGroupControls
+        Public Function Add(ParamArray controls() As SplitButton) As MenuControls
+            Array.ForEach(controls, Sub(c) items.AddLast(c))
+            Return Me
+        End Function
+
+        Public Function Add(ParamArray controls() As ToggleButton) As MenuControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))
             Return Me
         End Function

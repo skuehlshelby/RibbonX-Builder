@@ -1,13 +1,9 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Containers
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
 Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities
 Imports stdole
 
 Namespace Builders

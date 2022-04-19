@@ -1,5 +1,4 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.BuilderInterfaces
 Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Controls.Events
