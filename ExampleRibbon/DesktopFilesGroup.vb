@@ -1,19 +1,18 @@
 ﻿Imports System.Drawing
 Imports System.IO
 Imports RibbonFactory
-Imports RibbonFactory.Builders
-Imports RibbonFactory.Containers
+Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Controls
 
 Public Class DesktopFilesGroup
-    
+
     Private ReadOnly _dropDown As DropDown
     Private ReadOnly _openButton As Button
-    Private Readonly _fileWatcher As FileSystemWatcher
+    Private ReadOnly _fileWatcher As FileSystemWatcher
 
     Public Sub New(ribbon As ICreateCallbacks)
         _fileWatcher = New FileSystemWatcher(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))
-        
+
         With _fileWatcher
             .EnableRaisingEvents = True
             AddHandler .Created, AddressOf OnFileChanged
@@ -21,17 +20,17 @@ Public Class DesktopFilesGroup
             AddHandler .Deleted, AddressOf OnFileChanged
         End With
 
-        _openButton = New ButtonBuilder().
+        Dim openButtonConfiguration As Action(Of IButtonBuilder) = Sub(bb) bb.
             Large().
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
             WithImage(Enums.ImageMSO.Common.FileOpen).
             OnClick(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName)).
-            WithClickCallback(AddressOf ribbon.OnAction).
-            Build()
+            RouteClickTo(AddressOf ribbon.OnAction)
 
-        _dropDown = New DropDownBuilder().
-            Add(New ButtonBuilder(_openButton).Build()).
+        _openButton = New Button(openButtonConfiguration)
+
+        _dropDown = New DropDown(Sub(ddb) ddb.
             WithScreenTip("Desktop Files").
             WithSuperTip("The files on your desktop.").
             AsWideAs("A DropDown This Big").
@@ -41,12 +40,14 @@ Public Class DesktopFilesGroup
             GetItemLabelFrom(AddressOf ribbon.GetItemLabel).
             GetItemSuperTipFrom(AddressOf ribbon.GetItemSuperTip).
             GetItemScreenTipFrom(AddressOf ribbon.GetItemScreenTip).
-            GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex, AddressOf ribbon.OnSelectionChange).
-            Build()
+            GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex, AddressOf ribbon.OnSelectionChange),
+                                 buttons:={New Button(openButtonConfiguration)})
 
-        For Each file As FileInfo In GetFilesOnDesktop()
-            _dropDown.Add(ConvertFileToDropDownItem(file))
-        Next
+        Using _dropDown.RefreshSuspension()
+            For Each file As FileInfo In GetFilesOnDesktop()
+                _dropDown.Add(ConvertFileToDropDownItem(file))
+            Next
+        End Using
     End Sub
 
     Private Sub OnFileChanged(sender As Object, e As FileSystemEventArgs)
@@ -64,11 +65,11 @@ Public Class DesktopFilesGroup
                 For Each item As Item In _dropDown
                     If Not DirectCast(item.Tag, FileInfo).Exists Then
                         With item
-                            .SuspendAutomaticRefreshing()
-                            .Label = e.Name
-                            .ScreenTip = e.Name
-                            .SuperTip = e.FullPath
-                            .ResumeAutomaticRefreshing()
+                            Using updateBlock As IDisposable = .RefreshSuspension()
+                                .Label = e.Name
+                                .ScreenTip = e.Name
+                                .SuperTip = e.FullPath
+                            End Using
                         End With
                         Exit For
                     End If
@@ -77,18 +78,9 @@ Public Class DesktopFilesGroup
     End Sub
 
     Public Function AsGroup() As Group
-        Dim label As LabelControl = New LabelControlBuilder().
-            WithLabel("        Desktop Files:").
-            Build()
+        Dim label As LabelControl = New LabelControl(Sub(lcb) lcb.WithLabel("        Desktop Files:"))
 
-        Dim separator As Separator = New SeparatorBuilder().
-            Invisible().
-            Build()
-
-        Return New GroupBuilder().
-                WithControls(_openButton, separator, BoxBuilder.Vertical(label, _dropDown)).
-                WithLabel("Desktop Files").
-                Build()
+        Return New Group(Sub(gb) gb.WithLabel("Desktop Files"), {_openButton, Separator.CreateInvisible(), Box.Vertical(label, _dropDown)})
     End Function
 
     Private Shared Function GetFilesOnDesktop() As IEnumerable(Of FileInfo)
@@ -102,11 +94,10 @@ Public Class DesktopFilesGroup
     End Function
 
     Private Shared Function ConvertFileToDropDownItem(file As FileSystemInfo) As Item
-        Return New ItemBuilder().
+        Return New Item(Sub(ib) ib.
             WithLabel(file.Name).
             WithSuperTip(file.FullName).
-            WithImage(Icon.ExtractAssociatedIcon(file.FullName)).
-            Build(file)
+            WithImage(Icon.ExtractAssociatedIcon(file.FullName)), file)
     End Function
 
     Private Shared Sub OpenFile(path As String)
