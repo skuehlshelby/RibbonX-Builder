@@ -105,7 +105,6 @@ Namespace Builders
 
         Public Function WithLabel(label As String, Optional copyToScreenTip As Boolean = True) As IGroupBuilder Implements IGroupBuilder.WithLabel
             LabelBase(label)
-            ShowLabelBase()
 
             If copyToScreenTip Then ScreentipBase(label)
             Return Me
@@ -113,7 +112,6 @@ Namespace Builders
 
         Public Function WithLabel(label As String, callback As FromControl(Of String), Optional copyToScreenTip As Boolean = True) As IGroupBuilder Implements IGroupBuilder.WithLabel
             LabelBase(label, callback)
-            ShowLabelBase()
 
             If copyToScreenTip Then ScreentipBase(label, callback)
             Return Me
