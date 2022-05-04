@@ -32,7 +32,7 @@ Namespace RibbonAttributes
 		End Function
 
 		Public Sub SetValue(value As T) Implements IRibbonAttributeReadWrite(Of T).SetValue
-			If Not _value.Value.Equals(value) Then
+			If Not Equals(_value.Value, value) Then
 				_value.Value = value
 				RaiseEvent ValueChanged()
 			End If
