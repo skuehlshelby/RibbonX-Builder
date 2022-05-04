@@ -56,7 +56,7 @@ Namespace RibbonAttributes
                         defaults.Add(New RibbonAttributeInvocationList(Of BeforeToggleChangeEventArgs)(AttributeName.BeforeToggle, AttributeCategory.BeforeToggle))
                         defaults.Add(New RibbonAttributeInvocationList(Of ToggleChangeEventArgs)(AttributeName.OnToggle, AttributeCategory.OnToggle))
                     Case GetType(ISelect)
-                        defaults.Add(New RibbonAttributeDefault(Of Item)(Item.Blank(), AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
+                        defaults.Add(New RibbonAttributeDefault(Of Item)(Nothing, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
                         defaults.Add(New RibbonAttributeInvocationList(Of BeforeSelectionChangeEventArgs)(AttributeName.BeforeSelectionChange, AttributeCategory.BeforeSelectionChange))
                         defaults.Add(New RibbonAttributeInvocationList(Of SelectionChangeEventArgs)(AttributeName.OnSelectionChange, AttributeCategory.OnSelectionChange))
                     Case GetType(IItemDimensions)
