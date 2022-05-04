@@ -1,5 +1,4 @@
 ﻿Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls
 Imports RibbonFactory.Controls.Events
 
 <TestClass()>

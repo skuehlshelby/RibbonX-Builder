@@ -3,7 +3,6 @@ Imports Microsoft.Office.Core
 Imports RibbonFactory
 Imports RibbonFactory.Controls
 Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Controls
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Utilities.Testing
 Imports stdole

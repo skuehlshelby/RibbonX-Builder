@@ -1,7 +1,6 @@
 ﻿Imports System.Drawing
 Imports RibbonFactory
 Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls
 Imports RibbonFactory.Controls.Events
 Imports RibbonFactory.Enums
 Imports RibbonFactory.Enums.ImageMSO
