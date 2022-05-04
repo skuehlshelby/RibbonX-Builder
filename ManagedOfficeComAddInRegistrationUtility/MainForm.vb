@@ -1,14 +1,14 @@
 ﻿Imports System.Drawing
-Imports System.Drawing.Text
-Imports System.IO
-Imports System.Reflection
 Imports System.Windows.Forms
 
 Public NotInheritable Class MainForm
 	Inherits Form
 	Implements IDisposable
 
-	Private ReadOnly tabControl As TabControl
+
+	Private ReadOnly addPanel As TableLayoutPanel
+	Private ReadOnly removePanel As TableLayoutPanel
+	Private ReadOnly topPanel As TableLayoutPanel
 	Private ReadOnly bottomPanel As TableLayoutPanel
 	Private ReadOnly buttons As ICollection(Of Button)
 	Private ReadOnly labels As ICollection(Of Label)
@@ -36,48 +36,61 @@ Public NotInheritable Class MainForm
 			Color.FromArgb(218, 0, 55),
 			Color.FromArgb(237, 237, 237))
 
-		bottomPanel = New TableLayoutPanel()
-		tabControl = New TabControl()
+		Font = New Font("Montserrat", 12.0!, FontStyle.Regular)
 
 		buttons = New Button() {
 			New Button() With {.Text = "OK", .Name = "OK"},
 			New Button() With {.Text = "Cancel", .Name = "Cancel"}
 		}
 
-		labels = New Label() {}
+		labels = New Label() {
+			New Label() With {.Text = "Register", .Name = "Register", .ForeColor = palette.Foreground},
+			New Label() With {.Text = "Un-Register", .Name = "Un-Register", .ForeColor = palette.Foreground}
+		}
 
-		bottomPanel.SuspendLayout()
-		tabControl.SuspendLayout()
-		SuspendLayout()
+		topPanel = New TableLayoutPanel()
+		topPanel.SuspendLayout()
 
-		With tabControl
-			.Dock = DockStyle.Fill
-			.DrawMode = TabDrawMode.OwnerDrawFixed
-			AddHandler .DrawItem, AddressOf OnTabControlDrawItem
+		With topPanel
+			.RowCount = 3
+			.ColumnCount = 5
 
-			With .TabPages
-				.Add("Register")
-				.Add("Un-Register")
+			With .ColumnStyles
+				.Add(New ColumnStyle(SizeType.Percent, 10.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 35.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 10.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 35.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 10.0!))
 			End With
 
-			For Each tab As TabPage In .TabPages
-				With tab
-					.BackColor = palette.Background
-					.ForeColor = palette.Foreground
-				End With
-			Next
+			With .RowStyles
+				.Add(New RowStyle(SizeType.Percent, 33.3!))
+				.Add(New RowStyle(SizeType.Percent, 33.3!))
+				.Add(New RowStyle(SizeType.Percent, 33.3!))
+			End With
+
+			With .Controls
+				.Add(labels.First(), 1, 1)
+				.Add(labels.Last(), 3, 1)
+			End With
+
+			.Dock = DockStyle.Top
 		End With
+
+		bottomPanel = New TableLayoutPanel()
+		bottomPanel.SuspendLayout()
+		SuspendLayout()
 
 		With bottomPanel
 			.RowCount = 3
 			.ColumnCount = 5
 
 			With .ColumnStyles
-				.Add(New ColumnStyle(SizeType.Percent, 10!))
-				.Add(New ColumnStyle(SizeType.Percent, 35!))
-				.Add(New ColumnStyle(SizeType.Percent, 10!))
-				.Add(New ColumnStyle(SizeType.Percent, 35!))
-				.Add(New ColumnStyle(SizeType.Percent, 10!))
+				.Add(New ColumnStyle(SizeType.Percent, 10.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 35.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 10.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 35.0!))
+				.Add(New ColumnStyle(SizeType.Percent, 10.0!))
 			End With
 
 			With .RowStyles
@@ -103,7 +116,6 @@ Public NotInheritable Class MainForm
 				.BackColor = palette.BackgroundMuted
 				.ForeColor = palette.Foreground
 				.UseVisualStyleBackColor = False
-				.Font = New Font("Montserrat", 12.0!, FontStyle.Regular)
 			End With
 		Next
 
@@ -111,27 +123,17 @@ Public NotInheritable Class MainForm
 		AddHandler cancel.Click, AddressOf OnCancel
 		CancelButton = cancel
 
-		AutoScaleDimensions = New SizeF(6!, 13!)
+		AutoScaleDimensions = New SizeF(6.0!, 13.0!)
 		AutoScaleMode = AutoScaleMode.Font
 		BackColor = palette.Background
 		ClientSize = New Size(800, 450)
 		Controls.Add(bottomPanel)
-		Controls.Add(tabControl)
+		Controls.Add(topPanel)
 		Name = "Main Form"
 		Text = "COM Registration Utility"
+		topPanel.ResumeLayout(False)
 		bottomPanel.ResumeLayout(False)
-		tabControl.ResumeLayout(False)
 		ResumeLayout(False)
-    End Sub
-
-	Private Sub OnTabControlDrawItem(sender As Object, e As DrawItemEventArgs)
-		Dim page As TabPage = tabControl.TabPages(e.Index)
-		e.Graphics.FillRectangle(new SolidBrush(palette.Background), e.Bounds)
-
-		Dim paddedBounds As Rectangle = e.Bounds
-		dim yOffset As Integer  = If(e.State = DrawItemState.Selected, -2 , 1)
-		paddedBounds.Offset(1, yOffset)
-		TextRenderer.DrawText(e.Graphics, page.Text, e.Font, paddedBounds, palette.Foreground)
 	End Sub
 
 	Private Sub OnCancel(sender As Object, e As EventArgs)
