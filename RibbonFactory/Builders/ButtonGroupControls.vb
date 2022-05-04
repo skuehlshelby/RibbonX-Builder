@@ -5,7 +5,7 @@ Namespace Builders
     Public Class ButtonGroupControls
         Implements IEnumerable(Of RibbonElement)
 
-        Private ReadOnly items As LinkedList(Of RibbonElement)
+        Private ReadOnly items As LinkedList(Of RibbonElement) = New LinkedList(Of RibbonElement)
 
         Public Function Add(ParamArray controls() As Button) As ButtonGroupControls
             Array.ForEach(controls, Sub(c) items.AddLast(c))

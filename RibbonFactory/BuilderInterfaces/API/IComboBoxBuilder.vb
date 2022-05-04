@@ -23,8 +23,8 @@ Namespace BuilderInterfaces.API
         Inherits IShowItemImage(Of IComboBoxBuilder)
 
         Function WithText(text As String, getText As FromControl(Of String), setText As TextChanged) As IComboBoxBuilder
-        Function BeforeTextChange(ParamArray actions() As Action(Of BeforeTextChangeEventArgs)) As IComboBoxBuilder
-        Function OnTextChange(ParamArray actions() As Action(Of TextChangeEventArgs)) As IComboBoxBuilder
+        Function BeforeTextChange(ParamArray actions() As EventHandler(Of BeforeTextChangeEventArgs)) As IComboBoxBuilder
+        Function OnTextChange(ParamArray actions() As EventHandler(Of TextChangeEventArgs)) As IComboBoxBuilder
     End Interface
 
 End Namespace

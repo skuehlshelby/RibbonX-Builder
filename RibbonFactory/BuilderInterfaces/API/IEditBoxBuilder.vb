@@ -15,8 +15,8 @@ Namespace BuilderInterfaces.API
         Inherits ISizeString(Of IEditBoxBuilder)
 
         Function WithText(text As String, getText As FromControl(Of String), setText As TextChanged) As IEditBoxBuilder
-        Function BeforeTextChange(ParamArray actions() As Action(Of BeforeTextChangeEventArgs)) As IEditBoxBuilder
-        Function AfterTextChange(ParamArray actions() As Action(Of TextChangeEventArgs)) As IEditBoxBuilder
+        Function BeforeTextChange(ParamArray actions() As EventHandler(Of BeforeTextChangeEventArgs)) As IEditBoxBuilder
+        Function AfterTextChange(ParamArray actions() As EventHandler(Of TextChangeEventArgs)) As IEditBoxBuilder
 
     End Interface
 

@@ -256,12 +256,12 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function BeforeTextChange(ParamArray actions() As Action(Of BeforeTextChangeEventArgs)) As IComboBoxBuilder Implements IComboBoxBuilder.BeforeTextChange
+        Private Function BeforeTextChange(ParamArray actions() As EventHandler(Of BeforeTextChangeEventArgs)) As IComboBoxBuilder Implements IComboBoxBuilder.BeforeTextChange
             AddBeforeTextChangeHandlers(actions)
             Return Me
         End Function
 
-        Private Function OnTextChange(ParamArray actions() As Action(Of TextChangeEventArgs)) As IComboBoxBuilder Implements IComboBoxBuilder.OnTextChange
+        Private Function OnTextChange(ParamArray actions() As EventHandler(Of TextChangeEventArgs)) As IComboBoxBuilder Implements IComboBoxBuilder.OnTextChange
             AddOnTextChangeHandlers(actions)
             Return Me
         End Function

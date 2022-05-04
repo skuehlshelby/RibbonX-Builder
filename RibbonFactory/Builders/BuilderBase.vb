@@ -351,14 +351,14 @@ Namespace Builders
                             New List(Of EventHandler)(FromElements(handlers)), AttributeName.OnClick, AttributeCategory.OnClick))
         End Sub
 
-        Protected Sub AddBeforeTextChangeHandlers(handlers As IEnumerable(Of Action(Of BeforeTextChangeEventArgs)))
+        Protected Sub AddBeforeTextChangeHandlers(handlers As IEnumerable(Of EventHandler(Of BeforeTextChangeEventArgs)))
             _attributes.Add(New RibbonAttributeInvocationList(Of BeforeTextChangeEventArgs)(
-                            New List(Of EventHandler(Of BeforeTextChangeEventArgs))(FromEventArgs(handlers)), AttributeName.BeforeTextChange, AttributeCategory.BeforeTextChange))
+                            New List(Of EventHandler(Of BeforeTextChangeEventArgs))(handlers), AttributeName.BeforeTextChange, AttributeCategory.BeforeTextChange))
         End Sub
 
-        Protected Sub AddOnTextChangeHandlers(handlers As IEnumerable(Of Action(Of TextChangeEventArgs)))
+        Protected Sub AddOnTextChangeHandlers(handlers As IEnumerable(Of EventHandler(Of TextChangeEventArgs)))
             _attributes.Add(New RibbonAttributeInvocationList(Of TextChangeEventArgs)(
-                            New List(Of EventHandler(Of TextChangeEventArgs))(FromEventArgs(handlers)), AttributeName.OnTextChange, AttributeCategory.OnTextChange))
+                            New List(Of EventHandler(Of TextChangeEventArgs))(handlers), AttributeName.OnTextChange, AttributeCategory.OnTextChange))
         End Sub
 
         Protected Sub AddBeforeToggleHandlers(handlers As IEnumerable(Of Action(Of BeforeToggleChangeEventArgs)))
@@ -415,13 +415,13 @@ Namespace Builders
 #Region "Selected Item"
 
         Protected Sub SelectedBase(getSelected As FromControl(Of String), setSelected As SelectionChanged)
-            Dim wrapped As ValueWrapper(Of Item) = New ValueWrapper(Of Item)(Item.Blank())
+            Dim wrapped As ValueWrapper(Of Item) = New ValueWrapper(Of Item)(Nothing)
             _attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, getSelected.Method.Name, AttributeName.GetSelectedItemID, AttributeCategory.SelectedItemPosition))
             _attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, setSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
         End Sub
 
         Protected Sub SelectedBase(getSelected As FromControl(Of Integer), setSelected As SelectionChanged)
-            Dim wrapped As ValueWrapper(Of Item) = New ValueWrapper(Of Item)(Item.Blank())
+            Dim wrapped As ValueWrapper(Of Item) = New ValueWrapper(Of Item)(Nothing)
             _attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, getSelected.Method.Name, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
             _attributes.Add(New RibbonAttributeWrappedValue(Of Item)(wrapped, setSelected.Method.Name, AttributeName.OnAction, AttributeCategory.OnAction))
         End Sub

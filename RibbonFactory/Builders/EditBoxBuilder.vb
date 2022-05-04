@@ -194,12 +194,12 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function BeforeTextChange(ParamArray actions() As Action(Of BeforeTextChangeEventArgs)) As IEditBoxBuilder Implements IEditBoxBuilder.BeforeTextChange
+        Private Function BeforeTextChange(ParamArray actions() As EventHandler(Of BeforeTextChangeEventArgs)) As IEditBoxBuilder Implements IEditBoxBuilder.BeforeTextChange
             AddBeforeTextChangeHandlers(actions)
             Return Me
         End Function
 
-        Private Function AfterTextChange(ParamArray actions() As Action(Of TextChangeEventArgs)) As IEditBoxBuilder Implements IEditBoxBuilder.AfterTextChange
+        Private Function AfterTextChange(ParamArray actions() As EventHandler(Of TextChangeEventArgs)) As IEditBoxBuilder Implements IEditBoxBuilder.AfterTextChange
             AddOnTextChangeHandlers(actions)
             Return Me
         End Function
