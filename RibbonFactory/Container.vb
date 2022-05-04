@@ -20,9 +20,9 @@ Public MustInherit Class Container(Of TRibbonElement As RibbonElement)
 
         For Each item As RibbonElement In Items
             If item.GetType().IsDerivedFromGenericType(genericContainer) Then
-                Dim method As MethodBase = item.GetType().GetMethod("Flatten", BindingFlags.Instance Or BindingFlags.NonPublic)
+                Dim method As MethodBase = item.GetType().GetMethod(NameOf(Flatten), BindingFlags.Instance Or BindingFlags.NonPublic)
 
-                method.Invoke(item, New Object() {results})
+                method.Invoke(item, {results})
             Else
                 results.Add(item)
             End If

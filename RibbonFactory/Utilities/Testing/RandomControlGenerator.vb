@@ -463,11 +463,11 @@ Public NotInheritable Class RandomControlGenerator
     End Function
 
     Public Function MakeDropDown() As DropDown
-        Return MakeControl(Function(e) New DropDown(e, Sub() Return))
+        Return MakeControl(Function(e) New DropDown(Sub() Return, e))
     End Function
 
     Public Function MakeGallery() As Gallery
-        Return MakeControl(Function(e) New Gallery(e, Sub() Return, Nothing))
+        Return MakeControl(Function(e) New Gallery(Sub() Return, Nothing, e))
     End Function
 
     Public Function MakeMenu() As Menu
