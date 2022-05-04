@@ -26,7 +26,7 @@ Namespace Controls
         Public Sub New(steps As Action(Of IItemBuilder), template As RibbonElement, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
-            Dim builder As ItemBuilder = If(template Is Nothing, New ItemBuilder(), New ItemBuilder(template))
+            Dim builder As ItemBuilder = New ItemBuilder(template)
 
             If steps IsNot Nothing Then
                 steps.Invoke(builder)
