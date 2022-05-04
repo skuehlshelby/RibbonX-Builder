@@ -30,11 +30,15 @@ Namespace Controls
         Private ReadOnly _beforeSelectionChangeEventManager As EventManager(Of BeforeSelectionChangeEventArgs)
         Private ReadOnly _selectionChangedEventManager As EventManager(Of SelectionChangeEventArgs)
 
-        Public Sub New(configuration As Action(Of IGalleryBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
-            Me.New(Nothing, configuration, buttons, tag)
+        Public Sub New(configuration As Action(Of IGalleryBuilder), Optional tag As Object = Nothing)
+            Me.New(configuration, Nothing, Nothing, tag)
         End Sub
 
-        Public Sub New(template As RibbonElement, configuration As Action(Of IGalleryBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
+        Public Sub New(configuration As Action(Of IGalleryBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
+            Me.New(configuration, buttons, Nothing, tag)
+        End Sub
+
+        Public Sub New(configuration As Action(Of IGalleryBuilder), buttons As ICollection(Of Button), template As RibbonElement, Optional tag As Object = Nothing)
             MyBase.New(New List(Of Item), tag)
 
             Dim builder As GalleryBuilder = New GalleryBuilder(template)
@@ -304,7 +308,7 @@ Namespace Controls
 
         Public Property SelectedItemIndex As Integer Implements ISelect.SelectedItemIndex
             Get
-                Return Items.IndexOf(Selected)
+                Return Math.Max(Items.IndexOf(Selected), 0)
             End Get
             Set
                 Selected = Items(Value)

@@ -13,24 +13,22 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(steps As Action(Of IButtonGroupBuilder), items As ButtonGroupControls, Optional tag As Object = Nothing)
-            MyBase.New(items.ToArray(), tag)
-
-            Dim builder As ButtonGroupBuilder = New ButtonGroupBuilder
-
-            steps.Invoke(builder)
-
-            _attributes = builder.Build()
-
-            AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
+        Public Sub New(items As ButtonGroupControls, Optional tag As Object = Nothing)
+            Me.New(Nothing, items, Nothing, tag)
         End Sub
 
-        Public Sub New(template As RibbonElement, steps As Action(Of IButtonGroupBuilder), items As ButtonGroupControls, Optional tag As Object = Nothing)
-            MyBase.New(items.ToArray(), tag)
+        Public Sub New(steps As Action(Of IButtonGroupBuilder), items As ButtonGroupControls, Optional tag As Object = Nothing)
+            Me.New(steps, items, Nothing, tag)
+        End Sub
+
+        Public Sub New(steps As Action(Of IButtonGroupBuilder), items As ButtonGroupControls, template As RibbonElement, Optional tag As Object = Nothing)
+            MyBase.New(If(items Is Nothing, Array.Empty(Of RibbonElement)(), items.ToArray()), tag)
 
             Dim builder As ButtonGroupBuilder = New ButtonGroupBuilder(template)
 
-            steps.Invoke(builder)
+            If steps IsNot Nothing Then
+                steps.Invoke(builder)
+            End If
 
             _attributes = builder.Build()
 

@@ -27,18 +27,18 @@ Namespace Controls
         Private ReadOnly _selectionChangedEventManager As EventManager(Of SelectionChangeEventArgs)
 
         Public Sub New(steps As Action(Of IDropdownBuilder), Optional tag As Object = Nothing)
-            Me.New(Nothing, steps, Array.Empty(Of Button)(), tag)
+            Me.New(steps, Nothing, Nothing, tag)
         End Sub
 
         Public Sub New(steps As Action(Of IDropdownBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
-            Me.New(Nothing, steps, buttons, tag)
+            Me.New(steps, buttons, Nothing, tag)
         End Sub
 
-        Public Sub New(template As RibbonElement, steps As Action(Of IDropdownBuilder), Optional tag As Object = Nothing)
-            Me.New(template, steps, Array.Empty(Of Button)(), tag)
+        Public Sub New(steps As Action(Of IDropdownBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+            Me.New(steps, Nothing, template, tag)
         End Sub
 
-        Public Sub New(template As RibbonElement, configuration As Action(Of IDropdownBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
+        Public Sub New(configuration As Action(Of IDropdownBuilder), buttons As ICollection(Of Button), template As RibbonElement, Optional tag As Object = Nothing)
             MyBase.New(New List(Of Item)(), tag)
 
             Dim builder As DropDownBuilder = New DropDownBuilder(template)
@@ -51,7 +51,7 @@ Namespace Controls
 
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
 
-            Me.Buttons = buttons
+            Me.Buttons = If(buttons, Array.Empty(Of Button)())
 
             _beforeSelectionChangeEventManager = New EventManager(Of BeforeSelectionChangeEventArgs)($"{NameOf(DropDown)}.{NameOf(BeforeSelectionChange)}")
             _selectionChangedEventManager = New EventManager(Of SelectionChangeEventArgs)($"{NameOf(DropDown)}.{NameOf(SelectionChanged)}")
@@ -117,7 +117,11 @@ Namespace Controls
 
         Protected Overrides Sub AfterAdd(item As Item)
             AddHandler item.ValueChanged, AddressOf OnChildItemChange
-            Selected = If(Selected, item)
+
+            If Selected Is Nothing Then
+                Selected = item
+            End If
+
             RefreshNeeded()
         End Sub
 
@@ -274,7 +278,7 @@ Namespace Controls
 
         Public Property SelectedItemIndex As Integer Implements ISelect.SelectedItemIndex
             Get
-                Return Items.IndexOf(Selected)
+                Return Math.Max(Items.IndexOf(Selected), 0)
             End Get
             Set
                 Selected = Items(Value)
