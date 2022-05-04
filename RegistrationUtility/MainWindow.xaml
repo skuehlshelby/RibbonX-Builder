@@ -1,0 +1,153 @@
+﻿<Window x:Class="RegistrationUtility.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RegistrationUtility" d:DataContext="{d:DesignInstance Type=local:ViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" MinHeight="650" Width="920" MinWidth="920">
+
+    <Grid Background="#2B2E4A">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.88*"/>
+            <RowDefinition Height="0.12*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.Resources>
+            <Style x:Key="NoMouseOverEffect" TargetType="Button">
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="ToolTip">
+                <Style.Resources>
+                    <Style TargetType="ContentPresenter">
+                        <Style.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </Style.Resources>
+                    </Style>
+                </Style.Resources>
+                <Setter Property="MaxWidth" Value="500" />
+            </Style>
+        </Grid.Resources>
+
+        <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="20 20 20 100" >
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.15*"/>
+                <ColumnDefinition Width="0.85*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20 20 0 20">
+                <TextBlock Grid.Row="0" Foreground="#E84545" FontWeight="Bold">
+                    DLL:
+                </TextBlock >
+            </Label>
+            <Label Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20 20 0 20">
+                <TextBlock Grid.Row="0" Foreground="#E84545" FontWeight="Bold">
+                    Connection Class:
+                </TextBlock >
+            </Label>
+            <Label Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20 20 0 20">
+                <TextBlock Grid.Row="0" Foreground="#E84545" FontWeight="Bold">
+                    Host Application:
+                </TextBlock >
+            </Label>
+            <Label Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20 20 0 20">
+                <TextBlock Grid.Row="0" Foreground="#E84545" FontWeight="Bold">
+                    Load Behavior:
+                </TextBlock >
+            </Label>
+            <Label Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20 20 0 20">
+                <TextBlock Grid.Row="0" Foreground="#E84545" FontWeight="Bold">
+                    Friendly Name:
+                </TextBlock >
+            </Label>
+            <Label Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="20 20 0 20">
+                <TextBlock Grid.Row="0" Foreground="#E84545" FontWeight="Bold">
+                    Description:
+                </TextBlock >
+            </Label>
+
+            <DockPanel Grid.Row="0" Grid.Column="1" Margin="20" Background="#E84545" MouseEnter="DLLTextBox_MouseEnter" MouseLeave="DLLTextBox_MouseLeave">
+                <ToolTipService.ToolTip>
+                    The DLL which contains the type(s) to be registered or un-registered.
+                </ToolTipService.ToolTip>
+                <Button BorderThickness="0" Style="{StaticResource NoMouseOverEffect}" DockPanel.Dock="Right" Width="25" Visibility="{Binding FolderIconVisibility}" Command="{Binding SelectDll}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="img/Folder_Icon.png" AlignmentX="Center" AlignmentY="Center" Stretch="UniformToFill"/>
+                    </Button.Background>
+                </Button>
+                <TextBox HorizontalAlignment="Stretch" Height="30" Background="#E84545" Foreground="#2B2E4A" FontWeight="Bold" Padding="20 0" VerticalContentAlignment="Center" BorderThickness="0" Text="{Binding DLL}"/>
+            </DockPanel>
+
+            <ComboBox Background="#53354A" Grid.Row="1" Grid.Column="1" Margin="20" Padding="20 0" VerticalContentAlignment="Center" SelectedItem="{Binding TargetType}" ItemsSource="{Binding AvailableTypes}">
+                <ToolTipService.ToolTip>
+                    The type(s) to be registered or un-registered.
+                    In order to be registered, the type needs to be decorated with 'ComVisibleAttribute', 'GuidAttribute', and 'ProgIdAttribute'.
+                </ToolTipService.ToolTip>
+            </ComboBox>
+
+            <ComboBox BorderBrush="#53354A" Foreground="#2B2E4A" Grid.Row="2" Grid.Column="1" Margin="20" Padding="20 0" VerticalContentAlignment="Center" SelectedItem="{Binding Application}" ItemsSource="{Binding Applications}">
+                <ToolTipService.ToolTip>
+                    The target office host application.
+                </ToolTipService.ToolTip>
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Background" Value="#E84545"/>
+                        <Setter Property="BorderBrush" Value="#E84545"/>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
+            <ComboBox Background="#53354A" Grid.Row="3" Grid.Column="1" Margin="20" Padding="20 0" VerticalContentAlignment="Center" SelectedItem="{Binding LoadBehavior}" ItemsSource="{Binding LoadBehaviors}">
+                <ToolTipService.ToolTip>
+                    The load-behavior of the add-in.
+                </ToolTipService.ToolTip>
+                <ComboBox.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Control.ToolTip" Value="{Binding Description}"/>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
+            <TextBox Background="#E84545" Foreground="#2B2E4A" FontWeight="Bold" BorderBrush="#903749" Grid.Row="4" Grid.Column="1" Margin="20" Padding="20 0" VerticalContentAlignment="Center" Text="{Binding FriendlyName}"/>
+            <TextBox Background="#E84545" Foreground="#2B2E4A" FontWeight="Bold" BorderBrush="#903749" Grid.Row="5" Grid.Column="1" Margin="20" Padding="20 0" VerticalContentAlignment="Center" Text="{Binding Description}"/>
+        </Grid>
+
+        <Button Grid.Row="2" Grid.Column="0" Margin="20" Background="#53354A" Foreground="#E84545" BorderBrush="#903749" FontWeight="Bold" Command="{Binding Register}">
+            <Button.Content>
+                <TextBlock>
+                    Register
+                </TextBlock>
+            </Button.Content>
+        </Button>
+
+        <Button Grid.Row="2" Grid.Column="1" Margin="20" Background="#53354A" Foreground="#E84545" BorderBrush="#903749" FontWeight="Bold" Command="{Binding Unregister}">
+            <Button.Content>
+                <TextBlock>
+                    Un-Register
+                </TextBlock>
+            </Button.Content>
+        </Button>
+
+    </Grid>
+</Window>
