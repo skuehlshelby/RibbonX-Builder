@@ -8,9 +8,6 @@ The created ribbon uses a mix of static and dynamic content. It includes custom 
 
 ### Additional Steps To Run
 1. Build the project.
-2. Add the path to the freshly built .dll to the included .reg file.
-3. Use the .reg file.
-4. Project Properties > Debug > Start External Program > 'C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE' (If not already set.)
-5. Run
-
-Note to self: Automate the above steps in the future.
+2. Use the bundled registration tool to register the example ribbon.
+3. Project Properties > Debug > Start External Program > 'C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE' (If not already set.)
+4. Run
