@@ -69,7 +69,7 @@ Namespace Utilities.Testing
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         Private Sub LogXmlError(sender As Object, e As ValidationEventArgs)
-            _errors.Add($"{DirectCast(sender, XAttribute).Parent.Name.LocalName} {e.Severity.ToString().ToUpper}: {e.Message}")
+            _errors.Add($"{e.Severity.ToString().ToUpper}: {e.Message} for the element '{DirectCast(sender, XAttribute).Parent.Name.LocalName}'")
         End Sub
     End Class
 End NameSpace
