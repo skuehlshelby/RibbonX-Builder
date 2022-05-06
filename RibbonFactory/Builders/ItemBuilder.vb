@@ -16,6 +16,12 @@ Namespace Builders
             MyBase.New(template)
         End Sub
 
+        Private Function WithId(id As String) As IItemBuilder Implements IItemBuilder.WithId
+            WithIdBase(id)
+
+            Return Me
+        End Function
+
         Private Function WithLabel(label As String, Optional copyToScreentip As Boolean = True) As IItemBuilder Implements IItemBuilder.WithLabel
             LabelBase(label, AddressOf FakeCallback)
 

@@ -3,6 +3,9 @@
 Namespace BuilderInterfaces.API
 
     Public Interface IItemBuilder
+
+        Function WithId(id As String) As IItemBuilder
+
         Function WithLabel(label As String, Optional copyToScreentip As Boolean = True) As IItemBuilder
 
         Function WithScreenTip(screenTip As String) As IItemBuilder

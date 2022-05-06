@@ -259,7 +259,7 @@ Namespace Controls
 
         Public Property Selected As Item Implements ISelect.Selected
             Get
-                Return _attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition)
+                Return If(_attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition), Item.Blank)
             End Get
             Set
                 Using updateBlock As IDisposable = RefreshSuspension()
