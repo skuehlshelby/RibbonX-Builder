@@ -6,6 +6,7 @@ Imports Microsoft.Office.Core
 Imports RibbonFactory.BuilderInterfaces.API
 Imports RibbonFactory.Builders
 Imports RibbonFactory.RibbonAttributes
+Imports RibbonFactory.Utilities
 Imports RibbonFactory.Utilities.Testing
 
 Namespace Controls
@@ -24,7 +25,7 @@ Namespace Controls
         End Sub
 
         Public Sub New(configuration As Action(Of IRibbonBuilder), ParamArray tabs() As Tab)
-            _elements = Flatten(tabs).ToDictionary(Function(element) element.ID)
+            _elements = ConvertElementsToDictionaryAndThrowIfDuplicatesArePresent(Flatten(tabs))
 
             Dim builder As RibbonBuilder = New RibbonBuilder()
 
@@ -34,14 +35,14 @@ Namespace Controls
             _attributes = builder.Build()
 
             RibbonX = String.Join(Environment.NewLine,
-                                  "<?xml version=""1.0"" encoding=""utf-8"" ?>",
-                                  $"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"" {_attributes.ToString(AttributeCategory.OnLoad)} {_attributes.ToString(AttributeCategory.LoadImage)}>",
-                                  $"<ribbon {_attributes.ToString(AttributeCategory.StartFromScratch)}>",
-                                  "<tabs>",
-                                  String.Join(Environment.NewLine, tabs.Select(Function(tab) tab.XML)),
-                                  "</tabs>",
-                                  "</ribbon>",
-                                  "</customUI>")
+                                        "<?xml version=""1.0"" encoding=""utf-8"" ?>",
+                                        $"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"" {_attributes.ToString(AttributeCategory.OnLoad)} {_attributes.ToString(AttributeCategory.LoadImage)}>",
+                                        $"<ribbon {_attributes.ToString(AttributeCategory.StartFromScratch)}>",
+                                        "<tabs>",
+                                        String.Join(Environment.NewLine, tabs.Select(Function(tab) tab.XML)),
+                                        "</tabs>",
+                                        "</ribbon>",
+                                        "</customUI>").NoDoubleSpace()
 
             RegisterEvents(_elements.Values)
         End Sub
@@ -65,6 +66,25 @@ Namespace Controls
         Private Sub HandleValueChanged(sender As Object, e As ValueChangedEventArgs)
             _ribbon.InvalidateControl(e.ID)
         End Sub
+
+        Private Function ConvertElementsToDictionaryAndThrowIfDuplicatesArePresent(elements As ICollection(Of RibbonElement)) As Dictionary(Of String, RibbonElement)
+            Dim duplicateElements As ICollection(Of String) = New List(Of String)
+            Dim results As Dictionary(Of String, RibbonElement) = New Dictionary(Of String, RibbonElement)
+
+            For Each element As RibbonElement In elements
+                If results.ContainsKey(element.ID) Then
+                    duplicateElements.Add(element.ID)
+                Else
+                    results.Add(element.ID, element)
+                End If
+            Next
+
+            If duplicateElements.Any() Then
+                Throw New InvalidOperationException($"More than one instance of {If(1 < duplicateElements.Count, "elements", "element")} {String.Join(", ", duplicateElements)} {If(1 < duplicateElements.Count, "were", "was")} detected. Use .Clone() to add elements more than once.")
+            Else
+                Return results
+            End If
+        End Function
 
 #End Region
 
@@ -101,9 +121,15 @@ Namespace Controls
         End Function
 
         Private Shared Function GetCustomUIVersion2009() As XmlSchema
-            Using reader As StreamReader = New StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("RibbonFactory.RibbonX.xsd"))
-                Return XmlSchema.Read(XmlReader.Create(reader), AddressOf ValidationEventHandler)
+            Dim schema As XmlSchema
+
+            Using stream As Stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("RibbonFactory.RibbonX.xsd")
+                Using reader As XmlTextReader = New XmlTextReader(stream)
+                    schema = XmlSchema.Read(reader, AddressOf ValidationEventHandler)
+                End Using
             End Using
+
+            Return schema
         End Function
 
         Private Shared Sub ValidationEventHandler(sender As Object, e As ValidationEventArgs)
