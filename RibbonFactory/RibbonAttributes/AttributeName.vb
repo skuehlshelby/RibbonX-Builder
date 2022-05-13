@@ -188,12 +188,7 @@ Namespace RibbonAttributes
 
 		Public Shared Property ItemSize As AttributeName                = New AttributeName(value:=60, name:=NameOf(ItemSize).CamelCase())
 
-		Public Shared Property ShowInRibbon As AttributeName            = New AttributeName(value:=61, name:=NameOf(ShowInRibbon).CamelCase())
-
-		<Obsolete>
-		Public Shared Property FrameworkBeforeEvent As AttributeName    = New AttributeName(value:=62, name:=NameOf(FrameworkBeforeEvent))
-		<Obsolete>
-		Public Shared Property FrameworkOnEvent As AttributeName = New AttributeName(value:=63, name:=NameOf(FrameworkOnEvent))
+		Public Shared Property ShowInRibbon As AttributeName = New AttributeName(value:=61, name:=NameOf(ShowInRibbon).CamelCase())
 
 		Public Shared ReadOnly Property BeforeClick As AttributeName = New AttributeName(64, NameOf(BeforeClick))
 
