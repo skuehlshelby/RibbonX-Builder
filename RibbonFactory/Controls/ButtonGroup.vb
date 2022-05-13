@@ -13,6 +13,14 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
+        Public Sub New(Optional tag As Object = Nothing)
+            Me.New(Nothing, Nothing, Nothing, tag)
+        End Sub
+
+        Public Sub New(steps As Action(Of IButtonGroupBuilder), Optional tag As Object = Nothing)
+            Me.New(steps, Nothing, Nothing, tag)
+        End Sub
+
         Public Sub New(items As ButtonGroupControls, Optional tag As Object = Nothing)
             Me.New(Nothing, items, Nothing, tag)
         End Sub
