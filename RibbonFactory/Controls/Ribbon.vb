@@ -64,7 +64,11 @@ Namespace Controls
         End Sub
 
         Private Sub HandleValueChanged(sender As Object, e As ValueChangedEventArgs)
-            _ribbon.InvalidateControl(e.ID)
+            If _ribbon IsNot Nothing Then
+                _ribbon.InvalidateControl(e.ID)
+            Else
+                Throw New Exception("A control was updated, but the IRibbonUI object was never assigned. Did you forget to handle the OnLoad() callback?")
+            End If
         End Sub
 
         Private Function ConvertElementsToDictionaryAndThrowIfDuplicatesArePresent(elements As ICollection(Of RibbonElement)) As Dictionary(Of String, RibbonElement)
