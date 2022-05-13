@@ -26,16 +26,20 @@ Namespace Controls
         Private ReadOnly _beforeSelectionChangeEventManager As EventManager(Of BeforeSelectionChangeEventArgs)
         Private ReadOnly _selectionChangedEventManager As EventManager(Of SelectionChangeEventArgs)
 
-        Public Sub New(steps As Action(Of IDropdownBuilder), Optional tag As Object = Nothing)
-            Me.New(steps, Nothing, Nothing, tag)
+        Public Sub New(Optional tag As Object = Nothing)
+            Me.New(Nothing, Nothing, Nothing, tag)
         End Sub
 
-        Public Sub New(steps As Action(Of IDropdownBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
-            Me.New(steps, buttons, Nothing, tag)
+        Public Sub New(configuration As Action(Of IDropdownBuilder), Optional tag As Object = Nothing)
+            Me.New(configuration, Nothing, Nothing, tag)
         End Sub
 
-        Public Sub New(steps As Action(Of IDropdownBuilder), template As RibbonElement, Optional tag As Object = Nothing)
-            Me.New(steps, Nothing, template, tag)
+        Public Sub New(configuration As Action(Of IDropdownBuilder), buttons As ICollection(Of Button), Optional tag As Object = Nothing)
+            Me.New(configuration, buttons, Nothing, tag)
+        End Sub
+
+        Public Sub New(configuration As Action(Of IDropdownBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+            Me.New(configuration, Nothing, template, tag)
         End Sub
 
         Public Sub New(configuration As Action(Of IDropdownBuilder), buttons As ICollection(Of Button), template As RibbonElement, Optional tag As Object = Nothing)
@@ -118,10 +122,6 @@ Namespace Controls
         Protected Overrides Sub AfterAdd(item As Item)
             AddHandler item.ValueChanged, AddressOf OnChildItemChange
 
-            If Selected Is Nothing Then
-                Selected = item
-            End If
-
             RefreshNeeded()
         End Sub
 
@@ -129,10 +129,6 @@ Namespace Controls
             For Each item As Item In currentItems
                 RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
             Next
-
-            Using suspension As IDisposable = RefreshSuspension(refreshOnDispose:=False)
-                Selected = Nothing
-            End Using
         End Sub
 
         Protected Overrides Sub AfterClear()
@@ -259,7 +255,17 @@ Namespace Controls
 
         Public Property Selected As Item Implements ISelect.Selected
             Get
-                Return If(_attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition), Item.Blank)
+                Dim value As Item = _attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition)
+
+                If value IsNot Nothing Then
+                    Return value
+                Else
+                    If Items.Any() Then
+                        Return Items.First()
+                    Else
+                        Return Item.Blank
+                    End If
+                End If
             End Get
             Set
                 Using updateBlock As IDisposable = RefreshSuspension()

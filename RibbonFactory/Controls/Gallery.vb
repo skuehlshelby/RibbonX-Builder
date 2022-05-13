@@ -119,7 +119,7 @@ Namespace Controls
 
         Protected Overrides Sub AfterAdd(item As Item)
             AddHandler item.ValueChanged, AddressOf OnChildItemChange
-            Selected = If(Selected, item)
+
             RefreshNeeded()
         End Sub
 
@@ -127,18 +127,11 @@ Namespace Controls
             For Each item As Item In currentItems
                 RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
             Next
-
-            Using suspension As IDisposable = RefreshSuspension(refreshOnDispose:=False)
-                Selected = Nothing
-            End Using
-        End Sub
-
-        Protected Overrides Sub AfterClear()
-            RefreshNeeded()
         End Sub
 
         Protected Overrides Sub AfterRemove(item As Item)
             RemoveHandler item.ValueChanged, AddressOf OnChildItemChange
+
             RefreshNeeded()
         End Sub
 
@@ -288,7 +281,17 @@ Namespace Controls
 
         Public Property Selected As Item Implements ISelect.Selected
             Get
-                Return If(_attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition), Item.Blank)
+                Dim value As Item = _attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition)
+
+                If value IsNot Nothing Then
+                    Return value
+                Else
+                    If Items.Any() Then
+                        Return Items.First()
+                    Else
+                        Return Item.Blank
+                    End If
+                End If
             End Get
             Set
                 Using updateBlock As IDisposable = RefreshSuspension()
