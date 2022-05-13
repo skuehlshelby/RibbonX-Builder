@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports RibbonFactory.ControlInterfaces
 Imports RibbonFactory.Controls
 Imports RibbonFactory.Controls.Events
 Imports RibbonFactory.Enums
@@ -11,22 +12,16 @@ Imports stdole
 Namespace Builders
 
     Friend Class BuilderBase(Of TElement As RibbonElement)
-        Private ReadOnly _attributes As AttributeSet = New AttributeSet()
+        Private ReadOnly _attributes As AttributeSet = GetDefaults()
 
-        Public Sub New()
-            _attributes = New AttributeSet(Defaults(Of TElement).Get())
-        End Sub
-
-        Public Sub New(template As RibbonElement)
-            If template Is Nothing Then
-                _attributes = New AttributeSet(Defaults(Of TElement).Get())
-            Else
+        Public Sub New(Optional template As RibbonElement = Nothing)
+            If template IsNot Nothing Then
                 Dim defaultProvider As IDefaultProvider = TryCast(template, IDefaultProvider)
 
                 If defaultProvider Is Nothing Then
                     Throw New ArgumentException($"Could not copy properties from '{template.ID}' to type '{GetType(TElement)}'")
                 Else
-                    _attributes = New AttributeSet(Defaults(Of TElement).Get()).OverwriteWithIntersectionOf(defaultProvider.GetDefaults())
+                    _attributes.OverwriteWithIntersectionOf(defaultProvider.GetDefaults())
                 End If
             End If
         End Sub
@@ -34,6 +29,81 @@ Namespace Builders
         Public Function Build() As AttributeSet
             Return _attributes
         End Function
+
+#Region "Defaults"
+        Private Shared Function GetNextElementId() As Integer
+            Static id As Integer = 0
+            id = If(id = Integer.MaxValue, 0, id + 1)
+            Return id
+        End Function
+
+        Private Function GetDefaults() As AttributeSet
+            Dim elementType As Type = GetType(TElement)
+
+            Dim defaults As AttributeSet = New AttributeSet From {
+                New RibbonAttributeReadOnly(Of String)(elementType.Name & GetNextElementId(), AttributeName.Id, AttributeCategory.IdType)
+            }
+
+            Dim implementedInterfaces As Type() = elementType.GetInterfaces()
+
+            For Each interfaceType As Type In implementedInterfaces
+                Select Case interfaceType
+                    Case GetType(IEnabled)
+                        defaults.Add(New RibbonAttributeDefault(Of Boolean)(True, AttributeName.Enabled, AttributeCategory.Enabled))
+                    Case GetType(IVisible)
+                        defaults.Add(New RibbonAttributeDefault(Of Boolean)(True, AttributeName.Visible, AttributeCategory.Visibility))
+                    Case GetType(ILabel)
+                        defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Label, AttributeCategory.Label))
+                    Case GetType(IShowLabel)
+                        defaults.Add(New RibbonAttributeDefault(Of Boolean)(False, AttributeName.ShowLabel, AttributeCategory.LabelVisibility))
+                    Case GetType(IScreenTip)
+                        defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Screentip, AttributeCategory.ScreenTip))
+                    Case GetType(ISuperTip)
+                        defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Supertip, AttributeCategory.SuperTip))
+                    Case GetType(ISize)
+                        defaults.Add(New RibbonAttributeDefault(Of ControlSize)(ControlSize.Normal, AttributeName.Size, AttributeCategory.Size))
+                    Case GetType(IDescription)
+                        defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Description, AttributeCategory.Description))
+                    Case GetType(IKeyTip)
+                        defaults.Add(New RibbonAttributeDefault(Of KeyTip)("A", AttributeName.Keytip, AttributeCategory.KeyTip))
+                    Case GetType(IImage)
+                        defaults.Add(New RibbonAttributeDefault(Of RibbonImage)(RibbonImage.Create(Common.HappyFace), AttributeName.ImageMso, AttributeCategory.Image))
+                    Case GetType(IShowImage)
+                        defaults.Add(New RibbonAttributeDefault(Of Boolean)(False, AttributeName.ShowImage, AttributeCategory.ImageVisibility))
+                    Case GetType(ITitle)
+                        defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.Title, AttributeCategory.Title))
+                    Case GetType(IClickable)
+                        defaults.Add(New RibbonAttributeDefault(Of Action)(Sub() Return, AttributeName.OnAction, AttributeCategory.OnAction))
+                        defaults.Add(New RibbonAttributeInvocationList(Of CancelableEventArgs)(AttributeName.BeforeClick, AttributeCategory.BeforeClick))
+                        defaults.Add(New RibbonAttributeInvocationList(AttributeName.OnClick, AttributeCategory.OnClick))
+                    Case GetType(IText)
+                        defaults.Add(New RibbonAttributeDefault(Of String)(String.Empty, AttributeName.GetText, AttributeCategory.Text))
+                        defaults.Add(New RibbonAttributeDefault(Of String)("WWWWWW", AttributeName.SizeString, AttributeCategory.SizeString))
+                        defaults.Add(New RibbonAttributeDefault(Of Byte)(Byte.MaxValue, AttributeName.MaxLength, AttributeCategory.MaxLength))
+                        defaults.Add(New RibbonAttributeInvocationList(Of BeforeTextChangeEventArgs)(AttributeName.BeforeTextChange, AttributeCategory.BeforeTextChange))
+                        defaults.Add(New RibbonAttributeInvocationList(Of TextChangeEventArgs)(AttributeName.OnTextChange, AttributeCategory.OnTextChange))
+                    Case GetType(IPressed)
+                        defaults.Add(New RibbonAttributeDefault(Of Boolean)(False, AttributeName.GetPressed, AttributeCategory.Pressed))
+                        defaults.Add(New RibbonAttributeInvocationList(Of BeforeToggleChangeEventArgs)(AttributeName.BeforeToggle, AttributeCategory.BeforeToggle))
+                        defaults.Add(New RibbonAttributeInvocationList(Of ToggleChangeEventArgs)(AttributeName.OnToggle, AttributeCategory.OnToggle))
+                    Case GetType(ISelect)
+                        defaults.Add(New RibbonAttributeDefault(Of Item)(Nothing, AttributeName.GetSelectedItemIndex, AttributeCategory.SelectedItemPosition))
+                        defaults.Add(New RibbonAttributeInvocationList(Of BeforeSelectionChangeEventArgs)(AttributeName.BeforeSelectionChange, AttributeCategory.BeforeSelectionChange))
+                        defaults.Add(New RibbonAttributeInvocationList(Of SelectionChangeEventArgs)(AttributeName.OnSelectionChange, AttributeCategory.OnSelectionChange))
+                    Case GetType(IItemDimensions)
+                        defaults.Add(New RibbonAttributeDefault(Of Integer)(1, AttributeName.ItemHeight, AttributeCategory.ItemHeight))
+                        defaults.Add(New RibbonAttributeDefault(Of Integer)(1, AttributeName.ItemWidth, AttributeCategory.ItemWidth))
+                    Case GetType(IItemSize)
+                        defaults.Add(New RibbonAttributeDefault(Of ControlSize)(ControlSize.Normal, AttributeName.ItemSize, AttributeCategory.ItemSize))
+                    Case GetType(IBoxStyle)
+                        defaults.Add(New RibbonAttributeDefault(Of BoxStyle)(BoxStyle.Horizontal, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
+                End Select
+            Next interfaceType
+
+            Return defaults
+        End Function
+
+#End Region
 
 #Region "Enabled"
 
@@ -258,11 +328,11 @@ Namespace Builders
 #Region "Normal"
 
         Protected Sub NormalBase()
-            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.normal, AttributeName.Size, AttributeCategory.Size))
+            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.Normal, AttributeName.Size, AttributeCategory.Size))
         End Sub
 
         Protected Sub NormalBase(callback As FromControl(Of ControlSize))
-            _attributes.Add(New RibbonAttributeReadWrite(Of ControlSize)(ControlSize.normal, AttributeName.GetSize, AttributeCategory.Size, callback.Method.Name))
+            _attributes.Add(New RibbonAttributeReadWrite(Of ControlSize)(ControlSize.Normal, AttributeName.GetSize, AttributeCategory.Size, callback.Method.Name))
         End Sub
 
 #End Region
@@ -270,11 +340,11 @@ Namespace Builders
 #Region "Large"
 
         Protected Sub LargeBase()
-            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.large, AttributeName.Size, AttributeCategory.Size))
+            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.Large, AttributeName.Size, AttributeCategory.Size))
         End Sub
 
         Protected Sub LargeBase(callback As FromControl(Of ControlSize))
-            _attributes.Add(New RibbonAttributeReadWrite(Of ControlSize)(ControlSize.large, AttributeName.GetSize, AttributeCategory.Size, callback.Method.Name))
+            _attributes.Add(New RibbonAttributeReadWrite(Of ControlSize)(ControlSize.Large, AttributeName.GetSize, AttributeCategory.Size, callback.Method.Name))
         End Sub
 
 #End Region
@@ -298,11 +368,11 @@ Namespace Builders
 #Region "Horizontal/Vertical"
 
         Protected Sub HorizontalBase()
-            _attributes.Add(New RibbonAttributeReadOnly(Of BoxStyle)(BoxStyle.horizontal, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
+            _attributes.Add(New RibbonAttributeReadOnly(Of BoxStyle)(BoxStyle.Horizontal, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
         End Sub
 
         Protected Sub VerticalBase()
-            _attributes.Add(New RibbonAttributeReadOnly(Of BoxStyle)(BoxStyle.vertical, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
+            _attributes.Add(New RibbonAttributeReadOnly(Of BoxStyle)(BoxStyle.Vertical, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
         End Sub
 
 #End Region
@@ -543,11 +613,11 @@ Namespace Builders
 #Region "Large/Normal Items"
 
         Protected Sub LargeItemsBase()
-            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.large, AttributeName.ItemSize, AttributeCategory.ItemSize))
+            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.Large, AttributeName.ItemSize, AttributeCategory.ItemSize))
         End Sub
 
         Protected Sub NormalItemsBase()
-            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.normal, AttributeName.ItemSize, AttributeCategory.ItemSize))
+            _attributes.Add(New RibbonAttributeReadOnly(Of ControlSize)(ControlSize.Normal, AttributeName.ItemSize, AttributeCategory.ItemSize))
         End Sub
 
 #End Region
