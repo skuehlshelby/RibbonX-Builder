@@ -475,7 +475,7 @@ Public NotInheritable Class RandomControlGenerator
     End Function
 
     Public Function MakeBox(ParamArray controls() As RibbonElement) As Box
-        Return MakeControl(Function(e) New Box(e, Sub() Return, controls))
+        Return MakeControl(Function(e) New Box(Sub() Return, controls, e))
     End Function
 
     Public Function MakeGroup(ParamArray controls() As RibbonElement) As Group

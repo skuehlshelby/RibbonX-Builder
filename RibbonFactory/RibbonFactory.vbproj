@@ -221,11 +221,16 @@
     <Compile Include="Controls\ToggleButton.vb" />
     <Compile Include="Enums\BoxStyle.vb" />
     <Compile Include="Enums\ControlSize.vb" />
+    <Compile Include="Enums\ImageMSO\3D.vb" />
+    <Compile Include="Enums\ImageMSO\Chart.vb" />
     <Compile Include="Enums\ImageMSO\Common.vb" />
     <Compile Include="Enums\ImageMSO\ImageMSO.vb" />
+    <Compile Include="Enums\ImageMSO\Pivot.vb" />
+    <Compile Include="Enums\ImageMSO\Mail.vb" />
     <Compile Include="Enums\ImageMSO\Letter.vb" />
     <Compile Include="Enums\ImageMSO\Misc.vb" />
     <Compile Include="Enums\ImageMSO\Number.vb" />
+    <Compile Include="Enums\ImageMSO\XML.vb" />
     <Compile Include="Enums\MSO\Excel.vb" />
     <Compile Include="Enums\MSO\MSO.vb" />
     <Compile Include="Enums\MSO\Word.vb" />
@@ -247,9 +252,7 @@
     <Compile Include="RibbonAttributes\AttributeCategory.vb" />
     <Compile Include="RibbonAttributes\AttributeSet.vb" />
     <Compile Include="RibbonAttributes\AttributeName.vb" />
-    <Compile Include="RibbonAttributes\Defaults.vb" />
     <Compile Include="RibbonAttributes\IDefaultProvider.vb" />
-    <Compile Include="RibbonAttributes\IdManager.vb" />
     <Compile Include="RibbonElement.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -303,6 +306,8 @@
   <ItemGroup>
     <None Include="ExampleXML.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Enums\Enumeration.vb" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
