@@ -12,7 +12,7 @@ Imports RibbonFactory.Utilities.Testing
                                                <tabs>
                                                    <tab>
                                                        <group label="group1" showLabel="true">
-                                                           <button id="button1" description="test"/>
+                                                           <button id="button1" description="test" label="test" showLabel="true"/>
                                                        </group>
                                                    </tab>
                                                </tabs>
@@ -21,7 +21,7 @@ Imports RibbonFactory.Utilities.Testing
 
         Dim errorLog As RibbonErrorLog = Ribbon.GetErrors(invalidRibbonX)
 
-        Assert.IsFalse(errorLog.None)
+        Assert.AreEqual(1, errorLog.Errors.Count()) 'showLabel is not defined for the element 'group'
     End Sub
 
 End Class

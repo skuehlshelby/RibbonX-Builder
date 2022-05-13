@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing
 Imports RibbonFactory
 Imports RibbonFactory.Controls
+Imports RibbonFactory.Controls.Events
 Imports RibbonFactory.Enums.ImageMSO
 
 <TestClass()>
@@ -167,7 +168,7 @@ Public Class ComboBoxTests
     End Sub
 
     <TestMethod>
-    Public Sub CanAddItems()
+    Public Sub CanAddItemsAfterComboBoxCreation()
         Dim combobox As ComboBox = New ComboBox() From {
             Item.Blank(),
             Item.Blank(),
@@ -232,6 +233,21 @@ Public Class ComboBoxTests
         }
 
         Assert.That.ValueChangedIsRaised(combobox, Sub(cb) cb.First().Label = "New Label")
+    End Sub
+
+    <TestMethod>
+    Public Sub EventCanBeSubscribedTo()
+        Dim combobox As ComboBox = New ComboBox() From {
+            Item.Blank()
+        }
+        Dim before As EventHandler(Of BeforeTextChangeEventArgs) = Sub(s, e) Return
+        Dim onChange As EventHandler(Of TextChangeEventArgs) = Sub(s, e) Return
+
+        AddHandler combobox.BeforeTextChange, before
+        AddHandler combobox.TextChanged, onChange
+
+        RemoveHandler combobox.BeforeTextChange, before
+        RemoveHandler combobox.TextChanged, onChange
     End Sub
 
 End Class

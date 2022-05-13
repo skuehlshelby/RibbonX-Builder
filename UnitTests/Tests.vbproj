@@ -128,6 +128,9 @@
     <Compile Include="TestBase.vb" />
     <Compile Include="ToggleButtonTests.vb" />
     <Compile Include="BoxTests.vb" />
+    <Compile Include="ButtonGroupTests.vb" />
+    <Compile Include="EnumTests.vb" />
+    <Compile Include="DialogLauncherTests.vb" />
     <Compile Include="ValidationWithXsdTests.vb" />
   </ItemGroup>
   <ItemGroup>
