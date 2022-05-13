@@ -37,6 +37,30 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Shared Function [From](ParamArray controls() As Button) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls)
+        End Function
+
+        Public Shared Function [From](ParamArray controls() As Gallery) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls)
+        End Function
+
+        Public Shared Function [From](ParamArray controls() As Menu) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls)
+        End Function
+
+        Public Shared Function [From](ParamArray controls() As Separator) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls)
+        End Function
+
+        Public Shared Function [From](ParamArray controls() As SplitButton) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls)
+        End Function
+
+        Public Shared Function [From](ParamArray controls() As ToggleButton) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls)
+        End Function
+
         Private Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator
             Return items.GetEnumerator()
         End Function
