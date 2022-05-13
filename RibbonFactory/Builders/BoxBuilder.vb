@@ -7,11 +7,7 @@ Namespace Builders
         Inherits BuilderBase(Of Box)
         Implements IBoxBuilder
 
-        Public Sub New()
-            MyBase.New()
-        End Sub
-
-        Public Sub New(template As RibbonElement)
+        Public Sub New(Optional template As RibbonElement = Nothing)
             MyBase.New(template)
         End Sub
 
