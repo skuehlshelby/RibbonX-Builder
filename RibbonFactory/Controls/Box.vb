@@ -15,15 +15,17 @@ Namespace Controls
         Private ReadOnly _attributes As AttributeSet
 
         Public Sub New(steps As Action(Of IBoxBuilder), items As ICollection(Of RibbonElement), Optional tag As Object = Nothing)
-            Me.New(Nothing, steps, items, tag)
+            Me.New(steps, items, Nothing, tag)
         End Sub
 
-        Public Sub New(template As RibbonElement, steps As Action(Of IBoxBuilder), items As ICollection(Of RibbonElement), Optional tag As Object = Nothing)
-            MyBase.New(items, tag)
+        Public Sub New(steps As Action(Of IBoxBuilder), items As ICollection(Of RibbonElement), template As RibbonElement, Optional tag As Object = Nothing)
+            MyBase.New(If(items, Array.Empty(Of RibbonElement)), tag)
 
-            Dim builder As BoxBuilder = If(template Is Nothing, New BoxBuilder(), New BoxBuilder(template))
+            Dim builder As BoxBuilder = New BoxBuilder(template)
 
-            steps.Invoke(builder)
+            If steps IsNot Nothing Then
+                steps.Invoke(builder)
+            End If
 
             _attributes = builder.Build()
 
