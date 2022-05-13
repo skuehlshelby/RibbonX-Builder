@@ -1,7 +1,7 @@
 ﻿Public MustInherit Class RibbonElement
 	Implements IEquatable(Of RibbonElement)
 
-	Private _refreshEnabled As Boolean = True
+	Private refreshDecrement As Integer = 0
 
 	Protected Sub New(Optional tag As Object = Nothing)
 		Me.Tag = tag
@@ -18,7 +18,7 @@
 #Region "Refreshing"
 
 	Protected Sub RefreshNeeded()
-		If _refreshEnabled Then
+		If refreshDecrement = 0 Then
 			RaiseEvent ValueChanged(Me, New ValueChangedEventArgs(ID))
 		End If
 	End Sub
@@ -30,24 +30,23 @@
 	Private NotInheritable Class UpdateBlock
 		Implements IDisposable
 
-		Private parent As RibbonElement
-		Private refreshOnDispose As Boolean
+		Private ReadOnly parent As RibbonElement
+		Private ReadOnly refreshOnDispose As Boolean
 
 		Public Sub New(parent As RibbonElement, refreshOnDispose As Boolean)
 			Me.parent = parent
 			Me.refreshOnDispose = refreshOnDispose
-			Me.parent._refreshEnabled = False
+			parent.refreshDecrement -= 1
 		End Sub
 
 		Private Sub Dispose() Implements IDisposable.Dispose
-			parent._refreshEnabled = True
+			parent.refreshDecrement += 1
 
 			If refreshOnDispose Then
 				parent.RefreshNeeded()
 			End If
-
-			parent = Nothing
 		End Sub
+
 	End Class
 
 #End Region
