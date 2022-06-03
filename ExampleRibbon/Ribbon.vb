@@ -1,322 +1,332 @@
 Imports System.Drawing
-Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Threading
-Imports Extensibility
-Imports Microsoft.Office.Core
-Imports RibbonFactory
-Imports RibbonFactory.Builders
-Imports RibbonFactory.Controls
+Imports RibbonX
+Imports RibbonX.Builders
+Imports RibbonX.Controls
+Imports RibbonX.Enums
+Imports RibbonX.ComTypes.Extensibility
+Imports RibbonX.ComTypes.Microsoft.Office.Core
 Imports Excel = Microsoft.Office.Interop.Excel
+
 
 <ComVisible(True)>
 <Guid("C2C29BAF-8F1B-46EF-A071-8A286423F4C4")>
 <ProgId("ExampleRibbon.Ribbon")>
 Public Class Ribbon
-	Inherits RibbonFactory.Utilities.StockRibbonBase
-	Implements IDTExtensibility2
-	Implements IRibbonExtensibility
+    Inherits RibbonX.Utilities.StockRibbonBase
+    Implements IDTExtensibility2
+    Implements IRibbonExtensibility
 
-	Public Sub New()
-		MyBase.New(New Troubleshooter())
-	End Sub
+    Public Sub New()
+        MyBase.New(New Troubleshooter())
+    End Sub
 
-	Private ReadOnly Property Excel As Excel.Application
-		Get
-			Return DirectCast(HostApp, Excel.Application)
-		End Get
-	End Property
+    Private ReadOnly Property Excel As Excel.Application
+        Get
+            Return DirectCast(HostApp, Excel.Application)
+        End Get
+    End Property
 
-	Protected Overrides Function BuildRibbon() As Controls.Ribbon
-		Dim buttonWithStockIconOne As Button = New Button(
-				Sub(bb) bb.
-				Large().
-				WithLabel("Happy Button").
-				WithSuperTip("Oh, to be so happy again!").
-				WithImage(Enums.ImageMSO.Common.HappyFace).
-				RouteClickTo(AddressOf OnAction).
-				OnClick(Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")))
+    Protected Overrides Function BuildRibbon() As Controls.Ribbon
+        Dim buttonWithStockIconOne As Button = New Button(
+                Sub(bb) bb.
+                Large().
+                WithLabel("Happy Button").
+                WithSuperTip("Oh, to be so happy again!").
+                WithImage(ImageMSO.Common.HappyFace).
+                RouteClickTo(AddressOf OnAction).
+                OnClick(Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")))
 
-		Dim buttonWithStockIconTwo As Button = New Button(Sub(bb) bb.
-				WithLabel("Sad Button").
-				WithSuperTip("#Sad").
-				WithImage(Enums.ImageMSO.Common.SadFace),
-				template:=buttonWithStockIconOne)
+        Dim buttonWithStockIconTwo As Button = New Button(Sub(bb) bb.
+                WithLabel("Sad Button").
+                WithSuperTip("#Sad").
+                WithImage(ImageMSO.Common.SadFace),
+                template:=buttonWithStockIconOne)
 
-		Dim buttonWithStockIconThree As Button = New Button(Sub(bb) bb.
-				WithLabel("Money Button").
-				WithSuperTip("Make that money!").
-				WithImage(Enums.ImageMSO.Common.DollarSign),
-				template:=buttonWithStockIconOne)
+        Dim buttonWithStockIconThree As Button = New Button(Sub(bb) bb.
+                WithLabel("Money Button").
+                WithSuperTip("Make that money!").
+                WithImage(ImageMSO.Common.DollarSign),
+                template:=buttonWithStockIconOne)
 
 
-		Dim buttonWithStockIconOneSmall As Button = New Button(Sub(bb) bb.Normal(),
-			template:=buttonWithStockIconOne)
+        Dim buttonWithStockIconOneSmall As Button = New Button(Sub(bb) bb.Normal(),
+            template:=buttonWithStockIconOne)
 
-		Dim buttonWithStockIconTwoSmall As Button = New Button(Sub(bb) bb.Normal(),
-			template:=buttonWithStockIconTwo)
+        Dim buttonWithStockIconTwoSmall As Button = New Button(Sub(bb) bb.Normal(),
+            template:=buttonWithStockIconTwo)
 
-		Dim buttonWithStockIconThreeSmall As Button = New Button(Sub(bb) bb.Normal(),
-			template:=buttonWithStockIconThree)
+        Dim buttonWithStockIconThreeSmall As Button = New Button(Sub(bb) bb.Normal(),
+            template:=buttonWithStockIconThree)
 
-		Dim buttonsWithStockIcons As Group = New Group(Sub(gb) gb.
-			WithLabel("Buttons With Stock Icons"),
-			{buttonWithStockIconOne, buttonWithStockIconTwo, buttonWithStockIconThree, Separator.CreateVisible(), buttonWithStockIconOneSmall, buttonWithStockIconTwoSmall, buttonWithStockIconThreeSmall})
+        Dim buttonsWithStockIcons As Group = New Group(Sub(gb) gb.
+            WithLabel("Buttons With Stock Icons"),
+            {buttonWithStockIconOne, buttonWithStockIconTwo, buttonWithStockIconThree, Separator.CreateVisible(), buttonWithStockIconOneSmall, buttonWithStockIconTwoSmall, buttonWithStockIconThreeSmall})
 
-		Dim buttonWithCustomIconOne As Button = New Button(Sub(bb) bb.
-			Large().
-			WithLabel("GitHub").
-			WithSuperTip("Open GitHub's website in the default browser.").
-			WithImage(LoadBitmap("ExampleRibbon.github.png"), AddressOf GetImage).
-			OnClick(Sub(b) OpenWebsiteInDefaultBrowser(b.Tag.ToString()), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
-			RouteClickTo(AddressOf OnAction),
-			tag:="https://github.com/")
+        Dim buttonWithCustomIconOne As Button = New Button(Sub(bb) bb.
+            Large().
+            WithLabel("GitHub").
+            WithSuperTip("Open GitHub's website in the default browser.").
+            WithImage(LoadBitmap("ExampleRibbon.github.png"), AddressOf GetImage).
+            OnClick(Sub(b) OpenWebsiteInDefaultBrowser(b.Tag.ToString()), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
+            RouteClickTo(AddressOf OnAction),
+            tag:="https://github.com/")
 
-		Dim buttonWithCustomIconTwo As Button = New Button(Sub(bb) bb.
-			WithLabel("LinkedIn").
-			WithSuperTip("Open LinkedIn's website in the default browser.").
-			WithImage(LoadBitmap("ExampleRibbon.linkedin.png"), AddressOf GetImage),
-			template:=buttonWithCustomIconOne,
-			"https://www.linkedin.com")
+        Dim buttonWithCustomIconTwo As Button = New Button(Sub(bb) bb.
+            WithLabel("LinkedIn").
+            WithSuperTip("Open LinkedIn's website in the default browser.").
+            WithImage(LoadBitmap("ExampleRibbon.linkedin.png"), AddressOf GetImage),
+            template:=buttonWithCustomIconOne,
+            "https://www.linkedin.com")
 
-		Dim buttonWithCustomIconThree As Button = New Button(Sub(bb) bb.
-			WithLabel("BandCamp").
-			WithSuperTip("Open BandCamp's website in the default browser.").
-			WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"), AddressOf GetImage),
-			template:=buttonWithCustomIconOne,
-			"https://bandcamp.com/")
+        Dim buttonWithCustomIconThree As Button = New Button(Sub(bb) bb.
+            WithLabel("BandCamp").
+            WithSuperTip("Open BandCamp's website in the default browser.").
+            WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"), AddressOf GetImage),
+            template:=buttonWithCustomIconOne,
+            "https://bandcamp.com/")
 
-		Dim buttonWithCustomIconOneSmall As Button = New Button(Sub(bb) bb.
-			Normal(),
-			template:=buttonWithStockIconOne,
-			"https://github.com/")
+        Dim buttonWithCustomIconOneSmall As Button = New Button(Sub(bb) bb.
+            Normal(),
+            template:=buttonWithStockIconOne,
+            "https://github.com/")
 
-		Dim buttonWithCustomIconTwoSmall As Button = New Button(Sub(bb) bb.
-			Normal(),
-			template:=buttonWithStockIconTwo,
-			"https://www.linkedin.com")
+        Dim buttonWithCustomIconTwoSmall As Button = New Button(Sub(bb) bb.
+            Normal(),
+            template:=buttonWithStockIconTwo,
+            "https://www.linkedin.com")
 
-		Dim buttonWithCustomIconThreeSmall As Button = New Button(Sub(bb) bb.
-			Normal(),
-			template:=buttonWithStockIconThree,
-			"https://bandcamp.com/")
+        Dim buttonWithCustomIconThreeSmall As Button = New Button(Sub(bb) bb.
+            Normal(),
+            template:=buttonWithStockIconThree,
+            "https://bandcamp.com/")
 
-		Dim buttonsWithCustomIcons As Group = New Group(
-			Sub(gb) gb.WithLabel("Buttons With Custom Icons"),
-			{buttonWithCustomIconOne, buttonWithCustomIconTwo, buttonWithCustomIconThree, Separator.CreateVisible(), buttonWithCustomIconOneSmall, buttonWithCustomIconTwoSmall, buttonWithCustomIconThreeSmall})
+        Dim buttonsWithCustomIcons As Group = New Group(
+            Sub(gb) gb.WithLabel("Buttons With Custom Icons"),
+            {buttonWithCustomIconOne, buttonWithCustomIconTwo, buttonWithCustomIconThree, Separator.CreateVisible(), buttonWithCustomIconOneSmall, buttonWithCustomIconTwoSmall, buttonWithCustomIconThreeSmall})
 
-		Dim textBox As EditBox = New EditBox(Sub(ebb) ebb.
-			WithLabel("Editable Text: ").
-			WithScreenTip("Editable Text").
-			WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
-			AsWideAs("Some Text This Big").
-			WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
-			BeforeTextChange(Sub(sender, e) If e.NewText.Contains("  ") Then e.Cancel(), Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage("Double spaces are not allowed!")).
-			AfterTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")))
+        Dim textBox As EditBox = New EditBox(Sub(ebb) ebb.
+            WithLabel("Editable Text: ").
+            WithScreenTip("Editable Text").
+            WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
+            AsWideAs("Some Text This Big").
+            WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
+            BeforeTextChange(Sub(sender, e) If e.NewText.Contains("  ") Then e.Cancel(), Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage("Double spaces are not allowed!")).
+            AfterTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")))
 
-		Dim comboBox As ComboBox = New ComboBox(Sub(cbb) cbb.
-			WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
-			BeforeTextChange(
-							 Sub(sender, e) If Not DirectCast(sender, ComboBox).Any(Function(item) item.Label.Equals(e.NewText, StringComparison.OrdinalIgnoreCase)) Then e.Cancel(),
-							 Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage($"'{e.NewText}' is not one of the available options.")).
-			OnTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")).
-			GetItemCountFrom(AddressOf GetItemCount).
-			GetItemIdFrom(AddressOf GetItemID).
-			GetItemLabelFrom(AddressOf GetItemLabel).
-			GetItemSuperTipFrom(AddressOf GetItemSuperTip).
-			GetItemScreenTipFrom(AddressOf GetItemScreenTip),
-			textBox)
+        Dim comboBox As ComboBox = New ComboBox(Sub(cbb) cbb.
+            WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
+            BeforeTextChange(
+                             Sub(sender, e) If Not DirectCast(sender, ComboBox).Any(Function(item) item.Label.Equals(e.NewText, StringComparison.OrdinalIgnoreCase)) Then e.Cancel(),
+                             Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage($"'{e.NewText}' is not one of the available options.")).
+            OnTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")).
+            GetItemCountFrom(AddressOf GetItemCount).
+            GetItemIdFrom(AddressOf GetItemID).
+            GetItemLabelFrom(AddressOf GetItemLabel).
+            GetItemSuperTipFrom(AddressOf GetItemSuperTip).
+            GetItemScreenTipFrom(AddressOf GetItemScreenTip),
+            textBox)
 
-		With comboBox
-			.Add("Option One", "The first option.")
-			.Add("Option Two", "The second option.")
-			.Add("Option Three", "The third option.")
-		End With
+        With comboBox
+            .Add("Option One", "The first option.")
+            .Add("Option Two", "The second option.")
+            .Add("Option Three", "The third option.")
+        End With
 
-		Dim textBoxGroup As Group = New Group(Sub(gb) gb.WithLabel("Editable Text"), Box.Vertical(textBox, comboBox))
+        Dim textBoxGroup As Group = New Group(Sub(gb) gb.WithLabel("Editable Text"), Box.Vertical(textBox, comboBox))
 
-		Dim one As Button = New Button(Sub(bb) bb.
-			WithLabel("One").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.One).
-			OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
-			RouteClickTo(AddressOf OnAction),
-			tag:=1)
+        Dim one As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.One)).
+                                             HideLabel().
+                                             Normal().
+                                             WithImage(ImageMSO.Number.One).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
+                                             RouteClickTo(AddressOf OnAction),
+                                       tag:=ImageMSO.Number.One.Value)
 
-		Dim two As Button = New Button(Sub(bb) bb.
-			WithLabel("Two").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Two),
-			template:=one,
-			tag:=2)
+        Dim two As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Two)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Two).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Two.Value)
 
-		Dim three As Button = New Button(Sub(bb) bb.
-			WithLabel("Three").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Three),
-			template:=one,
-			tag:=3)
+        Dim three As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Three)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Three).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Three.Value)
 
-		Dim four As Button = New Button(Sub(bb) bb.
-			WithLabel("Four").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Four),
-			template:=one,
-			tag:=4)
+        Dim four As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Four)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Four).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Four.Value)
 
-		Dim five As Button = New Button(Sub(bb) bb.
-			WithLabel("Five").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Five),
-			template:=one,
-			tag:=5)
+        Dim five As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Five)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Five).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Five.Value)
 
-		Dim six As Button = New Button(Sub(bb) bb.
-			WithLabel("Six").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Six),
-			template:=one,
-			tag:=6)
+        Dim six As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Six)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Six).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Six.Value)
 
-		Dim seven As Button = New Button(Sub(bb) bb.
-			WithLabel("Seven").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Seven),
-			template:=one,
-			tag:=7)
+        Dim seven As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Seven)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Seven).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Seven.Value)
 
-		Dim eight As Button = New Button(Sub(bb) bb.
-			WithLabel("Eight").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Eight),
-			template:=one,
-			tag:=8)
+        Dim eight As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Eight)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Eight).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Eight.Value)
 
-		Dim nine As Button = New Button(Sub(bb) bb.
-			WithLabel("Nine").
-			HideLabel().
-			WithImage(Enums.ImageMSO.Number.Nine),
-			template:=one,
-			tag:=9)
+        Dim nine As Button = New Button(Sub(bb) bb.
+                                             WithLabel(NameOf(ImageMSO.Number.Nine)).
+                                             HideLabel().
+                                             WithImage(ImageMSO.Number.Nine).
+                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
+                                       template:=one,
+                                       tag:=ImageMSO.Number.Nine.Value)
 
-		Dim numbersTopRow As ButtonGroup = New ButtonGroup(New ButtonGroupControls().Add(one, two, three))
+        Dim numbersTopRow As ButtonGroup = New ButtonGroup(ButtonGroupControls.From(one, two, three))
 
-		Dim numbersMiddleRow As ButtonGroup = New ButtonGroup(New ButtonGroupControls().Add(four, five, six))
+        Dim numbersMiddleRow As ButtonGroup = New ButtonGroup(ButtonGroupControls.From(four, five, six))
 
-		Dim numbersBottomRow As ButtonGroup = New ButtonGroup(New ButtonGroupControls().Add(seven, eight, nine))
+        Dim numbersBottomRow As ButtonGroup = New ButtonGroup(ButtonGroupControls.From(seven, eight, nine))
 
-		Dim numberGroup As Group = New Group(Sub(gb) gb.WithLabel("Numbers"), {numbersTopRow, numbersMiddleRow, numbersBottomRow})
+        Dim numberGroup As Group = New Group(Sub(gb) gb.WithLabel("Numbers"), {numbersTopRow, numbersMiddleRow, numbersBottomRow})
 
-		Dim heart As Button = New Button(Sub(bb) bb.
-			WithLabel("Heart").
-			WithSuperTip("A heart.").
-			WithDescription("This suit was invented in 15th century Germany and is a survivor from a large pool of experimental suit signs created to replace the Latin suits.").
-			WithImage(Enums.ImageMSO.Misc.Heart),
-			template:=buttonWithStockIconOne)
+        Dim heart As Button = New Button(Sub(bb) bb.
+            WithLabel("Heart").
+            WithSuperTip("A heart.").
+            WithDescription("This suit was invented in 15th century Germany and is a survivor from a large pool of experimental suit signs created to replace the Latin suits.").
+            WithImage(ImageMSO.Misc.Heart),
+            template:=buttonWithStockIconOne)
 
-		Dim spade As Button = New Button(Sub(bb) bb.
-			WithLabel("Spade").
-			WithSuperTip("A black spade.").
-			WithDescription("Spades form one of the four suits of playing cards in the standard French deck. It is a black heart turned upside down with a stalk at its base and symbolises the pike or halberd, two medieval weapons.").
-			WithImage(Enums.ImageMSO.Misc.Spade),
-			template:=heart)
+        Dim spade As Button = New Button(Sub(bb) bb.
+            WithLabel("Spade").
+            WithSuperTip("A black spade.").
+            WithDescription("Spades form one of the four suits of playing cards in the standard French deck. It is a black heart turned upside down with a stalk at its base and symbolises the pike or halberd, two medieval weapons.").
+            WithImage(ImageMSO.Misc.Spade),
+            template:=heart)
 
-		Dim club As Button = New Button(Sub(bb) bb.
-			WithLabel("Club").
-			WithSuperTip("A black club.").
-			WithDescription("Clubs is one of the four suits of playing cards in the standard French deck. It corresponds to the suit of Acorns in a German deck.").
-			WithImage(Enums.ImageMSO.Misc.Club),
-			template:=heart)
+        Dim club As Button = New Button(Sub(bb) bb.
+            WithLabel("Club").
+            WithSuperTip("A black club.").
+            WithDescription("Clubs is one of the four suits of playing cards in the standard French deck. It corresponds to the suit of Acorns in a German deck.").
+            WithImage(ImageMSO.Misc.Club),
+            template:=heart)
 
-		Dim diamond As Button = New Button(Sub(bb) bb.
-			WithLabel("Diamond").
-			WithSuperTip("A red diamond.").
-			WithDescription("Diamonds is one of the four suits of playing cards in the standard French deck. It is the only French suit to not have been adapted from the German deck, taking the place of the suit of Bells Bay.").
-			WithImage(Enums.ImageMSO.Misc.Diamond),
-			template:=heart)
+        Dim diamond As Button = New Button(Sub(bb) bb.
+            WithLabel("Diamond").
+            WithSuperTip("A red diamond.").
+            WithDescription("Diamonds is one of the four suits of playing cards in the standard French deck. It is the only French suit to not have been adapted from the German deck, taking the place of the suit of Bells Bay.").
+            WithImage(ImageMSO.Misc.Diamond),
+            template:=heart)
 
-		Dim cardsMenu As Menu = New Menu(Sub(mb) mb.
-			Large().
-			WithLargeItems().
-			WithLabel("Cards").
-			WithSuperTip("Pick a card!").
-			WithImage(LoadBitmap("ExampleRibbon.playing-cards-icon.png"), AddressOf GetImage),
-			New MenuControls().Add(heart, spade, club, diamond))
+        Dim cardsMenu As Menu = New Menu(Sub(mb) mb.
+            Large().
+            WithLargeItems().
+            WithLabel("Cards").
+            WithSuperTip("Pick a card!").
+            WithImage(LoadBitmap("ExampleRibbon.playing-cards-icon.png"), AddressOf GetImage),
+            New MenuControls().Add(heart, spade, club, diamond))
 
-		Dim cardsGroup As Group = New Group(Nothing, {cardsMenu}, template:=cardsMenu)
+        Dim cardsGroup As Group = New Group(Nothing, {cardsMenu}, template:=cardsMenu)
 
-		Dim desktopFilesDropdownGroup As Group = New DesktopFilesGroup(Me).AsGroup()
+        Dim desktopFilesDropdownGroup As Group = New DesktopFilesGroup(Me).AsGroup()
 
-		'TODO Finish this
-		Dim gallery As Gallery = New Gallery(Sub(gb) gb.
-			Large().
-			WithImage(Enums.ImageMSO.Common.Refresh).
-			WithLabel("My Custom Gallery").
-			WithColumnCount(5).
-			WithRowCount(1).
-			WithItemDimensions(New Size(32, 32)).
-			GetItemCountFrom(AddressOf GetItemCount).
-			GetItemImageFrom(AddressOf GetItemImage).
-			GetSelectedItemIndexFrom(getSelected:=AddressOf GetSelectedItemIndex, setSelected:=AddressOf OnSelectionChange))
+        'TODO Finish this
+        Dim gallery As Gallery = New Gallery(Sub(gb) gb.
+            Large().
+            WithImage(ImageMSO.Common.Refresh).
+            WithLabel("My Custom Gallery").
+            WithColumnCount(5).
+            WithRowCount(1).
+            WithItemDimensions(New Size(32, 32)).
+            GetItemCountFrom(AddressOf GetItemCount).
+            GetItemImageFrom(AddressOf GetItemImage).
+            GetSelectedItemIndexFrom(getSelected:=AddressOf GetSelectedItemIndex, setSelected:=AddressOf OnSelectionChange))
 
-		For i As Integer = 1 To 5
-			gallery.Add(New Item(Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
-		Next
+        For i As Integer = 1 To 5
+            gallery.Add(New Item(Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
+        Next
 
-		Dim galleryGroup As Group = New Group(Sub(gb) gb.WithLabel("Gallery"), {gallery})
+        Dim galleryGroup As Group = New Group(Sub(gb) gb.WithLabel("Gallery"), {gallery})
 
-		Dim tab As Tab = New Tab(Sub(tb) tb.
-				WithLabel("My Custom Tab").
-				InsertAfter(Enums.MSO.Excel.TabHome),
-				buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup)
+        Dim tab As Tab = New Tab(Sub(tb) tb.
+                WithLabel("My Custom Tab").
+                InsertAfter(MSO.Excel.TabHome),
+                buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup)
 
-		Return New Controls.Ribbon(Sub(rb) rb.OnLoad(AddressOf OnLoad), tab)
-	End Function
+        Return New Controls.Ribbon(Sub(rb) rb.OnLoad(AddressOf OnLoad), tab)
+    End Function
 
-	Private Shared Sub OpenWebsiteInDefaultBrowser(webAddress As String)
-		Try
-			Using process As Process = New Process()
-				Process.Start(webAddress)
-			End Using
-		Catch ex As Exception
+    Private Shared Sub OpenWebsiteInDefaultBrowser(webAddress As String)
+        Try
+            Using process As Process = New Process()
+                Process.Start(webAddress)
+            End Using
+        Catch ex As Exception
 
-		End Try
-	End Sub
+        End Try
+    End Sub
 
-	Private _source As CancellationTokenSource
+    Private _source As CancellationTokenSource
 
-	Private Async Sub DisplayStatusBarMessage(message As String)
-		If _source IsNot Nothing Then
-			_source.Cancel()
-		End If
+    Private Async Sub DisplayStatusBarMessage(message As String)
+        If _source IsNot Nothing Then
+            _source.Cancel()
+        End If
 
-		Dim newSource As CancellationTokenSource = New CancellationTokenSource()
-		_source = newSource
+        Dim newSource As CancellationTokenSource = New CancellationTokenSource()
+        _source = newSource
 
-		Try
-			With Excel
-				.DisplayStatusBar = True
-				.StatusBar = message
-			End With
+        Try
+            With Excel
+                .DisplayStatusBar = True
+                .StatusBar = message
+            End With
 
-			Await Task.Delay(5000, _source.Token)
+            Await Task.Delay(5000, _source.Token)
 
-			Excel.StatusBar = False
-		Catch ex As OperationCanceledException
+            Excel.StatusBar = False
+        Catch ex As OperationCanceledException
 
-		Catch ex As Exception
+        Catch ex As Exception
 
-		End Try
+        End Try
 
-		If _source Is newSource Then
-			_source = Nothing
-		End If
-	End Sub
+        If _source Is newSource Then
+            _source = Nothing
+        End If
+    End Sub
 
-	Private Sub SetContentsOfSelectedCell(contents As Object)
-		If Excel.ActiveCell IsNot Nothing Then
-			Excel.ActiveCell.Value2 = contents
-		End If
-	End Sub
+    Private Sub SetContentsOfSelectedCell(contents As Object)
+        If Excel.ActiveCell IsNot Nothing Then
+            Excel.ActiveCell.Value2 = contents
+        End If
+    End Sub
 
 End Class

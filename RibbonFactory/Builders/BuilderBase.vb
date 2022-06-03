@@ -1,13 +1,13 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls.Events
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Enums.ImageMSO
-Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities
-Imports stdole
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Controls
+Imports RibbonX.Controls.Events
+Imports RibbonX.Enums
+Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.Enums.MSO
+Imports RibbonX.RibbonAttributes
+Imports RibbonX.Utilities
+Imports RibbonX.ComTypes.StdOle
 
 Namespace Builders
 

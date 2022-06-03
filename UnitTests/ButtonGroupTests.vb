@@ -1,6 +1,6 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.Controls
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.Controls
 
 <TestClass()>
 Public Class ButtonGroupTests

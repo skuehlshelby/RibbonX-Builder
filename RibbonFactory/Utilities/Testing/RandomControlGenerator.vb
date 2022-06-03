@@ -1,13 +1,13 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.Builders
-Imports RibbonFactory.Controls
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Enums.ImageMSO
-Imports RibbonFactory.Enums.MSO
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities
-Imports stdole
+Imports RibbonX.Builders
+Imports RibbonX.Controls
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Enums
+Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.Enums.MSO
+Imports RibbonX.RibbonAttributes
+Imports RibbonX.Utilities
+Imports RibbonX.ComTypes.StdOle
 
 Public NotInheritable Class RandomControlGenerator
 
@@ -475,7 +475,7 @@ Public NotInheritable Class RandomControlGenerator
     End Function
 
     Public Function MakeBox(ParamArray controls() As RibbonElement) As Box
-        Return MakeControl(Function(e) New Box(Sub() Return, controls, e))
+        Return MakeControl(Function(e) New Box(Sub() Return, e, controls))
     End Function
 
     Public Function MakeGroup(ParamArray controls() As RibbonElement) As Group

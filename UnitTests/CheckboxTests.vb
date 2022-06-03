@@ -1,5 +1,5 @@
-﻿Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls.Events
+﻿Imports RibbonX.Controls
+Imports RibbonX.Controls.Events
 
 <TestClass()>
 Public Class CheckboxTests

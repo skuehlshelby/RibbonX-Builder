@@ -1,8 +1,8 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.RibbonAttributes
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.RibbonAttributes
 
 Namespace Controls
 

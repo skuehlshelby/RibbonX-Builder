@@ -1,7 +1,7 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Enums.MSO
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
+Imports RibbonX.Enums
+Imports RibbonX.Enums.MSO
 
 Namespace Builders
     Friend NotInheritable Class SplitButtonBuilder

@@ -1,8 +1,8 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Enums
-Imports RibbonFactory.RibbonAttributes
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Enums
+Imports RibbonX.RibbonAttributes
 
 Namespace Controls
 
@@ -14,12 +14,8 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(steps As Action(Of IBoxBuilder), items As ICollection(Of RibbonElement), Optional tag As Object = Nothing)
-            Me.New(steps, items, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IBoxBuilder), items As ICollection(Of RibbonElement), template As RibbonElement, Optional tag As Object = Nothing)
-            MyBase.New(If(items, Array.Empty(Of RibbonElement)), tag)
+        Public Sub New(Optional steps As Action(Of IBoxBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional items As ICollection(Of RibbonElement) = Nothing, Optional tag As Object = Nothing)
+            MyBase.New(items, tag)
 
             Dim builder As BoxBuilder = New BoxBuilder(template)
 
@@ -62,16 +58,17 @@ Namespace Controls
         End Property
 
         Public Shared Function Horizontal(ParamArray items() As RibbonElement) As Box
-            Return New Box(Sub(bb) bb.Horizontal().Visible(), items)
+            Return New Box(Sub(bb) bb.Horizontal().Visible(), items:=items)
         End Function
 
         Public Shared Function Vertical(ParamArray items() As RibbonElement) As Box
-            Return New Box(Sub(bb) bb.Vertical().Visible(), items)
+            Return New Box(Sub(bb) bb.Vertical().Visible(), items:=items)
         End Function
 
         Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
             Return _attributes.Clone()
         End Function
+
     End Class
 
 End Namespace

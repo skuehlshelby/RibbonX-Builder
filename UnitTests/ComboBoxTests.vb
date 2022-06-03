@@ -1,8 +1,8 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls.Events
-Imports RibbonFactory.Enums.ImageMSO
+Imports RibbonX
+Imports RibbonX.Controls
+Imports RibbonX.Controls.Events
+Imports RibbonX.Enums.ImageMSO
 
 <TestClass()>
 Public Class ComboBoxTests

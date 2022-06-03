@@ -1,5 +1,5 @@
-﻿Imports Microsoft.Office.Core
-Imports stdole
+﻿Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.ComTypes.StdOle
 
 Public Delegate Sub OnLoad(ribbon As IRibbonUI)
 

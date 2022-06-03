@@ -1,4 +1,4 @@
-﻿Imports stdole
+﻿Imports RibbonX.ComTypes.StdOle
 
 Namespace BuilderInterfaces
 

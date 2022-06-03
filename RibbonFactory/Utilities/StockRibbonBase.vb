@@ -1,10 +1,10 @@
 ﻿Imports System.Runtime.InteropServices
-Imports Extensibility
-Imports Microsoft.Office.Core
-Imports RibbonFactory.Controls
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Enums
-Imports stdole
+Imports RibbonX.ComTypes.Extensibility
+Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.Controls
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Enums
+Imports RibbonX.ComTypes.StdOle
 
 Namespace Utilities
 
@@ -44,6 +44,13 @@ Namespace Utilities
             For Each extension As IDTExtensibility2 In Extensions
                 extension.OnDisconnection(removeMode, custom)
             Next
+
+            HostApp = Nothing
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
         End Sub
 
         Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate

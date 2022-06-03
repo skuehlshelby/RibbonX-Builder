@@ -2,12 +2,12 @@
 Imports System.Reflection
 Imports System.Xml
 Imports System.Xml.Schema
-Imports Microsoft.Office.Core
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities
-Imports RibbonFactory.Utilities.Testing
+Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.RibbonAttributes
+Imports RibbonX.Utilities
+Imports RibbonX.Utilities.Testing
 
 Namespace Controls
 
@@ -127,7 +127,7 @@ Namespace Controls
         Private Shared Function GetCustomUIVersion2009() As XmlSchema
             Dim schema As XmlSchema
 
-            Using stream As Stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("RibbonFactory.RibbonX.xsd")
+            Using stream As Stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("RibbonX.RibbonX.xsd")
                 Using reader As XmlTextReader = New XmlTextReader(stream)
                     schema = XmlSchema.Read(reader, AddressOf ValidationEventHandler)
                 End Using

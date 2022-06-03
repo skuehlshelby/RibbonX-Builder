@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Enums
+﻿Imports RibbonX.Enums
 
 Namespace BuilderInterfaces
 

@@ -1,5 +1,5 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.RibbonAttributes
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.RibbonAttributes
 
 Namespace Builders
 

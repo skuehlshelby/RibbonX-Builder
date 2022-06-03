@@ -7,11 +7,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("RibbonFactory")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyTitle("RibbonX")>
+<Assembly: AssemblyDescription("A set of ribbon-related wrapper objects and convenience methods.")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("RibbonFactory")>
-<Assembly: AssemblyCopyright("Copyright ©  2020")>
+<Assembly: AssemblyProduct("RibbonX Builder")>
+<Assembly: AssemblyCopyright("Scott Kuehl-Shelby ©  2022")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

@@ -1,6 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.InteropServices
-Imports Microsoft.Office.Core
+Imports RibbonX.ComTypes.Microsoft.Office.Core
 
 Namespace Utilities.Testing
 

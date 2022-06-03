@@ -1,5 +1,5 @@
 ﻿Imports System.Reflection
-Imports RibbonFactory.Utilities
+Imports RibbonX.Utilities
 
 Namespace RibbonAttributes
 

@@ -1,9 +1,9 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Controls.Events
-Imports RibbonFactory.Enums
-Imports RibbonFactory.RibbonAttributes
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Controls.Events
+Imports RibbonX.Enums
+Imports RibbonX.RibbonAttributes
 
 Namespace Controls
 
@@ -27,19 +27,7 @@ Namespace Controls
         Private ReadOnly _beforeClickManager As EventManager(Of CancelableEventArgs)
         Private ReadOnly _onClickManager As EventManager
 
-        Public Sub New()
-            Me.New(Nothing, Nothing, Nothing)
-        End Sub
-
-        Public Sub New(template As RibbonElement, Optional tag As Object = Nothing)
-            Me.New(Nothing, template, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IButtonBuilder), Optional tag As Object = Nothing)
-            Me.New(steps, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IButtonBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional steps As Action(Of IButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
             Dim builder As ButtonBuilder = New ButtonBuilder(template)

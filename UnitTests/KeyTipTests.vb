@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory
+﻿Imports RibbonX
 
 <TestClass()>
 Public Class KeyTipTests

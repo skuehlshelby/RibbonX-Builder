@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Enums.MSO
+﻿Imports RibbonX.Enums.MSO
 
 Namespace BuilderInterfaces
 

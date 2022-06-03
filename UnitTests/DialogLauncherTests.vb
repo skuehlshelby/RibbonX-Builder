@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Controls
+﻿Imports RibbonX.Controls
 
 <TestClass()>
 Public Class DialogLauncherTests

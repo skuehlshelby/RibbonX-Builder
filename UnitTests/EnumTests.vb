@@ -1,6 +1,6 @@
-﻿Imports RibbonFactory.Enums
-Imports RibbonFactory.Enums.ImageMSO
-Imports RibbonFactory.Enums.MSO
+﻿Imports RibbonX.Enums
+Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.Enums.MSO
 
 <TestClass()>
 Public Class EnumTests

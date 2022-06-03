@@ -1,8 +1,8 @@
 ﻿Imports System.Drawing
 Imports System.IO
-Imports RibbonFactory
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
+Imports RibbonX
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
 
 Public Class DesktopFilesGroup
 

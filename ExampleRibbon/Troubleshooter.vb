@@ -1,6 +1,6 @@
 ﻿Imports System.Runtime.ExceptionServices
 Imports System.Text
-Imports Extensibility
+Imports RibbonX.ComTypes.Extensibility
 
 Friend Class Troubleshooter
     Implements IDTExtensibility2

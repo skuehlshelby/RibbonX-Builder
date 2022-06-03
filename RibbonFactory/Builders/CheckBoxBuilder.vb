@@ -1,7 +1,7 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls.Events
-Imports RibbonFactory.Enums.MSO
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
+Imports RibbonX.Controls.Events
+Imports RibbonX.Enums.MSO
 
 Namespace Builders
 

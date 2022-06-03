@@ -1,8 +1,8 @@
 ﻿Imports System.Drawing
-Imports Microsoft.Office.Core
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
-Imports stdole
+Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
+Imports RibbonX.ComTypes.StdOle
 
 Namespace Builders
     Friend NotInheritable Class ItemBuilder

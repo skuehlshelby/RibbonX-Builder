@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Utilities
+﻿Imports RibbonX.Utilities
 
 Namespace RibbonAttributes
 

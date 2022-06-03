@@ -1,5 +1,5 @@
-﻿Imports RibbonFactory
-Imports RibbonFactory.Controls
+﻿Imports RibbonX
+Imports RibbonX.Controls
 
 <TestClass()>
 Public Class DynamicUpdating

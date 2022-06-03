@@ -1,5 +1,5 @@
 ﻿Imports System.Runtime.CompilerServices
-Imports RibbonFactory
+Imports RibbonX
 
 Friend Module Extensions
 

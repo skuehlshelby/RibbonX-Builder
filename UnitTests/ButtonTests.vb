@@ -1,9 +1,9 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Controls.Events
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Enums.ImageMSO
+Imports RibbonX
+Imports RibbonX.Controls
+Imports RibbonX.Controls.Events
+Imports RibbonX.Enums
+Imports RibbonX.Enums.ImageMSO
 
 <TestClass()>
 Public Class ButtonTests
@@ -173,7 +173,7 @@ Public Class ButtonTests
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
         Dim firstButton As Button = New Button(Sub(bb) bb.WithDescription("The Description").WithLabel("The Label").WithId("MyID"))
-        Dim secondButton As Button = New Button(firstButton)
+        Dim secondButton As Button = New Button(template:=firstButton)
 
         Assert.AreEqual(secondButton.Description, "The Description")
         Assert.AreEqual(secondButton.Label, "The Label")
@@ -239,7 +239,7 @@ Public Class ButtonTests
     <TestMethod()>
     Public Sub ClonedControl_Click_NoThrow() 'This was actually a problem at one point
         Dim toggle As ToggleButton = New ToggleButton()
-        Dim button As Button = New Button(toggle)
+        Dim button As Button = New Button(template:=toggle)
 
         button.Click()
     End Sub

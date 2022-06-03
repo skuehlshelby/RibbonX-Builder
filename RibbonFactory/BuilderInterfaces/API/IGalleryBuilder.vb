@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Controls.Events
+﻿Imports RibbonX.Controls.Events
 
 Namespace BuilderInterfaces.API
 

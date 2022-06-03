@@ -1,5 +1,5 @@
-﻿Imports RibbonFactory.Enums.ImageMSO
-Imports stdole
+﻿Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.ComTypes.StdOle
 
 Public MustInherit Class RibbonImage
 

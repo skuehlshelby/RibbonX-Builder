@@ -1,5 +1,5 @@
-﻿Imports RibbonFactory.Controls
-Imports RibbonFactory.Utilities.Testing
+﻿Imports RibbonX.Controls
+Imports RibbonX.Utilities.Testing
 
 <TestClass()> Public Class ValidationWithXsdTests
 

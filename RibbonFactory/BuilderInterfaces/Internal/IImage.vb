@@ -1,6 +1,6 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.Enums.ImageMSO
-Imports stdole
+Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.ComTypes.StdOle
 
 Namespace BuilderInterfaces
 

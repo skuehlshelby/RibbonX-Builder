@@ -1,10 +1,10 @@
 ﻿Imports System.Drawing
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Enums.ImageMSO
-Imports RibbonFactory.Enums.MSO
-Imports stdole
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
+Imports RibbonX.Enums
+Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.Enums.MSO
+Imports RibbonX.ComTypes.StdOle
 
 Namespace Builders
     Friend NotInheritable Class MenuBuilder

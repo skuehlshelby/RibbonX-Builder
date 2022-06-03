@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CD2B3599-42FA-4B2E-823D-982543489C09}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>RibbonFactory</RootNamespace>
-    <AssemblyName>RibbonFactory</AssemblyName>
+    <RootNamespace>RibbonX</RootNamespace>
+    <AssemblyName>RibbonX</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -20,7 +20,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>RibbonFactory.xml</DocumentationFile>
+    <DocumentationFile>RibbonX.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
@@ -33,7 +33,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>RibbonFactory.xml</DocumentationFile>
+    <DocumentationFile>RibbonX.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
@@ -62,16 +62,6 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="extensibility, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="OFFICE, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Bundle.Microsoft.Office.Interop.15.0.4569\lib\OFFICE.DLL</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -169,6 +159,14 @@
     <Compile Include="Builders\SplitButtonBuilder.vb" />
     <Compile Include="Builders\TabBuilder.vb" />
     <Compile Include="Builders\ToggleButtonBuilder.vb" />
+    <Compile Include="ComTypes\Extensibility\ext_ConnectMode.vb" />
+    <Compile Include="ComTypes\Extensibility\ext_DisconnectMode.vb" />
+    <Compile Include="ComTypes\Extensibility\IDTExtensibility2.vb" />
+    <Compile Include="ComTypes\OfficeCore\IRibbonControl.vb" />
+    <Compile Include="ComTypes\OfficeCore\IRibbonExtensibility.vb" />
+    <Compile Include="ComTypes\OfficeCore\IRibbonUI.vb" />
+    <Compile Include="ComTypes\StdOle\IPicture.vb" />
+    <Compile Include="ComTypes\StdOle\IPictureDisp.vb" />
     <Compile Include="Controls\Events\BeforeToggleChangeEventArgs.vb" />
     <Compile Include="Controls\Events\CancelableEventArgs.vb" />
     <Compile Include="ControlInterfaces\IBoxStyle.vb" />
@@ -246,7 +244,6 @@
     <Compile Include="RibbonImage.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="ICreateCallbacks.vb" />
-    <Compile Include="Utilities\ImageConversion\ImageConverter.vb" />
     <Compile Include="KeyTip.vb" />
     <Compile Include="Utilities\Contracts.vb" />
     <Compile Include="RibbonAttributes\AttributeCategory.vb" />

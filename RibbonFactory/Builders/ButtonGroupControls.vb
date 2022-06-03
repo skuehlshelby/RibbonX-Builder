@@ -1,4 +1,4 @@
-﻿Imports RibbonFactory.Controls
+﻿Imports RibbonX.Controls
 
 Namespace Builders
 
@@ -59,6 +59,30 @@ Namespace Builders
 
         Public Shared Function [From](ParamArray controls() As ToggleButton) As ButtonGroupControls
             Return New ButtonGroupControls().Add(controls)
+        End Function
+
+        Public Shared Function [From](controls As IEnumerable(Of Button)) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls.ToArray())
+        End Function
+
+        Public Shared Function [From](controls As IEnumerable(Of Gallery)) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls.ToArray())
+        End Function
+
+        Public Shared Function [From](controls As IEnumerable(Of Menu)) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls.ToArray())
+        End Function
+
+        Public Shared Function [From](controls As IEnumerable(Of Separator)) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls.ToArray())
+        End Function
+
+        Public Shared Function [From](controls As IEnumerable(Of SplitButton)) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls.ToArray())
+        End Function
+
+        Public Shared Function [From](controls As IEnumerable(Of ToggleButton)) As ButtonGroupControls
+            Return New ButtonGroupControls().Add(controls.ToArray())
         End Function
 
         Private Function GetEnumerator() As IEnumerator(Of RibbonElement) Implements IEnumerable(Of RibbonElement).GetEnumerator

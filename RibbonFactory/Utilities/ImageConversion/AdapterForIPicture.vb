@@ -1,6 +1,6 @@
 ﻿Imports System.Drawing
 Imports System.Runtime.InteropServices
-Imports stdole
+Imports RibbonX.ComTypes.StdOle
 
 Namespace Utilities
 

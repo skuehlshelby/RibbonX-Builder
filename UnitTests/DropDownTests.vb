@@ -1,6 +1,6 @@
-﻿Imports RibbonFactory
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
+﻿Imports RibbonX
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
 
 <TestClass()>
 Public Class DropDownTests

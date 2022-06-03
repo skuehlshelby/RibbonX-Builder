@@ -1,8 +1,8 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Controls.Events
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.RibbonAttributes
+Imports RibbonX.Controls.Events
 
 Namespace Controls
 

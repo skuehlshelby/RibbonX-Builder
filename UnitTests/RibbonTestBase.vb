@@ -1,11 +1,11 @@
 ﻿Imports System.Reflection
-Imports Microsoft.Office.Core
-Imports RibbonFactory
-Imports RibbonFactory.Controls
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Enums
-Imports RibbonFactory.Utilities.Testing
-Imports stdole
+Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX
+Imports RibbonX.Controls
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Enums
+Imports RibbonX.Utilities.Testing
+Imports RibbonX.ComTypes.StdOle
 
 Public MustInherit Class RibbonTestBase
     Implements IRibbonExtensibility
@@ -208,6 +208,5 @@ Public MustInherit Class RibbonTestBase
     End Sub
 
 #End Region
-
 
 End Class

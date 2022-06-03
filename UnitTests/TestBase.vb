@@ -1,9 +1,9 @@
 ﻿Imports System.Reflection
-Imports Microsoft.Office.Core
-Imports RibbonFactory
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Enums
-Imports stdole
+Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX
+Imports RibbonX.Controls
+Imports RibbonX.Enums
+Imports RibbonX.ComTypes.StdOle
 
 <TestClass()>
 Public MustInherit Class TestBase

@@ -1,6 +1,6 @@
-﻿Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Controls
-Imports RibbonFactory.Enums.MSO
+﻿Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Controls
+Imports RibbonX.Enums.MSO
 
 Namespace Builders
     Friend Class LabelControlBuilder

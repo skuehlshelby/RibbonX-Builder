@@ -1,6 +1,6 @@
-﻿Imports Microsoft.Office.Core
-Imports RibbonFactory.Enums
-Imports stdole
+﻿Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.Enums
+Imports RibbonX.ComTypes.StdOle
 
 ''' <summary>
 ''' This interface exists only for convenience.

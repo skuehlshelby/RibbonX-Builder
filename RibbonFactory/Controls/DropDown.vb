@@ -1,10 +1,10 @@
 ﻿Imports System.Text.RegularExpressions
-Imports RibbonFactory.BuilderInterfaces.API
-Imports RibbonFactory.Builders
-Imports RibbonFactory.ControlInterfaces
-Imports RibbonFactory.Controls.Events
-Imports RibbonFactory.RibbonAttributes
-Imports RibbonFactory.Utilities
+Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.ControlInterfaces
+Imports RibbonX.Controls.Events
+Imports RibbonX.RibbonAttributes
+Imports RibbonX.Utilities
 
 Namespace Controls
 
