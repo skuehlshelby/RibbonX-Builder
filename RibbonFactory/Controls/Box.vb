@@ -1,8 +1,8 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.Enums
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.SimpleTypes
 
 Namespace Controls
 
@@ -10,17 +10,17 @@ Namespace Controls
         Inherits Container(Of RibbonElement)
         Implements IVisible
         Implements IBoxStyle
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(Optional steps As Action(Of IBoxBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional items As ICollection(Of RibbonElement) = Nothing, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IBoxBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional items As ICollection(Of RibbonElement) = Nothing, Optional tag As Object = Nothing)
             MyBase.New(items, tag)
 
             Dim builder As BoxBuilder = New BoxBuilder(template)
 
-            If steps IsNot Nothing Then
-                steps.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -65,7 +65,7 @@ Namespace Controls
             Return New Box(Sub(bb) bb.Vertical().Visible(), items:=items)
         End Function
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

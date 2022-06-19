@@ -1,6 +1,6 @@
-﻿Imports RibbonX.Enums
-Imports RibbonX.BuilderInterfaces.API
+﻿Imports RibbonX.Builders
 Imports RibbonX.Controls
+Imports RibbonX.SimpleTypes
 
 <TestClass()>
 Public Class BoxTests
@@ -8,22 +8,22 @@ Public Class BoxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim box As Box = New Box(Nothing, Nothing)
+        Dim box As Box = New Box(template:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim box As Box = New Box(Nothing, Nothing)
+        Dim box As Box = New Box(config:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        CreateSimpleRibbon(Box.Horizontal(New Button()))
+        Assert.That.ValidRibbonXIsProduced(Box.Horizontal(ButtonTests.BuildButton(), ToggleButtonTests.BuildReadonlyToggleButton()))
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        ContainsNoNullValuesByDefaultHelper(New Box(Nothing, Nothing))
+        Assert.That.NoPropertiesAreNull(New Box())
     End Sub
 
     <TestMethod>
@@ -31,7 +31,7 @@ Public Class BoxTests
         Dim box As Box = Box.Horizontal()
 
         Assert.AreEqual(box.Visible, True)
-        Assert.AreEqual(box.BoxStyle, BoxStyle.horizontal)
+        Assert.AreEqual(box.BoxStyle, BoxStyle.Horizontal)
     End Sub
 
     <TestMethod>
@@ -52,9 +52,6 @@ Public Class BoxTests
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
         Dim box As Box = New Box(Sub(bb As IBoxBuilder) bb.Invisible().Vertical(), Nothing)
 
-        Dim otherBox As Box = New Box(Nothing, Nothing, box)
-
-        Assert.AreEqual(box.Visible, False)
-        Assert.AreEqual(box.BoxStyle, BoxStyle.vertical)
+        Assert.That.SharedPropertiesAreEqual(box, New Button(template:=box))
     End Sub
 End Class

@@ -2,12 +2,12 @@
 Imports System.Reflection
 Imports System.Xml
 Imports System.Xml.Schema
-Imports RibbonX.ComTypes.Microsoft.Office.Core
-Imports RibbonX.BuilderInterfaces.API
 Imports RibbonX.Builders
-Imports RibbonX.RibbonAttributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.ComTypes.Microsoft.Office.Core
 Imports RibbonX.Utilities
-Imports RibbonX.Utilities.Testing
+Imports RibbonX.Testing
 
 Namespace Controls
 

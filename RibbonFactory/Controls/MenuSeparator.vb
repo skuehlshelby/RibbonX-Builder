@@ -1,27 +1,25 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.Controls.Attributes
 
 Namespace Controls
 
     Public NotInheritable Class MenuSeparator
         Inherits RibbonElement
         Implements ITitle
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(configuration As Action(Of IMenuSeparatorBuilder), Optional tag As Object = Nothing)
-            Me.New(Nothing, configuration, tag)
-        End Sub
-
-        Public Sub New(template As RibbonElement, configuration As Action(Of IMenuSeparatorBuilder), Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IMenuSeparatorBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
-            Dim builder As MenuSeparatorBuilder = If(template Is Nothing, New MenuSeparatorBuilder(), New MenuSeparatorBuilder(template))
+            Dim builder As MenuSeparatorBuilder = New MenuSeparatorBuilder(template)
 
-            configuration.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
+            End If
 
             _attributes = builder.Build()
 
@@ -49,7 +47,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

@@ -1,8 +1,11 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
-Imports RibbonX.Controls.Events
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.EventArgs
+Imports RibbonX.Controls.Properties
+Imports RibbonX.Controls.Utilities
+Imports RibbonX.Images
+Imports RibbonX.SimpleTypes
 
 Namespace Controls
 
@@ -19,27 +22,19 @@ Namespace Controls
         Implements IShowImage
         Implements IMaxLength
         Implements IText
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _beforeTextChangedHelper As EventManager(Of BeforeTextChangeEventArgs)
         Private ReadOnly _textChangedHelper As EventManager(Of TextChangeEventArgs)
 
-        Public Sub New()
-            Me.New(Nothing, Nothing, Nothing)
-        End Sub
-
-        Public Sub New(configuration As Action(Of IComboBoxBuilder), Optional tag As Object = Nothing)
-            Me.New(configuration, Nothing, tag)
-        End Sub
-
-        Public Sub New(configuration As Action(Of IComboBoxBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IComboBoxBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(New List(Of Item)(), tag)
 
             Dim builder As ComboBoxBuilder = New ComboBoxBuilder(template)
 
-            If configuration IsNot Nothing Then
-                configuration.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -266,7 +261,7 @@ Namespace Controls
 
 #End Region
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

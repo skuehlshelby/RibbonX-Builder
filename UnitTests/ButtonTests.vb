@@ -1,9 +1,9 @@
 ﻿Imports System.Drawing
-Imports RibbonX
 Imports RibbonX.Controls
-Imports RibbonX.Controls.Events
-Imports RibbonX.Enums
-Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.Controls.EventArgs
+Imports RibbonX.Images
+Imports RibbonX.Images.BuiltIn
+Imports RibbonX.SimpleTypes
 
 <TestClass()>
 Public Class ButtonTests
@@ -11,47 +11,27 @@ Public Class ButtonTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim button As Button = New Button(Sub(bb) bb.Visible(), Nothing)
-
-        Debug.WriteLine(button)
+        Dim button As Button = New Button(template:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim button As Button = New Button(Nothing, Nothing)
-
-        Debug.WriteLine(button)
+        Dim button As Button = New Button(config:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Dim ribbon As Ribbon = CreateSimpleRibbon(
-            New Button(Sub(bb) bb.
-                           Visible().
-                           Enabled().
-                           ShowImage().
-                           ShowLabel().
-                           WithLabel("Button").
-                           WithSuperTip("Super").
-                           WithImage(Common.DollarSign)))
-
-        Assert.IsTrue(ribbon.GetErrors().None)
-
-        Debug.WriteLine(ribbon.RibbonX)
+        Assert.That.ValidRibbonXIsProduced(BuildReadonlyButtonII())
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Dim button As Button = New Button()
-
-        ContainsNoNullValuesByDefaultHelper(button)
-
-        Debug.WriteLine(button)
+        Assert.That.NoPropertiesAreNull(New Button())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim button As Button = New Button(Sub(bb) bb.
+        Dim control As Button = New Button(Sub(bb) bb.
                            Visible().
                            Enabled().
                            ShowImage().
@@ -63,121 +43,50 @@ Public Class ButtonTests
                            WithKeyTip("K2").
                            WithImage(Common.DollarSign))
 
-        Assert.IsTrue(button.Enabled)
-        Assert.IsTrue(button.Visible)
-        Assert.IsTrue(button.ShowImage)
-        Assert.IsTrue(button.ShowLabel)
-        Assert.AreEqual(button.Size, ControlSize.large)
-        Assert.AreEqual(button.Label, "Button")
-        Assert.AreEqual(button.ScreenTip, button.Label)
-        Assert.AreEqual(button.SuperTip, "Super")
-        Assert.AreEqual(button.Description, "Description")
-        Assert.AreEqual(button.KeyTip, "K2")
-        Assert.AreEqual(button.Image, Common.DollarSign)
+        Assert.IsTrue(control.Enabled)
+        Assert.IsTrue(control.Visible)
+        Assert.IsTrue(control.ShowImage)
+        Assert.IsTrue(control.ShowLabel)
+        Assert.AreEqual(control.Size, ControlSize.Large)
+        Assert.AreEqual(control.Label, "Button")
+        Assert.AreEqual(control.ScreenTip, control.Label)
+        Assert.AreEqual(control.SuperTip, "Super")
+        Assert.AreEqual(control.Description, "Description")
+        Assert.AreEqual(control.KeyTip, "K2")
+        Assert.AreEqual(control.Image, Common.DollarSign)
 
-        Debug.WriteLine(button)
+        Debug.WriteLine(control)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim button As Button = New Button(Sub(bb) bb.
-                           Invisible().
-                           Disabled().
-                           HideImage().
-                           HideLabel().
-                           Normal().
-                           WithLabel("Button").
-                           WithSuperTip("Super").
-                           WithDescription("Description").
-                           WithKeyTip("K2").
-                           WithImage("TheNameOfMyCachedImage"))
-
-        Assert.ThrowsException(Of Exception)(Sub() button.Visible = True)
-        Assert.ThrowsException(Of Exception)(Sub() button.Enabled = True)
-        Assert.ThrowsException(Of Exception)(Sub() button.ShowLabel = True)
-        Assert.ThrowsException(Of Exception)(Sub() button.ShowImage = True)
-        Assert.ThrowsException(Of Exception)(Sub() button.Label = "New Label")
-        Assert.ThrowsException(Of Exception)(Sub() button.ScreenTip = "New Screentip")
-        Assert.ThrowsException(Of Exception)(Sub() button.SuperTip = "New Supertip")
-        Assert.ThrowsException(Of Exception)(Sub() button.KeyTip = "K5")
-        Assert.ThrowsException(Of Exception)(Sub() button.Description = "New Description")
-        Assert.ThrowsException(Of Exception)(Sub() button.Image = RibbonImage.Create(Common.SadFace))
-        Assert.ThrowsException(Of Exception)(Sub() button.Size = ControlSize.large)
-
-        Debug.WriteLine(button)
+        Assert.That.PropertiesCannotBeModified(BuildReadonlyButton())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim button As Button = New Button(Sub(bb) bb.
-                           Visible(AddressOf GetVisible).
-                           Enabled(AddressOf GetEnabled).
-                           Normal(AddressOf GetSize).
-                           WithLabel("Button", AddressOf GetLabel).
-                           HideLabel(AddressOf GetShowLabel).
-                           WithSuperTip("Super", AddressOf GetSuperTip).
-                           WithDescription("Description", AddressOf GetDescription).
-                           WithKeyTip("K2", AddressOf GetKeyTip).
-                           WithImage(New Bitmap(48, 48), AddressOf GetImage).
-                           ShowImage(AddressOf GetShowImage).
-                           RouteClickTo(AddressOf OnAction).
-                           BeforeClick(Sub() Debug.WriteLine("Before Click Fired")).
-                           OnClick(Sub() Debug.WriteLine("On Click Fired")))
+        Dim button As Button = BuildButton()
 
-        Assert.IsTrue(button.Visible)
-        button.Visible = False
-        Assert.IsFalse(button.Visible)
-
-        Assert.IsTrue(button.Enabled)
-        button.Enabled = False
-        Assert.IsFalse(button.Enabled)
-
-        Assert.IsFalse(button.ShowLabel)
-        button.ShowLabel = True
-        Assert.IsTrue(button.ShowLabel)
-
-        Assert.IsTrue(button.ShowImage)
-        button.ShowImage = False
-        Assert.IsFalse(button.ShowImage)
-
-        Assert.AreEqual(button.Label, "Button")
-        button.Label = "New Label"
-        Assert.AreEqual(button.Label, "New Label")
-
-        Assert.AreEqual(button.ScreenTip, "Button")
-        button.ScreenTip = "New ScreenTip"
-        Assert.AreEqual(button.ScreenTip, "New ScreenTip")
-
-        Assert.AreEqual(button.SuperTip, "Super")
-        button.SuperTip = "New SuperTip"
-        Assert.AreEqual(button.SuperTip, "New SuperTip")
-
-        Assert.AreEqual(button.Description, "Description")
-        button.Description = "New Description"
-        Assert.AreEqual(button.Description, "New Description")
-
-        Assert.AreEqual(button.KeyTip, "K2")
-        button.KeyTip = "A"
-        Assert.AreEqual(button.KeyTip, "A")
-
-        Assert.AreEqual(button.Size, ControlSize.normal)
-        button.Size = ControlSize.large
-        Assert.AreEqual(button.Size, ControlSize.large)
-
-        button.Image = RibbonImage.Create(Common.TraceError)
-        Assert.AreEqual(button.Image, Common.TraceError)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.Visible, Not button.Visible)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.Enabled, Not button.Enabled)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.ShowLabel, Not button.ShowLabel)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.ShowImage, Not button.ShowImage)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.Label, String.Empty)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.ScreenTip, String.Empty)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.SuperTip, String.Empty)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.Description, String.Empty)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.KeyTip, CType("P5", KeyTip))
+        Assert.That.PropertyMayBeModified(button, Function(b) b.Size, ControlSize.Large)
+        Assert.That.PropertyMayBeModified(button, Function(b) b.Image, RibbonImage.Create(Common.TraceError))
 
         Debug.WriteLine(button)
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim firstButton As Button = New Button(Sub(bb) bb.WithDescription("The Description").WithLabel("The Label").WithId("MyID"))
-        Dim secondButton As Button = New Button(template:=firstButton)
+        Dim control As Button = BuildReadonlyButtonII()
 
-        Assert.AreEqual(secondButton.Description, "The Description")
-        Assert.AreEqual(secondButton.Label, "The Label")
-        Assert.AreNotEqual(secondButton.ID, firstButton.ID)
+        Assert.That.SharedPropertiesAreEqual(control, New EditBox(template:=control))
     End Sub
 
     <TestMethod()>
@@ -243,5 +152,70 @@ Public Class ButtonTests
 
         button.Click()
     End Sub
+
+    Public Shared Function BuildReadonlyButton() As Button
+        Return New Button(Sub(bb) bb.
+                   Invisible().
+                   Disabled().
+                   HideImage().
+                   HideLabel().
+                   Normal().
+                   WithLabel("Button").
+                   WithSuperTip("Super").
+                   WithDescription("Description").
+                   WithKeyTip("K2").
+                   WithImage("TheNameOfMyCachedImage"))
+    End Function
+
+    Public Shared Function BuildReadonlyButtonII() As Button
+        Return New Button(Sub(bb) bb.
+                   Visible().
+                   Enabled().
+                   ShowImage().
+                   ShowLabel().
+                   Large().
+                   WithLabel("Button").
+                   WithScreenTip("Button").
+                   WithSuperTip("Super").
+                   WithDescription("Description").
+                   WithKeyTip("K2").
+                   WithImage("TheNameOfMyCachedImage"))
+    End Function
+
+    Public Shared Function BuildButton() As Button
+        Return New Button(Sub(bb) bb.
+                           Visible(AddressOf GetVisibleShared).
+                           Enabled(AddressOf GetEnabledShared).
+                           Normal(AddressOf GetSizeShared).
+                           WithLabel("Button", AddressOf GetLabelShared).
+                           ShowLabel(AddressOf GetShowLabelShared).
+                           WithScreenTip("Button", AddressOf GetScreenTipShared).
+                           WithSuperTip("Super", AddressOf GetSuperTipShared).
+                           WithDescription("Description", AddressOf GetDescriptionShared).
+                           WithKeyTip("K2", AddressOf GetKeyTipShared).
+                           WithImage(New Bitmap(48, 48), AddressOf GetImageShared).
+                           ShowImage(AddressOf GetShowImageShared).
+                           RouteClickTo(AddressOf OnActionShared).
+                           BeforeClick(Sub() Debug.WriteLine("Before Click Fired")).
+                           OnClick(Sub() Debug.WriteLine("On Click Fired")))
+    End Function
+
+    Public Shared Function BuildButtonII() As Button
+        Return New Button(Sub(bb) bb.
+                           Invisible(AddressOf GetVisibleShared).
+                           Disabled(AddressOf GetEnabledShared).
+                           Large(AddressOf GetSizeShared).
+                           WithLabel("Button", AddressOf GetLabelShared, False).
+                           WithScreenTip("Button", AddressOf GetScreenTipShared).
+                           HideLabel(AddressOf GetShowLabelShared).
+                           WithSuperTip("Super", AddressOf GetSuperTipShared).
+                           WithDescription("Description", AddressOf GetDescriptionShared).
+                           WithKeyTip("K2", AddressOf GetKeyTipShared).
+                           WithImage(New Bitmap(48, 48), AddressOf GetImageShared).
+                           HideImage(AddressOf GetShowImageShared).
+                           RouteClickTo(AddressOf OnActionShared).
+                           BeforeClick(Sub() Debug.WriteLine("Before Click Fired")).
+                           OnClick(Sub() Debug.WriteLine("On Click Fired")))
+    End Function
 
 End Class

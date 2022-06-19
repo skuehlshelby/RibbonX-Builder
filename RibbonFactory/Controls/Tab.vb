@@ -1,7 +1,8 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.SimpleTypes
 
 Namespace Controls
 
@@ -10,7 +11,7 @@ Namespace Controls
         Implements IVisible
         Implements IKeyTip
         Implements ILabel
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
@@ -87,7 +88,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

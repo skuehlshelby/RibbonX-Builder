@@ -1,7 +1,9 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.Images
+Imports RibbonX.SimpleTypes
 
 Namespace Controls
 
@@ -13,25 +15,20 @@ Namespace Controls
         Implements IImage
         Implements IScreenTip
         Implements ISuperTip
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(ParamArray controls() As RibbonElement)
-            Me.New(Nothing, controls, Nothing, Nothing)
-        End Sub
-
-        Public Sub New(configuration As Action(Of IGroupBuilder), controls As ICollection(Of RibbonElement), Optional tag As Object = Nothing)
-            Me.New(configuration, controls, Nothing, tag)
-        End Sub
-
-        Public Sub New(configuration As Action(Of IGroupBuilder), controls As ICollection(Of RibbonElement), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IGroupBuilder) = Nothing,
+                       Optional controls As ICollection(Of RibbonElement) = Nothing,
+                       Optional template As RibbonElement = Nothing,
+                       Optional tag As Object = Nothing)
             MyBase.New(controls, tag)
 
-            Dim builder As GroupBuilder = If(template Is Nothing, New GroupBuilder(), New GroupBuilder(template))
+            Dim builder As GroupBuilder = New GroupBuilder(template)
 
-            If configuration IsNot Nothing Then
-                configuration.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -47,11 +44,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property XML As String
             Get
-                If Items.Any() Then
-                    Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, Items), $"</group>")
-                Else
-                    Return $"<group { _attributes } />"
-                End If
+                Return String.Join(Environment.NewLine, $"<group { _attributes }>", String.Join(Environment.NewLine, Items), $"</group>")
             End Get
         End Property
 
@@ -109,7 +102,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

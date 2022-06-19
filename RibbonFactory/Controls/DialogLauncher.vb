@@ -1,4 +1,8 @@
-﻿Namespace Controls
+﻿Imports System.Text.RegularExpressions
+Imports RibbonX.Controls.Base
+
+Namespace Controls
+
     Public NotInheritable Class DialogLauncher
         Inherits RibbonElement
 
@@ -16,10 +20,12 @@
 
         Public Overrides ReadOnly Property XML As String
             Get
-                Return String.Join(Environment.NewLine, "<dialogBoxLauncher>", _button.XML, "</dialogBoxLauncher>")
+                Dim regex As Regex = New Regex("(?:size|getSize|visible|getVisible)=""\w+""")
+
+                Return String.Join(Environment.NewLine, "<dialogBoxLauncher>", regex.Replace(_button.XML, String.Empty), "</dialogBoxLauncher>")
             End Get
         End Property
 
     End Class
 
-End NameSpace
+End Namespace

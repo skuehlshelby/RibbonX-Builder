@@ -1,5 +1,6 @@
 ﻿Imports RibbonX.Controls
-Imports RibbonX.Controls.Events
+Imports RibbonX.Controls.EventArgs
+Imports RibbonX.SimpleTypes
 
 <TestClass()>
 Public Class CheckboxTests
@@ -7,40 +8,27 @@ Public Class CheckboxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim checkbox As CheckBox = New CheckBox(Sub(cbb) cbb.Visible(), Nothing)
-
-        Debug.WriteLine(checkbox)
+        Dim checkbox As CheckBox = New CheckBox(template:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim checkbox As CheckBox = New CheckBox(Nothing, Nothing)
-
-        Debug.WriteLine(checkbox)
+        Dim checkbox As CheckBox = New CheckBox(config:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Dim ribbon As Ribbon = CreateSimpleRibbon(
-            New CheckBox(Sub(cbb) cbb.
+        Assert.That.ValidRibbonXIsProduced(New CheckBox(Sub(cbb) cbb.
                            Visible().
                            Enabled().
                            WithLabel("The Label").
                            WithSuperTip("The Supertip").
                            WithDescription("The Description")))
-
-        Assert.IsTrue(ribbon.GetErrors().None)
-
-        Debug.WriteLine(ribbon.RibbonX)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Dim checkbox As CheckBox = New CheckBox()
-
-        ContainsNoNullValuesByDefaultHelper(checkbox)
-
-        Debug.WriteLine(checkbox)
+        Assert.That.NoPropertiesAreNull(New CheckBox())
     End Sub
 
     <TestMethod>
@@ -74,13 +62,7 @@ Public Class CheckboxTests
                            WithDescription("The Description").
                            WithKeyTip("K2"))
 
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.Visible = True)
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.Enabled = True)
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.Label = "New Label")
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.ScreenTip = "New Screentip")
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.SuperTip = "New Supertip")
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.KeyTip = "K5")
-        Assert.ThrowsException(Of Exception)(Sub() checkbox.Description = "New Description")
+        Assert.That.PropertiesCannotBeModified(checkbox)
 
         Debug.WriteLine(checkbox)
     End Sub
@@ -98,52 +80,25 @@ Public Class CheckboxTests
                            BeforeStateChange(Sub() Debug.WriteLine("Before Toggle Fired")).
                            AfterCheckStateChanged(Sub() Debug.WriteLine("On Toggle Fired")))
 
-        Assert.IsTrue(checkbox.Visible)
-        checkbox.Visible = False
-        Assert.IsFalse(checkbox.Visible)
-
-        Assert.IsTrue(checkbox.Enabled)
-        checkbox.Enabled = False
-        Assert.IsFalse(checkbox.Enabled)
-
-        Assert.IsTrue(checkbox.Checked)
-        checkbox.Checked = False
-        Assert.IsFalse(checkbox.Checked)
-
-        Assert.AreEqual(checkbox.Label, "Button")
-        checkbox.Label = "New Label"
-        Assert.AreEqual(checkbox.Label, "New Label")
-
-        Assert.AreEqual(checkbox.ScreenTip, "Button")
-        checkbox.ScreenTip = "New ScreenTip"
-        Assert.AreEqual(checkbox.ScreenTip, "New ScreenTip")
-
-        Assert.AreEqual(checkbox.SuperTip, "Super")
-        checkbox.SuperTip = "New SuperTip"
-        Assert.AreEqual(checkbox.SuperTip, "New SuperTip")
-
-        Assert.AreEqual(checkbox.Description, "Description")
-        checkbox.Description = "New Description"
-        Assert.AreEqual(checkbox.Description, "New Description")
-
-        Assert.AreEqual(checkbox.KeyTip, "K2")
-        checkbox.KeyTip = "A"
-        Assert.AreEqual(checkbox.KeyTip, "A")
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Visible, Not checkbox.Visible)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Enabled, Not checkbox.Enabled)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Checked, Not checkbox.Checked)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Label, String.Empty)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.ScreenTip, String.Empty)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.SuperTip, String.Empty)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Description, String.Empty)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.KeyTip, CType("A", KeyTip))
 
         Debug.WriteLine(checkbox)
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim firstCheckbox As CheckBox = New CheckBox(Sub(cbb) cbb.WithDescription("The Description").WithLabel("The Label").WithId("MyID"))
-        Dim secondCheckbox As CheckBox = New CheckBox(Nothing, firstCheckbox)
+        Dim control As CheckBox = New CheckBox(Sub(cbb) cbb.WithDescription("The Description").
+                                                   WithLabel("The Label").
+                                                   WithId("MyID"))
 
-        Assert.AreEqual(secondCheckbox.Description, "The Description")
-        Assert.AreEqual(secondCheckbox.Label, "The Label")
-        Assert.AreNotEqual(secondCheckbox.ID, firstCheckbox.ID)
-
-        Debug.WriteLine(firstCheckbox)
-        Debug.WriteLine(secondCheckbox)
+        Assert.That.SharedPropertiesAreEqual(control, New Button(template:=control))
     End Sub
 
     <TestMethod()>
@@ -186,7 +141,6 @@ Public Class CheckboxTests
 
         RemoveHandler checkbox.BeforeStateChange, beforeChange
         RemoveHandler checkbox.StateChanged, onChange
-
     End Sub
 
 End Class

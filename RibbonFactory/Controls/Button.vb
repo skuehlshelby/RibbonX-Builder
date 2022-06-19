@@ -1,14 +1,17 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.Controls.Events
-Imports RibbonX.Enums
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.Controls.EventArgs
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Utilities
+Imports RibbonX.SimpleTypes
+Imports RibbonX.Images
 
 Namespace Controls
 
     Public NotInheritable Class Button
         Inherits RibbonElement
+        Implements IAttributeSource
         Implements IEnabled
         Implements IVisible
         Implements ILabel
@@ -21,19 +24,18 @@ Namespace Controls
         Implements IClickable
         Implements IShowImage
         Implements ISize
-        Implements IDefaultProvider
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _beforeClickManager As EventManager(Of CancelableEventArgs)
         Private ReadOnly _onClickManager As EventManager
 
-        Public Sub New(Optional steps As Action(Of IButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
             Dim builder As ButtonBuilder = New ButtonBuilder(template)
 
-            If steps IsNot Nothing Then
-                steps.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -69,7 +71,7 @@ Namespace Controls
                 _onClickManager.Remove(_attributes, value)
             End RemoveHandler
 
-            RaiseEvent(sender As Object, e As EventArgs)
+            RaiseEvent(sender As Object, e As System.EventArgs)
                 _onClickManager.FireEvent(_attributes, sender, e)
             End RaiseEvent
         End Event
@@ -124,6 +126,7 @@ Namespace Controls
                 _attributes.Write(Value, AttributeCategory.Description)
             End Set
         End Property
+
         Public Property Label As String Implements ILabel.Label
             Get
                 Return _attributes.Read(Of String)(AttributeCategory.Label)
@@ -213,13 +216,13 @@ Namespace Controls
             RaiseEvent BeforeClick(Me, e)
 
             If Not e.IsCancelled Then
-                RaiseEvent OnClick(Me, EventArgs.Empty)
+                RaiseEvent OnClick(Me, System.EventArgs.Empty)
             End If
         End Sub
 
 #End Region
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

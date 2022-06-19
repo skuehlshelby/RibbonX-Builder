@@ -1,6 +1,6 @@
-﻿Imports RibbonX.Enums
-Imports RibbonX.Enums.ImageMSO
-Imports RibbonX.Enums.MSO
+﻿Imports RibbonX.Utilities
+Imports RibbonX.Controls.BuiltIn
+Imports RibbonX.Images.BuiltIn
 
 <TestClass()>
 Public Class EnumTests

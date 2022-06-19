@@ -1,6 +1,7 @@
-﻿Imports RibbonX
-Imports RibbonX.BuilderInterfaces.API
+﻿Imports RibbonX.Builders
 Imports RibbonX.Controls
+Imports RibbonX.Images
+Imports RibbonX.Images.BuiltIn
 
 <TestClass()>
 Public Class DropDownTests
@@ -26,7 +27,7 @@ Public Class DropDownTests
                            ShowLabel().
                            WithLabel("Button").
                            WithSuperTip("Super").
-                           WithImage(Enums.ImageMSO.Common.DollarSign)) From {Item.Blank})
+                           WithImage(Common.DollarSign)) From {Item.Blank})
 
         Assert.IsTrue(ribbon.GetErrors().None)
 
@@ -35,12 +36,12 @@ Public Class DropDownTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        ContainsNoNullValuesByDefaultHelper(New DropDown())
+        Assert.That.NoPropertiesAreNull(New DropDown())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim dropDown As DropDown = New DropDown(Sub(bb As IDropdownBuilder) bb.
+        Dim dropDown As DropDown = New DropDown(config:=Sub(bb As IDropdownBuilder) bb.
                            Visible().
                            Enabled().
                            ShowImage().
@@ -48,7 +49,7 @@ Public Class DropDownTests
                            WithLabel("DropDown").
                            WithSuperTip("Super").
                            WithKeyTip("K2").
-                           WithImage(Enums.ImageMSO.Common.DollarSign))
+                           WithImage(Common.DollarSign))
 
         Assert.IsTrue(dropDown.Enabled)
         Assert.IsTrue(dropDown.Visible)
@@ -58,20 +59,20 @@ Public Class DropDownTests
         Assert.AreEqual(dropDown.ScreenTip, dropDown.Label)
         Assert.AreEqual(dropDown.SuperTip, "Super")
         Assert.AreEqual(dropDown.KeyTip, "K2")
-        Assert.AreEqual(dropDown.Image, Enums.ImageMSO.Common.DollarSign)
+        Assert.AreEqual(dropDown.Image, Common.DollarSign)
 
         Debug.WriteLine(dropDown)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim dropDown As DropDown = New DropDown(Sub(bb As IDropdownBuilder) bb.
+        Dim dropDown As DropDown = New DropDown(config:=Sub(bb As IDropdownBuilder) bb.
                            Invisible().
                            Disabled().
                            WithLabel("DropDown").
                            WithSuperTip("Super").
                            WithKeyTip("K2").
-                           WithImage(Enums.ImageMSO.Common.DollarSign).
+                           WithImage(Common.DollarSign).
                            HideImage().
                            HideLabel())
 
@@ -83,14 +84,14 @@ Public Class DropDownTests
         Assert.ThrowsException(Of Exception)(Sub() dropDown.ScreenTip = "New Screentip")
         Assert.ThrowsException(Of Exception)(Sub() dropDown.SuperTip = "New Supertip")
         Assert.ThrowsException(Of Exception)(Sub() dropDown.KeyTip = "K5")
-        Assert.ThrowsException(Of Exception)(Sub() dropDown.Image = RibbonImage.Create(Enums.ImageMSO.Common.SadFace))
+        Assert.ThrowsException(Of Exception)(Sub() dropDown.Image = RibbonImage.Create(Common.SadFace))
 
         Debug.WriteLine(dropDown)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim dropDown As DropDown = New DropDown(Sub(bb As IDropdownBuilder) bb.
+        Dim dropDown As DropDown = New DropDown(config:=Sub(bb As IDropdownBuilder) bb.
                            Visible(AddressOf GetVisible).
                            Enabled(AddressOf GetEnabled).
                            ShowImage(AddressOf GetShowImage).
@@ -119,11 +120,11 @@ Public Class DropDownTests
                            WithLabel("DropDown").
                            WithSuperTip("Super").
                            WithKeyTip("K2").
-                           WithImage(Enums.ImageMSO.Common.DollarSign).
+                           WithImage(Common.DollarSign).
                            HideImage().
                            HideLabel())
 
-        Dim anotherDropDown As DropDown = New DropDown(Nothing, dropDown)
+        Dim anotherDropDown As DropDown = New DropDown(template:=dropDown)
 
         Assert.AreEqual(dropDown.Label, anotherDropDown.Label)
     End Sub

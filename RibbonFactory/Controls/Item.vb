@@ -1,8 +1,9 @@
 ﻿Imports System.Drawing
-Imports RibbonX.BuilderInterfaces.API
 Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.Images
 
 Namespace Controls
 
@@ -15,21 +16,17 @@ Namespace Controls
         Implements IScreenTip
         Implements ISuperTip
         Implements IImage
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(steps As Action(Of IItemBuilder), Optional tag As Object = Nothing)
-            Me.New(steps, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IItemBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IItemBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
             Dim builder As ItemBuilder = New ItemBuilder(template)
 
-            If steps IsNot Nothing Then
-                steps.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -85,7 +82,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes
         End Function
 

@@ -1,8 +1,10 @@
 ﻿Imports System.Drawing
 Imports System.IO
 Imports RibbonX
-Imports RibbonX.BuilderInterfaces.API
+Imports RibbonX.Builders
+Imports RibbonX.Callbacks
 Imports RibbonX.Controls
+Imports RibbonX.Images.BuiltIn
 
 Public Class DesktopFilesGroup
 
@@ -24,7 +26,7 @@ Public Class DesktopFilesGroup
             Large().
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
-            WithImage(Enums.ImageMSO.Common.FileOpen).
+            WithImage(Common.FileOpen).
             OnClick(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName)).
             RouteClickTo(AddressOf ribbon.OnAction)
 

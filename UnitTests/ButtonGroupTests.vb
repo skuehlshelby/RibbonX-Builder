@@ -1,5 +1,4 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
+﻿Imports RibbonX.Builders
 Imports RibbonX.Controls
 
 <TestClass()>
@@ -8,31 +7,27 @@ Public Class ButtonGroupTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim buttonGroup As ButtonGroup = New ButtonGroup()
+        Dim buttonGroup As ButtonGroup = New ButtonGroup(template:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim buttonGroup As ButtonGroup = New ButtonGroup(Nothing, Nothing)
+        Dim buttonGroup As ButtonGroup = New ButtonGroup(config:=Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Dim ribbon As Ribbon = CreateSimpleRibbon(New ButtonGroup(ButtonGroupControls.From(New Button())))
-
-        Assert.IsTrue(ribbon.GetErrors().None)
-
-        Debug.WriteLine(ribbon.RibbonX)
+        Assert.That.ValidRibbonXIsProduced(New ButtonGroup(items:=ButtonGroupControls.From(New Button())))
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        ContainsNoNullValuesByDefaultHelper(New ButtonGroup())
+        Assert.That.NoPropertiesAreNull(New ButtonGroup())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim buttonGroup As ButtonGroup = New ButtonGroup(Sub(bgb As IButtonGroupBuilder) bgb.Visible())
+        Dim buttonGroup As ButtonGroup = New ButtonGroup(config:=Sub(b) b.Visible())
 
         Assert.AreEqual(buttonGroup.Visible, True)
     End Sub

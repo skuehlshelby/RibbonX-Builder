@@ -1,49 +1,40 @@
 ﻿Imports System.Reflection
-Imports RibbonX.ComTypes.Microsoft.Office.Core
-Imports RibbonX
+Imports RibbonX.Callbacks
 Imports RibbonX.Controls
-Imports RibbonX.Enums
+Imports RibbonX.Controls.Base
 Imports RibbonX.ComTypes.StdOle
+Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.SimpleTypes
+Imports System.Drawing
 
-<TestClass()>
 Public MustInherit Class TestBase
     Implements ICreateCallbacks
 
     Protected Function CreateSimpleRibbon(control As RibbonElement) As Ribbon
-        Return New Ribbon(New Tab(New Group(control)))
+        Return New Ribbon(New Tab(New Group(controls:={control})))
     End Function
 
-    <TestMethod>
     Public MustOverride Sub NullTemplate_NoThrow()
 
-    <TestMethod>
     Public MustOverride Sub NullConfiguration_NoThrow()
 
-    <TestMethod>
     Public MustOverride Sub ProducesLegalRibbonX()
 
-    <TestMethod>
     Public MustOverride Sub ContainsNoNullValuesByDefault()
 
-    Protected Sub ContainsNoNullValuesByDefaultHelper(Of T As RibbonElement)(control As T)
-        For Each propertyInfo As PropertyInfo In GetType(T).GetProperties()
-            If Not String.Equals(propertyInfo.Name, NameOf(RibbonElement.Tag)) Then
-                Assert.IsNotNull(propertyInfo.GetValue(control), $"Property '{propertyInfo.Name}' on {control.ID} is null.")
-            End If
-        Next
-    End Sub
-
-    <TestMethod>
     Public MustOverride Sub PropertiesAreMappedCorrectly()
 
-    <TestMethod>
     Public MustOverride Sub PropertiesWithoutCallbacksCannotBeModified()
 
-    <TestMethod>
     Public MustOverride Sub PropertiesWithCallbacksCanBeModified()
 
-    <TestMethod>
     Public MustOverride Sub TemplatePropertiesAreCopiedToNewControl()
+
+    Protected Shared Function BlankBitmap() As Bitmap
+        Return New Bitmap(24, 24)
+    End Function
+
+#Region "Non-Static Callback Methods"
 
     Public Sub OnLoad(ribbon As IRibbonUI) Implements ICreateCallbacks.OnLoad
         Throw New NotSupportedException()
@@ -160,5 +151,133 @@ Public MustInherit Class TestBase
     Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
         Throw New NotSupportedException()
     End Sub
+
+#End Region
+
+    'The below callback methods would not actually work in a real add-in. They are only for testing purposes.
+
+#Region "Static Callback Methods"
+
+    Public Shared Sub OnLoadShared(ribbon As IRibbonUI)
+        Throw New NotSupportedException()
+    End Sub
+
+    Public Shared Function LoadImageShared(imageID As String) As IPictureDisp
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetEnabledShared(control As IRibbonControl) As Boolean
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetVisibleShared(control As IRibbonControl) As Boolean
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetLabelShared(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetShowLabelShared(control As IRibbonControl) As Boolean
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetDescriptionShared(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetScreenTipShared(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetSuperTipShared(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetKeyTipShared(control As IRibbonControl) As KeyTip
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetSizeShared(control As IRibbonControl) As ControlSize
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetImageShared(control As IRibbonControl) As IPictureDisp
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetShowImageShared(control As IRibbonControl) As Boolean
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetPressedShared(control As IRibbonControl) As Boolean
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetTextShared(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemCountShared(control As IRibbonControl) As Integer
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemIDShared(control As IRibbonControl, index As Integer) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemImageShared(control As IRibbonControl, index As Integer) As IPictureDisp
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemLabelShared(control As IRibbonControl, index As Integer) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetTitle(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemScreenTipShared(control As IRibbonControl, index As Integer) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemSuperTipShared(control As IRibbonControl, index As Integer) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemHeightShared(control As IRibbonControl) As Integer
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetItemWidthShared(control As IRibbonControl) As Integer
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetSelectedItemIDShared(control As IRibbonControl) As String
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetSelectedItemIndexShared(control As IRibbonControl) As Integer
+        Throw New NotSupportedException()
+    End Function
+
+    Public Shared Sub OnActionShared(control As IRibbonControl)
+        Throw New NotSupportedException()
+    End Sub
+
+    Public Shared Sub OnChangeShared(control As IRibbonControl, text As String)
+        Throw New NotSupportedException()
+    End Sub
+
+    Public Shared Sub OnSelectionChangeShared(control As IRibbonControl, selectedId As String, selectedIndex As Integer)
+        Throw New NotSupportedException()
+    End Sub
+
+    Public Shared Sub OnButtonToggleShared(control As IRibbonControl, pressed As Boolean)
+        Throw New NotSupportedException()
+    End Sub
+
+#End Region
 
 End Class

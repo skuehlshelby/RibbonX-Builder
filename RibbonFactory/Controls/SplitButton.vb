@@ -1,9 +1,9 @@
 ﻿Imports System.Text.RegularExpressions
-Imports RibbonX.BuilderInterfaces.API
 Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.Enums
-Imports RibbonX.RibbonAttributes
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.SimpleTypes
 
 Namespace Controls
 
@@ -14,32 +14,26 @@ Namespace Controls
         Implements IKeyTip
         Implements ISize
         Implements IShowLabel
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(configuration As Action(Of ISplitButtonBuilder), button As Button, menu As Menu, Optional tag As Object = Nothing)
-            Me.New(Nothing, configuration, DirectCast(button, RibbonElement), menu, tag)
+        Public Sub New(button As Button, menu As Menu, Optional config As Action(Of ISplitButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
+            Me.New(DirectCast(button, RibbonElement), menu, config, template, tag)
         End Sub
 
-        Public Sub New(configuration As Action(Of ISplitButtonBuilder), button As ToggleButton, menu As Menu, Optional tag As Object = Nothing)
-            Me.New(Nothing, configuration, DirectCast(button, RibbonElement), menu, tag)
+        Public Sub New(toggleButton As ToggleButton, menu As Menu, Optional config As Action(Of ISplitButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
+            Me.New(DirectCast(toggleButton, RibbonElement), menu, config, template, tag)
         End Sub
 
-        Public Sub New(template As RibbonElement, configuration As Action(Of ISplitButtonBuilder), button As Button, menu As Menu, Optional tag As Object = Nothing)
-            Me.New(template, configuration, DirectCast(button, RibbonElement), menu, tag)
-        End Sub
-
-        Public Sub New(template As RibbonElement, configuration As Action(Of ISplitButtonBuilder), button As ToggleButton, menu As Menu, Optional tag As Object = Nothing)
-            Me.New(template, configuration, DirectCast(button, RibbonElement), menu, tag)
-        End Sub
-
-        Private Sub New(template As RibbonElement, configuration As Action(Of ISplitButtonBuilder), button As RibbonElement, menu As Menu, Optional tag As Object = Nothing)
+        Private Sub New(button As RibbonElement, menu As Menu, Optional config As Action(Of ISplitButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(New RibbonElement() {button, menu}, tag)
 
-            Dim builder As SplitButtonBuilder = If(template Is Nothing, New SplitButtonBuilder(), New SplitButtonBuilder(template))
+            Dim builder As SplitButtonBuilder = New SplitButtonBuilder(template)
 
-            configuration.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
+            End If
 
             _attributes = builder.Build()
 
@@ -56,15 +50,9 @@ Namespace Controls
             Get
                 Dim regex As Regex = New Regex("(?:size|getSize|visible|getVisible)=""\w+""")
 
-                If Items.Any() Then
-                    Return _
-                        String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
+                Return String.Join(Environment.NewLine, $"<splitButton { _attributes }>",
                                     regex.Replace(String.Join(Environment.NewLine, Items), String.Empty),
                                     "</splitButton>")
-
-                Else
-                    Return $"<splitButton { _attributes } />"
-                End If
             End Get
         End Property
 
@@ -125,7 +113,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

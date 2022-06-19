@@ -4,9 +4,9 @@ Imports System.Threading
 Imports RibbonX
 Imports RibbonX.Builders
 Imports RibbonX.Controls
-Imports RibbonX.Enums
 Imports RibbonX.ComTypes.Extensibility
 Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.Images.BuiltIn
 Imports Excel = Microsoft.Office.Interop.Excel
 
 
@@ -34,14 +34,14 @@ Public Class Ribbon
                 Large().
                 WithLabel("Happy Button").
                 WithSuperTip("Oh, to be so happy again!").
-                WithImage(ImageMSO.Common.HappyFace).
+                WithImage(Common.HappyFace).
                 RouteClickTo(AddressOf OnAction).
                 OnClick(Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")))
 
         Dim buttonWithStockIconTwo As Button = New Button(Sub(bb) bb.
                 WithLabel("Sad Button").
                 WithSuperTip("#Sad").
-                WithImage(ImageMSO.Common.SadFace),
+                WithImage(Common.SadFace),
                 template:=buttonWithStockIconOne)
 
         Dim buttonWithStockIconThree As Button = New Button(Sub(bb) bb.
@@ -137,29 +137,29 @@ Public Class Ribbon
         Dim textBoxGroup As Group = New Group(Sub(gb) gb.WithLabel("Editable Text"), Box.Vertical(textBox, comboBox))
 
         Dim one As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.One)).
+                                             WithLabel(NameOf(Number.One)).
                                              HideLabel().
                                              Normal().
-                                             WithImage(ImageMSO.Number.One).
+                                             WithImage(Number.One).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
                                              RouteClickTo(AddressOf OnAction),
-                                       tag:=ImageMSO.Number.One.Value)
+                                       tag:=Number.One.Value)
 
         Dim two As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Two)).
+                                             WithLabel(NameOf(Number.Two)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Two).
+                                             WithImage(Number.Two).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Two.Value)
+                                       tag:=Number.Two.Value)
 
         Dim three As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Three)).
+                                             WithLabel(NameOf(Number.Three)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Three).
+                                             WithImage(Number.Three).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Three.Value)
+                                       tag:=Number.Three.Value)
 
         Dim four As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(ImageMSO.Number.Four)).

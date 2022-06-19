@@ -1,41 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
-<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui">
-  <ribbon>
-    <tabs>
-      <tab>
-        <group >
-          <button idMso="test" description="test"></button>
-          <gallery size="">
-            <item />
-            <button />
-            <button />
-          </gallery>
-
-			<checkBox />
-
-          <button id="Button1"
-                  enabled="true"
-                  visible="true"
-                  showLabel="true"
-                  label="My Button"
-                  screentip="My favorite button."
-                  imageMso="HappyFace"
-                  size="large"
-                  onAction="OnAction" />
-          
-          <comboBox onChange="" >
-            <item/>
-          </comboBox>
-
-          <dropDown id="dropDown1">
-          </dropDown>
-			<editBox />
-          <dialogBoxLauncher>
-            <button />
-          </dialogBoxLauncher>
-        </group>
-      </tab>
-    </tabs>
-  </ribbon>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" >
+	<ribbon >
+		<tabs>
+			<tab id="Tab11" >
+				<group id="Group16" >
+					<menu id="Menu7" getVisible="GetVisibleShared" getEnabled="GetEnabledShared" getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getDescription="GetDescriptionShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getKeytip="GetKeyTipShared" getImage="GetImageShared" getShowImage="GetShowImageShared" getSize="GetSizeShared" itemSize="large" insertAfterMso="Calculator">
+						<splitButton id="SplitButton1" getVisible="GetVisibleShared" getEnabled="GetEnabledShared" getKeytip="GetKeyTipShared"  getShowLabel="GetShowLabelShared" insertAfterMso="AlignLeftToRightMenu">
+							<toggleButton id="ToggleButton4" getEnabled="GetEnabledShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getDescription="GetDescriptionShared" getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getImage="GetImageShared" getShowImage="GetShowImageShared"   getKeytip="GetKeyTipShared"/>
+							<menu id="Menu6"  getEnabled="GetEnabledShared" getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getDescription="GetDescriptionShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getKeytip="GetKeyTipShared" getImage="GetImageShared" getShowImage="GetShowImageShared"  itemSize="large" insertAfterMso="Calculator">
+								<button id="Button27" getEnabled="GetEnabledShared"  getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getKeytip="GetKeyTipShared" getDescription="GetDescriptionShared" getImage="GetImageShared" onAction="OnActionShared" getShowImage="GetShowImageShared" />
+							</menu>
+						</splitButton>
+						<button id="Button28" getEnabled="GetEnabledShared" getVisible="GetVisibleShared" getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getKeytip="GetKeyTipShared" getDescription="GetDescriptionShared" getImage="GetImageShared" onAction="OnActionShared" getShowImage="GetShowImageShared" />
+					</menu>
+				</group>
+			</tab>
+		</tabs>
+	</ribbon>
 </customUI>

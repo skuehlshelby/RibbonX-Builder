@@ -1,32 +1,24 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
 
 Namespace Controls
 
     Public NotInheritable Class Separator
         Inherits RibbonElement
         Implements IVisible
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New()
-            Me.New(Nothing, Nothing, Nothing)
-        End Sub
-
-        Public Sub New(configuration As Action(Of ISeparatorBuilder), Optional tag As Object = Nothing)
-            Me.New(configuration, Nothing, tag)
-        End Sub
-
-        Public Sub New(configuration As Action(Of ISeparatorBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of ISeparatorBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
             Dim builder As SeparatorBuilder = New SeparatorBuilder(template)
 
-            If configuration IsNot Nothing Then
-                configuration.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -69,7 +61,7 @@ Namespace Controls
             Return New Separator(configuration)
         End Function
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

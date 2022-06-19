@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{04AAE809-480A-420F-9C6E-AB779649C90A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>UnitTests</RootNamespace>
-    <AssemblyName>UnitTests</AssemblyName>
+    <RootNamespace>RibbonXTests</RootNamespace>
+    <AssemblyName>RibbonXTests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -28,7 +28,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>UnitTests.xml</DocumentationFile>
+    <DocumentationFile>RibbonXTests.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
@@ -41,7 +41,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>UnitTests.xml</DocumentationFile>
+    <DocumentationFile>RibbonXTests.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
@@ -95,7 +95,10 @@
     <Compile Include="ComboBoxTests.vb" />
     <Compile Include="Extensions.vb" />
     <Compile Include="GalleryTests.vb" />
+    <Compile Include="GroupTests.vb" />
+    <Compile Include="ItemTests.vb" />
     <Compile Include="LabelControlTests.vb" />
+    <Compile Include="MenuSeparatorTests.vb" />
     <Compile Include="RandomExtensions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -113,13 +116,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RibbonTestBase.vb" />
     <Compile Include="DropDownTests.vb" />
     <Compile Include="MenuTests.vb" />
-    <Compile Include="DynamicUpdating.vb" />
     <Compile Include="KeyTipTests.vb" />
     <Compile Include="EditBoxTests.vb" />
-    <Compile Include="SplitButtonWithTests.vb" />
+    <Compile Include="SeparatorTests.vb" />
+    <Compile Include="SplitButtonTests.vb" />
     <Compile Include="TestBase.vb" />
     <Compile Include="ToggleButtonTests.vb" />
     <Compile Include="BoxTests.vb" />

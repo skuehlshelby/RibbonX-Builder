@@ -1,8 +1,8 @@
 ﻿Imports System.Drawing
-Imports RibbonX
 Imports RibbonX.Controls
-Imports RibbonX.Controls.Events
-Imports RibbonX.Enums.ImageMSO
+Imports RibbonX.Controls.EventArgs
+Imports RibbonX.Images
+Imports RibbonX.Images.BuiltIn
 
 <TestClass()>
 Public Class ComboBoxTests
@@ -10,14 +10,14 @@ Public Class ComboBoxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim combobox As ComboBox = New ComboBox(Sub(cbb) Return, template:=Nothing)
+        Dim combobox As ComboBox = New ComboBox(template:=Nothing)
 
         Debug.WriteLine(combobox)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim combobox As ComboBox = New ComboBox(configuration:=Nothing, template:=Nothing)
+        Dim combobox As ComboBox = New ComboBox(config:=Nothing)
 
         Debug.WriteLine(combobox)
     End Sub
@@ -48,11 +48,7 @@ Public Class ComboBoxTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Dim combobox As ComboBox = New ComboBox()
-
-        ContainsNoNullValuesByDefaultHelper(combobox)
-
-        Debug.WriteLine(combobox)
+        Assert.That.NoPropertiesAreNull(New ComboBox())
     End Sub
 
     <TestMethod>
@@ -156,15 +152,12 @@ Public Class ComboBoxTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim firstCombobox As ComboBox = New ComboBox(Sub(cbb) cbb.WithImage(Common.Refresh).WithLabel("The Label").WithId("MyID"))
-        Dim secondCombobox As ComboBox = New ComboBox(Nothing, template:=firstCombobox)
+        Dim control As ComboBox = New ComboBox(Sub(cbb) cbb.
+                                                   WithImage(Common.Refresh).
+                                                   WithLabel("The Label").
+                                                   WithId("MyID"))
 
-        Assert.AreEqual(secondCombobox.Image, Common.Refresh)
-        Assert.AreEqual(secondCombobox.Label, "The Label")
-        Assert.AreNotEqual(secondCombobox.ID, firstCombobox.ID)
-
-        Debug.WriteLine(firstCombobox)
-        Debug.WriteLine(secondCombobox)
+        Assert.That.SharedPropertiesAreEqual(control, New DropDown(template:=control))
     End Sub
 
     <TestMethod>
@@ -216,14 +209,14 @@ Public Class ComboBoxTests
     Public Sub PropertyChangeTriggersRefresh()
         Dim combobox As ComboBox = New ComboBox(Sub(cbb) cbb.WithLabel("The Label", AddressOf GetLabel))
 
-        Assert.That.ValueChangedIsRaised(combobox, Sub(cb) cb.Label = "New Label")
+        Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.Label = "New Label")
     End Sub
 
     <TestMethod>
     Public Sub ItemAddTriggersRefresh()
         Dim combobox As ComboBox = New ComboBox()
 
-        Assert.That.ValueChangedIsRaised(combobox, Sub(cb) cb.Add(Item.Blank()))
+        Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.Add(Item.Blank()))
     End Sub
 
     <TestMethod>
@@ -232,7 +225,7 @@ Public Class ComboBoxTests
             Item.Blank()
         }
 
-        Assert.That.ValueChangedIsRaised(combobox, Sub(cb) cb.First().Label = "New Label")
+        Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.First().Label = "New Label")
     End Sub
 
     <TestMethod>

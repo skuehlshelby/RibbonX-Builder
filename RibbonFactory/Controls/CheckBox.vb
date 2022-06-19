@@ -1,8 +1,10 @@
-﻿Imports RibbonX.BuilderInterfaces.API
-Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.Controls.Events
-Imports RibbonX.RibbonAttributes
+﻿Imports RibbonX.Builders
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
+Imports RibbonX.Controls.EventArgs
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Utilities
+Imports RibbonX.SimpleTypes
 
 Namespace Controls
 
@@ -16,27 +18,19 @@ Namespace Controls
         Implements IDescription
         Implements IKeyTip
         Implements IPressed
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _beforeToggleManager As EventManager(Of BeforeToggleChangeEventArgs)
         Private ReadOnly _onToggleManager As EventManager(Of ToggleChangeEventArgs)
 
-        Public Sub New()
-            Me.New(Nothing, Nothing, Nothing)
-        End Sub
-
-        Public Sub New(steps As Action(Of ICheckBoxBuilder), Optional tag As Object = Nothing)
-            Me.New(steps, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of ICheckBoxBuilder), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of ICheckBoxBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
             Dim builder As CheckBoxBuilder = New CheckBoxBuilder(template)
 
-            If steps IsNot Nothing Then
-                steps.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -188,7 +182,7 @@ Namespace Controls
 
 #End Region
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 

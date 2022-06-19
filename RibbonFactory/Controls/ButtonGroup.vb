@@ -1,41 +1,28 @@
 ﻿Imports System.Text.RegularExpressions
-Imports RibbonX.BuilderInterfaces.API
 Imports RibbonX.Builders
-Imports RibbonX.ControlInterfaces
-Imports RibbonX.RibbonAttributes
+Imports RibbonX.Controls.Attributes
+Imports RibbonX.Controls.Base
+Imports RibbonX.Controls.Properties
 
 Namespace Controls
 
     Public NotInheritable Class ButtonGroup
         Inherits Container(Of RibbonElement)
         Implements IVisible
-        Implements IDefaultProvider
+        Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(Optional tag As Object = Nothing)
-            Me.New(Nothing, Nothing, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IButtonGroupBuilder), Optional tag As Object = Nothing)
-            Me.New(steps, Nothing, Nothing, tag)
-        End Sub
-
-        Public Sub New(items As ButtonGroupControls, Optional tag As Object = Nothing)
-            Me.New(Nothing, items, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IButtonGroupBuilder), items As ButtonGroupControls, Optional tag As Object = Nothing)
-            Me.New(steps, items, Nothing, tag)
-        End Sub
-
-        Public Sub New(steps As Action(Of IButtonGroupBuilder), items As ButtonGroupControls, template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of IButtonGroupBuilder) = Nothing,
+                       Optional items As ButtonGroupControls = Nothing,
+                       Optional template As RibbonElement = Nothing,
+                       Optional tag As Object = Nothing)
             MyBase.New(If(items Is Nothing, Array.Empty(Of RibbonElement)(), items.ToArray()), tag)
 
             Dim builder As ButtonGroupBuilder = New ButtonGroupBuilder(template)
 
-            If steps IsNot Nothing Then
-                steps.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()
@@ -66,7 +53,7 @@ Namespace Controls
             End Set
         End Property
 
-        Private Function GetDefaults() As AttributeSet Implements IDefaultProvider.GetDefaults
+        Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 
