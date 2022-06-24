@@ -10,10 +10,6 @@ Imports System.Drawing
 Public MustInherit Class TestBase
     Implements ICreateCallbacks
 
-    Protected Function CreateSimpleRibbon(control As RibbonElement) As Ribbon
-        Return New Ribbon(New Tab(New Group(controls:={control})))
-    End Function
-
     Public MustOverride Sub NullTemplate_NoThrow()
 
     Public MustOverride Sub NullConfiguration_NoThrow()

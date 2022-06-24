@@ -111,7 +111,6 @@ Namespace Controls
 
         Protected Overrides Sub AfterAdd(item As Item)
             AddHandler item.ValueChanged, AddressOf OnChildItemChange
-
             RefreshNeeded()
         End Sub
 

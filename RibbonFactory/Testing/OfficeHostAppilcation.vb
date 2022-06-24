@@ -23,6 +23,18 @@ Namespace Testing
                 Where(Function(descendant) descendant.Attribute("id") IsNot Nothing).
                 Select(Function(element) New RibbonControl(element, ribbonExtensibility)).
                 ToDictionary(Function(control) control.Id)
+
+            Dim customUI As XElement = ribbonX.Root
+
+            If customUI.Attributes("onLoad").Count() = 1 Then
+                Dim loadMethodName As String = customUI.Attributes("onLoad").Single().Value
+
+                Dim load As MethodInfo = ribbonExtensibility.GetType().GetMethod(loadMethodName)
+
+                load.Invoke(ribbonExtensibility, {Me})
+            End If
+
+            Invalidate()
         End Sub
 
         ''' <summary>
@@ -31,6 +43,10 @@ Namespace Testing
         ''' <param name="element"></param>
         Public Sub Click(element As RibbonElement)
             _controls(element.ID).Click()
+        End Sub
+
+        Public Sub Type(element As RibbonElement, text As String)
+            _controls(element.ID).Type(text)
         End Sub
 
 #Region "IRibbonUI Members"

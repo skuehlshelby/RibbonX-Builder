@@ -17,8 +17,7 @@ Public Class EditBoxTests
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Dim ribbon As Ribbon = CreateSimpleRibbon(
-            New EditBox(config:=Sub(builder) builder.
+        Assert.That.ValidRibbonXIsProduced(New EditBox(config:=Sub(builder) builder.
                            Visible().
                            Enabled().
                            WithLabel("Label").
@@ -26,10 +25,6 @@ Public Class EditBoxTests
                            InsertBefore(Excel.About).
                            WithMaximumInputLength(40).
                            WithText("Text", AddressOf GetText, AddressOf OnChange)))
-
-        Assert.IsTrue(ribbon.GetErrors().None)
-
-        Debug.WriteLine(ribbon.RibbonX)
     End Sub
 
     <TestMethod>

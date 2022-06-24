@@ -96,10 +96,10 @@
     <Compile Include="Extensions.vb" />
     <Compile Include="GalleryTests.vb" />
     <Compile Include="GroupTests.vb" />
+    <Compile Include="IntegrationTests.vb" />
     <Compile Include="ItemTests.vb" />
     <Compile Include="LabelControlTests.vb" />
     <Compile Include="MenuSeparatorTests.vb" />
-    <Compile Include="RandomExtensions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

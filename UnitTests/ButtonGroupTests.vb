@@ -1,5 +1,6 @@
 ﻿Imports RibbonX.Builders
 Imports RibbonX.Controls
+Imports RibbonX.Controls.BuiltIn
 
 <TestClass()>
 Public Class ButtonGroupTests
@@ -17,7 +18,10 @@ Public Class ButtonGroupTests
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(New ButtonGroup(items:=ButtonGroupControls.From(New Button())))
+        Assert.That.ValidRibbonXIsProduced(BuildReadonlyButtonGroup(ButtonGroupControls.
+                                                          From(ButtonTests.BuildButton()).
+                                                          Add(SeparatorTests.BuildReadonlySeparator()).
+                                                          Add(ToggleButtonTests.BuildToggleButtonII())))
     End Sub
 
     <TestMethod>
@@ -27,31 +31,55 @@ Public Class ButtonGroupTests
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim buttonGroup As ButtonGroup = New ButtonGroup(config:=Sub(b) b.Visible())
+        Dim buttonGroup As ButtonGroup = BuildButtonGroup(ButtonGroupControls.
+                                                          From(ButtonTests.BuildButton()).
+                                                          Add(SeparatorTests.BuildReadonlySeparator()).
+                                                          Add(ToggleButtonTests.BuildToggleButtonII()))
 
         Assert.AreEqual(buttonGroup.Visible, True)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim buttonGroup As ButtonGroup = New ButtonGroup(Sub(bgb As IButtonGroupBuilder) bgb.Invisible())
-
-        Assert.ThrowsException(Of Exception)(Sub() buttonGroup.Visible = True)
+        Assert.That.PropertiesCannotBeModified(BuildReadonlyButtonGroupII(ButtonGroupControls.
+                                                          From(ButtonTests.BuildButton()).
+                                                          Add(SeparatorTests.BuildReadonlySeparator()).
+                                                          Add(ToggleButtonTests.BuildToggleButtonII())))
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim buttonGroup As ButtonGroup = New ButtonGroup(Sub(bgb As IButtonGroupBuilder) bgb.Invisible(AddressOf GetVisible))
+        Dim control As ButtonGroup = BuildButtonGroup(ButtonGroupControls.
+                                                          From(ButtonTests.BuildButton()).
+                                                          Add(SeparatorTests.BuildReadonlySeparator()).
+                                                          Add(ToggleButtonTests.BuildToggleButtonII()))
 
-        buttonGroup.Visible = True
+        Assert.That.PropertyMayBeModified(control, Function(c) c.Visible, Not control.Visible)
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim template As Button = New Button(Sub(bb) bb.Invisible())
-        Dim buttonGroup As ButtonGroup = New ButtonGroup(Nothing, Nothing, template)
+        Dim control As ButtonGroup = BuildButtonGroupII(ButtonGroupControls.
+                                                          From(ButtonTests.BuildButton()).
+                                                          Add(SeparatorTests.BuildReadonlySeparator()).
+                                                          Add(ToggleButtonTests.BuildToggleButtonII()))
 
-        Assert.AreEqual(buttonGroup.Visible, template.Visible)
+        Assert.That.SharedPropertiesAreEqual(control, New Gallery(template:=control))
     End Sub
 
+    Public Shared Function BuildReadonlyButtonGroup(controls As ButtonGroupControls) As ButtonGroup
+        Return New ButtonGroup(config:=Sub(b) b.InsertAfter(Excel.About).Visible(), items:=controls)
+    End Function
+
+    Public Shared Function BuildReadonlyButtonGroupII(controls As ButtonGroupControls) As ButtonGroup
+        Return New ButtonGroup(config:=Sub(b) b.InsertBefore(Excel.About).Invisible(), items:=controls)
+    End Function
+
+    Public Shared Function BuildButtonGroup(controls As ButtonGroupControls) As ButtonGroup
+        Return New ButtonGroup(config:=Sub(b) b.InsertAfter(Excel.About).Visible(AddressOf GetVisibleShared), items:=controls)
+    End Function
+
+    Public Shared Function BuildButtonGroupII(controls As ButtonGroupControls) As ButtonGroup
+        Return New ButtonGroup(config:=Sub(b) b.InsertBefore(Excel.About).Invisible(AddressOf GetVisibleShared), items:=controls)
+    End Function
 End Class

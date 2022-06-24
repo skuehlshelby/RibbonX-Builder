@@ -4,6 +4,7 @@ Imports System.Threading
 Imports RibbonX
 Imports RibbonX.Builders
 Imports RibbonX.Controls
+Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.ComTypes.Extensibility
 Imports RibbonX.ComTypes.Microsoft.Office.Core
 Imports RibbonX.Images.BuiltIn
@@ -14,7 +15,7 @@ Imports Excel = Microsoft.Office.Interop.Excel
 <Guid("C2C29BAF-8F1B-46EF-A071-8A286423F4C4")>
 <ProgId("ExampleRibbon.Ribbon")>
 Public Class Ribbon
-    Inherits RibbonX.Utilities.StockRibbonBase
+    Inherits StockRibbonBase
     Implements IDTExtensibility2
     Implements IRibbonExtensibility
 
@@ -47,7 +48,7 @@ Public Class Ribbon
         Dim buttonWithStockIconThree As Button = New Button(Sub(bb) bb.
                 WithLabel("Money Button").
                 WithSuperTip("Make that money!").
-                WithImage(ImageMSO.Common.DollarSign),
+                WithImage(Common.DollarSign),
                 template:=buttonWithStockIconOne)
 
 
@@ -162,58 +163,58 @@ Public Class Ribbon
                                        tag:=Number.Three.Value)
 
         Dim four As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Four)).
+                                             WithLabel(NameOf(Number.Four)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Four).
+                                             WithImage(Number.Four).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Four.Value)
+                                       tag:=Number.Four.Value)
 
         Dim five As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Five)).
+                                             WithLabel(NameOf(Number.Five)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Five).
+                                             WithImage(Number.Five).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Five.Value)
+                                       tag:=Number.Five.Value)
 
         Dim six As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Six)).
+                                             WithLabel(NameOf(Number.Six)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Six).
+                                             WithImage(Number.Six).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Six.Value)
+                                       tag:=Number.Six.Value)
 
         Dim seven As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Seven)).
+                                             WithLabel(NameOf(Number.Seven)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Seven).
+                                             WithImage(Number.Seven).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Seven.Value)
+                                       tag:=Number.Seven.Value)
 
         Dim eight As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Eight)).
+                                             WithLabel(NameOf(Number.Eight)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Eight).
+                                             WithImage(Number.Eight).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Eight.Value)
+                                       tag:=Number.Eight.Value)
 
         Dim nine As Button = New Button(Sub(bb) bb.
-                                             WithLabel(NameOf(ImageMSO.Number.Nine)).
+                                             WithLabel(NameOf(Number.Nine)).
                                              HideLabel().
-                                             WithImage(ImageMSO.Number.Nine).
+                                             WithImage(Number.Nine).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=ImageMSO.Number.Nine.Value)
+                                       tag:=Number.Nine.Value)
 
-        Dim numbersTopRow As ButtonGroup = New ButtonGroup(ButtonGroupControls.From(one, two, three))
+        Dim numbersTopRow As ButtonGroup = New ButtonGroup(items:=ButtonGroupControls.From(one, two, three))
 
-        Dim numbersMiddleRow As ButtonGroup = New ButtonGroup(ButtonGroupControls.From(four, five, six))
+        Dim numbersMiddleRow As ButtonGroup = New ButtonGroup(items:=ButtonGroupControls.From(four, five, six))
 
-        Dim numbersBottomRow As ButtonGroup = New ButtonGroup(ButtonGroupControls.From(seven, eight, nine))
+        Dim numbersBottomRow As ButtonGroup = New ButtonGroup(items:=ButtonGroupControls.From(seven, eight, nine))
 
         Dim numberGroup As Group = New Group(Sub(gb) gb.WithLabel("Numbers"), {numbersTopRow, numbersMiddleRow, numbersBottomRow})
 
@@ -221,28 +222,28 @@ Public Class Ribbon
             WithLabel("Heart").
             WithSuperTip("A heart.").
             WithDescription("This suit was invented in 15th century Germany and is a survivor from a large pool of experimental suit signs created to replace the Latin suits.").
-            WithImage(ImageMSO.Misc.Heart),
+            WithImage(Misc.Heart),
             template:=buttonWithStockIconOne)
 
         Dim spade As Button = New Button(Sub(bb) bb.
             WithLabel("Spade").
             WithSuperTip("A black spade.").
             WithDescription("Spades form one of the four suits of playing cards in the standard French deck. It is a black heart turned upside down with a stalk at its base and symbolises the pike or halberd, two medieval weapons.").
-            WithImage(ImageMSO.Misc.Spade),
+            WithImage(Misc.Spade),
             template:=heart)
 
         Dim club As Button = New Button(Sub(bb) bb.
             WithLabel("Club").
             WithSuperTip("A black club.").
             WithDescription("Clubs is one of the four suits of playing cards in the standard French deck. It corresponds to the suit of Acorns in a German deck.").
-            WithImage(ImageMSO.Misc.Club),
+            WithImage(Misc.Club),
             template:=heart)
 
         Dim diamond As Button = New Button(Sub(bb) bb.
             WithLabel("Diamond").
             WithSuperTip("A red diamond.").
             WithDescription("Diamonds is one of the four suits of playing cards in the standard French deck. It is the only French suit to not have been adapted from the German deck, taking the place of the suit of Bells Bay.").
-            WithImage(ImageMSO.Misc.Diamond),
+            WithImage(Misc.Diamond),
             template:=heart)
 
         Dim cardsMenu As Menu = New Menu(Sub(mb) mb.
@@ -251,7 +252,7 @@ Public Class Ribbon
             WithLabel("Cards").
             WithSuperTip("Pick a card!").
             WithImage(LoadBitmap("ExampleRibbon.playing-cards-icon.png"), AddressOf GetImage),
-            New MenuControls().Add(heart, spade, club, diamond))
+            items:=MenuControls.From(heart, spade, club, diamond))
 
         Dim cardsGroup As Group = New Group(Nothing, {cardsMenu}, template:=cardsMenu)
 
@@ -260,25 +261,25 @@ Public Class Ribbon
         'TODO Finish this
         Dim gallery As Gallery = New Gallery(Sub(gb) gb.
             Large().
-            WithImage(ImageMSO.Common.Refresh).
+            WithImage(Common.Refresh).
             WithLabel("My Custom Gallery").
             WithColumnCount(5).
-            WithRowCount(1).
+            WithRowCount(2).
             WithItemDimensions(New Size(32, 32)).
             GetItemCountFrom(AddressOf GetItemCount).
             GetItemImageFrom(AddressOf GetItemImage).
             GetSelectedItemIndexFrom(getSelected:=AddressOf GetSelectedItemIndex, setSelected:=AddressOf OnSelectionChange))
 
-        For i As Integer = 1 To 5
-            gallery.Add(New Item(Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
+        For i As Integer = 1 To (gallery.Rows * gallery.Columns)
+            gallery.Add(New Item(config:=Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
         Next
 
-        Dim galleryGroup As Group = New Group(Sub(gb) gb.WithLabel("Gallery"), {gallery})
+        Dim galleryGroup As Group = New Group(config:=Sub(gb) gb.WithLabel("Gallery"), {gallery})
 
-        Dim tab As Tab = New Tab(Sub(tb) tb.
+        Dim tab As Tab = New Tab(config:=Sub(tb) tb.
                 WithLabel("My Custom Tab").
-                InsertAfter(MSO.Excel.TabHome),
-                buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup)
+                InsertAfter(BuiltIn.Excel.TabHome),
+                groups:={buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup})
 
         Return New Controls.Ribbon(Sub(rb) rb.OnLoad(AddressOf OnLoad), tab)
     End Function

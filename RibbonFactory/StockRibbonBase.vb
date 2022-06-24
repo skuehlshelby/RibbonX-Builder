@@ -7,9 +7,9 @@ Imports RibbonX.ComTypes.Extensibility
 Imports RibbonX.ComTypes.Microsoft.Office.Core
 Imports RibbonX.SimpleTypes
 
-Namespace Utilities
 
-    <ComVisible(True)>
+
+<ComVisible(True)>
     Public MustInherit Class StockRibbonBase
         Implements IDTExtensibility2
         Implements IRibbonExtensibility
@@ -194,6 +194,4 @@ Namespace Utilities
 
 #End Region
 
-    End Class
-
-End Namespace
+End Class

@@ -61,11 +61,11 @@ Friend Module Extensions
         Dim ribbon As Ribbon = Nothing
 
         If TypeOf control Is Group Then
-            ribbon = New Ribbon(New Tab(DirectCast(CType(control, Object), Group)))
+            ribbon = New Ribbon(New Tab(groups:={DirectCast(CType(control, Object), Group)}))
         ElseIf TypeOf control Is Tab Then
             ribbon = New Ribbon(DirectCast(CType(control, Object), Tab))
         Else
-            ribbon = New Ribbon(New Tab(New Group(controls:={control})))
+            ribbon = New Ribbon(New Tab(groups:={New Group(controls:={control})}))
         End If
 
         Dim errors As RibbonErrorLog = ribbon.GetErrors()
@@ -85,4 +85,5 @@ Friend Module Extensions
         currentValue = CType(propertyInfo.GetValue(control), TProperty)
         Assert.AreEqual(currentValue, updatedValue)
     End Sub
+
 End Module

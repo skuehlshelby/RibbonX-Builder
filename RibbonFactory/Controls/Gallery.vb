@@ -330,6 +330,18 @@ Namespace Controls
 
 #End Region
 
+        Public ReadOnly Property Rows As Integer
+            Get
+                Return _attributes.Read(Of Integer)(AttributeCategory.Rows)
+            End Get
+        End Property
+
+        Public ReadOnly Property Columns As Integer
+            Get
+                Return _attributes.Read(Of Integer)(AttributeCategory.Columns)
+            End Get
+        End Property
+
         Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function

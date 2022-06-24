@@ -15,21 +15,13 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(ParamArray groups() As Group)
-            Me.New(Nothing, groups)
-        End Sub
-
-        Public Sub New(configuration As Action(Of ITabBuilder), ParamArray groups() As Group)
-            Me.New(configuration, groups, Nothing)
-        End Sub
-
-        Public Sub New(configuration As Action(Of ITabBuilder), groups As ICollection(Of Group), template As RibbonElement, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of ITabBuilder) = Nothing, Optional groups As ICollection(Of Group) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(groups, tag)
 
             Dim builder As TabBuilder = New TabBuilder(template)
 
-            If configuration IsNot Nothing Then
-                configuration.Invoke(builder)
+            If config IsNot Nothing Then
+                config.Invoke(builder)
             End If
 
             _attributes = builder.Build()

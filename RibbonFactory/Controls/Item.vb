@@ -86,8 +86,11 @@ Namespace Controls
             Return _attributes
         End Function
 
-        Public Shared ReadOnly Property Blank As Item = New Item(Sub(builder) builder.WithId("item-1").WithLabel(String.Empty).WithSuperTip(String.Empty).WithImage(New Bitmap(1, 1)))
-
+        Public Shared ReadOnly Property Blank As Item
+            Get
+                Return New Item(Sub(builder) builder.WithId("item-1").WithLabel(String.Empty).WithSuperTip(String.Empty).WithImage(New Bitmap(1, 1)))
+            End Get
+        End Property
     End Class
 
 End Namespace

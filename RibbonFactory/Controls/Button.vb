@@ -226,6 +226,10 @@ Namespace Controls
             Return _attributes.Clone()
         End Function
 
+        Public Function Clone() As Button
+            Return New Button(template:=Me)
+        End Function
+
     End Class
 
 End Namespace

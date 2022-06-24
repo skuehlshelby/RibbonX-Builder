@@ -1,7 +1,5 @@
 ﻿Imports System.Drawing
 Imports System.IO
-Imports RibbonX
-Imports RibbonX.Builders
 Imports RibbonX.Callbacks
 Imports RibbonX.Controls
 Imports RibbonX.Images.BuiltIn
@@ -22,15 +20,13 @@ Public Class DesktopFilesGroup
             AddHandler .Deleted, AddressOf OnFileChanged
         End With
 
-        Dim openButtonConfiguration As Action(Of IButtonBuilder) = Sub(bb) bb.
+        _openButton = New Button(config:=Sub(bb) bb.
             Large().
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
             WithImage(Common.FileOpen).
             OnClick(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName)).
-            RouteClickTo(AddressOf ribbon.OnAction)
-
-        _openButton = New Button(openButtonConfiguration)
+            RouteClickTo(AddressOf ribbon.OnAction))
 
         _dropDown = New DropDown(Sub(ddb) ddb.
             WithScreenTip("Desktop Files").
@@ -43,7 +39,7 @@ Public Class DesktopFilesGroup
             GetItemSuperTipFrom(AddressOf ribbon.GetItemSuperTip).
             GetItemScreenTipFrom(AddressOf ribbon.GetItemScreenTip).
             GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex, AddressOf ribbon.OnSelectionChange),
-                                 buttons:={New Button(openButtonConfiguration)})
+                                 buttons:={_openButton.Clone()})
 
         Using _dropDown.RefreshSuspension()
             For Each file As FileInfo In GetFilesOnDesktop()
@@ -80,7 +76,7 @@ Public Class DesktopFilesGroup
     End Sub
 
     Public Function AsGroup() As Group
-        Dim label As LabelControl = New LabelControl(Sub(lcb) lcb.WithLabel("        Desktop Files:"))
+        Dim label As LabelControl = New LabelControl(config:=Sub(lcb) lcb.WithLabel("        Desktop Files:"))
 
         Return New Group(Sub(gb) gb.WithLabel("Desktop Files"), {_openButton, Separator.CreateInvisible(), Box.Vertical(label, _dropDown)})
     End Function
@@ -96,10 +92,10 @@ Public Class DesktopFilesGroup
     End Function
 
     Private Shared Function ConvertFileToDropDownItem(file As FileSystemInfo) As Item
-        Return New Item(Sub(ib) ib.
+        Return New Item(config:=Sub(ib) ib.
             WithLabel(file.Name).
             WithSuperTip(file.FullName).
-            WithImage(Icon.ExtractAssociatedIcon(file.FullName)), file)
+            WithImage(Icon.ExtractAssociatedIcon(file.FullName)), tag:=file)
     End Function
 
     Private Shared Sub OpenFile(path As String)

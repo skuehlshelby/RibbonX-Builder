@@ -1,49 +1,31 @@
-﻿Imports System.Drawing
-Imports RibbonX.Controls
+﻿Imports RibbonX.Controls
 Imports RibbonX.Controls.EventArgs
-Imports RibbonX.Images
 Imports RibbonX.Images.BuiltIn
+Imports RibbonX.SimpleTypes
 
 <TestClass()>
 Public Class ComboBoxTests
     Inherits TestBase
 
+    Private Const LABEL As String = "My ComboBox"
+    Private Const SCREENTIP As String = "My ComboBox Screentip"
+    Private Const SUPERTIP As String = "More Info About My ComboBox"
+    Private Const TEXT As String = "The Text"
+    Private Const KEYTIP As String = "E"
+
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
         Dim combobox As ComboBox = New ComboBox(template:=Nothing)
-
-        Debug.WriteLine(combobox)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
         Dim combobox As ComboBox = New ComboBox(config:=Nothing)
-
-        Debug.WriteLine(combobox)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Dim ribbon As Ribbon = CreateSimpleRibbon(
-            New ComboBox(Sub(cbb) cbb.
-                           Visible().
-                           Enabled().
-                           WithLabel("The Label").
-                           WithSuperTip("The Supertip").
-                           AsWideAs("AAAAAA").
-                           WithImage(New Bitmap(48, 48), AddressOf GetImage).
-                           WithText("The Text", AddressOf GetText, AddressOf OnChange).
-                           ShowItemImages().
-                           GetItemImageFrom(AddressOf GetItemImage).
-                           GetItemIdFrom(AddressOf GetItemID).
-                           GetItemLabelFrom(AddressOf GetItemLabel).
-                           GetItemScreenTipFrom(AddressOf GetItemScreenTip).
-                           GetItemSuperTipFrom(AddressOf GetItemSuperTip).
-                           GetItemCountFrom(AddressOf GetItemCount)))
-
-        Assert.IsTrue(ribbon.GetErrors().None)
-
-        Debug.WriteLine(ribbon.RibbonX)
+        Assert.That.ValidRibbonXIsProduced(BuildComboBox())
     End Sub
 
     <TestMethod>
@@ -53,109 +35,42 @@ Public Class ComboBoxTests
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim combobox As ComboBox =
-            New ComboBox(Sub(cbb) cbb.
-                           Visible().
-                           Enabled().
-                           WithLabel("The Label").
-                           WithSuperTip("The Supertip").
-                           WithMaximumInputLength(40).
-                           WithImage(Common.SadFace).
-                           WithKeyTip("K2").
-                           WithText("The Text", AddressOf GetText, AddressOf OnChange).
-                           ShowItemImages())
+        Dim combobox As ComboBox = BuildReadonlyComboBox()
 
         Assert.IsTrue(combobox.Enabled)
         Assert.IsTrue(combobox.Visible)
         Assert.IsTrue(combobox.ShowLabel)
         Assert.IsTrue(combobox.ShowImage)
         Assert.IsFalse(combobox.IsReadOnly)
-        Assert.AreEqual(combobox.Label, "The Label")
-        Assert.AreEqual(combobox.ScreenTip, "The Label")
-        Assert.AreEqual(combobox.SuperTip, "The Supertip")
+        Assert.AreEqual(combobox.Label, LABEL)
+        Assert.AreEqual(combobox.ScreenTip, SCREENTIP)
+        Assert.AreEqual(combobox.SuperTip, SUPERTIP)
         Assert.AreEqual(combobox.MaxLength, CByte(40))
         Assert.AreEqual(combobox.Image, Common.SadFace)
-        Assert.AreEqual(combobox.Text, "The Text")
-        Assert.AreEqual(combobox.KeyTip, "K2")
-
-        Debug.WriteLine(combobox)
+        Assert.AreEqual(combobox.KeyTip.ToString(), KEYTIP)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim combobox As ComboBox =
-            New ComboBox(Sub(cbb) cbb.
-                           Invisible().
-                           Disabled().
-                           WithLabel("The Label").
-                           WithSuperTip("The Supertip").
-                           HideLabel().
-                           HideImage().
-                           HideItemImages().
-                           WithKeyTip("K2").
-                           WithMaximumInputLength(40).
-                           WithImage(Common.SadFace))
-
-        Assert.ThrowsException(Of Exception)(Sub() combobox.Enabled = True)
-        Assert.ThrowsException(Of Exception)(Sub() combobox.Visible = True)
-        Assert.ThrowsException(Of Exception)(Sub() combobox.ShowLabel = True)
-        Assert.ThrowsException(Of Exception)(Sub() combobox.ShowImage = True)
-        Assert.ThrowsException(Of Exception)(Sub() combobox.Label = "New Label")
-        Assert.ThrowsException(Of Exception)(Sub() combobox.ScreenTip = "New ScreenTip")
-        Assert.ThrowsException(Of Exception)(Sub() combobox.SuperTip = "New SuperTip")
-        Assert.ThrowsException(Of Exception)(Sub() combobox.Image = RibbonImage.Create(Common.FileFind))
-        Assert.ThrowsException(Of Exception)(Sub() combobox.KeyTip = "5")
-
-        Debug.WriteLine(combobox)
+        Assert.That.PropertiesCannotBeModified(BuildReadonlyComboBox())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim combobox As ComboBox = New ComboBox(Sub(cbb) cbb.
-                           Visible(AddressOf GetVisible).
-                           Enabled(AddressOf GetEnabled).
-                           WithLabel("The Label", AddressOf GetLabel).
-                           WithSuperTip("The Supertip", AddressOf GetSuperTip).
-                           WithKeyTip("K2", AddressOf GetKeyTip).
-                           WithText("The Text", AddressOf GetText, AddressOf OnChange))
+        Dim control As ComboBox = BuildComboBoxII()
 
-        Assert.IsTrue(combobox.Visible)
-        combobox.Visible = False
-        Assert.IsFalse(combobox.Visible)
-
-        Assert.IsTrue(combobox.Enabled)
-        combobox.Enabled = False
-        Assert.IsFalse(combobox.Enabled)
-
-        Assert.AreEqual(combobox.Label, "The Label")
-        combobox.Label = "New Label"
-        Assert.AreEqual(combobox.Label, "New Label")
-
-        Assert.AreEqual(combobox.ScreenTip, "The Label")
-        combobox.ScreenTip = "New ScreenTip"
-        Assert.AreEqual(combobox.ScreenTip, "New ScreenTip")
-
-        Assert.AreEqual(combobox.SuperTip, "The Supertip")
-        combobox.SuperTip = "New SuperTip"
-        Assert.AreEqual(combobox.SuperTip, "New SuperTip")
-
-        Assert.AreEqual(combobox.KeyTip, "K2")
-        combobox.KeyTip = "A"
-        Assert.AreEqual(combobox.KeyTip, "A")
-
-        Assert.AreEqual(combobox.Text, "The Text")
-        combobox.Text = "The New Text"
-        Assert.AreEqual(combobox.Text, "The New Text")
-
-        Debug.WriteLine(combobox)
+        Assert.That.PropertyMayBeModified(control, Function(c) c.Visible, Not control.Visible)
+        Assert.That.PropertyMayBeModified(control, Function(c) c.Enabled, Not control.Enabled)
+        Assert.That.PropertyMayBeModified(control, Function(c) c.Label, String.Empty)
+        Assert.That.PropertyMayBeModified(control, Function(c) c.ScreenTip, String.Empty)
+        Assert.That.PropertyMayBeModified(control, Function(c) c.SuperTip, String.Empty)
+        Assert.That.PropertyMayBeModified(control, Function(c) c.KeyTip, CType("R", KeyTip))
+        Assert.That.PropertyMayBeModified(control, Function(c) c.Text, String.Empty)
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As ComboBox = New ComboBox(Sub(cbb) cbb.
-                                                   WithImage(Common.Refresh).
-                                                   WithLabel("The Label").
-                                                   WithId("MyID"))
+        Dim control As ComboBox = BuildReadonlyComboBoxII()
 
         Assert.That.SharedPropertiesAreEqual(control, New DropDown(template:=control))
     End Sub
@@ -222,7 +137,7 @@ Public Class ComboBoxTests
     <TestMethod>
     Public Sub ChangingChildItemTriggersRefresh()
         Dim combobox As ComboBox = New ComboBox() From {
-            Item.Blank()
+            New Item(Sub(ib) ib.WithLabel("Item1"))
         }
 
         Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.First().Label = "New Label")
@@ -242,5 +157,67 @@ Public Class ComboBoxTests
         RemoveHandler combobox.BeforeTextChange, before
         RemoveHandler combobox.TextChanged, onChange
     End Sub
+
+    Public Shared Function BuildReadonlyComboBox() As ComboBox
+        Return New ComboBox(Sub(cbb) cbb.
+                           Visible().
+                           Enabled().
+                           WithLabel(LABEL).
+                           WithScreenTip(SCREENTIP).
+                           WithSuperTip(SUPERTIP).
+                           ShowLabel().
+                           ShowImage().
+                           ShowItemImages().
+                           WithKeyTip(KEYTIP).
+                           WithMaximumInputLength(40).
+                           WithImage(Common.SadFace))
+    End Function
+
+    Public Shared Function BuildReadonlyComboBoxII() As ComboBox
+        Return New ComboBox(Sub(cbb) cbb.
+                           Invisible().
+                           Disabled().
+                           WithLabel(LABEL).
+                           WithScreenTip(SCREENTIP).
+                           WithSuperTip(SUPERTIP).
+                           HideLabel().
+                           HideImage().
+                           HideItemImages().
+                           WithKeyTip(KEYTIP).
+                           WithMaximumInputLength(40).
+                           WithImage(Common.SadFace))
+    End Function
+
+    Public Shared Function BuildComboBox() As ComboBox
+        Return New ComboBox(Sub(cbb) cbb.
+                           Visible(AddressOf GetVisibleShared).
+                           Enabled(AddressOf GetEnabledShared).
+                           WithLabel(LABEL, AddressOf GetLabelShared).
+                           WithScreenTip(SCREENTIP, AddressOf GetScreenTipShared).
+                           WithSuperTip(SUPERTIP, AddressOf GetSuperTipShared).
+                           ShowLabel(AddressOf GetShowLabelShared).
+                           ShowImage(AddressOf GetShowImageShared).
+                           ShowItemImages().
+                           WithKeyTip(KEYTIP, AddressOf GetKeyTipShared).
+                           WithMaximumInputLength(40).
+                           WithText(TEXT, AddressOf GetTextShared, AddressOf OnChangeShared).
+                           WithImage(BlankBitmap(), AddressOf GetImageShared))
+    End Function
+
+    Public Shared Function BuildComboBoxII() As ComboBox
+        Return New ComboBox(Sub(cbb) cbb.
+                           Invisible(AddressOf GetVisibleShared).
+                           Disabled(AddressOf GetEnabledShared).
+                           WithLabel(LABEL, AddressOf GetLabelShared).
+                           WithScreenTip(SCREENTIP, AddressOf GetScreenTipShared).
+                           WithSuperTip(SUPERTIP, AddressOf GetSuperTipShared).
+                           HideLabel(AddressOf GetShowLabelShared).
+                           HideImage(AddressOf GetShowImageShared).
+                           HideItemImages().
+                           WithKeyTip(KEYTIP, AddressOf GetKeyTipShared).
+                           WithMaximumInputLength(40).
+                           WithText(TEXT, AddressOf GetTextShared, AddressOf OnChangeShared).
+                           WithImage(BlankBitmap(), AddressOf GetImageShared))
+    End Function
 
 End Class

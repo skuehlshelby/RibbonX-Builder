@@ -16,7 +16,7 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(Optional template As RibbonElement = Nothing, Optional config As Action(Of ILabelControlBuilder) = Nothing, Optional tag As Object = Nothing)
+        Public Sub New(Optional config As Action(Of ILabelControlBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             MyBase.New(tag)
 
             Dim builder As LabelControlBuilder = New LabelControlBuilder(template)
@@ -98,6 +98,10 @@ Namespace Controls
 
         Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
+        End Function
+
+        Public Function Clone() As LabelControl
+            Return New LabelControl(template:=Me)
         End Function
 
     End Class

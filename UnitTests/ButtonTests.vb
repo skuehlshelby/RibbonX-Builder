@@ -121,7 +121,6 @@ Public Class ButtonTests
 
     <TestMethod()>
     Public Sub EventCanBeRemoved()
-
         Dim button As Button = New Button(Sub(bb) bb.RouteClickTo(AddressOf OnAction))
         Dim delegateWasInvoked As Boolean = False
         Dim callback As EventHandler = New EventHandler(Sub(o, e) delegateWasInvoked = True)
@@ -142,7 +141,6 @@ Public Class ButtonTests
         button.Click()
 
         Assert.IsFalse(delegateWasInvoked)
-
     End Sub
 
     <TestMethod()>
