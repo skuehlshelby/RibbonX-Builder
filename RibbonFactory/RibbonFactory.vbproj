@@ -178,6 +178,7 @@
     <Compile Include="Callbacks\CallbackDelegates.vb" />
     <Compile Include="Controls\Properties\IMaxLength.vb" />
     <Compile Include="Controls\Properties\IClickable.vb" />
+    <Compile Include="Controls\Properties\IRowsAndColumns.vb" />
     <Compile Include="Controls\Properties\IScreenTip.vb" />
     <Compile Include="Controls\Properties\ISelect.vb" />
     <Compile Include="Controls\Properties\IShowImage.vb" />

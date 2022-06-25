@@ -7,9 +7,13 @@ Namespace Builders.Internal.Standardization
 
     Public Interface IImage(Of T)
 
-        Function WithImage(imagePath As String) As T
-
         Function WithImage(image As ImageMSO) As T
+
+        Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As T
+
+        Function WithImage(imageId As String, image As Bitmap) As T
+
+        Function WithImage(imageId As String, image As Icon) As T
 
         Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As T
 

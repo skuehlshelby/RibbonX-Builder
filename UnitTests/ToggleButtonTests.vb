@@ -113,7 +113,7 @@ Public Class ToggleButtonTests
                         WithDescription("Description").
                         InsertAfter(Excel.About).
                         WithKeyTip("P").
-                        WithImage("blah").
+                        WithImage(Number.Three).
                         HideImage().
                         HideLabel())
     End Function

@@ -2,6 +2,7 @@
 Imports RibbonX.Controls
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.SimpleTypes
+Imports RibbonX.Images.BuiltIn
 
 <TestClass()>
 Public Class MenuTests
@@ -47,7 +48,7 @@ Public Class MenuTests
         Assert.AreEqual(control.Description, DESCRIPTION)
         Assert.AreEqual(control.KeyTip, KEYTIP)
         Assert.AreEqual(control.Size, ControlSize.Large)
-        Assert.AreEqual(control.Image, "img/blah.jpg")
+        Assert.AreEqual(control.Image, Common.DollarSign)
     End Sub
 
     <TestMethod>
@@ -91,7 +92,7 @@ Public Class MenuTests
                         WithScreenTip(SCREENTIP).
                         WithSuperTip(SUPERTIP).
                         WithDescription(DESCRIPTION).
-                        WithImage("img/blah.jpg").
+                        WithImage(Common.DollarSign).
                         WithKeyTip(KEYTIP),
                         items:=controls)
     End Function

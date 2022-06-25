@@ -1,4 +1,5 @@
-﻿Imports RibbonX.ComTypes.StdOle
+﻿Imports System.Drawing
+Imports RibbonX.ComTypes.StdOle
 Imports RibbonX.Images.BuiltIn
 
 Namespace Images
@@ -13,6 +14,14 @@ Namespace Images
             Cached
         End Enum
 
+        Public Interface ICachedImage
+
+            ReadOnly Property ImageId As String
+
+            ReadOnly Property Image As IPictureDisp
+
+        End Interface
+
         Public MustOverride ReadOnly Property ImageType As RibbonImageType
 
         Public MustOverride Property Image As Object
@@ -21,26 +30,68 @@ Namespace Images
 
         Public MustOverride Function AsIPictureDisp() As IPictureDisp
 
-        Public MustOverride Function AsCachedImage() As String
+        Public MustOverride Function AsCachedImage() As ICachedImage
 
         Public MustOverride Overrides Function ToString() As String
 
-        Public Shared Function Create(imageName As String) As RibbonImage
-            Return New CachedImage(imageName)
-        End Function
-
         Public Shared Function Create(imageMso As ImageMSO) As RibbonImage
             Return New BuiltInImage(imageMso)
+        End Function
+
+        ''' <summary>
+        ''' <para>
+        '''  Create a RibbonImage with a custom image whose contents will be queried by the MS Office <br/>
+        '''  host only once. This retrieval will happen during the 'loadImage' callback. Subsequent control<br/>
+        '''  refresh events will not update the image.
+        ''' </para>
+        ''' <br/>
+        ''' <para>
+        '''  Use this method when you want to use a custom image that you do not plan on changing at <br/>
+        ''' runtime.
+        ''' </para>
+        ''' </summary>
+        ''' <param name="imageId">A unique identifier for this image.</param>
+        ''' <param name="bitmap">The image.</param>
+        ''' <returns></returns>
+        Public Shared Function Create(imageId As String, bitmap As Bitmap) As RibbonImage
+            Return New CachedImage(imageId, New AdapterForIPicture(bitmap))
+        End Function
+
+        ''' <summary>
+        ''' <para>
+        '''  Create a RibbonImage with a custom image whose contents will be queried by the MS Office <br/>
+        '''  host only once. This retrieval will happen during the 'loadImage' callback. Subsequent control<br/>
+        '''  refresh events will not update the image.
+        ''' </para>
+        ''' <br/>
+        ''' <para>
+        '''  Use this method when you want to use a custom image that you do not plan on changing at <br/>
+        ''' runtime.
+        ''' </para>
+        ''' </summary>
+        ''' <param name="imageId">A unique identifier for this image.</param>
+        ''' <param name="icon">The image.</param>
+        ''' <returns></returns>
+        Public Shared Function Create(imageId As String, icon As Icon) As RibbonImage
+            Return New CachedImage(imageId, New AdapterForIPicture(icon))
         End Function
 
         Public Shared Function Create(image As IPictureDisp) As RibbonImage
             Return New IPictureDispImage(image)
         End Function
 
+        Public Shared Function Create(bitmap As Bitmap) As RibbonImage
+            Return Create(New AdapterForIPicture(bitmap))
+        End Function
+
+        Public Shared Function Create(icon As Icon) As RibbonImage
+            Return Create(New AdapterForIPicture(icon))
+        End Function
+
         Private Class BuiltInImage
             Inherits RibbonImage
 
-            Private ReadOnly value As ImageMSO
+            Private value As ImageMSO
 
             Public Sub New(value As ImageMSO)
                 Me.value = value
@@ -57,7 +108,9 @@ Namespace Images
                     Return value
                 End Get
                 Set
-                    Throw New InvalidOperationException("Built-in images (imageMsos) may only be specified at design time.")
+                    If TypeOf Value Is String Then
+                        Me.value = ImageMSO.Parse(Of ImageMSO)(Value.ToString())
+                    End If
                 End Set
             End Property
 
@@ -69,7 +122,7 @@ Namespace Images
                 Throw New InvalidOperationException("Built-in images (imageMsos) are not convertible to the type 'IPictureDisp'.")
             End Function
 
-            Public Overrides Function AsCachedImage() As String
+            Public Overrides Function AsCachedImage() As ICachedImage
                 Throw New InvalidOperationException("Built-in images (imageMsos) are not the same as cached images.")
             End Function
 
@@ -121,7 +174,7 @@ Namespace Images
                 Return value
             End Function
 
-            Public Overrides Function AsCachedImage() As String
+            Public Overrides Function AsCachedImage() As ICachedImage
                 Throw New InvalidOperationException("IPictureDisp images are not convertible to the type 'string'.")
             End Function
 
@@ -141,11 +194,11 @@ Namespace Images
 
         Private Class CachedImage
             Inherits RibbonImage
+            Implements ICachedImage
 
-            Private ReadOnly imageName As String
-
-            Public Sub New(imageName As String)
-                Me.imageName = imageName
+            Public Sub New(imageId As String, picture As IPictureDisp)
+                Me.ImageId = imageId
+                Me.Picture = picture
             End Sub
 
             Public Overrides ReadOnly Property ImageType As RibbonImageType
@@ -156,12 +209,16 @@ Namespace Images
 
             Public Overrides Property Image As Object
                 Get
-                    Return imageName
+                    Return Picture
                 End Get
                 Set
                     Throw New InvalidOperationException("The names of cached images may only be specified at design time. If you control the cache, consider updating the image there.")
                 End Set
             End Property
+
+            Public ReadOnly Property ImageId As String Implements ICachedImage.ImageId
+
+            Public ReadOnly Property Picture As IPictureDisp Implements ICachedImage.Image
 
             Public Overrides Function AsBuiltInImage() As ImageMSO
                 Throw New InvalidOperationException("Cached images are not convertible to the type 'ImageMSO'.")
@@ -171,20 +228,20 @@ Namespace Images
                 Throw New InvalidOperationException("Cached images are not convertible to the type 'IPictureDisp'.")
             End Function
 
-            Public Overrides Function AsCachedImage() As String
-                Return imageName
+            Public Overrides Function AsCachedImage() As ICachedImage
+                Return Me
             End Function
 
             Public Overrides Function ToString() As String
-                Return imageName
+                Return ImageId
             End Function
 
             Public Overrides Function Equals(obj As Object) As Boolean
-                Return imageName.Equals(obj)
+                Return ImageId.Equals(obj)
             End Function
 
             Public Overrides Function GetHashCode() As Integer
-                Return imageName.GetHashCode()
+                Return ImageId.GetHashCode()
             End Function
 
         End Class

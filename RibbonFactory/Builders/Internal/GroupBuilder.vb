@@ -71,6 +71,11 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(image, callback)
+            Return Me
+        End Function
+
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IGroupBuilder Implements IGroupBuilder.WithImage
             ImageBase(image, callback)
             Return Me
@@ -81,8 +86,13 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(imagePath As String) As IGroupBuilder Implements IGroupBuilder.WithImage
-            ImageBase(imagePath)
+        Public Function WithImage(imageId As String, image As Bitmap) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(imageId, image)
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Icon) As IGroupBuilder Implements IGroupBuilder.WithImage
+            ImageBase(imageId, image)
             Return Me
         End Function
 

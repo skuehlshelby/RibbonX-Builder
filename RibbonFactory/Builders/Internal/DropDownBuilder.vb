@@ -63,6 +63,11 @@ Namespace Builders
             Return Me
         End Function
 
+        Private Function GetItemImageFrom(callback As FromControlAndIndex(Of String)) As IDropdownBuilder Implements IDropdownBuilder.GetItemImageFrom
+            ItemImageBase(callback)
+            Return Me
+        End Function
+
         Private Function GetItemLabelFrom(callback As FromControlAndIndex(Of String)) As IDropdownBuilder Implements IDropdownBuilder.GetItemLabelFrom
             ItemLabelBase(callback)
             Return Me
@@ -218,8 +223,18 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function WithImage(imagePath As String) As IDropdownBuilder Implements IDropdownBuilder.WithImage
-            ImageBase(imagePath)
+        Public Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IDropdownBuilder Implements IDropdownBuilder.WithImage
+            ImageBase(image, callback)
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Bitmap) As IDropdownBuilder Implements IDropdownBuilder.WithImage
+            ImageBase(imageId, image)
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Icon) As IDropdownBuilder Implements IDropdownBuilder.WithImage
+            ImageBase(imageId, image)
             Return Me
         End Function
 

@@ -17,7 +17,7 @@ Namespace Utilities
 
         Public Shared Function Values(Of T As Enumeration)() As T()
             Return GetType(T).
-                GetProperties(BindingFlags.Public Or BindingFlags.Static Or BindingFlags.DeclaredOnly).
+                GetProperties(BindingFlags.Public Or BindingFlags.Static Or BindingFlags.DeclaredOnly Or BindingFlags.FlattenHierarchy).
                 Select(Function(p) p.GetValue(Nothing)).
                 OfType(Of T)().
                 ToArray()

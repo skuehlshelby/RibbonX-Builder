@@ -147,6 +147,11 @@ Namespace Builders
             Return Me
         End Function
 
+        Private Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(image, callback)
+            Return Me
+        End Function
+
         Private Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
             ImageBase(image, callback)
             Return Me
@@ -157,8 +162,13 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function WithImage(imagePath As String) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
-            ImageBase(imagePath)
+        Private Function WithImage(imageId As String, image As Bitmap) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(imageId, image)
+            Return Me
+        End Function
+
+        Private Function WithImage(imageId As String, image As Icon) As IToggleButtonBuilder Implements IToggleButtonBuilder.WithImage
+            ImageBase(imageId, image)
             Return Me
         End Function
 

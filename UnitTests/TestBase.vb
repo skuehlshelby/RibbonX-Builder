@@ -80,6 +80,10 @@ Public MustInherit Class TestBase
         Throw New NotSupportedException()
     End Function
 
+    Public Function GetBuiltInImage(control As IRibbonControl) As String Implements ICreateCallbacks.GetBuiltInImage
+        Throw New NotSupportedException()
+    End Function
+
     Public Function GetShowImage(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetShowImage
         Throw New NotSupportedException()
     End Function
@@ -200,6 +204,10 @@ Public MustInherit Class TestBase
 
     Public Shared Function GetImageShared(control As IRibbonControl) As IPictureDisp
         Throw New NotSupportedException()
+    End Function
+
+    Public Shared Function GetBuiltInImageShared(control As IRibbonControl) As String
+        Throw New NotImplementedException()
     End Function
 
     Public Shared Function GetShowImageShared(control As IRibbonControl) As Boolean

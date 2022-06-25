@@ -101,6 +101,9 @@ Namespace Builders.Internal.Base
                         defaults.Add(New RibbonAttributeDefault(Of ControlSize)(ControlSize.Normal, AttributeName.ItemSize, AttributeCategory.ItemSize))
                     Case GetType(IBoxStyle)
                         defaults.Add(New RibbonAttributeDefault(Of BoxStyle)(BoxStyle.Horizontal, AttributeName.BoxStyle, AttributeCategory.BoxStyle))
+                    Case GetType(IRowsAndColumns)
+                        defaults.Add(New RibbonAttributeDefault(Of Integer)(0, AttributeName.Rows, AttributeCategory.Rows))
+                        defaults.Add(New RibbonAttributeDefault(Of Integer)(0, AttributeName.Columns, AttributeCategory.Columns))
                 End Select
             Next interfaceType
 
@@ -283,12 +286,20 @@ Namespace Builders.Internal.Base
 
 #Region "Image"
 
-        Protected Sub ImageBase(path As String)
-            _attributes.Add(New RibbonAttributeReadOnly(Of RibbonImage)(RibbonImage.Create(path), AttributeName.Image, AttributeCategory.Image))
-        End Sub
-
         Protected Sub ImageBase(image As ImageMSO)
             _attributes.Add(New RibbonAttributeReadOnly(Of RibbonImage)(RibbonImage.Create(image), AttributeName.ImageMso, AttributeCategory.Image))
+        End Sub
+
+        Protected Sub ImageBase(image As ImageMSO, callback As FromControl(Of String))
+            _attributes.Add(New RibbonAttributeReadWrite(Of RibbonImage)(RibbonImage.Create(image), AttributeName.GetImage, AttributeCategory.Image, callback.Method.Name))
+        End Sub
+
+        Protected Sub ImageBase(imageId As String, bitmap As Bitmap)
+            _attributes.Add(New RibbonAttributeReadOnly(Of RibbonImage)(RibbonImage.Create(imageId, bitmap), AttributeName.Image, AttributeCategory.Image))
+        End Sub
+
+        Protected Sub ImageBase(imageId As String, icon As Icon)
+            _attributes.Add(New RibbonAttributeReadOnly(Of RibbonImage)(RibbonImage.Create(imageId, icon), AttributeName.Image, AttributeCategory.Image))
         End Sub
 
         Protected Sub ImageBase(image As IPictureDisp, callback As FromControl(Of IPictureDisp))
@@ -565,6 +576,10 @@ Namespace Builders.Internal.Base
 #Region "Item Image"
 
         Protected Sub ItemImageBase(callback As FromControlAndIndex(Of IPictureDisp))
+            _attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemImage, AttributeCategory.ItemImage))
+        End Sub
+
+        Protected Sub ItemImageBase(callback As FromControlAndIndex(Of String))
             _attributes.Add(New RibbonAttributeReadOnly(Of String)(callback.Method.Name, AttributeName.GetItemImage, AttributeCategory.ItemImage))
         End Sub
 

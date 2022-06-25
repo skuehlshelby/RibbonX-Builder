@@ -1,6 +1,7 @@
 ﻿Imports RibbonX.Controls
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.SimpleTypes
+Imports RibbonX.Images.BuiltIn
 
 <TestClass>
 Public Class GalleryTests
@@ -47,7 +48,7 @@ Public Class GalleryTests
         Assert.AreEqual(control.SuperTip, SUPERTIP)
         Assert.AreEqual(control.Description, DESCRIPTION)
         Assert.AreEqual(control.KeyTip, KEYTIP)
-        Assert.AreEqual(control.Image, "img.png")
+        Assert.AreEqual(control.Image, Common.DollarSign)
         Assert.AreEqual(control.ItemHeight, ITEM_HEIGHT)
         Assert.AreEqual(control.ItemWidth, ITEM_WIDTH)
         Assert.AreEqual(control.Size, ControlSize.Large)
@@ -92,7 +93,7 @@ Public Class GalleryTests
                                        WithDescription(DESCRIPTION).
                                        WithKeyTip(KEYTIP).
                                        ShowLabel().
-                                       WithImage("img.png").
+                                       WithImage(Common.DollarSign, AddressOf GetBuiltInImageShared).
                                        ShowImage().
                                        ShowLabelsOnChildItems().
                                        ShowItemImages().
@@ -117,7 +118,7 @@ Public Class GalleryTests
                                WithDescription(DESCRIPTION).
                                WithKeyTip(KEYTIP).
                                HideLabel().
-                               WithImage("img.png").
+                               WithImage(Common.DollarSign).
                                HideImage().
                                HideLabelsOnChildItems().
                                HideItemImages().

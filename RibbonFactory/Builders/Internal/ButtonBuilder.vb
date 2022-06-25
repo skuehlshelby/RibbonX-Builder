@@ -157,6 +157,12 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IButtonBuilder Implements IButtonBuilder.WithImage
+            ImageBase(image, callback)
+            ShowImageBase()
+            Return Me
+        End Function
+
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IButtonBuilder Implements IButtonBuilder.WithImage
             ImageBase(image, callback)
             ShowImageBase()
@@ -169,8 +175,14 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(imagePath As String) As IButtonBuilder Implements IButtonBuilder.WithImage
-            ImageBase(imagePath)
+        Public Function WithImage(imageId As String, image As Bitmap) As IButtonBuilder Implements IButtonBuilder.WithImage
+            ImageBase(imageId, image)
+            ShowImageBase()
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Icon) As IButtonBuilder Implements IButtonBuilder.WithImage
+            ImageBase(imageId, image)
             ShowImageBase()
             Return Me
         End Function

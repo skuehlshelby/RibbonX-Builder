@@ -112,6 +112,10 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IEditBoxBuilder Implements IEditBoxBuilder.WithImage
+            Throw New NotImplementedException()
+        End Function
+
         Private Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IEditBoxBuilder Implements IEditBoxBuilder.WithImage
             ImageBase(image, callback)
             Return Me
@@ -122,8 +126,13 @@ Namespace Builders
             Return Me
         End Function
 
-        Private Function WithImage(imagePath As String) As IEditBoxBuilder Implements IEditBoxBuilder.WithImage
-            ImageBase(imagePath)
+        Public Function WithImage(imageId As String, image As Bitmap) As IEditBoxBuilder Implements IEditBoxBuilder.WithImage
+            ImageBase(imageId, image)
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Icon) As IEditBoxBuilder Implements IEditBoxBuilder.WithImage
+            ImageBase(imageId, image)
             Return Me
         End Function
 

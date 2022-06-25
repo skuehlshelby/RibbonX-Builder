@@ -27,6 +27,7 @@ Namespace Controls
         Implements ISelect
         Implements ISize
         Implements IAttributeSource
+        Implements IRowsAndColumns
 
         Private ReadOnly _attributes As AttributeSet
         Private ReadOnly _beforeSelectionChangeEventManager As EventManager(Of BeforeSelectionChangeEventArgs)
@@ -330,13 +331,13 @@ Namespace Controls
 
 #End Region
 
-        Public ReadOnly Property Rows As Integer
+        Public ReadOnly Property Rows As Integer Implements IRowsAndColumns.Rows
             Get
                 Return _attributes.Read(Of Integer)(AttributeCategory.Rows)
             End Get
         End Property
 
-        Public ReadOnly Property Columns As Integer
+        Public ReadOnly Property Columns As Integer Implements IRowsAndColumns.Columns
             Get
                 Return _attributes.Read(Of Integer)(AttributeCategory.Columns)
             End Get

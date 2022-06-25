@@ -122,6 +122,12 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IMenuBuilder Implements IMenuBuilder.WithImage
+            ImageBase(image, callback)
+            ShowImageBase()
+            Return Me
+        End Function
+
         Public Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IMenuBuilder Implements IMenuBuilder.WithImage
             ImageBase(image, callback)
             ShowImageBase()
@@ -134,8 +140,14 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function WithImage(imagePath As String) As IMenuBuilder Implements IMenuBuilder.WithImage
-            ImageBase(imagePath)
+        Public Function WithImage(imageId As String, image As Bitmap) As IMenuBuilder Implements IMenuBuilder.WithImage
+            ImageBase(imageId, image)
+            ShowImageBase()
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Icon) As IMenuBuilder Implements IMenuBuilder.WithImage
+            ImageBase(imageId, image)
             ShowImageBase()
             Return Me
         End Function

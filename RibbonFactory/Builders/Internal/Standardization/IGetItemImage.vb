@@ -7,6 +7,8 @@ Namespace Builders.Internal.Standardization
 
         Function GetItemImageFrom(callback As FromControlAndIndex(Of IPictureDisp)) As T
 
+        Function GetItemImageFrom(callback As FromControlAndIndex(Of String)) As T
+
     End Interface
 
 End Namespace

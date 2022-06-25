@@ -162,7 +162,7 @@ Public Class ButtonTests
                    WithSuperTip("Super").
                    WithDescription("Description").
                    WithKeyTip("K2").
-                   WithImage("TheNameOfMyCachedImage"))
+                   WithImage(Common.DollarSign))
     End Function
 
     Public Shared Function BuildReadonlyButtonII() As Button
@@ -177,7 +177,7 @@ Public Class ButtonTests
                    WithSuperTip("Super").
                    WithDescription("Description").
                    WithKeyTip("K2").
-                   WithImage("TheNameOfMyCachedImage"))
+                   WithImage(Common.DollarSign))
     End Function
 
     Public Shared Function BuildButton() As Button
@@ -209,7 +209,7 @@ Public Class ButtonTests
                            WithSuperTip("Super", AddressOf GetSuperTipShared).
                            WithDescription("Description", AddressOf GetDescriptionShared).
                            WithKeyTip("K2", AddressOf GetKeyTipShared).
-                           WithImage(New Bitmap(48, 48), AddressOf GetImageShared).
+                           WithImage(Common.DollarSign, AddressOf GetBuiltInImageShared).
                            HideImage(AddressOf GetShowImageShared).
                            RouteClickTo(AddressOf OnActionShared).
                            BeforeClick(Sub() Debug.WriteLine("Before Click Fired")).

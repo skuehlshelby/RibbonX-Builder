@@ -21,6 +21,7 @@ Namespace Callbacks
         Function GetKeyTip(control As IRibbonControl) As KeyTip
         Function GetSize(control As IRibbonControl) As ControlSize
         Function GetImage(control As IRibbonControl) As IPictureDisp
+        Function GetBuiltInImage(control As IRibbonControl) As String
         Function GetShowImage(control As IRibbonControl) As Boolean
         Function GetPressed(control As IRibbonControl) As Boolean
         Function GetText(control As IRibbonControl) As String

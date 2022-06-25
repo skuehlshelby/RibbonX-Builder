@@ -23,7 +23,6 @@ Namespace Builders
             MyBase.New(template)
         End Sub
 
-
 #Region "Enabled and Visible"
 
         Private Function Enabled() As IComboBoxBuilder Implements IComboBoxBuilder.Enabled
@@ -146,6 +145,12 @@ Namespace Builders
             Return Me
         End Function
 
+        Public Function WithImage(image As ImageMSO, callback As FromControl(Of String)) As IComboBoxBuilder Implements IComboBoxBuilder.WithImage
+            ImageBase(image, callback)
+            ShowImageBase()
+            Return Me
+        End Function
+
         Private Function WithImage(image As Bitmap, callback As FromControl(Of IPictureDisp)) As IComboBoxBuilder Implements IComboBoxBuilder.WithImage
             ImageBase(image, callback)
             ShowImageBase()
@@ -154,11 +159,18 @@ Namespace Builders
 
         Private Function WithImage(image As Icon, callback As FromControl(Of IPictureDisp)) As IComboBoxBuilder Implements IComboBoxBuilder.WithImage
             ImageBase(image, callback)
+            ShowImageBase()
             Return Me
         End Function
 
-        Private Function WithImage(imagePath As String) As IComboBoxBuilder Implements IComboBoxBuilder.WithImage
-            ImageBase(imagePath)
+        Public Function WithImage(imageId As String, image As Bitmap) As IComboBoxBuilder Implements IComboBoxBuilder.WithImage
+            ImageBase(imageId, image)
+            ShowImageBase()
+            Return Me
+        End Function
+
+        Public Function WithImage(imageId As String, image As Icon) As IComboBoxBuilder Implements IComboBoxBuilder.WithImage
+            ImageBase(imageId, image)
             ShowImageBase()
             Return Me
         End Function
@@ -299,6 +311,11 @@ Namespace Builders
         End Function
 
         Private Function GetItemImageFrom(callback As FromControlAndIndex(Of IPictureDisp)) As IComboBoxBuilder Implements IComboBoxBuilder.GetItemImageFrom
+            ItemImageBase(callback)
+            Return Me
+        End Function
+
+        Private Function GetItemImageFrom(callback As FromControlAndIndex(Of String)) As IComboBoxBuilder Implements IComboBoxBuilder.GetItemImageFrom
             ItemImageBase(callback)
             Return Me
         End Function
