@@ -3,8 +3,8 @@ Imports System.Runtime.InteropServices
 Imports RibbonX.ComTypes.StdOle
 
 Namespace Images
-    'TODO: Make this Friend and remove references to it in the tests.
-    Public Class AdapterForIPicture
+
+    Friend Class AdapterForIPicture
         Implements IPicture
         Implements IPictureDisp
         Implements IDisposable
