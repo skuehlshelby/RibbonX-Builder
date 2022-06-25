@@ -11,6 +11,7 @@ Imports RibbonX.Testing
 
 Namespace Controls
 
+    <DebuggerDisplay("{GetDebuggerDisplay(),nq}")>
     Public NotInheritable Class Ribbon
         Implements IRibbonUI
         Implements IEnumerable(Of RibbonElement)
@@ -176,6 +177,10 @@ Namespace Controls
 
         Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
             Return GetEnumerator()
+        End Function
+
+        Private Function GetDebuggerDisplay() As String
+            Return $"Ribbon {_attributes}"
         End Function
 
     End Class
