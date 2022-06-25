@@ -43,7 +43,7 @@ Public Class IntegrationTests
                                 WithLabel("My Custom Tab"),
                       groups:={group})
 
-        Return New Ribbon(configuration:=Sub(b) b.OnLoad(AddressOf OnLoad), tab)
+        Return New Ribbon(config:=Sub(b) b.OnLoad(AddressOf OnLoad), tab)
     End Function
 
     <TestMethod()>

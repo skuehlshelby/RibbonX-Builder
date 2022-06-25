@@ -16,6 +16,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ExampleRibbon", "ExampleRib
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegistrationUtility", "RegistrationUtility\RegistrationUtility.csproj", "{6D4398BC-97B3-4AB6-BBA7-6CAC01DE895C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleCSharp", "ExampleCSharp\ExampleCSharp.csproj", "{4D5150B0-D0A3-4E86-93EA-C3FFF6B85EDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{6D4398BC-97B3-4AB6-BBA7-6CAC01DE895C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D4398BC-97B3-4AB6-BBA7-6CAC01DE895C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D4398BC-97B3-4AB6-BBA7-6CAC01DE895C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D5150B0-D0A3-4E86-93EA-C3FFF6B85EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D5150B0-D0A3-4E86-93EA-C3FFF6B85EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D5150B0-D0A3-4E86-93EA-C3FFF6B85EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D5150B0-D0A3-4E86-93EA-C3FFF6B85EDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

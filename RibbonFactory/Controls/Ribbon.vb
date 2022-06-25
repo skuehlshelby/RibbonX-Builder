@@ -24,13 +24,13 @@ Namespace Controls
             Me.New(Nothing, tabs)
         End Sub
 
-        Public Sub New(configuration As Action(Of IRibbonBuilder), ParamArray tabs() As Tab)
+        Public Sub New(config As Action(Of IRibbonBuilder), ParamArray tabs() As Tab)
             _elements = ConvertElementsToDictionaryAndThrowIfDuplicatesArePresent(Flatten(tabs))
 
             Dim builder As RibbonBuilder = New RibbonBuilder()
 
-            configuration = If(configuration, Sub(b) Return)
-            configuration.Invoke(builder)
+            config = If(config, Sub(b) Return)
+            config.Invoke(builder)
 
             _attributes = builder.Build()
 
