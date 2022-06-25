@@ -5,9 +5,9 @@
             MyBase.New(value, name)
         End Sub
 
-        Public Shadows ReadOnly Property Value As Integer
+        Public ReadOnly Property NumericValue As Integer
             Get
-                Return Value
+                Return value
             End Get
         End Property
 
@@ -23,7 +23,7 @@
         Public Shared ReadOnly Property Nine As Number = New Number(9, "_9")
 
         Public Overrides Function Clone() As Object
-            Return New Number(Value, name)
+            Return New Number(value, name)
         End Function
 
     End Class

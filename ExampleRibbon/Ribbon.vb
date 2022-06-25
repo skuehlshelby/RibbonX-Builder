@@ -144,7 +144,7 @@ Public Class Ribbon
                                              WithImage(Number.One).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
                                              RouteClickTo(AddressOf OnAction),
-                                       tag:=Number.One.Value)
+                                       tag:=Number.One.NumericValue)
 
         Dim two As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Two)).
@@ -152,7 +152,7 @@ Public Class Ribbon
                                              WithImage(Number.Two).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Two.Value)
+                                       tag:=Number.Two.NumericValue)
 
         Dim three As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Three)).
@@ -160,7 +160,7 @@ Public Class Ribbon
                                              WithImage(Number.Three).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Three.Value)
+                                       tag:=Number.Three.NumericValue)
 
         Dim four As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Four)).
@@ -168,7 +168,7 @@ Public Class Ribbon
                                              WithImage(Number.Four).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Four.Value)
+                                       tag:=Number.Four.NumericValue)
 
         Dim five As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Five)).
@@ -176,7 +176,7 @@ Public Class Ribbon
                                              WithImage(Number.Five).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Five.Value)
+                                       tag:=Number.Five.NumericValue)
 
         Dim six As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Six)).
@@ -184,7 +184,7 @@ Public Class Ribbon
                                              WithImage(Number.Six).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Six.Value)
+                                       tag:=Number.Six.NumericValue)
 
         Dim seven As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Seven)).
@@ -192,7 +192,7 @@ Public Class Ribbon
                                              WithImage(Number.Seven).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Seven.Value)
+                                       tag:=Number.Seven.NumericValue)
 
         Dim eight As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Eight)).
@@ -200,7 +200,7 @@ Public Class Ribbon
                                              WithImage(Number.Eight).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Eight.Value)
+                                       tag:=Number.Eight.NumericValue)
 
         Dim nine As Button = New Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Nine)).
@@ -208,7 +208,7 @@ Public Class Ribbon
                                              WithImage(Number.Nine).
                                              OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
                                        template:=one,
-                                       tag:=Number.Nine.Value)
+                                       tag:=Number.Nine.NumericValue)
 
         Dim numbersTopRow As ButtonGroup = New ButtonGroup(items:=ButtonGroupControls.From(one, two, three))
 

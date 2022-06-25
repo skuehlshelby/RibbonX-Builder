@@ -15,39 +15,36 @@ namespace ExampleCSharp
     [ProgId("ExampleCSharp.Connection")]
     public class Connection : StockRibbonBase
     {
-        internal Button Button { get; }
-        internal Group Group { get; }
-        internal Tab Tab { get; }
-        
-        public Connection()
-        {
-            Button = new Button(b => b.Large()
-                                      .WithLabel("Click Me!", GetLabel)
-                                      .WithSuperTip("I Really Want To Be Clicked!", GetSuperTip)
-                                      .WithImage(Common.SadFace, GetBuiltInImage)
-                                      .RouteClickTo(OnAction)
-                                      .OnClick((_) => MessageBox.Show(caption: "RibbonX C-Sharp Example", text: "Thank you!", buttons: MessageBoxButtons.OK),
-                                      (btn) =>
-                                      {
-                                          using (btn.RefreshSuspension())
-                                          {
-                                              btn.Label = "Thank You";
-                                              btn.SuperTip = "I really needed that.";
-                                              btn.Image = RibbonImage.Create(Common.HappyFace);
-                                          }
-                                      }));
-                                          
-            Group = new Group(b => b.WithLabel("A Button In Need")
-                                    .WithSuperTip("This group contains a button that needs your help."), 
-                                    controls: new []{ Button });
-
-            Tab = new Tab(b => b.WithLabel("C# Example")
-                                .InsertAfter(Excel.TabHome), 
-                                groups: new[] { Group });
-        }
+        internal Button Button { get; private set; }
+        internal Group Group { get; private set; }
+        internal Tab Tab { get; private set; }
 
         protected override Ribbon BuildRibbon()
         {
+            Button = new Button(b => b.Large()
+                          .WithLabel("Click Me!", GetLabel)
+                          .WithSuperTip("I Really Want To Be Clicked!", GetSuperTip)
+                          .WithImage(Common.SadFace, GetBuiltInImage)
+                          .RouteClickTo(OnAction)
+                          .OnClick((_) => MessageBox.Show(caption: "RibbonX C-Sharp Example", text: "Thank you!", buttons: MessageBoxButtons.OK),
+                          (btn) =>
+                          {
+                              using (btn.RefreshSuspension())
+                              {
+                                  btn.Label = "Thank You";
+                                  btn.SuperTip = "I really needed that.";
+                                  btn.Image = RibbonImage.Create(Common.HappyFace);
+                              }
+                          }));
+
+            Group = new Group(b => b.WithLabel("A Button In Need")
+                                    .WithSuperTip("This group contains a button that needs your help."),
+                                    controls: new[] { Button });
+
+            Tab = new Tab(b => b.WithLabel("C# Example")
+                                .InsertAfter(Excel.TabHome),
+                                groups: new[] { Group });
+
             return new Ribbon(b => b.OnLoad(OnLoad), Tab);
         }
     }
