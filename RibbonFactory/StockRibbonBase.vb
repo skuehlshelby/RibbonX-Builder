@@ -14,36 +14,48 @@ Public MustInherit Class StockRibbonBase
     Implements ICreateCallbacks
 
     Protected ReadOnly Extensions As ICollection(Of IDTExtensibility2)
-    Protected ReadOnly Ribbon As Ribbon
-    Protected HostApp As Object
+    Private _ribbon As Ribbon
+    Private _hostApp As Object
 
     Protected Sub New(ParamArray extensions() As IDTExtensibility2)
-        Ribbon = BuildRibbon()
         Me.Extensions = extensions
     End Sub
 
     Protected MustOverride Function BuildRibbon() As Ribbon
 
     Public Function GetCustomUI(ribbonID As String) As String Implements IRibbonExtensibility.GetCustomUI
+        _ribbon = BuildRibbon()
         Return Ribbon.RibbonX
     End Function
 
+    Protected ReadOnly Property Ribbon As Ribbon
+        Get
+            Return _ribbon
+        End Get
+    End Property
+
+    Protected ReadOnly Property HostApp As Object
+        Get
+            Return _hostApp
+        End Get
+    End Property
+
 #Region "IDTExtensibility2 Members"
 
-    Public Sub OnConnection(application As Object, connectMode As ext_ConnectMode, addInInst As Object, ByRef custom As Array) Implements IDTExtensibility2.OnConnection
-        HostApp = application
+    Public Overridable Sub OnConnection(application As Object, connectMode As ext_ConnectMode, addInInst As Object, ByRef custom As Array) Implements IDTExtensibility2.OnConnection
+        _hostApp = application
 
         For Each extension As IDTExtensibility2 In Extensions
             extension.OnConnection(application, connectMode, addInInst, custom)
         Next
     End Sub
 
-    Public Sub OnDisconnection(removeMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
+    Public Overridable Sub OnDisconnection(removeMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
         For Each extension As IDTExtensibility2 In Extensions
             extension.OnDisconnection(removeMode, custom)
         Next
 
-        HostApp = Nothing
+        _hostApp = Nothing
 
         For cycle As Integer = 1 To 2
             GC.Collect()
@@ -51,19 +63,19 @@ Public MustInherit Class StockRibbonBase
         Next
     End Sub
 
-    Public Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
+    Public Overridable Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
         For Each extension As IDTExtensibility2 In Extensions
             extension.OnAddInsUpdate(custom)
         Next
     End Sub
 
-    Public Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
+    Public Overridable Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
         For Each extension As IDTExtensibility2 In Extensions
             extension.OnStartupComplete(custom)
         Next
     End Sub
 
-    Public Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBegInShutdown
+    Public Overridable Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBegInShutdown
         For Each extension As IDTExtensibility2 In Extensions
             extension.OnBegInShutdown(custom)
         Next
