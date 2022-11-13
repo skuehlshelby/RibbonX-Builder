@@ -69,10 +69,5 @@ Namespace Utilities
             End If
         End Function
 
-        <Extension()>
-        Public Function NextBoolean(random As Random) As Boolean
-            Return random.Next() Mod 2 = 0
-        End Function
-
     End Module
 End NameSpace

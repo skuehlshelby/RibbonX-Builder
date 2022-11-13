@@ -34,7 +34,7 @@ Namespace Controls
         Private ReadOnly _selectionChangedEventManager As EventManager(Of SelectionChangeEventArgs)
 
         Public Sub New(Optional config As Action(Of IGalleryBuilder) = Nothing,
-                       Optional buttons As ICollection(Of Button) = Nothing,
+                       Optional buttons As ICollection(Of IButton) = Nothing,
                        Optional template As RibbonElement = Nothing,
                        Optional tag As Object = Nothing)
             MyBase.New(New List(Of Item), tag)
@@ -49,13 +49,13 @@ Namespace Controls
 
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
 
-            Me.Buttons = If(buttons, Array.Empty(Of Button))
+            Me.Buttons = If(buttons, Array.Empty(Of IButton))
 
             _beforeSelectionChangeEventManager = New EventManager(Of BeforeSelectionChangeEventArgs)($"{NameOf(Gallery)}.{NameOf(BeforeSelectionChange)}")
             _selectionChangedEventManager = New EventManager(Of SelectionChangeEventArgs)($"{NameOf(Gallery)}.{NameOf(SelectionChanged)}")
         End Sub
 
-        Public ReadOnly Property Buttons As ICollection(Of Button)
+        Public ReadOnly Property Buttons As ICollection(Of IButton)
 
 #Region "Events"
 
@@ -95,7 +95,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -155,19 +155,19 @@ Namespace Controls
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Enabled)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Enabled)
+                _attributes.Set(Value, AttributeCategory.Enabled)
             End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
@@ -177,55 +177,55 @@ Namespace Controls
 
         Public Property Description As String Implements IDescription.Description
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Description)
+                Return _attributes.Get(Of String)(AttributeCategory.Description)
             End Get
             Set
-                _attributes.Write(Of String)(Value, AttributeCategory.Description)
+                _attributes.Set(Of String)(Value, AttributeCategory.Description)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Label)
+                Return _attributes.Get(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Label)
+                _attributes.Set(Value, AttributeCategory.Label)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.LabelVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.LabelVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.LabelVisibility)
+                _attributes.Set(Value, AttributeCategory.LabelVisibility)
             End Set
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.ScreenTip)
+                Return _attributes.Get(Of String)(AttributeCategory.ScreenTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ScreenTip)
+                _attributes.Set(Value, AttributeCategory.ScreenTip)
             End Set
         End Property
 
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.SuperTip)
+                Return _attributes.Get(Of String)(AttributeCategory.SuperTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.SuperTip)
+                _attributes.Set(Value, AttributeCategory.SuperTip)
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Read(Of KeyTip)(AttributeCategory.KeyTip)
+                Return _attributes.Get(Of KeyTip)(AttributeCategory.KeyTip)
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
@@ -235,19 +235,19 @@ Namespace Controls
 
         Public Property ItemHeight As Integer Implements IItemDimensions.ItemHeight
             Get
-                Return _attributes.Read(Of Integer)(AttributeCategory.ItemHeight)
+                Return _attributes.Get(Of Integer)(AttributeCategory.ItemHeight)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ItemHeight)
+                _attributes.Set(Value, AttributeCategory.ItemHeight)
             End Set
         End Property
 
         Public Property ItemWidth As Integer Implements IItemDimensions.ItemWidth
             Get
-                Return _attributes.Read(Of Integer)(AttributeCategory.ItemWidth)
+                Return _attributes.Get(Of Integer)(AttributeCategory.ItemWidth)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ItemWidth)
+                _attributes.Set(Value, AttributeCategory.ItemWidth)
             End Set
         End Property
 
@@ -257,19 +257,19 @@ Namespace Controls
 
         Public Property Image As RibbonImage Implements IImage.Image
             Get
-                Return _attributes.Read(Of RibbonImage)()
+                Return _attributes.Get(Of RibbonImage)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property ShowImage As Boolean Implements IShowImage.ShowImage
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.ImageVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.ImageVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ImageVisibility)
+                _attributes.Set(Value, AttributeCategory.ImageVisibility)
             End Set
         End Property
 
@@ -279,7 +279,7 @@ Namespace Controls
 
         Public Property Selected As Item Implements ISelect.Selected
             Get
-                Dim value As Item = _attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition)
+                Dim value As Item = _attributes.Get(Of Item)(AttributeCategory.SelectedItemPosition)
 
                 If value IsNot Nothing Then
                     Return value
@@ -299,7 +299,7 @@ Namespace Controls
                     RaiseEvent BeforeSelectionChange(Me, e)
 
                     If Not e.IsCancelled Then
-                        _attributes.Write(e.NewSelection, AttributeCategory.SelectedItemPosition)
+                        _attributes.Set(e.NewSelection, AttributeCategory.SelectedItemPosition)
 
                         RaiseEvent SelectionChanged(Me, New SelectionChangeEventArgs(e.NewSelection))
                     End If
@@ -322,10 +322,10 @@ Namespace Controls
 
         Public Property Size As ControlSize Implements ISize.Size
             Get
-                Return _attributes.Read(Of ControlSize)(AttributeCategory.Size)
+                Return _attributes.Get(Of ControlSize)(AttributeCategory.Size)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Size)
+                _attributes.Set(Value, AttributeCategory.Size)
             End Set
         End Property
 
@@ -333,13 +333,13 @@ Namespace Controls
 
         Public ReadOnly Property Rows As Integer Implements IRowsAndColumns.Rows
             Get
-                Return _attributes.Read(Of Integer)(AttributeCategory.Rows)
+                Return _attributes.Get(Of Integer)(AttributeCategory.Rows)
             End Get
         End Property
 
         Public ReadOnly Property Columns As Integer Implements IRowsAndColumns.Columns
             Get
-                Return _attributes.Read(Of Integer)(AttributeCategory.Columns)
+                Return _attributes.Get(Of Integer)(AttributeCategory.Columns)
             End Get
         End Property
 

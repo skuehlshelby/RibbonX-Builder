@@ -8,8 +8,8 @@ Namespace Builders
 
         Private ReadOnly items As LinkedList(Of RibbonElement) = New LinkedList(Of RibbonElement)
 
-        Public Function Add(ParamArray controls() As Button) As ButtonGroupControls
-            Array.ForEach(controls, Sub(c) items.AddLast(c))
+        Public Function Add(ParamArray controls() As IButton) As ButtonGroupControls
+            Array.ForEach(controls, Sub(c) items.AddLast(CType(c, RibbonElement)))
             Return Me
         End Function
 
@@ -38,7 +38,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Shared Function [From](ParamArray controls() As Button) As ButtonGroupControls
+        Public Shared Function [From](ParamArray controls() As IButton) As ButtonGroupControls
             Return New ButtonGroupControls().Add(controls)
         End Function
 
@@ -62,7 +62,7 @@ Namespace Builders
             Return New ButtonGroupControls().Add(controls)
         End Function
 
-        Public Shared Function [From](controls As IEnumerable(Of Button)) As ButtonGroupControls
+        Public Shared Function [From](controls As IEnumerable(Of IButton)) As ButtonGroupControls
             Return New ButtonGroupControls().Add(controls.ToArray())
         End Function
 

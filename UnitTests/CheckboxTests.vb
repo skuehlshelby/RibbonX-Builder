@@ -82,7 +82,7 @@ Public Class CheckboxTests
 
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Visible, Not checkbox.Visible)
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Enabled, Not checkbox.Enabled)
-        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Checked, Not checkbox.Checked)
+        Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.IsChecked, Not checkbox.IsChecked)
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Label, String.Empty)
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.ScreenTip, String.Empty)
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.SuperTip, String.Empty)
@@ -110,7 +110,7 @@ Public Class CheckboxTests
 
         AddHandler checkbox.StateChanged, Sub(sender, e) fired = True
 
-        checkbox.Checked = True
+        checkbox.IsChecked = True
 
         Assert.IsTrue(fired)
 
@@ -123,9 +123,9 @@ Public Class CheckboxTests
 
         AddHandler checkbox.BeforeStateChange, Sub(sender, e) e.Cancel()
 
-        checkbox.Checked = True
+        checkbox.IsChecked = True
 
-        Assert.IsFalse(checkbox.Checked)
+        Assert.IsFalse(checkbox.IsChecked)
 
     End Sub
 

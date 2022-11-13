@@ -31,7 +31,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -55,28 +55,28 @@ Namespace Controls
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Read(Of KeyTip)()
+                Return _attributes.Get(Of KeyTip)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Label)
+                Return _attributes.Get(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Label)
+                _attributes.Set(Value, AttributeCategory.Label)
             End Set
         End Property
 

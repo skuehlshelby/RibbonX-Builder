@@ -151,7 +151,7 @@ Public MustInherit Class StockRibbonBase
     End Function
 
     Public Function GetPressed(control As IRibbonControl) As Boolean Implements ICreateCallbacks.GetPressed
-        Return Ribbon.GetElement(Of IPressed)(control.Id).Checked
+        Return Ribbon.GetElement(Of IChecked)(control.Id).IsChecked
     End Function
 
     Public Function GetText(control As IRibbonControl) As String Implements ICreateCallbacks.GetText
@@ -211,7 +211,7 @@ Public MustInherit Class StockRibbonBase
     End Sub
 
     Public Sub OnButtonToggle(control As IRibbonControl, pressed As Boolean) Implements ICreateCallbacks.OnButtonToggle
-        Ribbon.GetElement(Of IPressed)(control.Id).Checked = pressed
+        Ribbon.GetElement(Of IChecked)(control.Id).IsChecked = pressed
     End Sub
 
 #End Region

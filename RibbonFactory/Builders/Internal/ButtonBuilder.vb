@@ -247,12 +247,12 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Function BeforeClick(ParamArray actions() As Action(Of Button, CancelableEventArgs)) As IButtonBuilder Implements IButtonBuilder.BeforeClick
+        Public Function BeforeClick(ParamArray actions() As Action(Of IButton, CancelableEventArgs)) As IButtonBuilder Implements IButtonBuilder.BeforeClick
             AddBeforeClickHandlers(actions)
             Return Me
         End Function
 
-        Public Function OnClick(ParamArray actions() As Action(Of Button)) As IButtonBuilder Implements IButtonBuilder.OnClick
+        Public Function OnClick(ParamArray actions() As Action(Of IButton)) As IButtonBuilder Implements IButtonBuilder.OnClick
             AddOnClickHandlers(actions)
             Return Me
         End Function

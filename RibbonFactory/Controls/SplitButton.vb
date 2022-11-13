@@ -18,7 +18,7 @@ Namespace Controls
 
         Private ReadOnly _attributes As AttributeSet
 
-        Public Sub New(button As Button, menu As Menu, Optional config As Action(Of ISplitButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
+        Public Sub New(button As IButton, menu As Menu, Optional config As Action(Of ISplitButtonBuilder) = Nothing, Optional template As RibbonElement = Nothing, Optional tag As Object = Nothing)
             Me.New(DirectCast(button, RibbonElement), menu, config, template, tag)
         End Sub
 
@@ -42,7 +42,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -70,46 +70,46 @@ Namespace Controls
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Enabled)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Enabled)
+                _attributes.Set(Value, AttributeCategory.Enabled)
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Read(Of KeyTip)()
+                Return _attributes.Get(Of KeyTip)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property Size As ControlSize Implements ISize.Size
             Get
-                Return _attributes.Read(Of ControlSize)(AttributeCategory.Size)
+                Return _attributes.Get(Of ControlSize)(AttributeCategory.Size)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Size)
+                _attributes.Set(Value, AttributeCategory.Size)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.LabelVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.LabelVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.LabelVisibility)
+                _attributes.Set(Value, AttributeCategory.LabelVisibility)
             End Set
         End Property
 

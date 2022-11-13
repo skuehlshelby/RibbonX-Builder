@@ -11,7 +11,7 @@ Imports RibbonX.Utilities
 
 Namespace Controls
 
-    Public NotInheritable Class DropDown
+    Friend NotInheritable Class DropDown
         Inherits Container(Of Item)
         Implements ISelect
         Implements IEnabled
@@ -30,7 +30,7 @@ Namespace Controls
         Private ReadOnly _selectionChangedEventManager As EventManager(Of SelectionChangeEventArgs)
 
         Public Sub New(Optional config As Action(Of IDropdownBuilder) = Nothing,
-                       Optional buttons As ICollection(Of Button) = Nothing,
+                       Optional buttons As ICollection(Of IButton) = Nothing,
                        Optional template As RibbonElement = Nothing,
                        Optional tag As Object = Nothing)
             MyBase.New(New List(Of Item)(), tag)
@@ -45,13 +45,13 @@ Namespace Controls
 
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
 
-            Me.Buttons = If(buttons, Array.Empty(Of Button)())
+            Me.Buttons = If(buttons, Array.Empty(Of IButton)())
 
             _beforeSelectionChangeEventManager = New EventManager(Of BeforeSelectionChangeEventArgs)($"{NameOf(DropDown)}.{NameOf(BeforeSelectionChange)}")
             _selectionChangedEventManager = New EventManager(Of SelectionChangeEventArgs)($"{NameOf(DropDown)}.{NameOf(SelectionChanged)}")
         End Sub
 
-        Public ReadOnly Property Buttons As ICollection(Of Button)
+        Public ReadOnly Property Buttons As ICollection(Of IButton)
 
 #Region "Events"
 
@@ -89,7 +89,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -151,19 +151,19 @@ Namespace Controls
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Enabled)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Enabled)
+                _attributes.Set(Value, AttributeCategory.Enabled)
             End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
@@ -173,46 +173,46 @@ Namespace Controls
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Read(Of KeyTip)()
+                Return _attributes.Get(Of KeyTip)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Label)
+                Return _attributes.Get(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Label)
+                _attributes.Set(Value, AttributeCategory.Label)
             End Set
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.ScreenTip)
+                Return _attributes.Get(Of String)(AttributeCategory.ScreenTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ScreenTip)
+                _attributes.Set(Value, AttributeCategory.ScreenTip)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.LabelVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.LabelVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.LabelVisibility)
+                _attributes.Set(Value, AttributeCategory.LabelVisibility)
             End Set
         End Property
 
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.SuperTip)
+                Return _attributes.Get(Of String)(AttributeCategory.SuperTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.SuperTip)
+                _attributes.Set(Value, AttributeCategory.SuperTip)
             End Set
         End Property
 
@@ -222,19 +222,19 @@ Namespace Controls
 
         Public Property Image As RibbonImage Implements IImage.Image
             Get
-                Return _attributes.Read(Of RibbonImage)()
+                Return _attributes.Get(Of RibbonImage)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property ShowImage As Boolean Implements IShowImage.ShowImage
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.ImageVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.ImageVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ImageVisibility)
+                _attributes.Set(Value, AttributeCategory.ImageVisibility)
             End Set
         End Property
 
@@ -244,7 +244,7 @@ Namespace Controls
 
         Public Property Selected As Item Implements ISelect.Selected
             Get
-                Dim value As Item = _attributes.Read(Of Item)(AttributeCategory.SelectedItemPosition)
+                Dim value As Item = _attributes.Get(Of Item)(AttributeCategory.SelectedItemPosition)
 
                 If value IsNot Nothing Then
                     Return value
@@ -263,7 +263,7 @@ Namespace Controls
                     RaiseEvent BeforeSelectionChange(Me, e)
 
                     If Not e.IsCancelled Then
-                        _attributes.Write(e.NewSelection, AttributeCategory.SelectedItemPosition)
+                        _attributes.Set(e.NewSelection, AttributeCategory.SelectedItemPosition)
 
                         RaiseEvent SelectionChanged(Me, New SelectionChangeEventArgs(e.NewSelection))
                     End If

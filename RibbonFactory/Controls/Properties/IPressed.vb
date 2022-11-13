@@ -1,5 +1,5 @@
 ﻿Namespace Controls.Properties
-    Public Interface IPressed
-        Property Checked As Boolean
+    Public Interface IChecked
+        Property IsChecked As Boolean
     End Interface
 End NameSpace

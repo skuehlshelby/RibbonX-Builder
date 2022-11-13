@@ -4,7 +4,7 @@ Namespace Builders.Internal.Standardization
 
     Public Interface IAddButton(Of T)
 
-        Function Add(button As Button) As T
+        Function Add(button As IButton) As T
 
     End Interface
 

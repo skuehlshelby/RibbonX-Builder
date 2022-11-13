@@ -11,15 +11,15 @@ Namespace Controls.Utilities
         End Sub
 
         Public Sub Add(attributes As AttributeSet, handler As EventHandler(Of TEventArgs))
-            attributes.Read(Of ICollection(Of EventHandler(Of TEventArgs)))().Add(handler)
+            attributes.Get(Of ICollection(Of EventHandler(Of TEventArgs)))().Add(handler)
         End Sub
 
         Public Sub Remove(attributes As AttributeSet, handler As EventHandler(Of TEventArgs))
-            attributes.Read(Of ICollection(Of EventHandler(Of TEventArgs)))().Remove(handler)
+            attributes.Get(Of ICollection(Of EventHandler(Of TEventArgs)))().Remove(handler)
         End Sub
 
         Public Sub FireEvent(attributes As AttributeSet, sender As Object, e As TEventArgs)
-            For Each target As EventHandler(Of TEventArgs) In attributes.Read(Of ICollection(Of EventHandler(Of TEventArgs)))()
+            For Each target As EventHandler(Of TEventArgs) In attributes.Get(Of ICollection(Of EventHandler(Of TEventArgs)))()
                 Try
                     target.Invoke(sender, e)
                 Catch ex As Exception
@@ -40,15 +40,15 @@ Namespace Controls.Utilities
         End Sub
 
         Public Sub Add(attributes As AttributeSet, handler As EventHandler)
-            attributes.Read(Of ICollection(Of EventHandler))().Add(handler)
+            attributes.Get(Of ICollection(Of EventHandler))().Add(handler)
         End Sub
 
         Public Sub Remove(attributes As AttributeSet, handler As EventHandler)
-            attributes.Read(Of ICollection(Of EventHandler))().Remove(handler)
+            attributes.Get(Of ICollection(Of EventHandler))().Remove(handler)
         End Sub
 
         Public Sub FireEvent(attributes As AttributeSet, sender As Object, e As System.EventArgs)
-            For Each target As EventHandler In attributes.Read(Of ICollection(Of EventHandler))()
+            For Each target As EventHandler In attributes.Get(Of ICollection(Of EventHandler))()
                 Try
                     target.Invoke(sender, e)
                 Catch ex As Exception

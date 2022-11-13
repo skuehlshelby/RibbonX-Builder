@@ -63,6 +63,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -168,6 +169,10 @@
     <Compile Include="ComTypes\StdOle\IPictureDisp.vb" />
     <Compile Include="Controls\EventArgs\BeforeToggleChangeEventArgs.vb" />
     <Compile Include="Controls\EventArgs\CancelableEventArgs.vb" />
+    <Compile Include="PrivateApi\IRibbonProperty.vb" />
+    <Compile Include="PrivateApi\RibbonProperty.vb" />
+    <Compile Include="PublicApi\Binding.vb" />
+    <Compile Include="PublicApi\Controls.vb" />
     <Compile Include="Controls\Properties\IBoxStyle.vb" />
     <Compile Include="Controls\Properties\IItemDimensions.vb" />
     <Compile Include="Controls\Properties\IItemSize.vb" />
@@ -217,6 +222,7 @@
     <Compile Include="Controls\Gallery.vb" />
     <Compile Include="Controls\LabelControl.vb" />
     <Compile Include="Controls\ToggleButton.vb" />
+    <Compile Include="PublicApi\Properties.vb" />
     <Compile Include="SimpleTypes\BoxStyle.vb" />
     <Compile Include="SimpleTypes\ControlSize.vb" />
     <Compile Include="Images\BuiltIn\3D.vb" />
@@ -242,6 +248,7 @@
     <Compile Include="Controls\Attributes\Internal\RibbonAttributeWrappedValue.vb" />
     <Compile Include="Controls\Attributes\Internal\ValueWrapper.vb" />
     <Compile Include="Images\RibbonImage.vb" />
+    <Compile Include="Testing\InternalsVisibleTo.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="Callbacks\ICreateCallbacks.vb" />
     <Compile Include="SimpleTypes\KeyTip.vb" />

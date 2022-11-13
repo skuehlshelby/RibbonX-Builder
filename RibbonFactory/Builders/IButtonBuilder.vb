@@ -19,8 +19,8 @@ Namespace Builders
         Inherits IInsert(Of IButtonBuilder)
 
         Function RouteClickTo(callBack As OnAction) As IButtonBuilder
-        Function BeforeClick(ParamArray actions() As Action(Of Button, CancelableEventArgs)) As IButtonBuilder
-        Function OnClick(ParamArray actions() As Action(Of Button)) As IButtonBuilder
+        Function BeforeClick(ParamArray actions() As Action(Of IButton, CancelableEventArgs)) As IButtonBuilder
+        Function OnClick(ParamArray actions() As Action(Of IButton)) As IButtonBuilder
 
     End Interface
 

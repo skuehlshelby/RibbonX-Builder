@@ -6,9 +6,9 @@ Namespace Controls
     Public NotInheritable Class DialogLauncher
         Inherits RibbonElement
 
-        Private ReadOnly _button As Button
+        Private ReadOnly _button As IButton
 
-        Public Sub New(button As Button)
+        Public Sub New(button As IButton)
             _button = button
         End Sub
 
@@ -22,7 +22,7 @@ Namespace Controls
             Get
                 Dim regex As Regex = New Regex("(?:size|getSize|visible|getVisible)=""\w+""")
 
-                Return String.Join(Environment.NewLine, "<dialogBoxLauncher>", regex.Replace(_button.XML, String.Empty), "</dialogBoxLauncher>")
+                Return String.Join(Environment.NewLine, "<dialogBoxLauncher>", regex.Replace(_button.ConvertToXml(), String.Empty), "</dialogBoxLauncher>")
             End Get
         End Property
 

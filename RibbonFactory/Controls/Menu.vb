@@ -42,7 +42,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -56,107 +56,107 @@ Namespace Controls
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Enabled)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Enabled)
+                _attributes.Set(Value, AttributeCategory.Enabled)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Label)
+                Return _attributes.Get(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Label)
+                _attributes.Set(Value, AttributeCategory.Label)
             End Set
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.ScreenTip)
+                Return _attributes.Get(Of String)(AttributeCategory.ScreenTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ScreenTip)
+                _attributes.Set(Value, AttributeCategory.ScreenTip)
             End Set
         End Property
 
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.SuperTip)
+                Return _attributes.Get(Of String)(AttributeCategory.SuperTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.SuperTip)
+                _attributes.Set(Value, AttributeCategory.SuperTip)
             End Set
         End Property
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Read(Of KeyTip)()
+                Return _attributes.Get(Of KeyTip)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
 
             End Set
         End Property
 
         Public Property Image As RibbonImage Implements IImage.Image
             Get
-                Return _attributes.Read(Of RibbonImage)()
+                Return _attributes.Get(Of RibbonImage)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property ShowImage As Boolean Implements IShowImage.ShowImage
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.ImageVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.ImageVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ImageVisibility)
+                _attributes.Set(Value, AttributeCategory.ImageVisibility)
             End Set
         End Property
 
         Public Property Description As String Implements IDescription.Description
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Description)
+                Return _attributes.Get(Of String)(AttributeCategory.Description)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Description)
+                _attributes.Set(Value, AttributeCategory.Description)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.LabelVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.LabelVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.LabelVisibility)
+                _attributes.Set(Value, AttributeCategory.LabelVisibility)
             End Set
         End Property
 
         Public ReadOnly Property ItemSize As ControlSize Implements IItemSize.ItemSize
             Get
-                Return _attributes.Read(Of ControlSize)(AttributeCategory.ItemSize)
+                Return _attributes.Get(Of ControlSize)(AttributeCategory.ItemSize)
             End Get
         End Property
 
         Public Property Size As ControlSize Implements ISize.Size
             Get
-                Return _attributes.Read(Of ControlSize)(AttributeCategory.Size)
+                Return _attributes.Get(Of ControlSize)(AttributeCategory.Size)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Size)
+                _attributes.Set(Value, AttributeCategory.Size)
             End Set
         End Property
 

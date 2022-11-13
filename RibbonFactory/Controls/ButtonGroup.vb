@@ -1,4 +1,5 @@
 ﻿Imports System.Text.RegularExpressions
+Imports RibbonX.Api
 Imports RibbonX.Builders
 Imports RibbonX.Controls.Attributes
 Imports RibbonX.Controls.Base
@@ -6,9 +7,9 @@ Imports RibbonX.Controls.Properties
 
 Namespace Controls
 
-    Public NotInheritable Class ButtonGroup
+    Friend NotInheritable Class ButtonGroup
         Inherits Container(Of RibbonElement)
-        Implements IVisible
+        Implements IButtonGroup
         Implements IAttributeSource
 
         Private ReadOnly _attributes As AttributeSet
@@ -30,12 +31,6 @@ Namespace Controls
             AddHandler _attributes.AttributeChanged, AddressOf RefreshNeeded
         End Sub
 
-        Public Overrides ReadOnly Property ID As String
-            Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
-            End Get
-        End Property
-
         Public Overrides ReadOnly Property XML As String
             Get
                 Dim regex As Regex = New Regex("(?:size|getSize)=""\w+""")
@@ -46,17 +41,26 @@ Namespace Controls
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
+        End Property
+
+        Private ReadOnly Property IReadOnlyCollection_Count As Integer Implements IReadOnlyCollection(Of IRibbonElement).Count
+            Get
+                Throw New NotImplementedException()
+            End Get
         End Property
 
         Private Function GetAttributes() As AttributeSet Implements IAttributeSource.GetAttributes
             Return _attributes.Clone()
         End Function
 
+        Private Function IEnumerable_GetEnumerator() As IEnumerator(Of IRibbonElement) Implements IEnumerable(Of IRibbonElement).GetEnumerator
+            Throw New NotImplementedException()
+        End Function
     End Class
 
 End Namespace

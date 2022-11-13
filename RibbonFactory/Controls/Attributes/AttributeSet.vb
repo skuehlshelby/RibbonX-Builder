@@ -1,11 +1,15 @@
-﻿Imports RibbonX.Utilities
+﻿Imports System.ComponentModel
+Imports System.Runtime.CompilerServices
+Imports RibbonX.Utilities
 
 Namespace Controls.Attributes
     Friend Class AttributeSet
         Implements ICloneable
         Implements ICollection(Of IRibbonAttribute)
+        Implements INotifyPropertyChanged
 
         Public Event AttributeChanged()
+        Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
         Private Sub OnValueChange()
             RaiseEvent AttributeChanged()
@@ -92,7 +96,7 @@ Namespace Controls.Attributes
             End If
         End Function
 
-        Public Function Read(Of T)() As T
+        Public Function [Get](Of T)() As T
             Dim results As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T))
 
             If results.Count() = 1 Then
@@ -102,7 +106,7 @@ Namespace Controls.Attributes
             End If
         End Function
 
-        Public Function Read(Of T)(category As AttributeCategory) As T
+        Public Function [Get](Of T)(category As AttributeCategory) As T
             Dim results As IEnumerable(Of IRibbonAttributeReadOnly(Of T)) = _attributes.OfType(Of IRibbonAttributeReadOnly(Of T)).Where(Function(a) a.Category = category)
 
             If results.Count() = 1 Then
@@ -112,7 +116,7 @@ Namespace Controls.Attributes
             End If
         End Function
 
-        Public Sub Write(Of T)(value As T)
+        Public Sub [Set](Of T)(value As T, <CallerMemberName()> Optional callerMemberName As String = vbNullString)
             Dim results As IEnumerable(Of IRibbonAttributeReadWrite(Of T)) = _attributes.OfType(Of IRibbonAttributeReadWrite(Of T))
 
             If results.Count() = 1 Then
@@ -122,7 +126,7 @@ Namespace Controls.Attributes
             End If
         End Sub
 
-        Public Sub Write(Of T)(value As T, category As AttributeCategory)
+        Public Sub [Set](Of T)(value As T, category As AttributeCategory, <CallerMemberName()> Optional callerMemberName As String = vbNullString)
             Dim results As IEnumerable(Of IRibbonAttributeReadWrite(Of T)) = _attributes.OfType(Of IRibbonAttributeReadWrite(Of T)).Where(Function(a) a.Category = category)
 
             If results.Count() = 1 Then

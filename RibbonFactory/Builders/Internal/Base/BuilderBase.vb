@@ -86,7 +86,7 @@ Namespace Builders.Internal.Base
                         defaults.Add(New RibbonAttributeDefault(Of Byte)(Byte.MaxValue, AttributeName.MaxLength, AttributeCategory.MaxLength))
                         defaults.Add(New RibbonAttributeInvocationList(Of BeforeTextChangeEventArgs)(AttributeName.BeforeTextChange, AttributeCategory.BeforeTextChange))
                         defaults.Add(New RibbonAttributeInvocationList(Of TextChangeEventArgs)(AttributeName.OnTextChange, AttributeCategory.OnTextChange))
-                    Case GetType(IPressed)
+                    Case GetType(IChecked)
                         defaults.Add(New RibbonAttributeDefault(Of Boolean)(False, AttributeName.GetPressed, AttributeCategory.Pressed))
                         defaults.Add(New RibbonAttributeInvocationList(Of BeforeToggleChangeEventArgs)(AttributeName.BeforeToggle, AttributeCategory.BeforeToggle))
                         defaults.Add(New RibbonAttributeInvocationList(Of ToggleChangeEventArgs)(AttributeName.OnToggle, AttributeCategory.OnToggle))

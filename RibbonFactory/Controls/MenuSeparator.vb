@@ -28,7 +28,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -40,10 +40,10 @@ Namespace Controls
 
         Public Property Title As String Implements ITitle.Title
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Title)
+                Return _attributes.Get(Of String)(AttributeCategory.Title)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Title)
+                _attributes.Set(Value, AttributeCategory.Title)
             End Set
         End Property
 

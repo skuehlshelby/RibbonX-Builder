@@ -9,8 +9,8 @@ Namespace Builders
 
         Private ReadOnly items As LinkedList(Of RibbonElement) = New LinkedList(Of RibbonElement)()
 
-        Public Function Add(ParamArray controls() As Button) As MenuControls
-            Array.ForEach(controls, Sub(c) items.AddLast(c))
+        Public Function Add(ParamArray controls() As IButton) As MenuControls
+            Array.ForEach(controls, Sub(c) items.AddLast(CType(c, RibbonElement)))
             Return Me
         End Function
 
@@ -44,7 +44,7 @@ Namespace Builders
             Return Me
         End Function
 
-        Public Shared Function [From](ParamArray controls() As Button) As MenuControls
+        Public Shared Function [From](ParamArray controls() As IButton) As MenuControls
             Return New MenuControls().Add(controls)
         End Function
 

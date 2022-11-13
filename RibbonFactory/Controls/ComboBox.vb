@@ -77,7 +77,7 @@ Namespace Controls
 
         Public Overrides ReadOnly Property ID As String
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.IdType)
+                Return _attributes.Get(Of String)(AttributeCategory.IdType)
             End Get
         End Property
 
@@ -133,19 +133,19 @@ Namespace Controls
 
         Public Property Enabled As Boolean Implements IEnabled.Enabled
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Enabled)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Enabled)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Enabled)
+                _attributes.Set(Value, AttributeCategory.Enabled)
             End Set
         End Property
 
         Public Property Visible As Boolean Implements IVisible.Visible
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.Visibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.Visibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Visibility)
+                _attributes.Set(Value, AttributeCategory.Visibility)
             End Set
         End Property
 
@@ -155,45 +155,45 @@ Namespace Controls
 
         Public Property KeyTip As KeyTip Implements IKeyTip.KeyTip
             Get
-                Return _attributes.Read(Of KeyTip)(AttributeCategory.KeyTip)
+                Return _attributes.Get(Of KeyTip)(AttributeCategory.KeyTip)
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property Label As String Implements ILabel.Label
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Label)
+                Return _attributes.Get(Of String)(AttributeCategory.Label)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.Label)
+                _attributes.Set(Value, AttributeCategory.Label)
             End Set
         End Property
 
         Public Property ShowLabel As Boolean Implements IShowLabel.ShowLabel
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.LabelVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.LabelVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.LabelVisibility)
+                _attributes.Set(Value, AttributeCategory.LabelVisibility)
             End Set
         End Property
 
         Public Property ScreenTip As String Implements IScreenTip.ScreenTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.ScreenTip)
+                Return _attributes.Get(Of String)(AttributeCategory.ScreenTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ScreenTip)
+                _attributes.Set(Value, AttributeCategory.ScreenTip)
             End Set
         End Property
         Public Property SuperTip As String Implements ISuperTip.SuperTip
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.SuperTip)
+                Return _attributes.Get(Of String)(AttributeCategory.SuperTip)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.SuperTip)
+                _attributes.Set(Value, AttributeCategory.SuperTip)
             End Set
         End Property
 
@@ -203,19 +203,19 @@ Namespace Controls
 
         Public Property Image As RibbonImage Implements IImage.Image
             Get
-                Return _attributes.Read(Of RibbonImage)()
+                Return _attributes.Get(Of RibbonImage)()
             End Get
             Set
-                _attributes.Write(Value)
+                _attributes.Set(Value)
             End Set
         End Property
 
         Public Property ShowImage As Boolean Implements IShowImage.ShowImage
             Get
-                Return _attributes.Read(Of Boolean)(AttributeCategory.ImageVisibility)
+                Return _attributes.Get(Of Boolean)(AttributeCategory.ImageVisibility)
             End Get
             Set
-                _attributes.Write(Value, AttributeCategory.ImageVisibility)
+                _attributes.Set(Value, AttributeCategory.ImageVisibility)
             End Set
         End Property
 
@@ -225,7 +225,7 @@ Namespace Controls
 
         Public ReadOnly Property MaxLength As Byte Implements IMaxLength.MaxLength
             Get
-                Return _attributes.Read(Of Byte)(AttributeCategory.MaxLength)
+                Return _attributes.Get(Of Byte)(AttributeCategory.MaxLength)
             End Get
         End Property
 
@@ -235,7 +235,7 @@ Namespace Controls
 
         Public Property Text As String Implements IText.Text
             Get
-                Return _attributes.Read(Of String)(AttributeCategory.Text)
+                Return _attributes.Get(Of String)(AttributeCategory.Text)
             End Get
             Set
                 Using updateBlock As IDisposable = RefreshSuspension()
@@ -250,7 +250,7 @@ Namespace Controls
                         If Not e.IsCancelled Then
                             Dim updatedValue As String = e.NewText
 
-                            _attributes.Write(updatedValue, AttributeCategory.Text)
+                            _attributes.Set(updatedValue, AttributeCategory.Text)
 
                             RaiseEvent TextChanged(Me, New TextChangeEventArgs(updatedValue))
                         End If

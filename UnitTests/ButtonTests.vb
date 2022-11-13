@@ -151,7 +151,7 @@ Public Class ButtonTests
         button.Click()
     End Sub
 
-    Public Shared Function BuildReadonlyButton() As Button
+    Friend Shared Function BuildReadonlyButton() As Button
         Return New Button(Sub(bb) bb.
                    Invisible().
                    Disabled().
@@ -165,7 +165,7 @@ Public Class ButtonTests
                    WithImage(Common.DollarSign))
     End Function
 
-    Public Shared Function BuildReadonlyButtonII() As Button
+    Friend Shared Function BuildReadonlyButtonII() As Button
         Return New Button(Sub(bb) bb.
                    Visible().
                    Enabled().
@@ -180,7 +180,7 @@ Public Class ButtonTests
                    WithImage(Common.DollarSign))
     End Function
 
-    Public Shared Function BuildButton() As Button
+    Friend Shared Function BuildButton() As Button
         Return New Button(Sub(bb) bb.
                            Visible(AddressOf GetVisibleShared).
                            Enabled(AddressOf GetEnabledShared).
@@ -198,7 +198,7 @@ Public Class ButtonTests
                            OnClick(Sub() Debug.WriteLine("On Click Fired")))
     End Function
 
-    Public Shared Function BuildButtonII() As Button
+    Friend Shared Function BuildButtonII() As Button
         Return New Button(Sub(bb) bb.
                            Invisible(AddressOf GetVisibleShared).
                            Disabled(AddressOf GetEnabledShared).
