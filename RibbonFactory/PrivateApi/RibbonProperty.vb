@@ -1,5 +1,5 @@
-﻿Imports System.ComponentModel
-Imports RibbonX.Controls.Attributes
+﻿Imports RibbonX.Controls.Attributes
+Imports RibbonX.Utilities
 
 Namespace PrivateApi
 
@@ -8,6 +8,22 @@ Namespace PrivateApi
 
         Private ReadOnly callback As String
         Private value As T
+
+        Public Sub New(name As AttributeName, category As AttributeCategory, value As T, Optional callback As String = vbNullString, Optional isDefault As Boolean = False)
+            If name Is Nothing Then
+                Throw New ArgumentNullException(NameOf(name))
+            End If
+
+            If category Is Nothing Then
+                Throw New ArgumentNullException(NameOf(category))
+            End If
+
+            Me.Name = name
+            Me.Category = category
+            Me.value = value
+            Me.IsDefault = isDefault
+            Me.callback = callback
+        End Sub
 
         Public ReadOnly Property Name As AttributeName Implements IRibbonProperty.Name
 
@@ -48,6 +64,15 @@ Namespace PrivateApi
             Return Category.GetHashCode()
         End Function
 
+        Public Overrides Function ToString() As String
+            If IsDefault Then
+                Return String.Empty
+            ElseIf IsReadOnly Then
+                Return $"{Name.CamelCase()}=""{If(TypeOf value Is Boolean, value.CamelCase(), value.ToString())}"""
+            Else
+                Return $"{Name.CamelCase()}=""{callback}"""
+            End If
+        End Function
 
     End Class
 
