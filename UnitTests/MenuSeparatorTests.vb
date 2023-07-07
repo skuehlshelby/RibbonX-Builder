@@ -1,5 +1,4 @@
-﻿Imports RibbonX.Builders
-Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
 
 <TestClass>
@@ -10,27 +9,27 @@ Public Class MenuSeparatorTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As MenuSeparator = New MenuSeparator(template:=Nothing)
+        Dim control As IMenuSeparator = RxApi.MenuSeparator(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As MenuSeparator = New MenuSeparator(config:=Nothing)
+        Dim control As IMenuSeparator = RxApi.MenuSeparator(Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(MenuTests.BuildMenu(MenuControls.From(ButtonTests.BuildReadonlyButton()).Add(BuildSeparator()).Add(ButtonTests.BuildButtonII())))
+        Assert.That.ValidRibbonXIsProduced(MenuTests.BuildMenu(ButtonTests.BuildReadonlyButton(), BuildSeparator(), ButtonTests.BuildButtonII()))
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New MenuSeparator())
+        Assert.That.NoPropertiesAreNull(RxApi.MenuSeparator())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As MenuSeparator = BuildReadonlySeparator()
+        Dim control As IMenuSeparator = BuildReadonlySeparator()
 
         Assert.AreEqual(control.Title, TITLE)
     End Sub
@@ -42,32 +41,32 @@ Public Class MenuSeparatorTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As MenuSeparator = BuildSeparatorII()
+        Dim control As IMenuSeparator = BuildSeparatorII()
 
         Assert.That.PropertyMayBeModified(control, Function(c) c.Title, String.Empty)
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As MenuSeparator = BuildReadonlySeparatorII()
+        Dim control As IMenuSeparator = BuildReadonlySeparatorII()
 
-        Assert.That.SharedPropertiesAreEqual(control, New DropDown(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.DropDown(Sub(b) b.FromTemplate(control)))
     End Sub
 
-    Public Shared Function BuildReadonlySeparator() As MenuSeparator
-        Return New MenuSeparator(config:=Sub(b) b.InsertAfter(Excel.About).WithTitle(TITLE))
+    Public Shared Function BuildReadonlySeparator() As IMenuSeparator
+        Return RxApi.MenuSeparator(Sub(b) b.InsertAfter(Excel.About).WithTitle(TITLE))
     End Function
 
-    Public Shared Function BuildReadonlySeparatorII() As MenuSeparator
-        Return New MenuSeparator(config:=Sub(b) b.InsertAfter(Excel.About).WithTitle(TITLE))
+    Public Shared Function BuildReadonlySeparatorII() As IMenuSeparator
+        Return RxApi.MenuSeparator(Sub(b) b.InsertAfter(Excel.About).WithTitle(TITLE))
     End Function
 
-    Public Shared Function BuildSeparator() As MenuSeparator
-        Return New MenuSeparator(config:=Sub(b) b.InsertBefore(Excel.About).WithTitle(TITLE, AddressOf GetTitle))
+    Public Shared Function BuildSeparator() As IMenuSeparator
+        Return RxApi.MenuSeparator(Sub(b) b.InsertBefore(Excel.About).WithTitle(TITLE, AddressOf GetTitle))
     End Function
 
-    Public Shared Function BuildSeparatorII() As MenuSeparator
-        Return New MenuSeparator(config:=Sub(b) b.InsertBefore(Excel.About).WithTitle(TITLE, AddressOf GetTitle))
+    Public Shared Function BuildSeparatorII() As IMenuSeparator
+        Return RxApi.MenuSeparator(Sub(b) b.InsertBefore(Excel.About).WithTitle(TITLE, AddressOf GetTitle))
     End Function
 End Class
 

@@ -1,28 +1,28 @@
-﻿Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
-Imports RibbonX.SimpleTypes
 Imports RibbonX.Images.BuiltIn
+Imports RibbonX.SimpleTypes
 
 <TestClass>
-Public Class GalleryTests
+Public Class IGalleryTests
     Inherits TestBase
 
-    Private Const LABEL As String = "My Gallery"
-    Private Const SCREENTIP As String = "My Gallery Screentip"
-    Private Const SUPERTIP As String = "More Info About My Gallery"
-    Private Const DESCRIPTION As String = "Even More Info About My Gallery"
+    Private Const LABEL As String = "My IGallery"
+    Private Const SCREENTIP As String = "My IGallery Screentip"
+    Private Const SUPERTIP As String = "More Info About My IGallery"
+    Private Const DESCRIPTION As String = "Even More Info About My IGallery"
     Private Const KEYTIP As String = "D"
     Private Const ITEM_HEIGHT As Integer = 48
     Private Const ITEM_WIDTH As Integer = 48
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As Gallery = New Gallery(template:=Nothing)
+        Dim control As IGallery = RxApi.Gallery(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As Gallery = New Gallery(config:=Nothing)
+        Dim control As IGallery = RxApi.Gallery(Nothing)
     End Sub
 
     <TestMethod>
@@ -32,12 +32,12 @@ Public Class GalleryTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New Gallery())
+        Assert.That.NoPropertiesAreNull(RxApi.Gallery())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As Gallery = BuildReadonlyGallery()
+        Dim control As IGallery = BuildReadonlyGallery()
 
         Assert.IsTrue(control.Enabled)
         Assert.IsTrue(control.Visible)
@@ -61,7 +61,7 @@ Public Class GalleryTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As Gallery = BuildGalleryII()
+        Dim control As IGallery = BuildGalleryII()
 
         Assert.That.PropertyMayBeModified(control, Function(c) c.Enabled, Not control.Enabled)
         Assert.That.PropertyMayBeModified(control, Function(c) c.Visible, Not control.Visible)
@@ -77,13 +77,13 @@ Public Class GalleryTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As Gallery = BuildReadonlyGallery()
+        Dim control As IGallery = BuildReadonlyGallery()
 
-        Assert.That.SharedPropertiesAreEqual(control, New DropDown(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.DropDown(Sub(b) b.FromTemplate(control)))
     End Sub
 
-    Public Shared Function BuildReadonlyGallery() As Gallery
-        Return New Gallery(config:=Sub(b) b.
+    Public Shared Function BuildReadonlyGallery() As IGallery
+        Return RxApi.Gallery(Sub(b) b.
                                        InsertAfter(Word.About).
                                        Enabled().
                                        Visible().
@@ -100,14 +100,12 @@ Public Class GalleryTests
                                        Large().
                                        WithItemDimensions(ITEM_HEIGHT, ITEM_WIDTH).
                                        WithRowCount(2).
-                                       WithColumnCount(2),
-                           buttons:={ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()}) From {
-                            Item.Blank, Item.Blank
-                           }
+                                       WithColumnCount(2).
+                                       WithButtons(ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()))
     End Function
 
-    Public Shared Function BuildReadonlyGalleryII() As Gallery
-        Return New Gallery(config:=Sub(b) b.
+    Public Shared Function BuildReadonlyGalleryII() As IGallery
+        Dim gallery As IGallery = RxApi.Gallery(Sub(b) b.
                                InsertAfter(Word.About).
                                Disabled().
                                Invisible().
@@ -125,14 +123,16 @@ Public Class GalleryTests
                                Normal().
                                WithItemDimensions(ITEM_HEIGHT, ITEM_WIDTH).
                                WithRowCount(2).
-                               WithColumnCount(2),
-                   buttons:={ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()}) From {
-                    Item.Blank, Item.Blank
-                   }
+                               WithColumnCount(2).
+                               WithButtons(ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()))
+
+        gallery.Add(RxApi.Item(), RxApi.Item())
+
+        Return gallery
     End Function
 
-    Public Shared Function BuildGallery() As Gallery
-        Return New Gallery(config:=Sub(b) b.
+    Public Shared Function BuildGallery() As IGallery
+        Dim gallery As IGallery = RxApi.Gallery(Sub(b) b.
                                InsertAfter(Word.About).
                                Enabled(AddressOf GetEnabledShared).
                                Visible(AddressOf GetVisibleShared).
@@ -149,14 +149,16 @@ Public Class GalleryTests
                                Large(AddressOf GetSizeShared).
                                WithItemDimensions(ITEM_HEIGHT, ITEM_WIDTH).
                                WithRowCount(2).
-                               WithColumnCount(2),
-                   buttons:={ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()}) From {
-                    Item.Blank, Item.Blank
-                   }
+                               WithColumnCount(2).
+                               WithButtons(ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()))
+
+        gallery.Add(RxApi.Item(), RxApi.Item())
+
+        Return gallery
     End Function
 
-    Public Shared Function BuildGalleryII() As Gallery
-        Return New Gallery(config:=Sub(b) b.
+    Public Shared Function BuildGalleryII() As IGallery
+        Dim gallery As IGallery = RxApi.Gallery(Sub(b) b.
                        InsertAfter(Word.About).
                        Disabled(AddressOf GetEnabledShared).
                        Invisible(AddressOf GetVisibleShared).
@@ -173,9 +175,11 @@ Public Class GalleryTests
                        Normal(AddressOf GetSizeShared).
                        WithItemDimensions(ITEM_HEIGHT, ITEM_WIDTH).
                        WithRowCount(2).
-                       WithColumnCount(2),
-           buttons:={ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()}) From {
-            Item.Blank, Item.Blank
-           }
+                       WithColumnCount(2).
+                       WithButtons(ButtonTests.BuildReadonlyButton(), ButtonTests.BuildReadonlyButtonII()))
+
+        gallery.Add(RxApi.Item(), RxApi.Item())
+
+        Return gallery
     End Function
 End Class

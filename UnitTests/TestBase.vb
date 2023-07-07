@@ -1,11 +1,8 @@
-﻿Imports System.Reflection
+﻿Imports System.Drawing
 Imports RibbonX.Callbacks
-Imports RibbonX.Controls
-Imports RibbonX.Controls.Base
-Imports RibbonX.ComTypes.StdOle
 Imports RibbonX.ComTypes.Microsoft.Office.Core
+Imports RibbonX.ComTypes.StdOle
 Imports RibbonX.SimpleTypes
-Imports System.Drawing
 
 Public MustInherit Class TestBase
     Implements ICreateCallbacks

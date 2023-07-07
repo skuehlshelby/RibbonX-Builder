@@ -16,7 +16,7 @@ namespace RegistrationUtility.ModelObjects
             this.name = name;
         }
 
-        public static T[] Values<T>() where T: Enumeration
+        public static T[] Values<T>() where T : Enumeration
         {
             return typeof(T)
                 .GetProperties(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly)
@@ -25,7 +25,7 @@ namespace RegistrationUtility.ModelObjects
                 .ToArray();
         }
 
-        public static T Parse<T>(int value) where T: Enumeration
+        public static T Parse<T>(int value) where T : Enumeration
         {
             return Values<T>().Single(v => v.value == value);
         }

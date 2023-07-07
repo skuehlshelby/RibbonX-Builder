@@ -1,5 +1,4 @@
-﻿Imports RibbonX.Builders
-Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.SimpleTypes
 
@@ -9,37 +8,51 @@ Public Class SplitButtonTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As SplitButton = New SplitButton(ButtonTests.BuildButton(), New Menu(), template:=Nothing)
+        Dim button As IButton = ButtonTests.BuildButton()
+        Dim otherButton As IButton = ButtonTests.BuildButton()
+        Dim menu As IMenu = RxApi.Menu(Sub(mb) mb.WithLargeItems().FromTemplate(button).WithControls(otherButton))
+        Dim control As ISplitButton = RxApi.SplitButton(Sub(b) b.WithButtonAndMenu(button, menu).FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As SplitButton = New SplitButton(ButtonTests.BuildButtonII(), New Menu(), config:=Nothing)
+        Dim button As IButton = ButtonTests.BuildButton()
+        Dim otherButton As IButton = ButtonTests.BuildButton()
+        Dim menu As IMenu = RxApi.Menu(Sub(mb) mb.WithLargeItems().FromTemplate(button).WithControls(otherButton))
+        Dim control As ISplitButton = RxApi.SplitButton(Sub(b) b.WithButtonAndMenu(button, menu))
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
+        Dim button As IButton = ButtonTests.BuildButton()
+        Dim otherButton As IButton = ButtonTests.BuildButton()
+        Dim menu As IMenu = RxApi.Menu(Sub(mb) mb.WithLargeItems().FromTemplate(button).WithControls(otherButton))
+        Assert.That.ValidRibbonXIsProduced(RxApi.SplitButton(Sub(b) b.WithButtonAndMenu(button, menu)))
         Assert.That.ValidRibbonXIsProduced(BuildSplitButton())
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New SplitButton(New ToggleButton(), New Menu()))
+        Dim button As IButton = ButtonTests.BuildButton()
+        Dim otherButton As IButton = ButtonTests.BuildButton()
+        Dim menu As IMenu = RxApi.Menu(Sub(mb) mb.WithLargeItems().FromTemplate(button).WithControls(otherButton))
+        Assert.That.NoPropertiesAreNull(RxApi.SplitButton(Sub(b) b.WithButtonAndMenu(button, menu)))
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim button As Button = ButtonTests.BuildButton()
-        Dim otherButton As Button = ButtonTests.BuildButton()
-        Dim items As MenuControls = MenuControls.From(otherButton)
-        Dim menu As Menu = New Menu(config:=Sub(mb) mb.WithLargeItems(), items:=items, template:=button)
+        Dim button As IButton = ButtonTests.BuildButton()
+        Dim otherButton As IButton = ButtonTests.BuildButton()
+        Dim menu As IMenu = RxApi.Menu(Sub(mb) mb.WithLargeItems().FromTemplate(button).WithControls(otherButton))
 
-        Dim control As SplitButton = New SplitButton(button, menu, template:=button, config:=Sub(sb) sb.
-                                                                           Visible(AddressOf GetVisibleShared).
-                                                                           Enabled(AddressOf GetEnabledShared).
-                                                                           Large(AddressOf GetSizeShared).
-                                                                           ShowLabel(AddressOf GetShowLabelShared).
-                                                                           WithKeyTip("J1", AddressOf GetKeyTipShared))
+        Dim control As ISplitButton = RxApi.SplitButton(Sub(b) b.
+                                                            WithButtonAndMenu(button, menu).
+                                                            FromTemplate(button).
+                                                            Visible(AddressOf GetVisibleShared).
+                                                            Enabled(AddressOf GetEnabledShared).
+                                                            Large(AddressOf GetSizeShared).
+                                                            ShowLabel(AddressOf GetShowLabelShared).
+                                                            WithKeyTip("J1", AddressOf GetKeyTipShared))
 
         Assert.IsTrue(control.Enabled)
         Assert.IsTrue(control.Visible)
@@ -57,7 +70,7 @@ Public Class SplitButtonTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As SplitButton = BuildSplitButtonII()
+        Dim control As ISplitButton = BuildSplitButtonII()
 
         Assert.That.PropertyMayBeModified(control, Function(cb) cb.Visible, Not control.Visible)
         Assert.That.PropertyMayBeModified(control, Function(cb) cb.Enabled, Not control.Enabled)
@@ -70,63 +83,71 @@ Public Class SplitButtonTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As SplitButton = BuildReadonlySplitButtonII()
+        Dim control As ISplitButton = BuildReadonlySplitButtonII()
 
-        Assert.That.SharedPropertiesAreEqual(control, New EditBox(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.EditBox(Sub(b) b.FromTemplate(control)))
     End Sub
 
-    Public Shared Function BuildReadonlySplitButton() As SplitButton
-        Dim button As Button = ButtonTests.BuildReadonlyButton()
-        Dim otherButton As Button = ButtonTests.BuildReadonlyButton()
-        Dim menu As Menu = MenuTests.BuildMenu(MenuControls.From(otherButton))
+    Public Shared Function BuildReadonlySplitButton() As ISplitButton
+        Dim button As IButton = ButtonTests.BuildReadonlyButton()
+        Dim otherButton As IButton = ButtonTests.BuildReadonlyButton()
+        Dim menu As IMenu = MenuTests.BuildMenu(otherButton)
 
-        Return New SplitButton(button, menu, template:=button, config:=Sub(sb) sb.
-                                                                           InsertAfter(Excel.AlignLeftToRightMenu).
-                                                                           Visible().
-                                                                           Enabled().
-                                                                           Large().
-                                                                           ShowLabel().
-                                                                           WithKeyTip("J1"))
+        Return RxApi.SplitButton(Sub(b) b.
+                                     WithButtonAndMenu(button, menu).
+                                     FromTemplate(button).
+                                     InsertAfter(Excel.AlignLeftToRightMenu).
+                                     Visible().
+                                     Enabled().
+                                     Large().
+                                     ShowLabel().
+                                     WithKeyTip("J1"))
     End Function
 
-    Public Shared Function BuildReadonlySplitButtonII() As SplitButton
-        Dim button As ToggleButton = ToggleButtonTests.BuildToggleButton()
-        Dim otherButton As Button = ButtonTests.BuildReadonlyButtonII()
-        Dim menu As Menu = MenuTests.BuildMenu(MenuControls.From(otherButton))
+    Public Shared Function BuildReadonlySplitButtonII() As ISplitButton
+        Dim button As IToggleButton = ToggleButtonTests.BuildToggleButton()
+        Dim otherButton As IButton = ButtonTests.BuildReadonlyButtonII()
+        Dim menu As IMenu = MenuTests.BuildMenu(otherButton)
 
-        Return New SplitButton(button, menu, template:=button, config:=Sub(sb) sb.
-                                                                           InsertBefore(Excel.AlignLeftToRightMenu).
-                                                                           Invisible().
-                                                                           Disabled().
-                                                                           Normal().
-                                                                           HideLabel())
+        Return RxApi.SplitButton(Sub(b) b.
+                                     WithButtonAndMenu(button, menu).
+                                     FromTemplate(button).
+                                     InsertBefore(Excel.AlignLeftToRightMenu).
+                                     Invisible().
+                                     Disabled().
+                                     Normal().
+                                     HideLabel())
     End Function
 
-    Public Shared Function BuildSplitButton() As SplitButton
-        Dim button As Button = ButtonTests.BuildButton()
-        Dim otherButton As Button = ButtonTests.BuildButton()
-        Dim menu As Menu = MenuTests.BuildMenu(MenuControls.From(otherButton))
+    Public Shared Function BuildSplitButton() As ISplitButton
+        Dim button As IButton = ButtonTests.BuildButton()
+        Dim otherButton As IButton = ButtonTests.BuildButton()
+        Dim menu As IMenu = MenuTests.BuildMenu(otherButton)
 
-        Return New SplitButton(button, menu, template:=button, config:=Sub(sb) sb.
-                                                                           InsertAfter(Excel.AlignLeftToRightMenu).
-                                                                           Visible(AddressOf GetVisibleShared).
-                                                                           Enabled(AddressOf GetEnabledShared).
-                                                                           Large(AddressOf GetSizeShared).
-                                                                           ShowLabel(AddressOf GetShowLabelShared).
-                                                                           WithKeyTip("J1", AddressOf GetKeyTipShared))
+        Return RxApi.SplitButton(Sub(b) b.
+                                     WithButtonAndMenu(button, menu).
+                                     FromTemplate(button).
+                                    InsertAfter(Excel.AlignLeftToRightMenu).
+                                    Visible(AddressOf GetVisibleShared).
+                                    Enabled(AddressOf GetEnabledShared).
+                                    Large(AddressOf GetSizeShared).
+                                    ShowLabel(AddressOf GetShowLabelShared).
+                                    WithKeyTip("J1", AddressOf GetKeyTipShared))
     End Function
 
-    Public Shared Function BuildSplitButtonII() As SplitButton
-        Dim button As ToggleButton = ToggleButtonTests.BuildToggleButtonII()
-        Dim otherButton As Button = ButtonTests.BuildButtonII()
-        Dim menu As Menu = MenuTests.BuildMenu(MenuControls.From(otherButton))
+    Public Shared Function BuildSplitButtonII() As ISplitButton
+        Dim button As IToggleButton = ToggleButtonTests.BuildToggleButtonII()
+        Dim otherButton As IButton = ButtonTests.BuildButtonII()
+        Dim menu As IMenu = MenuTests.BuildMenu(otherButton)
 
-        Return New SplitButton(button, menu, template:=button, config:=Sub(sb) sb.
-                                                                           InsertAfter(Excel.AlignLeftToRightMenu).
-                                                                           Invisible(AddressOf GetVisibleShared).
-                                                                           Disabled(AddressOf GetEnabledShared).
-                                                                           Normal(AddressOf GetSizeShared).
-                                                                           HideLabel(AddressOf GetShowLabelShared))
+        Return RxApi.SplitButton(Sub(b) b.
+                                     WithButtonAndMenu(button, menu).
+                                     FromTemplate(button).
+                                    InsertAfter(Excel.AlignLeftToRightMenu).
+                                    Invisible(AddressOf GetVisibleShared).
+                                    Disabled(AddressOf GetEnabledShared).
+                                    Normal(AddressOf GetSizeShared).
+                                    HideLabel(AddressOf GetShowLabelShared))
     End Function
 
 End Class

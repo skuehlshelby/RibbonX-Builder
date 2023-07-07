@@ -1,7 +1,6 @@
 ﻿Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports RibbonX.ComTypes.Microsoft.Office.Core
-Imports RibbonX.Controls.Base
 
 Namespace Testing
 
@@ -41,11 +40,11 @@ Namespace Testing
         ''' Simulates a click on a ribbon element, as performed by a user in Excel.
         ''' </summary>
         ''' <param name="element"></param>
-        Public Sub Click(element As RibbonElement)
+        Public Sub Click(element As IRibbonElement)
             _controls(element.ID).Click()
         End Sub
 
-        Public Sub Type(element As RibbonElement, text As String)
+        Public Sub Type(element As IRibbonElement, text As String)
             _controls(element.ID).Type(text)
         End Sub
 

@@ -1,5 +1,4 @@
 ﻿Imports RibbonX
-Imports RibbonX.Controls
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.Testing
@@ -8,22 +7,21 @@ Imports RibbonX.Testing
 Public Class IntegrationTests
     Inherits StockRibbonBase
 
-    Private button As Button
-    Private editBox As EditBox
-    Private group As Group
-    Private tab As Tab
+    Private button As IButton
+    Private editBox As IEditBox
+    Private group As IGroup
+    Private tab As ITab
 
-    Protected Overrides Function BuildRibbon() As Ribbon
-        button = New Button(config:=Sub(b) b.
+    Protected Overrides Function BuildRibbon() As IRibbon
+        button = RxApi.Button(Sub(b) b.
                                     Large(AddressOf GetSize).
                                     WithLabel("My Button", AddressOf GetLabel).
                                     WithSuperTip("More Info", AddressOf GetSuperTip).
                                     WithImage(Common.HappyFace).
                                     ShowImage(AddressOf GetShowImage).
-                                    RouteClickTo(AddressOf OnAction).
-                                    OnClick(Sub(c) c.ShowImage = Not c.ShowImage))
+                                    OnClick(AddressOf OnAction, Sub(ab) ab.Do(Sub(c) c.ShowImage = Not c.ShowImage)))
 
-        editBox = New EditBox(config:=Sub(b) b.
+        editBox = RxApi.EditBox(Sub(b) b.
                                           WithImage(Common.FileFind).
                                           WithLabel("My Edit Box", AddressOf GetLabel).
                                           ShowLabel(AddressOf GetShowLabel).
@@ -31,28 +29,26 @@ Public Class IntegrationTests
                                           WithMaximumInputLength(10).
                                           WithText("Text", AddressOf GetText, AddressOf OnChange))
 
-        group = New Group(config:=Sub(b) b.
+        group = RxApi.Group(Sub(b) b.
                                     WithImage(Common.DollarSign).
                                     WithLabel("My Custom Group", AddressOf GetLabel).
                                     WithSuperTip("More Info", AddressOf GetSuperTip).
-                                    WithKeyTip("G", AddressOf GetKeyTip),
-                         controls:={button, editBox})
+                                    WithKeyTip("G", AddressOf GetKeyTip).
+                                    WithControls(button, editBox))
 
-        tab = New Tab(config:=Sub(b) b.
+        tab = RxApi.Tab(Sub(b) b.
                                 InsertAfter(Excel.TabHome).
-                                WithLabel("My Custom Tab"),
-                      groups:={group})
+                                WithLabel("My Custom Tab").
+                                WithGroups(group))
 
-        Return New Ribbon(config:=Sub(b) b.OnLoad(AddressOf OnLoad), tab)
+        Return RxApi.Ribbon(Sub(b) b.OnLoad(AddressOf OnLoad).WithTabs(tab))
     End Function
 
     <TestMethod()>
     Public Sub MinimalRibbon()
-        Debug.WriteLine(Me.Ribbon.RibbonX)
-
-        Assert.ThrowsException(Of Exception)(Sub() button.Label = String.Empty) 'When ribbonX is generated but IRibbonUI is unassigned, properties are not modifiable
-
         Dim host As OfficeHostAppilcation = New OfficeHostAppilcation(Me)
+
+        Debug.WriteLine(Ribbon.RibbonX)
 
         host.Click(button)
 

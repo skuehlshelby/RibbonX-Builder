@@ -1,4 +1,4 @@
-﻿Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.Testing
 
 <TestClass()> Public Class ValidationWithXsdTests
@@ -19,7 +19,7 @@ Imports RibbonX.Testing
                                            </ribbon>
                                        </customUI>.ToString()
 
-        Dim errorLog As RibbonErrorLog = Ribbon.GetErrors(invalidRibbonX)
+        Dim errorLog As RibbonErrorLog = New RibbonErrorLog(invalidRibbonX, RxApi.Instance.GetCustomUIVersion2009())
 
         Assert.AreEqual(1, errorLog.Errors.Count()) 'showLabel is not defined for the element 'group'
     End Sub

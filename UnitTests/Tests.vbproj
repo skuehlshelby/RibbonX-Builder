@@ -90,6 +90,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindingTests.vb" />
     <Compile Include="ButtonTests.vb" />
     <Compile Include="CheckboxTests.vb" />
     <Compile Include="ComboBoxTests.vb" />

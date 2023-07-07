@@ -1,6 +1,6 @@
-﻿Imports RibbonX.Builders
-Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.SimpleTypes
+Imports Rx = RibbonX.RxApi
 
 <TestClass()>
 Public Class BoxTests
@@ -8,27 +8,27 @@ Public Class BoxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim box As Box = New Box(template:=Nothing)
+        Dim box As IBox = Rx.Box(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim box As Box = New Box(config:=Nothing)
+        Dim box As IBox = RX.Box()
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(Box.Horizontal(ButtonTests.BuildButton(), ToggleButtonTests.BuildReadonlyToggleButton()))
+        Assert.That.ValidRibbonXIsProduced(Rx.Instance.BoxHorizontal(ButtonTests.BuildButton(), IGalleryTests.BuildReadonlyGallery()))
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New Box())
+        Assert.That.NoPropertiesAreNull(Rx.Box())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim box As Box = Box.Horizontal()
+        Dim box As IBox = Rx.Box(Sub(b) b.Horizontal().Visible().WithControls(Rx.Button(), Rx.CheckBox(), Rx.EditBox()))
 
         Assert.AreEqual(box.Visible, True)
         Assert.AreEqual(box.BoxStyle, BoxStyle.Horizontal)
@@ -36,22 +36,22 @@ Public Class BoxTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim box As Box = New Box(Sub(bb As IBoxBuilder) bb.Visible().Horizontal(), Nothing)
+        Dim box As IBox = Rx.Box(Sub(b) b.Horizontal().Visible())
 
-        Assert.ThrowsException(Of Exception)(Sub() box.Visible = False)
+        Assert.ThrowsException(Of PropertyNotSettableException)(Sub() box.Visible = False)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim box As Box = New Box(Sub(bb As IBoxBuilder) bb.Visible(AddressOf GetVisible).Horizontal(), Nothing)
+        Dim box As IBox = Rx.Box(Sub(b) b.Horizontal().Visible(AddressOf GetVisible))
 
         box.Visible = False
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim box As Box = New Box(Sub(bb As IBoxBuilder) bb.Invisible().Vertical(), Nothing)
+        Dim box As IBox = Rx.Box(Sub(b) b.Vertical().Invisible())
 
-        Assert.That.SharedPropertiesAreEqual(box, New Button(template:=box))
+        Assert.That.SharedPropertiesAreEqual(box, Rx.Button(Sub(b) b.FromTemplate(box)))
     End Sub
 End Class

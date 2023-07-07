@@ -1,8 +1,7 @@
-﻿Imports RibbonX.Builders
-Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
-Imports RibbonX.SimpleTypes
 Imports RibbonX.Images.BuiltIn
+Imports RibbonX.SimpleTypes
 
 <TestClass()>
 Public Class MenuTests
@@ -16,27 +15,27 @@ Public Class MenuTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As Menu = New Menu(template:=Nothing)
+        Dim control As IMenu = RxApi.Menu(Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As Menu = New Menu(config:=Nothing)
+        Dim control As IMenu = RxApi.Menu(Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(BuildMenu(MenuControls.From(ButtonTests.BuildButton(), ButtonTests.BuildButtonII()).Add(ToggleButtonTests.BuildToggleButton())))
+        Assert.That.ValidRibbonXIsProduced(BuildMenu(ButtonTests.BuildButton(), ButtonTests.BuildButtonII(), ToggleButtonTests.BuildToggleButton()))
     End Sub
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New Menu())
+        Assert.That.NoPropertiesAreNull(RxApi.Menu())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As Menu = BuildReadonlyMenu(MenuControls.From(ButtonTests.BuildButton(), ButtonTests.BuildButtonII()))
+        Dim control As IMenu = BuildReadonlyMenu(ButtonTests.BuildButton(), ButtonTests.BuildButtonII())
 
         Assert.IsTrue(control.Enabled)
         Assert.IsTrue(control.Visible)
@@ -53,12 +52,12 @@ Public Class MenuTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Assert.That.PropertiesCannotBeModified(BuildReadonlyMenu(MenuControls.From(ButtonTests.BuildButton(), ButtonTests.BuildButtonII())))
+        Assert.That.PropertiesCannotBeModified(BuildReadonlyMenu(ButtonTests.BuildButton(), ButtonTests.BuildButtonII()))
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As Menu = BuildMenu(MenuControls.From(SplitButtonTests.BuildSplitButtonII()).Add(ButtonTests.BuildButtonII()))
+        Dim control As IMenu = BuildMenu(SplitButtonTests.BuildSplitButtonII(), ButtonTests.BuildButtonII())
 
         Assert.That.PropertyMayBeModified(control, Function(c) c.Enabled, Not control.Enabled)
         Assert.That.PropertyMayBeModified(control, Function(c) c.Visible, Not control.Visible)
@@ -71,18 +70,18 @@ Public Class MenuTests
         Assert.That.PropertyMayBeModified(control, Function(c) c.Size, ControlSize.Large)
         Assert.That.PropertyMayBeModified(control, Function(c) c.KeyTip, CType("A", KeyTip))
 
-        Debug.WriteLine(control.XML)
+        Debug.WriteLine(control.ToXml())
     End Sub
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim menu As Menu = BuildMenu(MenuControls.From(ButtonTests.BuildButton(), ButtonTests.BuildButtonII()))
+        Dim menu As IMenu = BuildMenu(ButtonTests.BuildButton(), ButtonTests.BuildButtonII())
 
-        Assert.That.SharedPropertiesAreEqual(menu, New Gallery(template:=menu))
+        Assert.That.SharedPropertiesAreEqual(menu, RxApi.Gallery(Sub(b) b.FromTemplate(menu)))
     End Sub
 
-    Public Shared Function BuildReadonlyMenu(controls As MenuControls) As Menu
-        Return New Menu(config:=Sub(b) b.
+    Public Shared Function BuildReadonlyMenu(ParamArray controls() As IMenuAddable) As IMenu
+        Return RxApi.Menu(Sub(b) b.
                         InsertAfter(Excel.Calculator).
                         Enabled().
                         Visible().
@@ -93,12 +92,12 @@ Public Class MenuTests
                         WithSuperTip(SUPERTIP).
                         WithDescription(DESCRIPTION).
                         WithImage(Common.DollarSign).
-                        WithKeyTip(KEYTIP),
-                        items:=controls)
+                        WithKeyTip(KEYTIP).
+                        WithControls(controls))
     End Function
 
-    Public Shared Function BuildMenu(controls As MenuControls) As Menu
-        Return New Menu(config:=Sub(b) b.
+    Public Shared Function BuildMenu(ParamArray controls() As IMenuAddable) As IMenu
+        Return RxApi.Menu(Sub(b) b.
                         InsertAfter(Excel.Calculator).
                         Disabled(AddressOf GetEnabledShared).
                         Invisible(AddressOf GetVisibleShared).
@@ -111,7 +110,7 @@ Public Class MenuTests
                         WithDescription(DESCRIPTION, AddressOf GetDescriptionShared).
                         WithImage(BlankBitmap, AddressOf GetImageShared).
                         HideImage(AddressOf GetShowImageShared).
-                        WithKeyTip(KEYTIP, AddressOf GetKeyTipShared),
-                        items:=controls)
+                        WithKeyTip(KEYTIP, AddressOf GetKeyTipShared).
+                        WithControls(controls))
     End Function
 End Class

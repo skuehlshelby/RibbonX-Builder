@@ -1,4 +1,3 @@
-﻿Imports System.Runtime.CompilerServices
-
-<Assembly: InternalsVisibleTo("Tests")>
+﻿
+'<Assembly: InternalsVisibleTo("Tests")>
 

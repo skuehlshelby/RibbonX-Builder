@@ -1,4 +1,4 @@
-﻿Imports RibbonX.Controls
+﻿Imports RibbonX
 
 <TestClass>
 Public Class LabelControlTests
@@ -6,12 +6,12 @@ Public Class LabelControlTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As LabelControl = New LabelControl(template:=Nothing)
+        Dim control As ILabelControl = RxApi.LabelControl(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As LabelControl = New LabelControl(config:=Nothing)
+        Dim control As ILabelControl = RxApi.LabelControl(Nothing)
     End Sub
 
     <TestMethod>
@@ -21,12 +21,12 @@ Public Class LabelControlTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New LabelControl())
+        Assert.That.NoPropertiesAreNull(RxApi.LabelControl())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As LabelControl = New LabelControl(config:=Sub(lcb) lcb.
+        Dim control As ILabelControl = RxApi.LabelControl(Sub(lcb) lcb.
                            Enabled().
                            Visible().
                            WithLabel("The Label").
@@ -49,7 +49,7 @@ Public Class LabelControlTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As LabelControl = BuildLabel()
+        Dim control As ILabelControl = BuildLabel()
 
         Assert.That.PropertyMayBeModified(control, Function(cb) cb.Visible, Not control.Visible)
         Assert.That.PropertyMayBeModified(control, Function(cb) cb.Enabled, Not control.Enabled)
@@ -63,14 +63,14 @@ Public Class LabelControlTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As LabelControl = BuildReadonlyLabelII()
+        Dim control As ILabelControl = BuildReadonlyLabelII()
 
-        Assert.That.SharedPropertiesAreEqual(control, New Button(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.Button(Sub(b) b.FromTemplate(control)))
     End Sub
 
-    Public Shared Function BuildReadonlyLabel() As LabelControl
-        Return New LabelControl(
-            config:=Sub(lcb) lcb.
+    Public Shared Function BuildReadonlyLabel() As ILabelControl
+        Return RxApi.LabelControl(
+            Sub(lcb) lcb.
                         Enabled().
                         Visible().
                         ShowLabel().
@@ -79,9 +79,9 @@ Public Class LabelControlTests
                         WithSuperTip("Supertip"))
     End Function
 
-    Public Shared Function BuildReadonlyLabelII() As LabelControl
-        Return New LabelControl(
-            config:=Sub(lcb) lcb.
+    Public Shared Function BuildReadonlyLabelII() As ILabelControl
+        Return RxApi.LabelControl(
+            Sub(lcb) lcb.
                         Disabled().
                         Invisible().
                         WithLabel("Label").
@@ -90,9 +90,9 @@ Public Class LabelControlTests
                         WithSuperTip("Supertip"))
     End Function
 
-    Public Shared Function BuildLabel() As LabelControl
-        Return New LabelControl(
-            config:=Sub(lcb) lcb.
+    Public Shared Function BuildLabel() As ILabelControl
+        Return RxApi.LabelControl(
+            Sub(lcb) lcb.
                         Enabled(AddressOf GetEnabledShared).
                         Visible(AddressOf GetVisibleShared).
                         WithLabel("Label", AddressOf GetLabelShared).
@@ -101,9 +101,9 @@ Public Class LabelControlTests
                         WithSuperTip("Supertip", AddressOf GetSuperTipShared))
     End Function
 
-    Public Shared Function BuildLabelII() As LabelControl
-        Return New LabelControl(
-            config:=Sub(lcb) lcb.
+    Public Shared Function BuildLabelII() As ILabelControl
+        Return RxApi.LabelControl(
+            Sub(lcb) lcb.
                         Disabled(AddressOf GetEnabledShared).
                         Invisible(AddressOf GetVisibleShared).
                         WithLabel("Label", AddressOf GetLabelShared).

@@ -1,6 +1,5 @@
 ﻿Imports System.Drawing
-Imports RibbonX.Controls
-Imports RibbonX.Controls.EventArgs
+Imports RibbonX
 Imports RibbonX.Images
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.SimpleTypes
@@ -11,12 +10,12 @@ Public Class ButtonTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim button As Button = New Button(template:=Nothing)
+        Dim button As IButton = RxApi.Button(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim button As Button = New Button(config:=Nothing)
+        Dim button As IButton = RxApi.Button()
     End Sub
 
     <TestMethod>
@@ -26,12 +25,12 @@ Public Class ButtonTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New Button())
+        Assert.That.NoPropertiesAreNull(RxApi.Button())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As Button = New Button(Sub(bb) bb.
+        Dim control As IButton = RxApi.Button(Sub(bb) bb.
                            Visible().
                            Enabled().
                            ShowImage().
@@ -65,7 +64,7 @@ Public Class ButtonTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim button As Button = BuildButton()
+        Dim button As IButton = BuildButton()
 
         Assert.That.PropertyMayBeModified(button, Function(b) b.Visible, Not button.Visible)
         Assert.That.PropertyMayBeModified(button, Function(b) b.Enabled, Not button.Enabled)
@@ -84,20 +83,20 @@ Public Class ButtonTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As Button = BuildReadonlyButtonII()
+        Dim control As IButton = BuildReadonlyButtonII()
 
-        Assert.That.SharedPropertiesAreEqual(control, New EditBox(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.EditBox(Sub(b) b.FromTemplate(control)))
     End Sub
 
     <TestMethod()>
     Public Sub EventCanBeCancelled()
-        Dim button As Button = New Button(Sub(bb) bb.RouteClickTo(AddressOf OnAction))
+        Dim button As IButton = RxApi.Button(Sub(bb) bb.OnClick(AddressOf OnAction))
 
-        AddHandler button.BeforeClick, Sub(sender, e) e.Cancel()
+        AddHandler button.Clicking, Sub(sender, e) e.Cancel()
 
         Dim fired As Boolean = False
 
-        AddHandler button.OnClick, Sub(sender, e) fired = True
+        AddHandler button.Clicked, Sub(sender, e) fired = True
 
         button.Click()
 
@@ -107,11 +106,11 @@ Public Class ButtonTests
     <TestMethod()>
     Public Sub EventCanFire()
 
-        Dim button As Button = New Button(Sub(bb) bb.RouteClickTo(AddressOf OnAction))
+        Dim button As IButton = RxApi.Button(Sub(bb) bb.OnClick(AddressOf OnAction))
 
         Dim fired As Boolean = False
 
-        AddHandler button.OnClick, Sub(sender, e) fired = True
+        AddHandler button.Clicked, Sub(sender, e) fired = True
 
         button.Click()
 
@@ -121,13 +120,13 @@ Public Class ButtonTests
 
     <TestMethod()>
     Public Sub EventCanBeRemoved()
-        Dim button As Button = New Button(Sub(bb) bb.RouteClickTo(AddressOf OnAction))
+        Dim button As IButton = RxApi.Button()
         Dim delegateWasInvoked As Boolean = False
         Dim callback As EventHandler = New EventHandler(Sub(o, e) delegateWasInvoked = True)
         Dim callback2 As EventHandler(Of CancelableEventArgs) = New EventHandler(Of CancelableEventArgs)(Sub(o, e) delegateWasInvoked = True)
 
-        AddHandler button.OnClick, callback
-        AddHandler button.BeforeClick, callback2
+        AddHandler button.Clicked, callback
+        AddHandler button.Clicking, callback2
 
         button.Click()
 
@@ -135,8 +134,8 @@ Public Class ButtonTests
 
         delegateWasInvoked = False
 
-        RemoveHandler button.OnClick, callback
-        RemoveHandler button.BeforeClick, callback2
+        RemoveHandler button.Clicked, callback
+        RemoveHandler button.Clicking, callback2
 
         button.Click()
 
@@ -145,14 +144,14 @@ Public Class ButtonTests
 
     <TestMethod()>
     Public Sub ClonedControl_Click_NoThrow() 'This was actually a problem at one point
-        Dim toggle As ToggleButton = New ToggleButton()
-        Dim button As Button = New Button(template:=toggle)
+        Dim toggle As IToggleButton = RxApi.ToggleButton()
+        Dim button As IButton = RxApi.Button(Sub(b) b.FromTemplate(toggle))
 
         button.Click()
     End Sub
 
-    Friend Shared Function BuildReadonlyButton() As Button
-        Return New Button(Sub(bb) bb.
+    Friend Shared Function BuildReadonlyButton() As IButton
+        Return RxApi.Button(Sub(bb) bb.
                    Invisible().
                    Disabled().
                    HideImage().
@@ -165,23 +164,23 @@ Public Class ButtonTests
                    WithImage(Common.DollarSign))
     End Function
 
-    Friend Shared Function BuildReadonlyButtonII() As Button
-        Return New Button(Sub(bb) bb.
-                   Visible().
-                   Enabled().
-                   ShowImage().
-                   ShowLabel().
-                   Large().
-                   WithLabel("Button").
-                   WithScreenTip("Button").
-                   WithSuperTip("Super").
-                   WithDescription("Description").
-                   WithKeyTip("K2").
-                   WithImage(Common.DollarSign))
+    Friend Shared Function BuildReadonlyButtonII() As IButton
+        Return RxApi.Button(Sub(bb) bb.
+                               Visible().
+                               Enabled().
+                               ShowImage().
+                               ShowLabel().
+                               Large().
+                               WithLabel("Button").
+                               WithScreenTip("Button").
+                               WithSuperTip("Super").
+                               WithDescription("Description").
+                               WithKeyTip("K2").
+                               WithImage(Common.DollarSign))
     End Function
 
-    Friend Shared Function BuildButton() As Button
-        Return New Button(Sub(bb) bb.
+    Friend Shared Function BuildButton() As IButton
+        Return RxApi.Button(Sub(bb) bb.
                            Visible(AddressOf GetVisibleShared).
                            Enabled(AddressOf GetEnabledShared).
                            Normal(AddressOf GetSizeShared).
@@ -193,13 +192,14 @@ Public Class ButtonTests
                            WithKeyTip("K2", AddressOf GetKeyTipShared).
                            WithImage(New Bitmap(48, 48), AddressOf GetImageShared).
                            ShowImage(AddressOf GetShowImageShared).
-                           RouteClickTo(AddressOf OnActionShared).
-                           BeforeClick(Sub() Debug.WriteLine("Before Click Fired")).
-                           OnClick(Sub() Debug.WriteLine("On Click Fired")))
+                           OnClick(AddressOf OnActionShared,
+            Sub(b) b.
+                                                   Do(Sub() Debug.WriteLine("On Click Fired")).
+                                                   ButFirst(Sub() Debug.WriteLine("Before Click Fired"))))
     End Function
 
-    Friend Shared Function BuildButtonII() As Button
-        Return New Button(Sub(bb) bb.
+    Friend Shared Function BuildButtonII() As IButton
+        Return RxApi.Button(Sub(bb) bb.
                            Invisible(AddressOf GetVisibleShared).
                            Disabled(AddressOf GetEnabledShared).
                            Large(AddressOf GetSizeShared).
@@ -211,9 +211,10 @@ Public Class ButtonTests
                            WithKeyTip("K2", AddressOf GetKeyTipShared).
                            WithImage(Common.DollarSign, AddressOf GetBuiltInImageShared).
                            HideImage(AddressOf GetShowImageShared).
-                           RouteClickTo(AddressOf OnActionShared).
-                           BeforeClick(Sub() Debug.WriteLine("Before Click Fired")).
-                           OnClick(Sub() Debug.WriteLine("On Click Fired")))
+                           OnClick(AddressOf OnActionShared,
+            Sub(b) b.
+                                                   Do(Sub() Debug.WriteLine("On Click Fired")).
+                                                   ButFirst(Sub() Debug.WriteLine("Before Click Fired"))))
     End Function
 
 End Class

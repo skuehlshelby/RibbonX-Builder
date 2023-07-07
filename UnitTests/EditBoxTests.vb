@@ -1,4 +1,4 @@
-﻿Imports RibbonX.Controls
+﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
 
 <TestClass()>
@@ -7,17 +7,17 @@ Public Class EditBoxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As EditBox = New EditBox(template:=Nothing)
+        Dim control As IEditBox = RxApi.EditBox(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As EditBox = New EditBox(config:=Nothing)
+        Dim control As IEditBox = RxApi.EditBox(Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(New EditBox(config:=Sub(builder) builder.
+        Assert.That.ValidRibbonXIsProduced(RxApi.EditBox(Sub(builder) builder.
                            Visible().
                            Enabled().
                            WithLabel("Label").
@@ -29,12 +29,12 @@ Public Class EditBoxTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New EditBox())
+        Assert.That.NoPropertiesAreNull(RxApi.EditBox())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As EditBox = New EditBox(config:=Sub(builder) builder.
+        Dim control As IEditBox = RxApi.EditBox(Sub(builder) builder.
                            Invisible().
                            Disabled().
                            WithLabel("Label").
@@ -55,7 +55,7 @@ Public Class EditBoxTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim control As EditBox = New EditBox(config:=Sub(builder) builder.
+        Dim control As IEditBox = RxApi.EditBox(Sub(builder) builder.
                            Invisible().
                            Disabled().
                            WithLabel("Label").
@@ -65,17 +65,12 @@ Public Class EditBoxTests
                            WithMaximumInputLength(40).
                            WithText("Text", AddressOf GetText, AddressOf OnChange))
 
-        Assert.ThrowsException(Of Exception)(Sub() control.Visible = True)
-        Assert.ThrowsException(Of Exception)(Sub() control.Enabled = True)
-        Assert.ThrowsException(Of Exception)(Sub() control.ShowLabel = True)
-        Assert.ThrowsException(Of Exception)(Sub() control.Label = String.Empty)
-        Assert.ThrowsException(Of Exception)(Sub() control.ScreenTip = String.Empty)
-        Assert.ThrowsException(Of Exception)(Sub() control.SuperTip = String.Empty)
+        Assert.That.PropertiesCannotBeModified(control)
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As EditBox = New EditBox(config:=Sub(builder) builder.
+        Dim control As IEditBox = RxApi.EditBox(Sub(builder) builder.
                            Visible(AddressOf GetVisible).
                            Enabled(AddressOf GetEnabled).
                            WithLabel("Label", AddressOf GetLabel).
@@ -92,7 +87,7 @@ Public Class EditBoxTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As EditBox = New EditBox(config:=Sub(builder) builder.
+        Dim control As IEditBox = RxApi.EditBox(Sub(builder) builder.
                            Invisible().
                            Disabled().
                            WithLabel("Label").
@@ -102,7 +97,7 @@ Public Class EditBoxTests
                            WithMaximumInputLength(40).
                            WithText("Text", AddressOf GetText, AddressOf OnChange))
 
-        Dim otherControl As Button = New Button(template:=control)
+        Dim otherControl As IButton = RxApi.Button(Sub(builder) builder.FromTemplate(control))
 
         Assert.That.SharedPropertiesAreEqual(control, otherControl)
     End Sub

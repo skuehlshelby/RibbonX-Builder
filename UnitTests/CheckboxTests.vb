@@ -1,6 +1,7 @@
-﻿Imports RibbonX.Controls
-Imports RibbonX.Controls.EventArgs
+﻿
+Imports RibbonX
 Imports RibbonX.SimpleTypes
+Imports Rx = RibbonX.RxApi
 
 <TestClass()>
 Public Class CheckboxTests
@@ -8,17 +9,17 @@ Public Class CheckboxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim checkbox As CheckBox = New CheckBox(template:=Nothing)
+        Dim checkbox As ICheckbox = Rx.CheckBox(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim checkbox As CheckBox = New CheckBox(config:=Nothing)
+        Dim checkbox As ICheckbox = Rx.CheckBox(Nothing)
     End Sub
 
     <TestMethod>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(New CheckBox(Sub(cbb) cbb.
+        Assert.That.ValidRibbonXIsProduced(Rx.CheckBox(Sub(cbb) cbb.
                            Visible().
                            Enabled().
                            WithLabel("The Label").
@@ -28,12 +29,12 @@ Public Class CheckboxTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New CheckBox())
+        Assert.That.NoPropertiesAreNull(Rx.CheckBox())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim checkbox As CheckBox = New CheckBox(Sub(cbb) cbb.
+        Dim checkbox As ICheckbox = Rx.CheckBox(Sub(cbb) cbb.
                            Disabled().
                            Invisible().
                            WithLabel("The Label").
@@ -54,7 +55,7 @@ Public Class CheckboxTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithoutCallbacksCannotBeModified()
-        Dim checkbox As CheckBox = New CheckBox(Sub(cbb) cbb.
+        Dim checkbox As ICheckbox = Rx.CheckBox(Sub(cbb) cbb.
                            Invisible().
                            Disabled().
                            WithLabel("The Label").
@@ -69,16 +70,18 @@ Public Class CheckboxTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim checkbox As CheckBox = New CheckBox(Sub(cbb) cbb.
+        Dim checkbox As ICheckbox = Rx.CheckBox(Sub(cbb) cbb.
                            Visible(AddressOf GetVisible).
                            Enabled(AddressOf GetEnabled).
                            WithLabel("Button", AddressOf GetLabel).
                            WithSuperTip("Super", AddressOf GetSuperTip).
                            WithDescription("Description", AddressOf GetDescription).
                            WithKeyTip("K2", AddressOf GetKeyTip).
-                           Checked(AddressOf GetPressed, AddressOf OnButtonToggle).
-                           BeforeStateChange(Sub() Debug.WriteLine("Before Toggle Fired")).
-                           AfterCheckStateChanged(Sub() Debug.WriteLine("On Toggle Fired")))
+                           OnCheck(False, AddressOf GetPressed, AddressOf OnButtonToggle,
+                                   Sub(c) c.
+                                       Do(Sub() Debug.WriteLine("On Toggle Fired")).
+                                       ButFirst(Sub() Debug.WriteLine("Before Toggle Fired"))))
+
 
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Visible, Not checkbox.Visible)
         Assert.That.PropertyMayBeModified(checkbox, Function(cb) cb.Enabled, Not checkbox.Enabled)
@@ -94,21 +97,21 @@ Public Class CheckboxTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As CheckBox = New CheckBox(Sub(cbb) cbb.WithDescription("The Description").
+        Dim control As ICheckbox = Rx.CheckBox(Sub(cbb) cbb.WithDescription("The Description").
                                                    WithLabel("The Label").
                                                    WithId("MyID"))
 
-        Assert.That.SharedPropertiesAreEqual(control, New Button(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, Rx.Button(Sub(b) b.FromTemplate(control)))
     End Sub
 
     <TestMethod()>
     Public Sub EventCanFire()
 
-        Dim checkbox As CheckBox = New CheckBox(Sub(cbb) cbb.Unchecked(AddressOf GetPressed, AddressOf OnButtonToggle))
+        Dim checkbox As ICheckbox = Rx.CheckBox(Sub(cbb) cbb.OnCheck(initialValue:=False, AddressOf GetPressed, AddressOf OnButtonToggle))
 
         Dim fired As Boolean = False
 
-        AddHandler checkbox.StateChanged, Sub(sender, e) fired = True
+        AddHandler checkbox.Checked, Sub(sender, e) fired = True
 
         checkbox.IsChecked = True
 
@@ -118,29 +121,27 @@ Public Class CheckboxTests
 
     <TestMethod()>
     Public Sub EventCanBeCancelled()
+        Dim checkbox As ICheckbox = Rx.CheckBox(Sub(cbb) cbb.OnCheck(False, AddressOf GetPressed, AddressOf OnButtonToggle))
 
-        Dim checkbox As CheckBox = New CheckBox(Sub(cbb) cbb.Unchecked(AddressOf GetPressed, AddressOf OnButtonToggle))
-
-        AddHandler checkbox.BeforeStateChange, Sub(sender, e) e.Cancel()
+        AddHandler checkbox.Checking, Sub(sender, e) e.Cancel()
 
         checkbox.IsChecked = True
 
         Assert.IsFalse(checkbox.IsChecked)
-
     End Sub
 
     <TestMethod()>
     Public Sub HandlersCanBeAddedAndRemoved()
 
-        Dim checkbox As CheckBox = New CheckBox()
-        Dim beforeChange As EventHandler(Of BeforeToggleChangeEventArgs) = New EventHandler(Of BeforeToggleChangeEventArgs)(Sub(sender, e) Return)
-        Dim onChange As EventHandler(Of ToggleChangeEventArgs) = New EventHandler(Of ToggleChangeEventArgs)(Sub(sender, e) Return)
+        Dim checkbox As ICheckbox = Rx.CheckBox()
+        Dim beforeChange As EventHandler(Of CancelableEventArgs(Of Boolean)) = New EventHandler(Of CancelableEventArgs(Of Boolean))(Sub(sender, e) Return)
+        Dim onChange As EventHandler(Of EventArgs(Of Boolean)) = New EventHandler(Of EventArgs(Of Boolean))(Sub(sender, e) Return)
 
-        AddHandler checkbox.BeforeStateChange, beforeChange
-        AddHandler checkbox.StateChanged, onChange
+        AddHandler checkbox.Checking, beforeChange
+        AddHandler checkbox.Checked, onChange
 
-        RemoveHandler checkbox.BeforeStateChange, beforeChange
-        RemoveHandler checkbox.StateChanged, onChange
+        RemoveHandler checkbox.Checking, beforeChange
+        RemoveHandler checkbox.Checked, onChange
     End Sub
 
 End Class

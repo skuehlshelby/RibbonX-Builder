@@ -1,5 +1,4 @@
-﻿Imports RibbonX.Controls
-Imports RibbonX.Controls.Base
+﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.SimpleTypes
@@ -15,27 +14,27 @@ Public Class GroupTests
 
     <TestMethod()>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As Group = New Group(template:=Nothing)
+        Dim control As IGroup = RxApi.Group(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod()>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As Group = New Group(template:=Nothing)
+        Dim control As IGroup = RxApi.Group(Nothing)
     End Sub
 
     <TestMethod()>
     Public Overrides Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(New Group())
+        Assert.That.ValidRibbonXIsProduced(RxApi.Group())
     End Sub
 
     <TestMethod()>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New Group())
+        Assert.That.NoPropertiesAreNull(RxApi.Group())
     End Sub
 
     <TestMethod()>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As Group = BuildReadonlyGroup(SplitButtonTests.BuildReadonlySplitButton())
+        Dim control As IGroup = BuildReadonlyGroup(SplitButtonTests.BuildReadonlySplitButton())
 
         Assert.IsTrue(control.Visible)
         Assert.AreEqual(control.Image, Common.SadFace)
@@ -52,7 +51,7 @@ Public Class GroupTests
 
     <TestMethod()>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As Group = BuildGroup(SplitButtonTests.BuildSplitButtonII())
+        Dim control As IGroup = BuildGroup(SplitButtonTests.BuildSplitButtonII())
 
         Assert.That.PropertyMayBeModified(control, Function(c) c.Visible, Not control.Visible)
         Assert.That.PropertyMayBeModified(control, Function(c) c.Label, String.Empty)
@@ -64,31 +63,31 @@ Public Class GroupTests
 
     <TestMethod()>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As Group = BuildReadonlyGroup()
+        Dim control As IGroup = BuildReadonlyGroup()
 
-        Assert.That.SharedPropertiesAreEqual(control, New Button(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.Button(Sub(b) b.FromTemplate(control)))
     End Sub
 
-    Public Shared Function BuildReadonlyGroup(ParamArray controls() As RibbonElement) As Group
-        Return New [Group](config:=Sub(b) b.
+    Public Shared Function BuildReadonlyGroup(ParamArray controls() As IGroupAddable) As IGroup
+        Return RxApi.Group(Sub(b) b.
                            WithImage(Common.SadFace).
                            Visible().
                            WithKeyTip(KEYTIP).
                            WithLabel(LABEL).
                            WithScreenTip(SCREENTIP).
                            WithSuperTip(SUPERTIP).
-                           InsertAfter(Excel.About),
-                           controls:=controls)
+                           InsertAfter(Excel.About).
+                           WithControls(controls))
     End Function
 
-    Public Shared Function BuildGroup(ParamArray controls() As RibbonElement) As Group
-        Return New [Group](config:=Sub(b) b.
+    Public Shared Function BuildGroup(ParamArray controls() As IGroupAddable) As IGroup
+        Return RxApi.Group(Sub(b) b.
                            WithImage(BlankBitmap(), AddressOf GetImageShared).
                            Invisible(AddressOf GetVisibleShared).
                            WithKeyTip(KEYTIP, AddressOf GetKeyTipShared).
                            WithLabel(LABEL, AddressOf GetLabelShared).
                            WithScreenTip(SCREENTIP, AddressOf GetScreenTipShared).
-                           WithSuperTip(SUPERTIP, AddressOf GetSuperTipShared),
-                           controls:=controls)
+                           WithSuperTip(SUPERTIP, AddressOf GetSuperTipShared).
+                           WithControls(controls))
     End Function
 End Class
