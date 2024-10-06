@@ -119,5 +119,4 @@ Namespace Properties
         Sub AddTemplatedItem(item As Object)
         Sub RemoveTemplatedItem(item As Object)
     End Interface
-
 End Namespace

@@ -1,6 +1,6 @@
 ﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
-Imports Rx = RibbonX.RxApi
+Imports Rx = RibbonX.RibbonXBuilder
 
 <TestClass()>
 Public Class ButtonGroupTests

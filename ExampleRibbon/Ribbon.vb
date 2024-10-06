@@ -13,7 +13,7 @@ Imports Excel = Microsoft.Office.Interop.Excel
 <Guid("C2C29BAF-8F1B-46EF-A071-8A286423F4C4")>
 <ProgId("ExampleRibbon.Ribbon")>
 Public Class Ribbon
-    Inherits StockRibbonBase
+    Inherits CustomRibbonBase
     Implements IDTExtensibility2
     Implements IRibbonExtensibility
 
@@ -28,7 +28,7 @@ Public Class Ribbon
     End Property
 
     Protected Overrides Function BuildRibbon() As IRibbon
-        Dim buttonWithStockIconOne As IButton = RxApi.Button(
+        Dim buttonWithStockIconOne As IButton = RibbonXBuilder.Button(
                 Sub(bb) bb.
                 Large().
                 WithLabel("Happy Button").
@@ -36,14 +36,14 @@ Public Class Ribbon
                 WithImage(Common.HappyFace).
                 OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(btn) DisplayStatusBarMessage($"You clicked '{btn.Label}'!"))))
 
-        Dim buttonWithStockIconTwo As IButton = RxApi.Button(Sub(bb) bb.
+        Dim buttonWithStockIconTwo As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                 FromTemplate(buttonWithStockIconOne).
                 WithLabel("Sad Button").
                 WithSuperTip("#Sad").
                 WithImage(Common.SadFace).
                 OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(btn) DisplayStatusBarMessage($"You clicked '{btn.Label}'!"))))
 
-        Dim buttonWithStockIconThree As IButton = RxApi.Button(Sub(bb) bb.
+        Dim buttonWithStockIconThree As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                 FromTemplate(buttonWithStockIconOne).
                 WithLabel("Money Button").
                 WithSuperTip("Make that money!").
@@ -51,17 +51,17 @@ Public Class Ribbon
                 OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(btn) DisplayStatusBarMessage($"You clicked '{btn.Label}'!"))))
 
 
-        Dim buttonWithStockIconOneSmall As IButton = RxApi.Button(Sub(bb) bb.FromTemplate(buttonWithStockIconOne).Normal())
+        Dim buttonWithStockIconOneSmall As IButton = RibbonXBuilder.Button(Sub(bb) bb.FromTemplate(buttonWithStockIconOne).Normal())
 
-        Dim buttonWithStockIconTwoSmall As IButton = RxApi.Button(Sub(bb) bb.FromTemplate(buttonWithStockIconTwo).Normal())
+        Dim buttonWithStockIconTwoSmall As IButton = RibbonXBuilder.Button(Sub(bb) bb.FromTemplate(buttonWithStockIconTwo).Normal())
 
-        Dim buttonWithStockIconThreeSmall As IButton = RxApi.Button(Sub(bb) bb.FromTemplate(buttonWithStockIconThree).Normal())
+        Dim buttonWithStockIconThreeSmall As IButton = RibbonXBuilder.Button(Sub(bb) bb.FromTemplate(buttonWithStockIconThree).Normal())
 
-        Dim buttonsWithStockIcons As IGroup = RxApi.Group(Sub(gb) gb.
+        Dim buttonsWithStockIcons As IGroup = RibbonXBuilder.Group(Sub(gb) gb.
             WithLabel("Buttons With Stock Icons").
-            WithControls(buttonWithStockIconOne, buttonWithStockIconTwo, buttonWithStockIconThree, RxApi.Separator(), buttonWithStockIconOneSmall, buttonWithStockIconTwoSmall, buttonWithStockIconThreeSmall))
+            WithControls(buttonWithStockIconOne, buttonWithStockIconTwo, buttonWithStockIconThree, RibbonXBuilder.Separator(), buttonWithStockIconOneSmall, buttonWithStockIconTwoSmall, buttonWithStockIconThreeSmall))
 
-        Dim buttonWithCustomIconOne As IButton = RxApi.Button(Sub(bb) bb.
+        Dim buttonWithCustomIconOne As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             Large().
             WithLabel("GitHub").
             WithSuperTip("Open GitHub's website in the default browser.").
@@ -69,7 +69,7 @@ Public Class Ribbon
             WithTag("https://github.com/").
             OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(btn) OpenWebsiteInDefaultBrowser(btn.Tag.ToString()), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
-        Dim buttonWithCustomIconTwo As IButton = RxApi.Button(Sub(bb) bb.
+        Dim buttonWithCustomIconTwo As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             FromTemplate(buttonWithCustomIconOne).
             WithLabel("LinkedIn").
             WithSuperTip("Open LinkedIn's website in the default browser.").
@@ -77,33 +77,33 @@ Public Class Ribbon
             WithTag("https://www.linkedin.com").
             OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(btn) OpenWebsiteInDefaultBrowser(btn.Tag.ToString()), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
-        Dim buttonWithCustomIconThree As IButton = RxApi.Button(Sub(bb) bb.
+        Dim buttonWithCustomIconThree As IButton = RibbonXBuilder.Button(Sub(bb) bb.
+            FromTemplate(buttonWithCustomIconOne).
             WithLabel("BandCamp").
             WithSuperTip("Open BandCamp's website in the default browser.").
-            WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"), AddressOf GetImage),
-            template:=buttonWithCustomIconOne,
-            "https://bandcamp.com/")
+            WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"), AddressOf GetImage).
+            WithTag("https://bandcamp.com/"))
 
-        Dim buttonWithCustomIconOneSmall As IButton = RxApi.Button(Sub(bb) bb.
-            Normal(),
-            template:=buttonWithStockIconOne,
-            "https://github.com/")
+        Dim buttonWithCustomIconOneSmall As IButton = RibbonXBuilder.Button(Sub(bb) bb.
+            FromTemplate(buttonWithStockIconOne).
+            Normal().
+            WithTag("https://github.com/"))
 
-        Dim buttonWithCustomIconTwoSmall As IButton = RxApi.Button(Sub(bb) bb.
-            Normal(),
-            template:=buttonWithStockIconTwo,
-            "https://www.linkedin.com")
+        Dim buttonWithCustomIconTwoSmall As IButton = RibbonXBuilder.Button(Sub(bb) bb.
+            FromTemplate(buttonWithStockIconTwo).
+            Normal().
+            WithTag("https://www.linkedin.com"))
 
-        Dim buttonWithCustomIconThreeSmall As IButton = RxApi.Button(Sub(bb) bb.
-            Normal(),
-            template:=buttonWithStockIconThree,
-            "https://bandcamp.com/")
+        Dim buttonWithCustomIconThreeSmall As IButton = RibbonXBuilder.Button(Sub(bb) bb.
+            FromTemplate(buttonWithStockIconThree).
+            Normal().
+            WithTag("https://bandcamp.com/"))
 
-        Dim buttonsWithCustomIcons As IGroup = RxApi.Group(
-            Sub(gb) gb.WithLabel("Buttons With Custom Icons"),
-            {buttonWithCustomIconOne, buttonWithCustomIconTwo, buttonWithCustomIconThree, Separator.CreateVisible(), buttonWithCustomIconOneSmall, buttonWithCustomIconTwoSmall, buttonWithCustomIconThreeSmall})
+        Dim buttonsWithCustomIcons As IGroup = RibbonXBuilder.Group(
+            Sub(gb) gb.WithLabel("Buttons With Custom Icons").
+            WithControls(buttonWithCustomIconOne, buttonWithCustomIconTwo, buttonWithCustomIconThree, RibbonXBuilder.Separator(), buttonWithCustomIconOneSmall, buttonWithCustomIconTwoSmall, buttonWithCustomIconThreeSmall))
 
-        Dim textBox As IEditBox = RxApi.EditBox(Sub(ebb) ebb.
+        Dim textBox As IEditBox = RibbonXBuilder.EditBox(Sub(ebb) ebb.
             WithLabel("Editable Text: ").
             WithScreenTip("Editable Text").
             WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
@@ -112,7 +112,7 @@ Public Class Ribbon
             BeforeTextChange(Sub(sender, e) If e.NewText.Contains("  ") Then e.Cancel(), Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage("Double spaces are not allowed!")).
             AfterTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")))
 
-        Dim comboBox As IComboBox = RxApi.ComboBox(Sub(cbb) cbb.
+        Dim comboBox As IComboBox = RibbonXBuilder.ComboBox(Sub(cbb) cbb.
             WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
             BeforeTextChange(
                              Sub(sender, e) If Not DirectCast(sender, ComboBox).Any(Function(item) item.Label.Equals(e.NewText, StringComparison.OrdinalIgnoreCase)) Then e.Cancel(),
@@ -131,9 +131,9 @@ Public Class Ribbon
             .Add("Option Three", "The third option.")
         End With
 
-        Dim textBoxGroup As IGroup = RxApi.Group(Sub(gb) gb.WithLabel("Editable Text"), Box.Vertical(textBox, comboBox))
+        Dim textBoxGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Editable Text"), Box.Vertical(textBox, comboBox))
 
-        Dim one As IButton = RxApi.Button(Sub(bb) bb.
+        Dim one As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.One)).
                                              HideLabel().
                                              Normal().
@@ -142,7 +142,7 @@ Public Class Ribbon
                                              RouteClickTo(AddressOf OnAction),
                                        tag:=Number.One.NumericValue)
 
-        Dim two As IButton = RxApi.Button(Sub(bb) bb.
+        Dim two As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Two)).
                                              HideLabel().
                                              WithImage(Number.Two).
@@ -150,7 +150,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Two.NumericValue)
 
-        Dim three As IButton = RxApi.Button(Sub(bb) bb.
+        Dim three As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Three)).
                                              HideLabel().
                                              WithImage(Number.Three).
@@ -158,7 +158,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Three.NumericValue)
 
-        Dim four As IButton = RxApi.Button(Sub(bb) bb.
+        Dim four As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Four)).
                                              HideLabel().
                                              WithImage(Number.Four).
@@ -166,7 +166,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Four.NumericValue)
 
-        Dim five As IButton = RxApi.Button(Sub(bb) bb.
+        Dim five As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Five)).
                                              HideLabel().
                                              WithImage(Number.Five).
@@ -174,7 +174,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Five.NumericValue)
 
-        Dim six As IButton = RxApi.Button(Sub(bb) bb.
+        Dim six As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Six)).
                                              HideLabel().
                                              WithImage(Number.Six).
@@ -182,7 +182,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Six.NumericValue)
 
-        Dim seven As IButton = RxApi.Button(Sub(bb) bb.
+        Dim seven As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Seven)).
                                              HideLabel().
                                              WithImage(Number.Seven).
@@ -190,7 +190,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Seven.NumericValue)
 
-        Dim eight As IButton = RxApi.Button(Sub(bb) bb.
+        Dim eight As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Eight)).
                                              HideLabel().
                                              WithImage(Number.Eight).
@@ -198,7 +198,7 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Eight.NumericValue)
 
-        Dim nine As IButton = RxApi.Button(Sub(bb) bb.
+        Dim nine As IButton = RibbonXBuilder.Button(Sub(bb) bb.
                                              WithLabel(NameOf(Number.Nine)).
                                              HideLabel().
                                              WithImage(Number.Nine).
@@ -206,43 +206,43 @@ Public Class Ribbon
                                        template:=one,
                                        tag:=Number.Nine.NumericValue)
 
-        Dim numbersTopRow As IButtonGroup = RxApi.ButtonGroup(items:=ButtonGroupControls.From(one, two, three))
+        Dim numbersTopRow As IButtonGroup = RibbonXBuilder.ButtonGroup(items:=ButtonGroupControls.From(one, two, three))
 
-        Dim numbersMiddleRow As IButtonGroup = RxApi.ButtonGroup(items:=ButtonGroupControls.From(four, five, six))
+        Dim numbersMiddleRow As IButtonGroup = RibbonXBuilder.ButtonGroup(items:=ButtonGroupControls.From(four, five, six))
 
-        Dim numbersBottomRow As IButtonGroup = RxApi.ButtonGroup(items:=ButtonGroupControls.From(seven, eight, nine))
+        Dim numbersBottomRow As IButtonGroup = RibbonXBuilder.ButtonGroup(items:=ButtonGroupControls.From(seven, eight, nine))
 
-        Dim numberGroup As IGroup = RxApi.Group(Sub(gb) gb.WithLabel("Numbers"), {numbersTopRow, numbersMiddleRow, numbersBottomRow})
+        Dim numberGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Numbers"), {numbersTopRow, numbersMiddleRow, numbersBottomRow})
 
-        Dim heart As IButton = RxApi.Button(Sub(bb) bb.
+        Dim heart As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             FromTemplate(buttonWithStockIconOne).
             WithLabel("Heart").
             WithSuperTip("A heart.").
             WithDescription("This suit was invented in 15th century Germany and is a survivor from a large pool of experimental suit signs created to replace the Latin suits.").
             WithImage(Misc.Heart))
 
-        Dim spade As IButton = RxApi.Button(Sub(bb) bb.
+        Dim spade As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             FromTemplate(heart).
             WithLabel("Spade").
             WithSuperTip("A black spade.").
             WithDescription("Spades form one of the four suits of playing cards in the standard French deck. It is a black heart turned upside down with a stalk at its base and symbolises the pike or halberd, two medieval weapons.").
             WithImage(Misc.Spade))
 
-        Dim club As IButton = RxApi.Button(Sub(bb) bb.
+        Dim club As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             FromTemplate(heart).
             WithLabel("Club").
             WithSuperTip("A black club.").
             WithDescription("Clubs is one of the four suits of playing cards in the standard French deck. It corresponds to the suit of Acorns in a German deck.").
             WithImage(Misc.Club))
 
-        Dim diamond As IButton = RxApi.Button(Sub(bb) bb.
+        Dim diamond As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             FromTemplate(heart).
             WithLabel("Diamond").
             WithSuperTip("A red diamond.").
             WithDescription("Diamonds is one of the four suits of playing cards in the standard French deck. It is the only French suit to not have been adapted from the German deck, taking the place of the suit of Bells Bay.").
             WithImage(Misc.Diamond))
 
-        Dim cardsMenu As IMenu = RxApi.Menu(Sub(mb) mb.
+        Dim cardsMenu As IMenu = RibbonXBuilder.Menu(Sub(mb) mb.
             Large().
             WithLargeItems().
             WithLabel("Cards").
@@ -250,12 +250,12 @@ Public Class Ribbon
             WithImage(LoadBitmap("ExampleRibbon.playing-cards-icon.png"), AddressOf GetImage).
             WithControls(heart, spade, club, diamond))
 
-        Dim cardsGroup As IGroup = RxApi.Group(Sub(b) b.FromTemplate(cardsMenu).WithControls(cardsMenu))
+        Dim cardsGroup As IGroup = RibbonXBuilder.Group(Sub(b) b.FromTemplate(cardsMenu).WithControls(cardsMenu))
 
-        Dim desktopFilesDropdownGroup As IGroup = RxApi.DesktopFilesGroup(Me).AsGroup()
+        Dim desktopFilesDropdownGroup As IGroup = RibbonXBuilder.DesktopFilesGroup(Me).AsGroup()
 
         'TODO Finish this
-        Dim gallery As IGallery = RxApi.Gallery(Sub(gb) gb.
+        Dim gallery As IGallery = RibbonXBuilder.Gallery(Sub(gb) gb.
             Large().
             WithImage(Common.Refresh).
             WithLabel("My Custom Gallery").
@@ -267,12 +267,12 @@ Public Class Ribbon
             GetSelectedItemIndexFrom(AddressOf GetSelectedItemIndex, AddressOf OnSelectionChange))
 
         For i As Integer = 1 To (gallery.Rows * gallery.Columns)
-            gallery.Add(RxApi.Item(Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
+            gallery.Add(RibbonXBuilder.Item(Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
         Next
 
-        Dim galleryGroup As IGroup = RxApi.Group(Sub(gb) gb.WithLabel("Gallery"), {gallery})
+        Dim galleryGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Gallery"), {gallery})
 
-        Dim tab As ITab = RxApi.Tab(Sub(tb) tb.
+        Dim tab As ITab = RibbonXBuilder.Tab(Sub(tb) tb.
                 WithLabel("My Custom Tab").
                 InsertAfter(BuiltIn.Excel.TabHome).
                 WithGroups(buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup))

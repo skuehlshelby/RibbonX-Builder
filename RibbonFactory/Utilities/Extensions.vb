@@ -14,12 +14,12 @@ Public Module Extensions
     End Sub
 
     <Extension()>
-    Public Function BoxHorizontal(_1 As RxApi, ParamArray controls() As IBoxAddable) As IBox
-        Return RxApi.Box(Sub(b) b.Visible().Horizontal().WithControls(controls))
+    Public Function BoxHorizontal(_1 As RibbonXBuilder, ParamArray controls() As IBoxAddable) As IBox
+        Return RibbonXBuilder.Box(Sub(b) b.Visible().Horizontal().WithControls(controls))
     End Function
 
     <Extension()>
-    Public Function GetCustomUIVersion2009(_1 As RxApi) As XmlSchema
+    Public Function GetCustomUIVersion2009(_1 As RibbonXBuilder) As XmlSchema
         Dim schema As XmlSchema
 
         Using stream As Stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("RibbonX.RibbonX.xsd")

@@ -2,9 +2,9 @@
 Imports RibbonX.Builders
 Imports RibbonX.InternalApi
 
-Public Class RxApi
+Public Class RibbonXBuilder
 
-    Public Shared ReadOnly Property Instance As RxApi = New RxApi()
+    Public Shared ReadOnly Property Instance As RibbonXBuilder = New RibbonXBuilder()
 
     Public Shared Function Box(Optional options As Action(Of IBoxBuilder) = Nothing) As IBox
         Return BoxBuilder.FromAction(options)

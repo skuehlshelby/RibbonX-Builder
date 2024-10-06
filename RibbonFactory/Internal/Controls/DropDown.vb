@@ -162,7 +162,7 @@ Namespace Controls
                 End If
             End Get
             Set
-                Using updateBlock As IDisposable = SuspendRefreshing()
+                Using updateBlock As IDisposable = SuspendRefresh()
                     Dim e As CancelableEventArgs(Of IItem) = New CancelableEventArgs(Of IItem)(Selected, Value)
 
                     RaiseEvent BeforeSelectionChange(Me, e)

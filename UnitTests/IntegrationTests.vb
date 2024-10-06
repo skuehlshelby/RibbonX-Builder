@@ -5,7 +5,7 @@ Imports RibbonX.Testing
 
 <TestClass()>
 Public Class IntegrationTests
-    Inherits StockRibbonBase
+    Inherits CustomRibbonBase
 
     Private button As IButton
     Private editBox As IEditBox
@@ -13,7 +13,7 @@ Public Class IntegrationTests
     Private tab As ITab
 
     Protected Overrides Function BuildRibbon() As IRibbon
-        button = RxApi.Button(Sub(b) b.
+        button = RibbonXBuilder.Button(Sub(b) b.
                                     Large(AddressOf GetSize).
                                     WithLabel("My Button", AddressOf GetLabel).
                                     WithSuperTip("More Info", AddressOf GetSuperTip).
@@ -21,7 +21,7 @@ Public Class IntegrationTests
                                     ShowImage(AddressOf GetShowImage).
                                     OnClick(AddressOf OnAction, Sub(ab) ab.Do(Sub(c) c.ShowImage = Not c.ShowImage)))
 
-        editBox = RxApi.EditBox(Sub(b) b.
+        editBox = RibbonXBuilder.EditBox(Sub(b) b.
                                           WithImage(Common.FileFind).
                                           WithLabel("My Edit Box", AddressOf GetLabel).
                                           ShowLabel(AddressOf GetShowLabel).
@@ -29,19 +29,19 @@ Public Class IntegrationTests
                                           WithMaximumInputLength(10).
                                           WithText("Text", AddressOf GetText, AddressOf OnChange))
 
-        group = RxApi.Group(Sub(b) b.
+        group = RibbonXBuilder.Group(Sub(b) b.
                                     WithImage(Common.DollarSign).
                                     WithLabel("My Custom Group", AddressOf GetLabel).
                                     WithSuperTip("More Info", AddressOf GetSuperTip).
                                     WithKeyTip("G", AddressOf GetKeyTip).
                                     WithControls(button, editBox))
 
-        tab = RxApi.Tab(Sub(b) b.
+        tab = RibbonXBuilder.Tab(Sub(b) b.
                                 InsertAfter(Excel.TabHome).
                                 WithLabel("My Custom Tab").
                                 WithGroups(group))
 
-        Return RxApi.Ribbon(Sub(b) b.OnLoad(AddressOf OnLoad).WithTabs(tab))
+        Return RibbonXBuilder.Ribbon(Sub(b) b.OnLoad(AddressOf OnLoad).WithTabs(tab))
     End Function
 
     <TestMethod()>

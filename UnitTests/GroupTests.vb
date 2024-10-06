@@ -2,6 +2,7 @@
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.SimpleTypes
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass()>
 Public Class GroupTests

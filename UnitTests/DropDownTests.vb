@@ -3,7 +3,7 @@ Imports RibbonX.Images
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.SimpleTypes
 Imports RibbonX
-Imports Rx = RibbonX.RxApi
+Imports Rx = RibbonX.RibbonXBuilder
 
 <TestClass()>
 Public Class DropDownTests

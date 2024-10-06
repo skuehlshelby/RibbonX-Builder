@@ -1,6 +1,7 @@
 ﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.SimpleTypes
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass>
 Public Class SplitButtonTests

@@ -145,7 +145,7 @@ Namespace Controls
                 Return Attributes.Get(Category.Pressed)
             End Get
             Set
-                Using updateBlock As IDisposable = SuspendRefreshing()
+                Using updateBlock As IDisposable = SuspendRefresh()
                     Dim e As CancelableEventArgs(Of Boolean) = New CancelableEventArgs(Of Boolean)(IsChecked, Value)
 
                     RaiseEvent Checking(Me, e)

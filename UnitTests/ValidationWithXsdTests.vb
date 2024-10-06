@@ -1,5 +1,6 @@
 ﻿Imports RibbonX
 Imports RibbonX.Testing
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass()> Public Class ValidationWithXsdTests
 

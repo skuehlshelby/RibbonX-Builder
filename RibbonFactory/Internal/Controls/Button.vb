@@ -1,9 +1,4 @@
-﻿
-Imports System.ComponentModel
-Imports System.Linq.Expressions
-Imports RibbonX.Api
-Imports RibbonX.BindingFactory
-Imports RibbonX.Controls.Base
+﻿Imports RibbonX.Controls.Base
 Imports RibbonX.Images
 Imports RibbonX.InternalApi
 Imports RibbonX.Properties
@@ -182,12 +177,6 @@ Namespace Controls
         Public Overrides Function Clone() As Object
             Return New Button(CType(Attributes.Clone(), IPropertyCollection), Tag)
         End Function
-
-        Public Overloads Sub Bind(Of TTarget As Class)(target As TTarget, ParamArray expressions() As Expression(Of Action(Of IButton, TTarget))) Implements IButton.Bind
-            For Each expression As Expression(Of Action(Of IButton, TTarget)) In expressions
-                BindingFactory.Instance.Create(Me, target, expression)
-            Next
-        End Sub
     End Class
 
 End Namespace

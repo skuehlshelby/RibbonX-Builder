@@ -2,8 +2,8 @@
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports RibbonX
-Imports RibbonX.Api.Internal
 Imports RibbonX.Testing
+Imports RxApi = RibbonX.RibbonXBuilder
 
 Friend Module Extensions
 

@@ -15,7 +15,7 @@ Namespace Builders
         Inherits BuilderBase(Of Gallery)
         Implements IGalleryBuilder
 
-        Private blank As IItem = RxApi.Item()
+        Private blank As IItem = RibbonXBuilder.Item()
         Private ReadOnly buttons As ICollection(Of IButton) = New LinkedList(Of IButton)()
 
         Private Function WithId(id As String) As IGalleryBuilder Implements IGalleryBuilder.WithId

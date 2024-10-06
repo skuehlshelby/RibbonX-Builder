@@ -1,6 +1,6 @@
 ﻿Imports RibbonX
 Imports RibbonX.SimpleTypes
-Imports Rx = RibbonX.RxApi
+Imports Rx = RibbonX.RibbonXBuilder
 
 <TestClass()>
 Public Class BoxTests

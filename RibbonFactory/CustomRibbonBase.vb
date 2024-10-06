@@ -8,7 +8,7 @@ Imports RibbonX.Properties
 Imports RibbonX.SimpleTypes
 
 <ComVisible(True)>
-Public MustInherit Class StockRibbonBase
+Public MustInherit Class CustomRibbonBase
     Implements IDTExtensibility2
     Implements IRibbonExtensibility
     Implements ICreateCallbacks

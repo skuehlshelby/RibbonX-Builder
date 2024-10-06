@@ -3,6 +3,7 @@ Imports RibbonX
 Imports RibbonX.Images
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.SimpleTypes
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass()>
 Public Class ButtonTests

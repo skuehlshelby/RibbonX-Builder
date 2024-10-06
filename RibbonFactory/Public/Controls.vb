@@ -1,5 +1,4 @@
 ﻿Imports System.ComponentModel
-Imports System.Linq.Expressions
 Imports RibbonX.ComTypes.Microsoft.Office.Core
 Imports RibbonX.Properties
 Imports RibbonX.Testing
@@ -18,7 +17,7 @@ Public Interface IRibbonElement
     ReadOnly Property Id As String
     Property Tag As Object
     Function ToXml(Optional excluded As ExcludedAttributes = ExcludedAttributes.None) As String
-    Function SuspendRefreshing() As IDisposable
+    Function SuspendRefresh() As IDisposable
 End Interface
 
 Public Interface IBoxAddable
@@ -52,7 +51,6 @@ Public Interface IButton
     Inherits IButtonGroupAddable
     Inherits IMenuAddable
     Inherits IGroupAddable
-    Sub Bind(Of TTarget As Class)(target As TTarget, ParamArray bindings As Expression(Of Action(Of IButton, TTarget))())
     Event Clicking As EventHandler(Of CancelableEventArgs)
     Event Clicked As EventHandler
 End Interface

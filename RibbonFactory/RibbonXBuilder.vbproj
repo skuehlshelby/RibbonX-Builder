@@ -101,8 +101,6 @@
     <Compile Include="Internal\Builders\ButtonGroupBuilder.vb" />
     <Compile Include="Internal\Controls\Base\ContainerOfItems.vb" />
     <Compile Include="Internal\Controls\Base\Helpers.vb" />
-    <Compile Include="Internal\Controls\Binding\Binding.vb" />
-    <Compile Include="Internal\Controls\Binding\WeakEventHandler.vb" />
     <Compile Include="Public\ComTypes\Extensibility\ext_ConnectMode.vb" />
     <Compile Include="Public\ComTypes\Extensibility\ext_DisconnectMode.vb" />
     <Compile Include="Public\ComTypes\Extensibility\IDTExtensibility2.vb" />
@@ -121,7 +119,6 @@
     <Compile Include="Internal\Properties.vb" />
     <Compile Include="Internal\PropertyCategories.vb" />
     <Compile Include="Internal\PropertyNames.vb" />
-    <Compile Include="Public\Binding.vb" />
     <Compile Include="Public\Builders.vb" />
     <Compile Include="Public\Controls.vb" />
     <Compile Include="Public\Callbacks\CallbackDelegates.vb" />
@@ -146,7 +143,8 @@
     <Compile Include="Internal\Controls\ToggleButton.vb" />
     <Compile Include="Public\Exceptions.vb" />
     <Compile Include="Public\Properties.vb" />
-    <Compile Include="Public\RxApi.vb" />
+    <Compile Include="Public\RibbonXBuilder.vb" />
+	<Compile Include="Public\Templating.vb" />
     <Compile Include="Public\SimpleTypes\BoxStyle.vb" />
     <Compile Include="Public\SimpleTypes\ControlSize.vb" />
     <Compile Include="Public\Images\BuiltIn\3D.vb" />
@@ -163,7 +161,6 @@
     <Compile Include="Internal\Controls\BuiltIn\MSO.vb" />
     <Compile Include="Internal\Controls\BuiltIn\Word.vb" />
     <Compile Include="Public\Images\RibbonImage.vb" />
-    <Compile Include="Public\Templating.vb" />
     <Compile Include="Testing\InternalsVisibleTo.vb" />
     <Compile Include="Utilities\ExtensionMethods.vb" />
     <Compile Include="Public\Callbacks\ICreateCallbacks.vb" />
@@ -190,7 +187,7 @@
     <Compile Include="Public\Images\AdapterForIPicture.vb" />
     <Compile Include="Testing\OfficeHostAppilcation.vb" />
     <Compile Include="Testing\RibbonErrorLog.vb" />
-    <Compile Include="StockRibbonBase.vb" />
+    <Compile Include="CustomRibbonBase.vb" />
     <Compile Include="Utilities\Extensions.vb" />
   </ItemGroup>
   <ItemGroup>

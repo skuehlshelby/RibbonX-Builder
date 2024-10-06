@@ -1,5 +1,6 @@
 ﻿Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass>
 Public Class SeparatorTests

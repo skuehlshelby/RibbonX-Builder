@@ -5,7 +5,7 @@ Public Class DialogLauncherTests
 
     <TestMethod()>
     Public Sub ProducesLegalRibbonX()
-        Assert.That.ValidRibbonXIsProduced(RxApi.DialogLauncher(ButtonTests.BuildButtonII()))
+        Assert.That.ValidRibbonXIsProduced(RibbonXBuilder.DialogLauncher(ButtonTests.BuildButtonII()))
     End Sub
 
 End Class

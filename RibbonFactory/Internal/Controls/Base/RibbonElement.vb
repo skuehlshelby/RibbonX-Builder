@@ -21,7 +21,7 @@ Namespace Controls.Base
             AddHandler refreshSuspensionTracker.HitZero, AddressOf EmptyMessageQueues
         End Sub
 
-        Public Function SuspendRefreshing() As IDisposable Implements IRibbonElement.SuspendRefreshing
+        Public Function SuspendRefresh() As IDisposable Implements IRibbonElement.SuspendRefresh
             Return refreshSuspensionTracker.AddSuspension()
         End Function
 

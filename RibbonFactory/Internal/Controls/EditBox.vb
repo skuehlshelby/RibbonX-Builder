@@ -157,7 +157,7 @@ Namespace Controls
                 Return Attributes.Get(Category.Text)
             End Get
             Set
-                Using updateBlock As IDisposable = SuspendRefreshing()
+                Using updateBlock As IDisposable = SuspendRefresh()
                     Dim initialValue As String = Text
 
                     If Not initialValue.Equals(Value, StringComparison.OrdinalIgnoreCase) AndAlso Value.Length <= MaxLength Then

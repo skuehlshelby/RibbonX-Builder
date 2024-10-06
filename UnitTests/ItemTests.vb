@@ -1,6 +1,6 @@
 ﻿Imports RibbonX
-Imports RibbonX.Controls
 Imports RibbonX.Images.RibbonImage
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass()>
 Public Class ItemTests

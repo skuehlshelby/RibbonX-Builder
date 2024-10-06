@@ -1,6 +1,5 @@
 ﻿Imports RibbonX.Api
 Imports RibbonX.Callbacks
-Imports RibbonX.Controls
 Imports RibbonX.InternalApi
 
 Namespace Builders
@@ -36,7 +35,7 @@ Namespace Builders
         End Function
 
         Public Function Build() As IRibbon
-            Return New Ribbon(properties, tabs.ToArray())
+            Return New Controls.Ribbon(properties, tabs.ToArray())
         End Function
 
         Friend Shared Function FromAction(action As Action(Of IRibbonBuilder)) As IRibbon

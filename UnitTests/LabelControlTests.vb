@@ -1,4 +1,5 @@
 ﻿Imports RibbonX
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass>
 Public Class LabelControlTests

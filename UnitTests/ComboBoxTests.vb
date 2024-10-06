@@ -15,12 +15,12 @@ Public Class IComboBoxTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim combobox As IComboBox = RxApi.ComboBox(Sub(b) b.FromTemplate(Nothing))
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim combobox As IComboBox = RxApi.ComboBox(Nothing)
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox(Nothing)
     End Sub
 
     <TestMethod>
@@ -30,7 +30,7 @@ Public Class IComboBoxTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(RxApi.ComboBox())
+        Assert.That.NoPropertiesAreNull(RibbonXBuilder.ComboBox())
     End Sub
 
     <TestMethod>
@@ -72,15 +72,15 @@ Public Class IComboBoxTests
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
         Dim control As IComboBox = BuildReadonlyComboBoxII()
 
-        Assert.That.SharedPropertiesAreEqual(control, RxApi.DropDown(Sub(b) b.FromTemplate(control)))
+        Assert.That.SharedPropertiesAreEqual(control, RibbonXBuilder.DropDown(Sub(b) b.FromTemplate(control)))
     End Sub
 
     <TestMethod>
     Public Sub CanAddItemsAfterIComboBoxCreation()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
         For Index As Integer = 1 To 4
-            combobox.Add(RxApi.Item())
+            combobox.Add(RibbonXBuilder.Item())
         Next
 
         Assert.AreEqual(combobox.Count, 4)
@@ -88,10 +88,10 @@ Public Class IComboBoxTests
 
     <TestMethod>
     Public Sub CanClearItems()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
         For Index As Integer = 1 To 4
-            combobox.Add(RxApi.Item())
+            combobox.Add(RibbonXBuilder.Item())
         Next
 
         Assert.AreEqual(combobox.Count, 4)
@@ -103,10 +103,10 @@ Public Class IComboBoxTests
 
     <TestMethod>
     Public Sub CanRemoveItems()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
         For Index As Integer = 1 To 4
-            combobox.Add(RxApi.Item())
+            combobox.Add(RibbonXBuilder.Item())
         Next
 
         Assert.AreEqual(combobox.Count, 4)
@@ -115,39 +115,39 @@ Public Class IComboBoxTests
             Assert.IsTrue(combobox.Remove(combobox.First()))
         End While
 
-        Assert.IsFalse(combobox.Remove(RxApi.Item()))
+        Assert.IsFalse(combobox.Remove(RibbonXBuilder.Item()))
 
         Assert.AreEqual(combobox.Count, 0)
     End Sub
 
     <TestMethod>
     Public Sub PropertyChangeTriggersRefresh()
-        Dim combobox As IComboBox = RxApi.ComboBox(Sub(cbb) cbb.WithLabel("The Label", AddressOf GetLabel))
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox(Sub(cbb) cbb.WithLabel("The Label", AddressOf GetLabel))
 
         Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.Label = "New Label")
     End Sub
 
     <TestMethod>
     Public Sub ItemAddTriggersRefresh()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
-        Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.Add(RxApi.Item()))
+        Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.Add(RibbonXBuilder.Item()))
     End Sub
 
     <TestMethod>
     Public Sub ChangingChildItemTriggersRefresh()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
-        combobox.Add(RxApi.Item())
+        combobox.Add(RibbonXBuilder.Item())
 
         Assert.That.ValueChangedIsRaisedOnce(combobox, Sub(cb) cb.First().Label = "New Label")
     End Sub
 
     <TestMethod>
     Public Sub EventCanBeSubscribedTo()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
-        combobox.Add(RxApi.Item())
+        combobox.Add(RibbonXBuilder.Item())
 
         Dim before As EventHandler(Of CancelableEventArgs(Of String)) = Sub(s, e) Return
         Dim onChange As EventHandler(Of EventArgs(Of String)) = Sub(s, e) Return
@@ -169,20 +169,20 @@ Public Class IComboBoxTests
         Public Function Apply(obj As Object) As IItem Implements IItemTemplate.Apply
             Dim type As Type = obj.GetType()
 
-            Return RxApi.Item(Sub(b) b.WithId(type.Name).WithLabel(type.Name).WithSuperTip(type.FullName).WithTag(type))
+            Return RibbonXBuilder.Item(Sub(b) b.WithId(type.Name).WithLabel(type.Name).WithSuperTip(type.FullName).WithTag(type))
         End Function
     End Class
 
     <TestMethod>
     Public Sub TemplateCanBeAdded()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
         combobox.AddTemplate(New TestItemTemplate())
     End Sub
 
     <TestMethod>
     Public Sub TemplateCanBeUsedToAddItems()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
         combobox.AddTemplate(New TestItemTemplate())
 
@@ -194,7 +194,7 @@ Public Class IComboBoxTests
 
     <TestMethod>
     Public Sub TemplateCanBeUsedToRemoveItems()
-        Dim combobox As IComboBox = RxApi.ComboBox()
+        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
 
         combobox.AddTemplate(New TestItemTemplate())
 
@@ -210,7 +210,7 @@ Public Class IComboBoxTests
     End Sub
 
     Public Shared Function BuildReadonlyComboBox() As IComboBox
-        Return RxApi.ComboBox(Sub(cbb) cbb.
+        Return RibbonXBuilder.ComboBox(Sub(cbb) cbb.
                            Visible().
                            Enabled().
                            WithLabel(LABEL).
@@ -225,7 +225,7 @@ Public Class IComboBoxTests
     End Function
 
     Public Shared Function BuildReadonlyComboBoxII() As IComboBox
-        Return RxApi.ComboBox(Sub(cbb) cbb.
+        Return RibbonXBuilder.ComboBox(Sub(cbb) cbb.
                            Invisible().
                            Disabled().
                            WithLabel(LABEL).
@@ -240,7 +240,7 @@ Public Class IComboBoxTests
     End Function
 
     Public Shared Function BuildComboBox() As IComboBox
-        Return RxApi.ComboBox(Sub(cbb) cbb.
+        Return RibbonXBuilder.ComboBox(Sub(cbb) cbb.
                            Visible(AddressOf GetVisibleShared).
                            Enabled(AddressOf GetEnabledShared).
                            WithLabel(LABEL, AddressOf GetLabelShared).
@@ -256,7 +256,7 @@ Public Class IComboBoxTests
     End Function
 
     Public Shared Function BuildComboBoxII() As IComboBox
-        Return RxApi.ComboBox(Sub(cbb) cbb.
+        Return RibbonXBuilder.ComboBox(Sub(cbb) cbb.
                            Invisible(AddressOf GetVisibleShared).
                            Disabled(AddressOf GetEnabledShared).
                            WithLabel(LABEL, AddressOf GetLabelShared).
