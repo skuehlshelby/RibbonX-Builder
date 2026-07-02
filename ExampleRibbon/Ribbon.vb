@@ -108,111 +108,111 @@ Public Class Ribbon
             WithScreenTip("Editable Text").
             WithSuperTip("You can edit this text, and the updated text will be displayed in the status bar!").
             AsWideAs("Some Text This Big").
-            WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
-            BeforeTextChange(Sub(sender, e) If e.NewText.Contains("  ") Then e.Cancel(), Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage("Double spaces are not allowed!")).
-            AfterTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")))
+            WithText("Edit Me!", AddressOf GetText, AddressOf OnChange,
+                Sub(action)
+                    action.ButFirst(Function(newText As String) Not newText.Contains("  "))
+                    action.Do(Sub(newText As String) DisplayStatusBarMessage($"Text was changed to '{newText}'."))
+                End Sub))
 
         Dim comboBox As IComboBox = RibbonXBuilder.ComboBox(Sub(cbb) cbb.
-            WithText("Edit Me!", AddressOf GetText, AddressOf OnChange).
-            BeforeTextChange(
-                             Sub(sender, e) If Not DirectCast(sender, ComboBox).Any(Function(item) item.Label.Equals(e.NewText, StringComparison.OrdinalIgnoreCase)) Then e.Cancel(),
-                             Sub(sender, e) If e.IsCancelled Then DisplayStatusBarMessage($"'{e.NewText}' is not one of the available options.")).
-            OnTextChange(Sub(sender, e) DisplayStatusBarMessage($"Text was changed to '{e.NewText}'.")).
+            WithText("Edit Me!", AddressOf GetText, AddressOf OnChange,
+                Sub(action)
+                    action.ButFirst(Function(cb As IComboBox, newText As String) cb.Any(Function(item) item.Label.Equals(newText, StringComparison.OrdinalIgnoreCase)))
+                    action.Do(Sub(newText As String) DisplayStatusBarMessage($"Text was changed to '{newText}'."))
+                End Sub).
             GetItemCountFrom(AddressOf GetItemCount).
             GetItemIdFrom(AddressOf GetItemID).
             GetItemLabelFrom(AddressOf GetItemLabel).
             GetItemSuperTipFrom(AddressOf GetItemSuperTip).
-            GetItemScreenTipFrom(AddressOf GetItemScreenTip),
-            textBox)
+            GetItemScreenTipFrom(AddressOf GetItemScreenTip))
 
         With comboBox
-            .Add("Option One", "The first option.")
-            .Add("Option Two", "The second option.")
-            .Add("Option Three", "The third option.")
+            .Add(RibbonXBuilder.Item(Sub(ib) ib.WithLabel("Option One").WithScreenTip("The first option.")))
+            .Add(RibbonXBuilder.Item(Sub(ib) ib.WithLabel("Option Two").WithScreenTip("The second option.")))
+            .Add(RibbonXBuilder.Item(Sub(ib) ib.WithLabel("Option Three").WithScreenTip("The third option.")))
         End With
 
-        Dim textBoxGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Editable Text"), Box.Vertical(textBox, comboBox))
+        Dim textBoxGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Editable Text").WithControls(RibbonXBuilder.Box(Sub(bb) bb.Vertical().WithControls(textBox, comboBox))))
 
         Dim one As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.One)).
-                                             HideLabel().
-                                             Normal().
-                                             WithImage(Number.One).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")).
-                                             RouteClickTo(AddressOf OnAction),
-                                       tag:=Number.One.NumericValue)
+            WithLabel(NameOf(Number.One)).
+            HideLabel().
+            Normal().
+            WithImage(Number.One).
+            WithTag(Number.One.NumericValue).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim two As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Two)).
-                                             HideLabel().
-                                             WithImage(Number.Two).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Two.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Two.NumericValue).
+            WithLabel(NameOf(Number.Two)).
+            HideLabel().
+            WithImage(Number.Two).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim three As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Three)).
-                                             HideLabel().
-                                             WithImage(Number.Three).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Three.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Three.NumericValue).
+            WithLabel(NameOf(Number.Three)).
+            HideLabel().
+            WithImage(Number.Three).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim four As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Four)).
-                                             HideLabel().
-                                             WithImage(Number.Four).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Four.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Four.NumericValue).
+            WithLabel(NameOf(Number.Four)).
+            HideLabel().
+            WithImage(Number.Four).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim five As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Five)).
-                                             HideLabel().
-                                             WithImage(Number.Five).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Five.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Five.NumericValue).
+            WithLabel(NameOf(Number.Five)).
+            HideLabel().
+            WithImage(Number.Five).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim six As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Six)).
-                                             HideLabel().
-                                             WithImage(Number.Six).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Six.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Six.NumericValue).
+            WithLabel(NameOf(Number.Six)).
+            HideLabel().
+            WithImage(Number.Six).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim seven As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Seven)).
-                                             HideLabel().
-                                             WithImage(Number.Seven).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Seven.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Seven.NumericValue).
+            WithLabel(NameOf(Number.Seven)).
+            HideLabel().
+            WithImage(Number.Seven).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim eight As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Eight)).
-                                             HideLabel().
-                                             WithImage(Number.Eight).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Eight.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Eight.NumericValue).
+            WithLabel(NameOf(Number.Eight)).
+            HideLabel().
+            WithImage(Number.Eight).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
         Dim nine As IButton = RibbonXBuilder.Button(Sub(bb) bb.
-                                             WithLabel(NameOf(Number.Nine)).
-                                             HideLabel().
-                                             WithImage(Number.Nine).
-                                             OnClick(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!")),
-                                       template:=one,
-                                       tag:=Number.Nine.NumericValue)
+            FromTemplate(one).
+            WithTag(Number.Nine.NumericValue).
+            WithLabel(NameOf(Number.Nine)).
+            HideLabel().
+            WithImage(Number.Nine).
+            OnClick(AddressOf OnAction, Sub(click) click.Do(Sub(b) SetContentsOfSelectedCell(b.Tag), Sub(b) DisplayStatusBarMessage($"You clicked '{b.Label}'!"))))
 
-        Dim numbersTopRow As IButtonGroup = RibbonXBuilder.ButtonGroup(items:=ButtonGroupControls.From(one, two, three))
+        Dim numbersTopRow As IButtonGroup = RibbonXBuilder.ButtonGroup(Sub(bg) bg.WithControls(one, two, three))
 
-        Dim numbersMiddleRow As IButtonGroup = RibbonXBuilder.ButtonGroup(items:=ButtonGroupControls.From(four, five, six))
+        Dim numbersMiddleRow As IButtonGroup = RibbonXBuilder.ButtonGroup(Sub(bg) bg.WithControls(four, five, six))
 
-        Dim numbersBottomRow As IButtonGroup = RibbonXBuilder.ButtonGroup(items:=ButtonGroupControls.From(seven, eight, nine))
+        Dim numbersBottomRow As IButtonGroup = RibbonXBuilder.ButtonGroup(Sub(bg) bg.WithControls(seven, eight, nine))
 
-        Dim numberGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Numbers"), {numbersTopRow, numbersMiddleRow, numbersBottomRow})
+        Dim numberGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Numbers").WithControls(numbersTopRow, numbersMiddleRow, numbersBottomRow))
 
         Dim heart As IButton = RibbonXBuilder.Button(Sub(bb) bb.
             FromTemplate(buttonWithStockIconOne).
@@ -252,7 +252,7 @@ Public Class Ribbon
 
         Dim cardsGroup As IGroup = RibbonXBuilder.Group(Sub(b) b.FromTemplate(cardsMenu).WithControls(cardsMenu))
 
-        Dim desktopFilesDropdownGroup As IGroup = RibbonXBuilder.DesktopFilesGroup(Me).AsGroup()
+        Dim desktopFilesDropdownGroup As IGroup = New DesktopFilesGroup(Me).AsGroup()
 
         'TODO Finish this
         Dim gallery As IGallery = RibbonXBuilder.Gallery(Sub(gb) gb.
@@ -270,14 +270,14 @@ Public Class Ribbon
             gallery.Add(RibbonXBuilder.Item(Sub(ib) ib.WithImage(LoadBitmap("ExampleRibbon.bandcamp.png"))))
         Next
 
-        Dim galleryGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Gallery"), {gallery})
+        Dim galleryGroup As IGroup = RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Gallery").WithControls(gallery))
 
         Dim tab As ITab = RibbonXBuilder.Tab(Sub(tb) tb.
                 WithLabel("My Custom Tab").
                 InsertAfter(BuiltIn.Excel.TabHome).
                 WithGroups(buttonsWithStockIcons, buttonsWithCustomIcons, textBoxGroup, numberGroup, cardsGroup, desktopFilesDropdownGroup, galleryGroup))
 
-        Return New Controls.Ribbon(Sub(rb) rb.OnLoad(AddressOf OnLoad), tab)
+        Return RibbonXBuilder.Ribbon(Sub(rb) rb.OnLoad(AddressOf OnLoad).WithTabs(tab))
     End Function
 
     Private Shared Sub OpenWebsiteInDefaultBrowser(webAddress As String)

@@ -20,14 +20,14 @@ Public Class DesktopFilesGroup
             AddHandler .Deleted, AddressOf OnFileChanged
         End With
 
-        _openButton = RxApi.Button(Sub(bb) bb.
+        _openButton = RibbonXBuilder.Button(Sub(bb) bb.
             Large().
             WithLabel("Open File").
             WithSuperTip("Open or launch the selected file/program.").
             WithImage(Common.FileOpen).
-            OnClick(AddressOf ribbon.OnAction, Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName)))
+            OnClick(AddressOf ribbon.OnAction, Sub(click) click.Do(Sub() OpenFile(DirectCast(_dropDown.Selected.Tag, FileSystemInfo).FullName))))
 
-        _dropDown = RxApi.DropDown(Sub(ddb) ddb.
+        _dropDown = RibbonXBuilder.DropDown(Sub(ddb) ddb.
             WithScreenTip("Desktop Files").
             WithSuperTip("The files on your desktop.").
             AsWideAs("A DropDown This Big").
@@ -40,7 +40,7 @@ Public Class DesktopFilesGroup
             WithButtons(DirectCast(_openButton.Clone(), IButton)).
             GetSelectedItemIndexFrom(AddressOf ribbon.GetSelectedItemIndex, AddressOf ribbon.OnSelectionChange))
 
-        Using _dropDown.SuspendRefreshing()
+        Using _dropDown.SuspendRefresh()
             For Each file As FileInfo In GetFilesOnDesktop()
                 _dropDown.Add(ConvertFileToDropDownItem(file))
             Next
@@ -62,7 +62,7 @@ Public Class DesktopFilesGroup
                 For Each item As IItem In _dropDown
                     If Not DirectCast(item.Tag, FileInfo).Exists Then
                         With item
-                            Using updateBlock As IDisposable = .SuspendRefreshing()
+                            Using updateBlock As IDisposable = .SuspendRefresh()
                                 .Label = e.Name
                                 .ScreenTip = e.Name
                                 .SuperTip = e.FullPath
@@ -75,9 +75,9 @@ Public Class DesktopFilesGroup
     End Sub
 
     Public Function AsGroup() As IGroup
-        Dim label As ILabelControl = RxApi.LabelControl(Sub(lcb) lcb.WithLabel("        Desktop Files:"))
+        Dim label As ILabelControl = RibbonXBuilder.LabelControl(Sub(lcb) lcb.WithLabel("        Desktop Files:"))
 
-        Return RxApi.Group(Sub(gb) gb.WithLabel("Desktop Files").WithControls(_openButton, RxApi.Separator(Sub(b) b.Invisible()), RxApi.Box(Sub(b) b.Vertical.WithControls(_dropDown))))
+        Return RibbonXBuilder.Group(Sub(gb) gb.WithLabel("Desktop Files").WithControls(_openButton, RibbonXBuilder.Separator(Sub(b) b.Invisible()), RibbonXBuilder.Box(Sub(b) b.Vertical.WithControls(_dropDown))))
     End Function
 
     Private Shared Function GetFilesOnDesktop() As IEnumerable(Of FileInfo)
@@ -91,7 +91,7 @@ Public Class DesktopFilesGroup
     End Function
 
     Private Shared Function ConvertFileToDropDownItem(file As FileSystemInfo) As IItem
-        Return RxApi.Item(Sub(ib) ib.
+        Return RibbonXBuilder.Item(Sub(ib) ib.
             WithLabel(file.Name).
             WithSuperTip(file.FullName).
             WithImage(Icon.ExtractAssociatedIcon(file.FullName)).
