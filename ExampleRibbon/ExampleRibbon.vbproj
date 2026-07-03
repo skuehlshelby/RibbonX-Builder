@@ -63,12 +63,15 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="netstandard" />
-    <Reference Include="RibbonX">
-      <HintPath>..\RibbonFactory\bin\Debug\RibbonX.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RibbonFactory\RibbonXBuilder.vbproj">
+      <Project>{CD2B3599-42FA-4B2E-823D-982543489C09}</Project>
+      <Name>RibbonXBuilder</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
