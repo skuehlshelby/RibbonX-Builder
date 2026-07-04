@@ -39,7 +39,7 @@ namespace RegistrationUtility
             set { Set(value); }
         }
 
-        public LoadBehavior LoadBehavior 
+        public LoadBehavior LoadBehavior
         {
             get { return Get<LoadBehavior>(); }
             set { Set(value); }

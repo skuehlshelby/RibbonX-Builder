@@ -1,5 +1,4 @@
-﻿Imports System.Reflection
-Imports System.Xml.Schema
+﻿Imports System.Xml.Schema
 Imports RibbonX.Utilities
 
 Namespace Testing

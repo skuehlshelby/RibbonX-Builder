@@ -1,8 +1,9 @@
 ﻿Imports System.Drawing
-Imports RibbonX.Controls
+Imports RibbonX
 Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.Images.BuiltIn
 Imports RibbonX.SimpleTypes
+Imports RxApi = RibbonX.RibbonXBuilder
 
 <TestClass>
 Public Class ToggleButtonTests
@@ -10,12 +11,12 @@ Public Class ToggleButtonTests
 
     <TestMethod>
     Public Overrides Sub NullTemplate_NoThrow()
-        Dim control As ToggleButton = New ToggleButton(template:=Nothing)
+        Dim control As IToggleButton = RxApi.ToggleButton(Sub(b) b.FromTemplate(Nothing))
     End Sub
 
     <TestMethod>
     Public Overrides Sub NullConfiguration_NoThrow()
-        Dim control As ToggleButton = New ToggleButton(config:=Nothing)
+        Dim control As IToggleButton = RxApi.ToggleButton(Nothing)
     End Sub
 
     <TestMethod>
@@ -25,13 +26,13 @@ Public Class ToggleButtonTests
 
     <TestMethod>
     Public Overrides Sub ContainsNoNullValuesByDefault()
-        Assert.That.NoPropertiesAreNull(New ToggleButton())
+        Assert.That.NoPropertiesAreNull(RxApi.ToggleButton())
     End Sub
 
     <TestMethod>
     Public Overrides Sub PropertiesAreMappedCorrectly()
-        Dim control As ToggleButton =
-            New ToggleButton(config:=Sub(builder) builder.
+        Dim control As IToggleButton =
+            RxApi.ToggleButton(Sub(builder) builder.
                                 Disabled().
                                 Invisible().
                                 Normal().
@@ -65,7 +66,7 @@ Public Class ToggleButtonTests
 
     <TestMethod>
     Public Overrides Sub PropertiesWithCallbacksCanBeModified()
-        Dim control As ToggleButton = BuildToggleButton()
+        Dim control As IToggleButton = BuildToggleButton()
 
         Assert.That.PropertyMayBeModified(control, Function(c) control.Enabled, Not control.Enabled)
         Assert.That.PropertyMayBeModified(control, Function(c) control.Visible, Not control.Visible)
@@ -81,13 +82,13 @@ Public Class ToggleButtonTests
 
     <TestMethod>
     Public Overrides Sub TemplatePropertiesAreCopiedToNewControl()
-        Dim control As ToggleButton = BuildToggleButtonII()
+        Dim control As IToggleButton = BuildToggleButtonII()
 
-        Assert.That.SharedPropertiesAreEqual(control, New Button(template:=control))
+        Assert.That.SharedPropertiesAreEqual(control, RxApi.Button(Sub(b) b.FromTemplate(control)))
     End Sub
 
-    Public Shared Function BuildReadonlyToggleButton() As ToggleButton
-        Return New ToggleButton(config:=Sub(builder) builder.
+    Public Shared Function BuildReadonlyToggleButton() As IToggleButton
+        Return RxApi.ToggleButton(Sub(builder) builder.
                                 Enabled().
                                 Visible().
                                 Large().
@@ -102,8 +103,8 @@ Public Class ToggleButtonTests
                                 ShowLabel())
     End Function
 
-    Public Shared Function BuildReadonlyToggleButtonII() As ToggleButton
-        Return New ToggleButton(config:=Sub(builder) builder.
+    Public Shared Function BuildReadonlyToggleButtonII() As IToggleButton
+        Return RxApi.ToggleButton(Sub(builder) builder.
                         Disabled().
                         Invisible().
                         Normal().
@@ -118,8 +119,8 @@ Public Class ToggleButtonTests
                         HideLabel())
     End Function
 
-    Public Shared Function BuildToggleButton() As ToggleButton
-        Return New ToggleButton(config:=Sub(builder) builder.
+    Public Shared Function BuildToggleButton() As IToggleButton
+        Return RxApi.ToggleButton(Sub(builder) builder.
                         Enabled(AddressOf GetEnabledShared).
                         Visible(AddressOf GetVisibleShared).
                         Large(AddressOf GetSizeShared).
@@ -133,8 +134,8 @@ Public Class ToggleButtonTests
                         ShowLabel(AddressOf GetShowLabelShared))
     End Function
 
-    Public Shared Function BuildToggleButtonII() As ToggleButton
-        Return New ToggleButton(config:=Sub(builder) builder.
+    Public Shared Function BuildToggleButtonII() As IToggleButton
+        Return RxApi.ToggleButton(Sub(builder) builder.
                         Disabled(AddressOf GetEnabledShared).
                         Invisible(AddressOf GetVisibleShared).
                         Normal(AddressOf GetSizeShared).

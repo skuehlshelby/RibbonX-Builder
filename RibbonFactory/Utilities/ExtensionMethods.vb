@@ -25,21 +25,6 @@ Namespace Utilities
         End Function
 
         <Extension()>
-        Public Function IsDerivedFromGenericType(type As Type, generic As Type) As Boolean
-            While type IsNot Nothing AndAlso type IsNot GetType(Object)
-                Dim check As Type = If(type.IsGenericType, type.GetGenericTypeDefinition(), type)
-
-                If check Is generic Then
-                    Return True
-                End If
-
-                type = type.BaseType
-            End While
-
-            Return False
-        End Function
-
-        <Extension()>
         Public Function NoDoubleSpace(input As String) As String
             If String.IsNullOrWhiteSpace(input) Then
                 Return String.Empty
@@ -67,11 +52,6 @@ Namespace Utilities
 
                 Return New String(output, 0, current)
             End If
-        End Function
-
-        <Extension()>
-        Public Function NextBoolean(random As Random) As Boolean
-            Return random.Next() Mod 2 = 0
         End Function
 
     End Module

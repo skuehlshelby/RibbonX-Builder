@@ -38,7 +38,7 @@ namespace RegistrationUtility.ModelObjects
 
         protected T Get<T>([CallerMemberName] string name = null)
         {
-            return ((IBindableProperty<T>)bindableProperties.First(bp => bp.Name.Equals(name))).Value;          
+            return ((IBindableProperty<T>)bindableProperties.First(bp => bp.Name.Equals(name))).Value;
         }
 
         protected void Set<T>(T value, [CallerMemberName] string name = null)
@@ -62,7 +62,7 @@ namespace RegistrationUtility.ModelObjects
 
         private interface IBindableProperty<T> : IBindableProperty
         {
-            T Value { get; set; }            
+            T Value { get; set; }
         }
 
         private class BindableProperty<T> : IBindableProperty<T>, IEquatable<IBindableProperty>

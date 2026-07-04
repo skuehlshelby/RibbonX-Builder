@@ -8,7 +8,7 @@
     <ProjectGuid>{04AAE809-480A-420F-9C6E-AB779649C90A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>RibbonXTests</RootNamespace>
-    <AssemblyName>RibbonXTests</AssemblyName>
+    <AssemblyName>Tests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -28,7 +28,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>RibbonXTests.xml</DocumentationFile>
+    <DocumentationFile>Tests.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
@@ -41,7 +41,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>RibbonXTests.xml</DocumentationFile>
+    <DocumentationFile>Tests.xml</DocumentationFile>
     <NoWarn>
     </NoWarn>
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
@@ -65,9 +65,6 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.1\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="RibbonX">
-      <HintPath>..\RibbonFactory\bin\Debug\RibbonX.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -76,6 +73,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RibbonFactory\RibbonXBuilder.vbproj">
+      <Project>{CD2B3599-42FA-4B2E-823D-982543489C09}</Project>
+      <Name>RibbonXBuilder</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -128,6 +131,7 @@
     <Compile Include="ButtonGroupTests.vb" />
     <Compile Include="EnumTests.vb" />
     <Compile Include="DialogLauncherTests.vb" />
+    <Compile Include="ExtensionLifecycleTests.vb" />
     <Compile Include="ValidationWithXsdTests.vb" />
   </ItemGroup>
   <ItemGroup>

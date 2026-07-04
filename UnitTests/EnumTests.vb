@@ -1,6 +1,6 @@
-﻿Imports RibbonX.Utilities
-Imports RibbonX.Controls.BuiltIn
+﻿Imports RibbonX.Controls.BuiltIn
 Imports RibbonX.Images.BuiltIn
+Imports RibbonX.Utilities
 
 <TestClass()>
 Public Class EnumTests

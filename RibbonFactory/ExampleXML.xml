@@ -13,6 +13,9 @@
 						</splitButton>
 						<button id="Button28" getEnabled="GetEnabledShared" getVisible="GetVisibleShared" getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getKeytip="GetKeyTipShared" getDescription="GetDescriptionShared" getImage="GetImageShared" onAction="OnActionShared" getShowImage="GetShowImageShared" />
 					</menu>
+					<dialogBoxLauncher>
+						<button id="Button1" getEnabled="GetEnabledShared" getLabel="GetLabelShared" getShowLabel="GetShowLabelShared" getKeytip="GetKeyTipShared" getDescription="GetDescriptionShared" getScreentip="GetScreenTipShared" getSupertip="GetSuperTipShared" getImage="GetBuiltInImageShared" getShowImage="GetShowImageShared" onAction="OnActionShared"/>
+					</dialogBoxLauncher>
 				</group>
 			</tab>
 		</tabs>

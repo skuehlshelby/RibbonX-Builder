@@ -1,5 +1,4 @@
 ﻿using RibbonX;
-using RibbonX.Controls;
 using RibbonX.Controls.BuiltIn;
 using RibbonX.Images.BuiltIn;
 using System;
@@ -12,39 +11,40 @@ namespace ExampleCSharp
     [ComVisible(true)]
     [Guid("68D5D1E1-A37E-4E5A-A706-D2EBF4FA927E")]
     [ProgId("ExampleCSharp.Connection")]
-    public class Connection : StockRibbonBase
+    public class Connection : CustomRibbonBase
     {
-        internal Button Button { get; private set; }
-        internal Group Group { get; private set; }
-        internal Tab Tab { get; private set; }
+        internal IButton Button { get; private set; }
+        internal IGroup Group { get; private set; }
+        internal ITab Tab { get; private set; }
 
-        protected override Ribbon BuildRibbon()
+        protected override IRibbon BuildRibbon()
         {
-            Button = new Button(b => b.Large()
+            Button = RibbonXBuilder.Button(b => b.Large()
               .WithLabel("Click Me!", GetLabel)
               .WithSuperTip("I Really Want To Be Clicked!", GetSuperTip)
               .WithImage(Common.SadFace, GetBuiltInImage)
-              .RouteClickTo(OnAction)
-              .OnClick((_) => MessageBox.Show(caption: "RibbonX C-Sharp Example", text: "Thank you!", buttons: MessageBoxButtons.OK),
-              (btn) =>
+              .OnClick(OnAction, click => click.Do(btn =>
               {
-                  using (btn.RefreshSuspension())
+
+                  using (btn.SuspendRefresh())
                   {
                       btn.Label = "Thank You";
                       btn.SuperTip = "I really needed that.";
                       btn.Image = Common.HappyFace;
                   }
-              }));
 
-            Group = new Group(b => b.WithLabel("A Button In Need")
-                                    .WithSuperTip("This group contains a button that needs your help."),
-                                    controls: new[] { Button });
+                  MessageBox.Show(caption: "RibbonX C-Sharp Example", text: "Thank you!", buttons: MessageBoxButtons.OK);
+              })));
 
-            Tab = new Tab(b => b.WithLabel("C# Example")
-                                .InsertAfter(Excel.TabHome),
-                                groups: new[] { Group });
+            Group = RibbonXBuilder.Group(b => b.WithLabel("A Button In Need")
+                                    .WithSuperTip("This group contains a button that needs your help.")
+                                    .WithControls(Button));
 
-            return new Ribbon(b => b.OnLoad(OnLoad), Tab);
+            Tab = RibbonXBuilder.Tab(b => b.WithLabel("C# Example")
+                                .InsertAfter(Excel.TabHome)
+                                .WithGroups(Group));
+
+            return RibbonXBuilder.Ribbon(b => b.OnLoad(OnLoad).WithTabs(Tab));
         }
     }
 }
