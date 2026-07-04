@@ -131,6 +131,7 @@
     <Compile Include="ButtonGroupTests.vb" />
     <Compile Include="EnumTests.vb" />
     <Compile Include="DialogLauncherTests.vb" />
+    <Compile Include="ExtensionLifecycleTests.vb" />
     <Compile Include="ValidationWithXsdTests.vb" />
   </ItemGroup>
   <ItemGroup>

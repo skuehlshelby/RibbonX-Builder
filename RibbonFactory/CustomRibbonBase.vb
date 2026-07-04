@@ -46,13 +46,21 @@ Public MustInherit Class CustomRibbonBase
         _hostApp = application
 
         For Each extension As IDTExtensibility2 In Extensions
-            extension.OnConnection(application, connectMode, addInInst, custom)
+            Try
+                extension.OnConnection(application, connectMode, addInInst, custom)
+            Catch ex As Exception
+                LogExtensionFailure(extension, "OnConnection", ex)
+            End Try
         Next
     End Sub
 
     Public Overridable Sub OnDisconnection(removeMode As ext_DisconnectMode, ByRef custom As Array) Implements IDTExtensibility2.OnDisconnection
         For Each extension As IDTExtensibility2 In Extensions
-            extension.OnDisconnection(removeMode, custom)
+            Try
+                extension.OnDisconnection(removeMode, custom)
+            Catch ex As Exception
+                LogExtensionFailure(extension, "OnDisconnection", ex)
+            End Try
         Next
 
         _hostApp = Nothing
@@ -65,20 +73,36 @@ Public MustInherit Class CustomRibbonBase
 
     Public Overridable Sub OnAddInsUpdate(ByRef custom As Array) Implements IDTExtensibility2.OnAddInsUpdate
         For Each extension As IDTExtensibility2 In Extensions
-            extension.OnAddInsUpdate(custom)
+            Try
+                extension.OnAddInsUpdate(custom)
+            Catch ex As Exception
+                LogExtensionFailure(extension, "OnAddInsUpdate", ex)
+            End Try
         Next
     End Sub
 
     Public Overridable Sub OnStartupComplete(ByRef custom As Array) Implements IDTExtensibility2.OnStartupComplete
         For Each extension As IDTExtensibility2 In Extensions
-            extension.OnStartupComplete(custom)
+            Try
+                extension.OnStartupComplete(custom)
+            Catch ex As Exception
+                LogExtensionFailure(extension, "OnStartupComplete", ex)
+            End Try
         Next
     End Sub
 
     Public Overridable Sub OnBeginShutdown(ByRef custom As Array) Implements IDTExtensibility2.OnBegInShutdown
         For Each extension As IDTExtensibility2 In Extensions
-            extension.OnBegInShutdown(custom)
+            Try
+                extension.OnBegInShutdown(custom)
+            Catch ex As Exception
+                LogExtensionFailure(extension, "OnBeginShutdown", ex)
+            End Try
         Next
+    End Sub
+
+    Private Shared Sub LogExtensionFailure(extension As IDTExtensibility2, callbackName As String, ex As Exception)
+        Trace.WriteLine($"Add-in extension '{extension.GetType().Name}' threw during {callbackName} and was skipped: {ex}")
     End Sub
 
 #End Region

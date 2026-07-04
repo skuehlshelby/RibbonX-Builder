@@ -185,7 +185,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Public\Images\AdapterForIPicture.vb" />
-    <Compile Include="Testing\OfficeHostAppilcation.vb" />
+    <Compile Include="Testing\OfficeHostApplication.vb" />
     <Compile Include="Testing\RibbonErrorLog.vb" />
     <Compile Include="CustomRibbonBase.vb" />
     <Compile Include="Utilities\Extensions.vb" />

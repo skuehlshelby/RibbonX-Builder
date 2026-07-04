@@ -46,7 +46,7 @@ Public Class IntegrationTests
 
     <TestMethod()>
     Public Sub MinimalRibbon()
-        Dim host As OfficeHostAppilcation = New OfficeHostAppilcation(Me)
+        Dim host As OfficeHostApplication = New OfficeHostApplication(Me)
 
         Debug.WriteLine(Ribbon.RibbonX)
 
