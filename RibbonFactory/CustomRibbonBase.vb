@@ -183,7 +183,7 @@ Public MustInherit Class CustomRibbonBase
     End Function
 
     Public Function GetItemCount(control As IRibbonControl) As Integer Implements ICreateCallbacks.GetItemCount
-        Return Ribbon.GetContainer(Of Item)(control.Id).Count
+        Return Ribbon.GetContainer(Of IItem)(control.Id).Count
     End Function
 
     Public Function GetItemID(control As IRibbonControl, index As Integer) As String Implements ICreateCallbacks.GetItemID

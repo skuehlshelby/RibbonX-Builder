@@ -123,7 +123,7 @@ Namespace Controls
         End Function
 
         Public Function GetContainerItem(parentId As String, index As Integer) As IItem Implements IRibbon.GetContainerItem
-            Return GetContainer(Of IItem)(parentId)(index)
+            Return GetContainer(Of IItem)(parentId).ElementAt(index)
         End Function
 
         Public Function GetErrors() As RibbonErrorLog Implements IRibbon.GetErrors

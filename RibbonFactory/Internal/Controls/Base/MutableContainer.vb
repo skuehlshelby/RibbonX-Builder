@@ -4,6 +4,7 @@ Imports RibbonX.InternalApi
 Friend MustInherit Class MutableContainer(Of T As IRibbonElement)
     Inherits RibbonElement
     Implements ICollection(Of T)
+    Implements IReadOnlyCollection(Of T)
 
     Protected ReadOnly Items As ICollection(Of T) = New LinkedList(Of T)
 
@@ -11,7 +12,7 @@ Friend MustInherit Class MutableContainer(Of T As IRibbonElement)
         MyBase.New(attributes, tag)
     End Sub
 
-    Public ReadOnly Property Count As Integer Implements ICollection(Of T).Count
+    Public ReadOnly Property Count As Integer Implements ICollection(Of T).Count, IReadOnlyCollection(Of T).Count
         Get
             Return Items.Count
         End Get
