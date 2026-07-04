@@ -7,7 +7,7 @@ Namespace Testing
     ''' <summary>
     ''' A test class for simulating requests from an MS Office host application.
     ''' </summary>
-    Public Class OfficeHostAppilcation
+    Public Class OfficeHostApplication
         Implements IRibbonUI
 
         Private ReadOnly _controls As IDictionary(Of String, RibbonControl)
