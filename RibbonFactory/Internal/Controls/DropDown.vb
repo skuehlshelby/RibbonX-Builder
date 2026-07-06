@@ -7,7 +7,7 @@ Imports RibbonX.Utilities
 Namespace Controls
 
     Friend NotInheritable Class DropDown
-        Inherits ContainerOfItems
+        Inherits MutableContainer(Of IItem)
         Implements IDropDown
 
         Private ReadOnly blank As IItem

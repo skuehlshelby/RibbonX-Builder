@@ -48,7 +48,7 @@ Namespace Utilities
         End Function
 
         Public Overloads Function Equals(other As Enumeration) As Boolean Implements IEquatable(Of Enumeration).Equals
-            Return other IsNot Nothing AndAlso other.value = value
+            Return other IsNot Nothing AndAlso Me.GetType() Is other.GetType() AndAlso other.value = value
         End Function
 
         Public Function CompareTo(other As Enumeration) As Integer Implements IComparable(Of Enumeration).CompareTo

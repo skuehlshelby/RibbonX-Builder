@@ -113,10 +113,4 @@ Namespace Properties
         Inherits IRibbonElementProperty
         Property Visible As Boolean
     End Interface
-
-    Public Interface IItemTemplateable
-        Sub AddTemplate(template As IItemTemplate)
-        Sub AddTemplatedItem(item As Object)
-        Sub RemoveTemplatedItem(item As Object)
-    End Interface
 End Namespace

@@ -52,11 +52,7 @@ Namespace Controls
         End Sub
 
         Private Sub HandleValueChanged(sender As Object, e As RefreshNeededEventArgs)
-            If _ribbon IsNot Nothing Then
-                _ribbon.InvalidateControl(e.ID)
-            Else
-                Throw New MissingOnLoadException()
-            End If
+            RibbonUI.InvalidateControl(e.ID)
         End Sub
 
         Private Function ConvertElementsToDictionaryAndThrowIfDuplicatesArePresent(tabs() As ITab) As Dictionary(Of String, IRibbonElement)
@@ -110,6 +106,20 @@ Namespace Controls
             _ribbon = If(_ribbon, ribbonUi)
         End Sub
 
+        ''' <summary>
+        ''' The Office-supplied <see cref="IRibbonUI"/>, or a helpful exception if it has not
+        ''' been received yet (the OnLoad callback has not fired).
+        ''' </summary>
+        Private ReadOnly Property RibbonUI As IRibbonUI
+            Get
+                If _ribbon Is Nothing Then
+                    Throw New MissingOnLoadException()
+                End If
+
+                Return _ribbon
+            End Get
+        End Property
+
         Public Function GetElement(id As String) As IRibbonElement Implements IRibbon.GetElement
             Return _elements.Item(id)
         End Function
@@ -153,27 +163,27 @@ Namespace Controls
 #Region "IRibbonUI Members"
 
         Public Sub RefreshAll() Implements IRibbonUI.Invalidate
-            _ribbon.Invalidate()
+            RibbonUI.Invalidate()
         End Sub
 
         Public Sub RefreshControl(controlID As String) Implements IRibbonUI.InvalidateControl
-            _ribbon.InvalidateControl(controlID)
+            RibbonUI.InvalidateControl(controlID)
         End Sub
 
         Public Sub RefreshBuiltInControl(msoID As String) Implements IRibbonUI.InvalidateControlMso
-            _ribbon.InvalidateControlMso(msoID)
+            RibbonUI.InvalidateControlMso(msoID)
         End Sub
 
         Public Sub ActivateTab(controlID As String) Implements IRibbonUI.ActivateTab
-            _ribbon.ActivateTab(controlID)
+            RibbonUI.ActivateTab(controlID)
         End Sub
 
         Public Sub ActivateTabMso(controlID As String) Implements IRibbonUI.ActivateTabMso
-            _ribbon.ActivateTabMso(controlID)
+            RibbonUI.ActivateTabMso(controlID)
         End Sub
 
         Public Sub ActivateTabQ(controlID As String, [namespace] As String) Implements IRibbonUI.ActivateTabQ
-            _ribbon.ActivateTabQ(controlID, [namespace])
+            RibbonUI.ActivateTabQ(controlID, [namespace])
         End Sub
 
 #End Region

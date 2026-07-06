@@ -8,7 +8,7 @@ Imports RibbonX.Utilities
 Namespace Controls
 
     Friend NotInheritable Class Gallery
-        Inherits ContainerOfItems
+        Inherits MutableContainer(Of IItem)
         Implements IGallery
 
         Private ReadOnly blank As IItem

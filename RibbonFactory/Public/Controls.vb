@@ -98,7 +98,6 @@ Public Interface IComboBox
     Inherits IShowImage
     Inherits IMaxLength
     Inherits IText
-    Inherits IItemTemplateable
     Inherits IBoxAddable
     Inherits IButtonGroupAddable
     Inherits IGroupAddable
@@ -124,7 +123,6 @@ Public Interface IDropDown
     Inherits ISelect
     Inherits IImage
     Inherits IShowImage
-    Inherits IItemTemplateable
     Inherits IBoxAddable
     Inherits IGroupAddable
     ReadOnly Property Buttons As ICollection(Of IButton)
@@ -168,7 +166,6 @@ Public Interface IGallery
     Inherits IItemDimensions
     Inherits IRowsAndColumns
     Inherits ISelect
-    Inherits IItemTemplateable
     Inherits IBoxAddable
     Inherits IButtonGroupAddable
     Inherits IMenuAddable

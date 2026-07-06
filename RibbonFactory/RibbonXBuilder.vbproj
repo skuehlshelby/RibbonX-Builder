@@ -99,7 +99,6 @@
     <Compile Include="Internal\Builders\ToggleButtonBuilder.vb" />
     <Compile Include="Internal\Builders\ButtonBuilder.vb" />
     <Compile Include="Internal\Builders\ButtonGroupBuilder.vb" />
-    <Compile Include="Internal\Controls\Base\ContainerOfItems.vb" />
     <Compile Include="Internal\Controls\Base\Helpers.vb" />
     <Compile Include="Public\ComTypes\Extensibility\ext_ConnectMode.vb" />
     <Compile Include="Public\ComTypes\Extensibility\ext_DisconnectMode.vb" />
@@ -144,7 +143,6 @@
     <Compile Include="Public\Exceptions.vb" />
     <Compile Include="Public\Properties.vb" />
     <Compile Include="Public\RibbonXBuilder.vb" />
-	<Compile Include="Public\Templating.vb" />
     <Compile Include="Public\SimpleTypes\BoxStyle.vb" />
     <Compile Include="Public\SimpleTypes\ControlSize.vb" />
     <Compile Include="Public\Images\BuiltIn\3D.vb" />

@@ -157,6 +157,10 @@ Namespace Controls
                 Return Attributes.Get(Category.Text)
             End Get
             Set
+                If Value Is Nothing Then
+                    Throw New ArgumentNullException(NameOf(Value))
+                End If
+
                 Using updateBlock As IDisposable = SuspendRefresh()
                     Dim initialValue As String = Text
 

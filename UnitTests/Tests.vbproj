@@ -133,6 +133,8 @@
     <Compile Include="DialogLauncherTests.vb" />
     <Compile Include="ExtensionLifecycleTests.vb" />
     <Compile Include="ItemCallbackTests.vb" />
+    <Compile Include="RibbonImageEqualityTests.vb" />
+    <Compile Include="RegressionTests.vb" />
     <Compile Include="ValidationWithXsdTests.vb" />
   </ItemGroup>
   <ItemGroup>

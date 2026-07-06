@@ -159,56 +159,6 @@ Public Class IComboBoxTests
         RemoveHandler combobox.Changed, onChange
     End Sub
 
-    Private NotInheritable Class TestItemTemplate
-        Implements IItemTemplate
-
-        Public Function Match(obj As Object) As Boolean Implements IItemTemplate.Match
-            Return True
-        End Function
-
-        Public Function Apply(obj As Object) As IItem Implements IItemTemplate.Apply
-            Dim type As Type = obj.GetType()
-
-            Return RibbonXBuilder.Item(Sub(b) b.WithId(type.Name).WithLabel(type.Name).WithSuperTip(type.FullName).WithTag(type))
-        End Function
-    End Class
-
-    <TestMethod>
-    Public Sub TemplateCanBeAdded()
-        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
-
-        combobox.AddTemplate(New TestItemTemplate())
-    End Sub
-
-    <TestMethod>
-    Public Sub TemplateCanBeUsedToAddItems()
-        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
-
-        combobox.AddTemplate(New TestItemTemplate())
-
-        combobox.AddTemplatedItem(New Exception)
-        combobox.AddTemplatedItem(New Boolean())
-
-        Assert.AreEqual(2, combobox.Count)
-    End Sub
-
-    <TestMethod>
-    Public Sub TemplateCanBeUsedToRemoveItems()
-        Dim combobox As IComboBox = RibbonXBuilder.ComboBox()
-
-        combobox.AddTemplate(New TestItemTemplate())
-
-        combobox.AddTemplatedItem(New Exception)
-        combobox.AddTemplatedItem(New Boolean())
-
-        Assert.AreEqual(2, combobox.Count)
-
-        combobox.RemoveTemplatedItem(New Exception)
-        combobox.RemoveTemplatedItem(New Boolean())
-
-        Assert.AreEqual(0, combobox.Count)
-    End Sub
-
     Public Shared Function BuildReadonlyComboBox() As IComboBox
         Return RibbonXBuilder.ComboBox(Sub(cbb) cbb.
                            Visible().

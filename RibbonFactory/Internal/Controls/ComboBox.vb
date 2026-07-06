@@ -7,7 +7,7 @@ Imports RibbonX.SimpleTypes
 Namespace Controls
 
     Friend NotInheritable Class ComboBox
-        Inherits ContainerOfItems
+        Inherits MutableContainer(Of IItem)
         Implements IComboBox
 
         Public Sub New(attributes As IPropertyCollection, Optional tag As Object = Nothing)
@@ -155,6 +155,10 @@ Namespace Controls
                 Return Attributes.Get(Category.Text)
             End Get
             Set
+                If Value Is Nothing Then
+                    Throw New ArgumentNullException(NameOf(Value))
+                End If
+
                 Using updateBlock As IDisposable = SuspendRefresh()
                     Dim initialValue As String = Text
 

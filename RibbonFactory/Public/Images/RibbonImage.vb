@@ -108,7 +108,8 @@ Namespace Images
             End Function
 
             Public Overrides Function Equals(obj As Object) As Boolean
-                Return value.Equals(obj)
+                Dim other As BuiltInImage = TryCast(obj, BuiltInImage)
+                Return Equals(value, If(other IsNot Nothing, other.value, obj))
             End Function
 
             Public Overrides Function GetHashCode() As Integer
@@ -155,7 +156,8 @@ Namespace Images
             End Function
 
             Public Overrides Function Equals(obj As Object) As Boolean
-                Return value.Equals(obj)
+                Dim other As IPictureDispImage = TryCast(obj, IPictureDispImage)
+                Return Equals(value, If(other IsNot Nothing, other.value, obj))
             End Function
 
             Public Overrides Function GetHashCode() As Integer
@@ -206,7 +208,8 @@ Namespace Images
             End Function
 
             Public Overrides Function Equals(obj As Object) As Boolean
-                Return ImageId.Equals(obj)
+                Dim other As ICachedImage = TryCast(obj, ICachedImage)
+                Return ImageId.Equals(If(other IsNot Nothing, other.ImageId, obj))
             End Function
 
             Public Overrides Function GetHashCode() As Integer

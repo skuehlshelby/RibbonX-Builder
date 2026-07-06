@@ -13,7 +13,7 @@ Namespace Controls.Base
             MyBase.New(attributes, tag)
             Me.Items = If(items, Array.Empty(Of TRibbonElement)())
 
-            For Each item As TRibbonElement In items
+            For Each item As TRibbonElement In Me.Items
                 If item IsNot Nothing Then
                     AddHandler item.PropertyChanged, AddressOf OnPropertyChanged
                     AddHandler item.RefreshNeeded, AddressOf OnRefreshNeeded
